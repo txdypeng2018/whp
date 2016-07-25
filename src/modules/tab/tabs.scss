@@ -1,4 +1,29 @@
 /* global css */
-.background-color-grey {
+ion-content {
   background-color: #f4f4f4;
+}
+
+/* main css */
+.main-title .title {
+  color: #387ef5 !important;
+  font-weight: 600;
+  font-size: 1.5em;
+  letter-spacing: 0.1em;
+}
+
+.main-content {
+  > .scroll {
+    height: 100%;
+  }
+
+  .row {
+    padding: 0;
+    margin: 0;
+
+    .main-grid-col {
+      border: 1px solid #e0e0e0;
+      background-color: #ffffff;
+      text-align: center;
+    }
+  }
 }
