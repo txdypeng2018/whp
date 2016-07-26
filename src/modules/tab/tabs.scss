@@ -1,10 +1,6 @@
-$colorPositive: #387ef5;
-$colorBalanced: #33cd5f;
-$colorAssertive: #ef473a;
-
 /* global css */
 ion-content {
-  background-color: #f4f4f4;
+  background-color: #f4f4f4 !important;
 }
 
 /* main css */
@@ -45,7 +41,7 @@ ion-content {
         bottom: 0;
         height: 35px;
         width: 100%;
-        z-index: 2;
+        z-index: 6;
         background:rgba(0,0,0,0.2);
         color: #ffffff;
         text-align: center;
@@ -62,30 +58,15 @@ ion-content {
       justify-content: center;
       align-items: center;
 
-      .main-grid-icon-positive {
-        border: 1px solid $colorPositive;
-      }
-      .main-grid-icon-balanced {
-        border: 1px solid $colorBalanced;
-      }
-      .main-grid-icon-assertive {
-        border: 1px solid $colorAssertive;
+      .main-grid-icon {
+        border-width: 1px;
+        border-style: solid;
       }
 
       .main-grid-icon {
         height: 33px;
         width: 33px;
         border-radius: 50%;
-
-        .main-grid-i-positive {
-          color: $colorPositive;
-        }
-        .main-grid-i-balanced {
-          color: $colorBalanced;
-        }
-        .main-grid-i-assertive {
-          color: $colorAssertive;
-        }
 
         i {
           font-size: 25px;
@@ -110,5 +91,72 @@ ion-content {
     .main-grid-column {
       flex-direction: column;
     }
+  }
+}
+
+/* register css */
+.register-title-image {
+  height: 35px;
+  width: 35px;
+  vertical-align: middle;
+  margin: -5px 20px 0 -20px;
+}
+
+.register-title-icon {
+  margin-left: 3px;
+  font-weight: 600;
+}
+
+.register-content {
+  text-align: center;
+
+  > .scroll {
+    height: 100%;
+  }
+
+  .register-content-no {
+    font-size: 13px;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+/* personal css */
+.personal-title {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .personal-title-img {
+    height: 50px;
+    width: 50px;
+  }
+
+  .personal-title-font1 {
+    margin-top: 12px;
+    color: #ffffff;
+    font-size: 16px;
+  }
+
+  .personal-title-font2 {
+    margin-top: 12px;
+    color: #ffffff;
+    font-size: 13px;
+  }
+}
+
+.personal-list {
+  .personal-list-left-icon {
+    font-size: 28px;
+  }
+
+  .personal-list-right-icon {
+    color: #999999;
+    font-size: 22px;
   }
 }
