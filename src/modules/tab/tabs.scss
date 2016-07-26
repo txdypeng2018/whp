@@ -1,3 +1,7 @@
+$colorPositive: #387ef5;
+$colorBalanced: #33cd5f;
+$colorAssertive: #ef473a;
+
 /* global css */
 ion-content {
   background-color: #f4f4f4;
@@ -6,9 +10,9 @@ ion-content {
 /* main css */
 .main-title .title {
   color: #387ef5 !important;
-  font-weight: 600;
-  font-size: 1.5em;
-  letter-spacing: 0.1em;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  letter-spacing: 0.1em !important;
 }
 
 .main-content {
@@ -20,10 +24,91 @@ ion-content {
     padding: 0;
     margin: 0;
 
+    .main-grid-carousel {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      position: relative;
+
+      > ul {
+        flex-grow: 1;
+      }
+
+      .main-grid-img {
+        height: 100%;
+        width: 100%;
+        background-size:100% 100%;
+      }
+
+      .main-carousel-footer {
+        position: absolute;
+        bottom: 0;
+        height: 35px;
+        width: 100%;
+        z-index: 2;
+        background:rgba(0,0,0,0.2);
+        color: #ffffff;
+        text-align: center;
+        padding: 2px 0;
+      }
+    }
+
     .main-grid-col {
-      border: 1px solid #e0e0e0;
+      border-left: 1px solid #dddddd;
+      border-bottom: 1px solid #e0e0e0;
       background-color: #ffffff;
       text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .main-grid-icon-positive {
+        border: 1px solid $colorPositive;
+      }
+      .main-grid-icon-balanced {
+        border: 1px solid $colorBalanced;
+      }
+      .main-grid-icon-assertive {
+        border: 1px solid $colorAssertive;
+      }
+
+      .main-grid-icon {
+        height: 33px;
+        width: 33px;
+        border-radius: 50%;
+
+        .main-grid-i-positive {
+          color: $colorPositive;
+        }
+        .main-grid-i-balanced {
+          color: $colorBalanced;
+        }
+        .main-grid-i-assertive {
+          color: $colorAssertive;
+        }
+
+        i {
+          font-size: 25px;
+          line-height: 33px;
+        }
+      }
+
+      .main-grid-space {
+        height: 9px;
+        width: 9px;
+      }
+
+      .main-grid-font {
+        font-size: 15px;
+      }
+    }
+
+    .main-grid-row {
+      flex-direction: row;
+    }
+
+    .main-grid-column {
+      flex-direction: column;
     }
   }
 }

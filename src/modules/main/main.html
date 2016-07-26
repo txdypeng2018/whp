@@ -3,20 +3,80 @@
 </ion-header-bar>
 <ion-content scroll="false" class="has-header main-content">
   <div class="row" style="height: 43%">
-    <div class="col main-grid-col">.col</div>
+    <div id="main-carousel-col" class="col main-grid-carousel">
+      <div class="main-carousel-footer">
+        <div>{{carouselImages[carouselIndex].name}}</div>
+        <div rn-carousel-indicators style="margin-top: -4px"
+             ng-if="carouselImages.length > 1" slides="carouselImages"
+             rn-carousel-index="carouselIndex"></div>
+      </div>
+      <ul id="main-carousel" rn-carousel rn-carousel-index="carouselIndex">
+        <li ng-repeat="carouselImage in carouselImages">
+          <div class="main-grid-img" style="background-image: url({{carouselImage.url}});"></div>
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="row" style="height: 19%">
-    <div class="col main-grid-col">.col</div>
-    <div class="col main-grid-col">.col</div>
+    <div class="col main-grid-col main-grid-row">
+      <span class="main-grid-icon main-grid-icon-assertive">
+        <i class="icon ion-ios-paper-outline main-grid-i-assertive"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">预约挂号</span>
+    </div>
+    <div class="col main-grid-col main-grid-row">
+      <span class="main-grid-icon main-grid-icon-assertive">
+        <i class="icon ion-ios-paper-outline main-grid-i-assertive"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">当日挂号</span>
+    </div>
   </div>
   <div class="row" style="height: 19%">
-    <div class="col main-grid-col">.col</div>
-    <div class="col main-grid-col">.col</div>
-    <div class="col main-grid-col">.col</div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-positive">
+        <i class="icon ion-ios-copy-outline main-grid-i-positive"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">查看报告</span>
+    </div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-positive">
+        <i class="icon ion-ios-cart-outline main-grid-i-positive"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">缴费</span>
+    </div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-positive">
+        <i class="icon ion-ios-people-outline main-grid-i-positive"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">医生介绍</span>
+    </div>
   </div>
   <div class="row" style="height: 19%">
-    <div class="col main-grid-col">.col</div>
-    <div class="col main-grid-col">.col</div>
-    <div class="col main-grid-col">.col</div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-balanced">
+        <i class="icon ion-ios-location-outline main-grid-i-balanced"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">医院导航</span>
+    </div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-balanced">
+        <i class="icon ion-ios-home-outline main-grid-i-balanced"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">医院介绍</span>
+    </div>
+    <div class="col main-grid-col main-grid-column">
+      <span class="main-grid-icon main-grid-icon-balanced">
+        <i class="icon ion-ios-help-empty main-grid-i-balanced"></i>
+      </span>
+      <span class="main-grid-space"></span>
+      <span class="main-grid-font">就医指南</span>
+    </div>
   </div>
 </ion-content>

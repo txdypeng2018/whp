@@ -3,7 +3,8 @@
 (function() {
 
   var deps = [
-    'ionic'
+    'ionic',
+    'angular-carousel'
   ];
   angular.module('isj', deps);
 
