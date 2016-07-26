@@ -16,7 +16,7 @@ module.exports = function(grunt) {
   var appConfig = {
     src: 'src',
     test: 'test',
-    dist: 'dist',
+    dist: 'www',
     proxy: 'proxy'
   };
 
