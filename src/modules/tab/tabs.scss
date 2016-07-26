@@ -55,8 +55,18 @@ ion-content {
       background-color: #ffffff;
       text-align: center;
       display: flex;
-      justify-content: center;
-      align-items: center;
+
+      > a {
+        text-decoration: none;
+        color: #000000;
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+      }
 
       .main-grid-icon {
         border-width: 1px;
@@ -85,7 +95,7 @@ ion-content {
     }
 
     .main-grid-row {
-      flex-direction: row;
+      flex-direction: row !important;
     }
 
     .main-grid-column {
