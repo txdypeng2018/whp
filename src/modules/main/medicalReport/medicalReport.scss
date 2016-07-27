@@ -1,0 +1,27 @@
+.medicalReport-prompt {
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #777777;
+
+  .prompt-icon {
+    margin: 7px;
+    font-size: 18px;
+  }
+}
+
+.medicalReport-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > div {
+    width: 50%;
+    text-align: center;
+  }
+
+  > div:first-child {
+    border-right: 1px solid #777777;
+  }
+}

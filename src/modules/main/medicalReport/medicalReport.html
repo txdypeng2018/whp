@@ -1,0 +1,46 @@
+<ion-header-bar class="bar-light">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    我的报告单
+    <span class="title-operation-down positive">
+      <i class="icon ion-ios-arrow-down"></i>
+    </span>
+  </div>
+</ion-header-bar>
+<ion-content class="has-header">
+  <div class="medicalReport-prompt">
+    <div class="prompt-icon">
+      <i class="icon ion-ios-information-outline"></i>
+    </div>
+    <div>
+      温馨提示：无法查看到结果的患者请确认病历号是否绑定正确，部分结果无法在手机上查看。
+    </div>
+  </div>
+  <div class="medicalReport-search">
+    <div>
+      <label class="item-input item-select">
+        <div class="input-label"></div>
+        <select>
+          <option>时间不限</option>
+          <option>一周内</option>
+          <option>一月内</option>
+          <option>半年内</option>
+          <option>一年内</option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <label class="item-input item-select">
+        <div class="input-label"></div>
+        <select>
+          <option>状态不限</option>
+          <option>已出</option>
+          <option>未出</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</ion-content>
