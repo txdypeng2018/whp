@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var messageCtrl = function($scope) {
+  var messageCtrl = function() {
 
   };
 
@@ -10,7 +10,7 @@
       url: '/message',
       views:{
         'tab-message':{
-          templateUrl: "modules/message/message.html",
+          templateUrl: 'modules/message/message.html',
           controller: messageCtrl
         }
       }

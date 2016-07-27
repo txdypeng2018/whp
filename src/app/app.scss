@@ -1,0 +1,43 @@
+ion-content {
+  background-color: #f4f4f4 !important;
+}
+
+ion-content.content-introduce {
+  padding: 25px;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.positive {
+  color: #387ef5 !important;
+}
+
+.a-return {
+  margin-left: 8px;
+  margin-top: 3px;
+
+  i {
+    font-size: 28px;
+    margin-right: 3px;
+  }
+
+  div {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 17px;
+    margin-top: -10px;
+  }
+}
+
+.title-photo {
+  height: 35px;
+  width: 35px;
+  vertical-align: middle;
+  margin: -5px 20px 0 -20px;
+}
+
+.title-operation-down {
+  margin-left: 3px;
+}

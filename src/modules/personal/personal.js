@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var personalCtrl = function($scope) {
+  var personalCtrl = function() {
 
   };
 
@@ -10,7 +10,7 @@
       url: '/personal',
       views:{
         'tab-personal':{
-          templateUrl: "modules/personal/personal.html",
+          templateUrl: 'modules/personal/personal.html',
           controller: personalCtrl
         }
       }

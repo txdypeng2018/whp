@@ -70,7 +70,7 @@ module.exports = function(grunt) {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
+        hostname: '0.0.0.0',
         livereload: 35729
       },
       proxies: [
@@ -424,6 +424,22 @@ module.exports = function(grunt) {
         src: ['<%= app.src %>/{app,modules}/**/*.js', '.tmp/*.js'],
         dest: '.tmp/concat/scripts/scripts.js'
       }
+    },
+
+    replace: {
+      dist: {
+        options: {
+          patterns: [
+            {
+              match: /\/styles\/fonts\//g,
+              replacement: './fonts/'
+            }
+          ]
+        },
+        files: [
+          {expand: true, flatten: true, src: ['<%= app.dist %>/styles/*.css'], dest: '<%= app.dist %>/styles/'}
+        ]
+      }
     }
   });
 
@@ -473,6 +489,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'newer:jshint',
-    'build'
+    'build',
+    'replace:dist'
   ]);
 };

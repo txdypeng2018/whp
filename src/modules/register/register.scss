@@ -1,0 +1,16 @@
+.register-content {
+  text-align: center;
+
+  > .scroll {
+    height: 100%;
+  }
+
+  .register-content-no {
+    font-size: 13px;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}

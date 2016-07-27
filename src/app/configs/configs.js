@@ -28,7 +28,7 @@
   };
 
   // Config JWT in http header and prefix of url
-  var CONTEXT = '/api';
+  var CONTEXT = './api';
   app.factory('authInterceptor', function($q, $window, $rootScope) {
     return {
       request: function(config) {

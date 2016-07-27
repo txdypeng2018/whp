@@ -15,10 +15,10 @@
   });
 
   var mainRouter = function($stateProvider) {
-    $stateProvider.state("tab", {
-      url: "/tab",
+    $stateProvider.state('tab', {
+      url: '/tab',
       abstract: true,
-      templateUrl: "modules/tab/tabs.html"
+      templateUrl: 'modules/tab/tabs.html'
     });
   };
 

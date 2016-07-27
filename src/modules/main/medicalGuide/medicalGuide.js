@@ -1,8 +1,10 @@
 (function(app) {
   'use strict';
 
-  var medicalGuideCtrl = function($scope) {
-
+  var medicalGuideCtrl = function($scope, $http) {
+    $http.get('/main/medicalGuide').success(function(data) {
+      $scope.medicalGuide = data;
+    });
   };
 
   var mainRouter = function($stateProvider) {
