@@ -1,5 +1,5 @@
 .medicalReport-prompt {
-  padding: 15px;
+  padding: 10px 15px 10px 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-bottom: 10px;
 
   > div {
     width: 50%;
@@ -23,5 +24,46 @@
 
   > div:first-child {
     border-right: 1px solid #777777;
+  }
+
+  .medicalReport-select {
+    padding: 0;
+
+    select {
+      background: transparent;
+      position: inherit;
+      font-size: 17px;
+      padding: 0 6px 0 0;
+      margin-left: auto;
+      direction: inherit;
+    }
+
+    &:after {
+      border-top: 0;
+    }
+
+    i {
+      font-size: 20px;
+      margin-right: auto;
+    }
+  }
+}
+
+.medicalReport-reports {
+  h2 {
+    padding-bottom: 5px;
+  }
+
+  .badge {
+    align-items: center;
+    height: 100%;
+    top: 0;
+  }
+
+  .no-report {
+    text-align: center;
+    padding-top: 120px;
+    font-size: 18px;
+    color: #999999;
   }
 }

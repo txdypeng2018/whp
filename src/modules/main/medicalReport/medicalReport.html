@@ -10,7 +10,7 @@
     </span>
   </div>
 </ion-header-bar>
-<ion-content class="has-header">
+<ion-content id="medicalReport_Content" scroll="false" class="has-header">
   <div class="medicalReport-prompt">
     <div class="prompt-icon">
       <i class="icon ion-ios-information-outline"></i>
@@ -21,26 +21,31 @@
   </div>
   <div class="medicalReport-search">
     <div>
-      <label class="item-input item-select">
-        <div class="input-label"></div>
-        <select>
-          <option>时间不限</option>
-          <option>一周内</option>
-          <option>一月内</option>
-          <option>半年内</option>
-          <option>一年内</option>
-        </select>
+      <label class="item-input item-select medicalReport-select">
+        <select ng-model="searchStr.searchTime" ng-change="searchChange('searchTime', searchTime)"
+                ng-options="node.code as node.name for node in searchTimeTypes"></select>
+        <i class="icon ion-ios-arrow-down positive"></i>
       </label>
     </div>
     <div>
-      <label class="item-input item-select">
-        <div class="input-label"></div>
-        <select>
-          <option>状态不限</option>
-          <option>已出</option>
-          <option>未出</option>
-        </select>
+      <label class="item-input item-select medicalReport-select">
+        <select ng-model="searchStr.searchStatus" ng-change="searchChange('searchStatus', searchStatus)"
+                ng-options="node.code as node.name for node in searchStatusTypes"></select>
+        <i class="icon ion-ios-arrow-down positive"></i>
       </label>
     </div>
   </div>
+  <ion-scroll id="medicalReport_reports" class="medicalReport-reports">
+    <ion-refresher pulling-icon="" on-refresh="reportRefresh()"></ion-refresher>
+    <ul ng-if="reports.length > 0" class="list">
+      <li class="item item-icon-right" ng-repeat="report in reports">
+        <h2>{{report.name}}</h2>
+        <p>检查时间：{{report.date}}</p>
+        <i ng-if="report.status == '0'" class="badge assertive">未出</i>
+        <i ng-if="report.status == '1'" class="badge positive">已出</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+    </ul>
+    <div ng-if="reports.length == 0" class="no-report">暂时没有报告</div>
+  </ion-scroll>
 </ion-content>
