@@ -4,7 +4,7 @@
   var reportFormOneCtrl = function($scope, $http, $stateParams) {
     $http.get('/main/medicalReport/data', {params: {id: $stateParams.id}}).success(function(data) {
       $scope.report = data;
-    })
+    });
   };
 
   var mainRouter = function($stateProvider) {
