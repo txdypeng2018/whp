@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalReportCtrl = function($scope, $http) {
+  var medicalReportCtrl = function() {
 
   };
 

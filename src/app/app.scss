@@ -16,8 +16,11 @@ a {
 }
 
 .a-return {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin-left: 8px;
-  margin-top: 3px;
+  margin-top: 2px;
 
   i {
     font-size: 28px;
@@ -25,10 +28,7 @@ a {
   }
 
   div {
-    display: inline-block;
-    vertical-align: middle;
     font-size: 17px;
-    margin-top: -10px;
   }
 }
 
