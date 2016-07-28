@@ -8,6 +8,11 @@ console.log('PEP Proxy Server');
 console.log('');
 
 var onReq = function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Max-Age', '1000');
+
   var query = common.parseUrl(req).query;
 
   console.log('Received %s request %s', req.method, req.url);
@@ -47,6 +52,9 @@ var onReq = function(req, res) {
     handler.onGet(req, res);
   } else if (req.method === 'DELETE') {
     handler.onDelete(req, res);
+  } else if (req.method === 'OPTIONS') {
+    res.statusCode = 200;
+    res.end();
   } else {
     res.statusCode = 401;
     res.end();
@@ -54,4 +62,3 @@ var onReq = function(req, res) {
 };
 
 http.createServer(onReq).listen(9090);
-

@@ -1,11 +1,4 @@
-/* global css */
-ion-content {
-  background-color: #f4f4f4 !important;
-}
-
-/* main css */
 .main-title .title {
-  color: #387ef5 !important;
   font-weight: 600 !important;
   font-size: 22px !important;
   letter-spacing: 0.1em !important;
@@ -57,8 +50,6 @@ ion-content {
       display: flex;
 
       > a {
-        text-decoration: none;
-        color: #000000;
         flex-grow: 1;
         display: flex;
         justify-content: center;
@@ -101,72 +92,5 @@ ion-content {
     .main-grid-column {
       flex-direction: column;
     }
-  }
-}
-
-/* register css */
-.register-title-image {
-  height: 35px;
-  width: 35px;
-  vertical-align: middle;
-  margin: -5px 20px 0 -20px;
-}
-
-.register-title-icon {
-  margin-left: 3px;
-  font-weight: 600;
-}
-
-.register-content {
-  text-align: center;
-
-  > .scroll {
-    height: 100%;
-  }
-
-  .register-content-no {
-    font-size: 13px;
-    height:100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-}
-
-/* personal css */
-.personal-title {
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  .personal-title-img {
-    height: 50px;
-    width: 50px;
-  }
-
-  .personal-title-font1 {
-    margin-top: 12px;
-    color: #ffffff;
-    font-size: 16px;
-  }
-
-  .personal-title-font2 {
-    margin-top: 12px;
-    color: #ffffff;
-    font-size: 13px;
-  }
-}
-
-.personal-list {
-  .personal-list-left-icon {
-    font-size: 28px;
-  }
-
-  .personal-list-right-icon {
-    color: #999999;
-    font-size: 22px;
   }
 }

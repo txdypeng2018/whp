@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerCtrl = function($scope) {
+  var registerCtrl = function() {
 
   };
 
@@ -10,7 +10,7 @@
       url: '/register',
       views:{
         'tab-register':{
-          templateUrl: "modules/register/register.html",
+          templateUrl: 'modules/register/register.html',
           controller: registerCtrl
         }
       }
