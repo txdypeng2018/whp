@@ -1,0 +1,28 @@
+.doctorIntroduction-subheader {
+  position: relative;
+
+  form {
+    width: 100%;
+  }
+
+  .search-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -33px;
+  }
+
+  .item-input-wrapper {
+    background: #ffffff;
+
+    input {
+      width: 100%;
+      margin-top: -2px;
+    }
+
+    input::-webkit-input-placeholder {
+      color: #387ef5;
+      text-align: center;
+    }
+  }
+}

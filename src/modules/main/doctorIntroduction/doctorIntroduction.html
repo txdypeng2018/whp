@@ -1,0 +1,21 @@
+<ion-header-bar class="bar-light">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">医生介绍</div>
+</ion-header-bar>
+<ion-header-bar class="bar-subheader bar-light doctorIntroduction-subheader">
+  <div ng-if="searchName == null || searchName == ''" class="search-placeholder positive">
+    <i class="icon ion-ios-search-strong"></i>
+    <span>搜索医生</span>
+  </div>
+  <form ng-submit="doSearch()">
+    <label class="item-input-wrapper">
+      <input type="search" ng-model="searchName">
+    </label>
+  </form>
+</ion-header-bar>
+<ion-content class="has-header has-subheader">
+
+</ion-content>
