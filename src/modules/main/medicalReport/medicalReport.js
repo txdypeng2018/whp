@@ -26,7 +26,7 @@
       {code:'1', name :'已出'},
       {code:'0', name :'未出'}
     ];
-    $scope.searchChange = function(type, code) {
+    $scope.searchChange = function() {
       getMedicalReports($scope.searchStr);
     };
     $scope.reportRefresh = function() {
