@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalReportCtrl = function($scope, $http, $window) {
+  var medicalReportCtrl = function($scope, $http, $window, $state) {
     var getMedicalReports = function(param) {
       $http.get('/main/medicalReport', {params: param}).success(function(data) {
         $scope.reports = data;
@@ -33,6 +33,12 @@
       getMedicalReports($scope.searchStr);
     };
     getMedicalReports($scope.searchStr);
+
+    $scope.viewReport = function(id, status) {
+      if (status === '1') {
+        $state.go('mainMedicalReportFormOne', {id: id});
+      }
+    };
 
     $scope.$watch('$viewContentLoaded', function() {
       document.getElementById('medicalReport_reports').style.height =

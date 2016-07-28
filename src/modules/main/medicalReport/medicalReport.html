@@ -38,7 +38,7 @@
   <ion-scroll id="medicalReport_reports" class="medicalReport-reports">
     <ion-refresher pulling-icon="" on-refresh="reportRefresh()"></ion-refresher>
     <ul ng-if="reports.length > 0" class="list">
-      <li class="item item-icon-right" ng-repeat="report in reports">
+      <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.status)">
         <h2>{{report.name}}</h2>
         <p>检查时间：{{report.date}}</p>
         <i ng-if="report.status == '0'" class="badge assertive">未出</i>
