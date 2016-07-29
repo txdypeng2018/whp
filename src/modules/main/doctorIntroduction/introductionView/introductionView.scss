@@ -1,3 +1,14 @@
+.introductionView-title {
+  a.button.button-clear.icon:before {
+    font-size: 26px;
+  }
+
+  a.button {
+    margin-top: -2px;
+    margin-right: 2px;
+  }
+}
+
 .introductionView-list {
   li:first-child {
     border-top: 0;
