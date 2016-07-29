@@ -10,7 +10,7 @@
 
     $scope.placeholderClk = function() {
       setTimeout(function() {
-        document.getElementById("doctorIntroduction_search").focus();
+        document.getElementById('doctorIntroduction_search').focus();
       }, 100);
     };
     $scope.doSearch = function() {
