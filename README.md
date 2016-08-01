@@ -6,13 +6,15 @@ Ionic SJ App
 </a>
 
 ```bash
-$ npm install -g ionic
+$ npm install -g cordova ionic
 $ npm install
 $ bower install
 
+# 需要先执行grunt命令生成www文件夹
 $ ionic platform add ios
 $ ionic platform add android
 
+# 需要先安装SDK，并配置环境变量；JDK必须是1.8
 $ ionic build ios
 $ ionic emulate ios
 
