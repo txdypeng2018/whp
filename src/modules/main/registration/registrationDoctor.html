@@ -1,0 +1,53 @@
+<ion-header-bar class="bar-light">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title"></div>
+</ion-header-bar>
+<ion-content class="has-header registrationDoctor-content">
+  <div class="patient">
+    <img src="/assets/images/pic_man.png">
+    <span>就诊人：{{doctor.patient}}</span>
+    <span>
+      <a class="positive">
+        换人
+        <i class="icon ion-ios-loop-strong"></i>
+      </a>
+    </span>
+  </div>
+  <div class="doctor">
+    <table>
+      <tr>
+        <td class="label">就诊时间：</td>
+        <td width="100%">{{doctor.date}}</td>
+      </tr>
+      <tr>
+        <td class="label">就诊科室：</td>
+        <td width="100%">{{doctor.dept}}</td>
+      </tr>
+      <tr>
+        <td class="label">看诊医生：</td>
+        <td width="100%">{{doctor.name}}</td>
+      </tr>
+      <tr>
+        <td class="label positive">温馨提示：</td>
+        <td width="100%" class="positive">
+          单日挂号不需要取号，直接携带身份证去对应科室候诊。
+          <br/>
+          儿童挂现场号需要绑定就诊卡。
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="agreement" ng-click="showAgreement()">
+    我已了解并同意一下挂号规则（点击查看详细）
+    <i class="icon ion-ios-arrow-down positive"></i>
+  </div>
+  <div class="amount">
+    合计：{{doctor.amount}}元
+  </div>
+  <div class="confirm">
+    <button class="button button-positive" ng-click="registrationPay()">确定</button>
+  </div>
+</ion-content>

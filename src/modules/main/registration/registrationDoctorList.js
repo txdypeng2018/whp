@@ -1,8 +1,9 @@
 (function(app) {
   'use strict';
 
-  var registrationDoctorListCtrl = function($scope, $http) {
-    $http.get('/main/registration/doctorList').success(function(data) {
+  var registrationDoctorListCtrl = function($scope, $http, $state, $stateParams) {
+    var id = $stateParams.id;
+    $http.get('/main/registration/doctorList', {params: {id: id}}).success(function(data) {
       $scope.doctors = data;
     });
 
