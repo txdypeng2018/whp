@@ -7,16 +7,24 @@
     科室列表
   </div>
 </ion-header-bar>
-<ion-content class="has-header dept-list-content">
-  <div class="buttons">
-    <button class="button button-positive" ng-click="">
-      南湖院区
-    </button>
-    <button class="button button-light positive-border positive">
-      滑翔院区
-    </button>
-    <button class="button button-light positive-border positive">
-      沈北院区
-    </button>
+<ion-content scroll="false" id="dept_list_content" class="has-header dept-list-content">
+  <div class="district-buttons">
+    <div class="button-bar">
+      <button ng-repeat="district in districts" class="button button-positive district-button" ng-class="{'button-outline': $index!=0}" ng-click="districtClk($event, '{{district.id}}')">
+        {{district.name}}
+      </button>
+    </div>
+  </div>
+  <div id="dept_select" class="dept-select">
+    <ion-scroll class="dept-scroll dept-scroll-left">
+      <div ng-repeat="dept in depts" class="dept-div" ng-class="{true: ['positive', 'dept-div-left']}[$index==0]" ng-click="deptLeftClk($event, '{{dept.id}}')">
+        {{dept.name}}
+      </div>
+    </ion-scroll>
+    <ion-scroll class="dept-scroll dept-scroll-right">
+      <div ng-repeat="deptRight in deptRights" class="dept-div" ng-click="deptRightClk('{{deptRight.id}}')">
+        {{deptRight.name}}
+      </div>
+    </ion-scroll>
   </div>
 </ion-content>

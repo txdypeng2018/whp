@@ -1,33 +1,57 @@
 .dept-list-content {
-  .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 10px;
+  background-color: #ffffff !important;
 
-    .button {
+  .district-buttons {
+    padding: 8px 35px;
+    border-bottom: 1px solid #dddddd;
+
+    .district-button {
+      min-height: 32px;
+      line-height: 32px;
       font-size: 14px;
-      padding: 0 18px;
-      min-height: 34px;
-      line-height: 34px;
-    }
-
-    .button:not(:first-child):not(:last-child) {
-      border-radius: 0;
-    }
-
-    .button:first-child {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .button:last-child {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
     }
   }
-}
 
-.dept-list-content {
-  background-color: #ffffff !important;
+  .dept-select {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+
+    .dept-scroll {
+      height: 100%;
+      overflow-y: auto;
+      border-top: 1px solid #999999;
+
+      .dept-div {
+        border-bottom: 1px solid #dddddd;
+        border-left: 3px solid transparent;
+        font-size: 18px;
+        color: #666666;
+        padding: 8px 0 8px 20px;
+
+        .icon-dept-select {
+          display: none;
+          margin-right: 3px;
+        }
+
+        .icon-dept-selected {
+          display: inline-block !important;
+        }
+      }
+
+      .dept-div-left {
+        border-left-color: #387ef5;
+      }
+    }
+
+    .dept-scroll-left {
+      border-right: 1px solid #999999;
+      width: 35%;
+      background: #f0f0f0;
+    }
+
+    .dept-scroll-right {
+      width: 65%;
+    }
+  }
 }
