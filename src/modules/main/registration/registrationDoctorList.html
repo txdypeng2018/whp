@@ -6,5 +6,19 @@
   <div class="title"></div>
 </ion-header-bar>
 <ion-content class="has-header registrationDoctorList-content">
-
+  <ul ng-if="doctors.length > 0" class="list registrationDoctorList-List">
+    <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id)">
+      <img ng-if="doctor.sex == '1'" src="./assets/images/doctor_man.png" class="list-photo">
+      <img ng-if="doctor.sex == '2'" src="./assets/images/doctor_woman.png" class="list-photo">
+      <div class="list-name">
+        <h2>{{doctor.name}}</h2>
+        <p>{{doctor.title}}</p>
+        <div class="img-registration">
+          <img src="./assets/images/appointment_available.png">
+        </div>
+      </div>
+      <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
+    </li>
+  </ul>
+  <div ng-if="doctors.length == 0" class="no-doctor">暂无医生排班信息</div>
 </ion-content>

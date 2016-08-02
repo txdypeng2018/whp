@@ -1,8 +1,14 @@
 (function(app) {
   'use strict';
 
-  var registrationDoctorListCtrl = function() {
+  var registrationDoctorListCtrl = function($scope, $http) {
+    $http.get('/main/registration/doctorList').success(function(data) {
+      $scope.doctors = data;
+    });
 
+    $scope.doctorClk = function(id) {
+      $state.go('mainRegistrationDoctor', {id: id});
+    };
   };
 
   var mainRouter = function($stateProvider) {
