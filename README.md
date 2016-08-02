@@ -22,3 +22,7 @@ $ ionic serve
 
 $ grunt serve
 ```
+android 生成发布版本命令
+```bash
+$ ionic build android --release --  --buildConfig=build.json
+```
