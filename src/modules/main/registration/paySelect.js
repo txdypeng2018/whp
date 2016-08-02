@@ -1,8 +1,13 @@
 (function(app) {
   'use strict';
 
-  var paySelectCtrl = function() {
-
+  var paySelectCtrl = function($scope) {
+    $scope.paySelectValue = '';
+    $scope.paySelect = function(value) {
+      $scope.paySelectValue = value;
+      angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
+      angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
+    };
   };
 
   var mainRouter = function($stateProvider) {
