@@ -1,0 +1,17 @@
+<ion-header-bar class="bar-light">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">医院导航</div>
+  <button class="button button-clear button-positive" ng-click="modal.show()">列表</button>
+</ion-header-bar>
+<ion-content class="has-header hospitalNavigation-content">
+  <div class="district-buttons">
+    <div class="button-bar">
+      <button ng-repeat="district in districts" class="button button-positive district-button" ng-class="{'button-outline': $index!=0}" ng-click="districtClk($event, '{{district.id}}')">
+        {{district.name}}
+      </button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,25 @@
+.floorList-content {
+  .card {
+    margin: 15px;
+  }
+
+  .item {
+    position: relative;
+    padding: 10px 10px 10px 70px;
+    font-size: 14px !important;
+
+    .floor {
+      position: absolute;
+      display: inline-block;
+      left: 0;
+      top: 10px;
+      color: #ffffff;
+      width: 60px;
+      text-align: center;
+    }
+
+    .floor-introduce {
+      white-space: normal;
+    }
+  }
+}
