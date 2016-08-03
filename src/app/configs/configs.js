@@ -6,6 +6,20 @@
     $urlRouterProvider.otherwise('/tab/main');
   });
 
+  app.config(function (ionicDatePickerProvider) {
+    var datePickerObj = {
+      setLabel: '选择',
+      todayLabel: '今天',
+      closeLabel: '关闭',
+      weeksList: ["日", "一", "二", "三", "四", "五", "六"],
+      monthsList: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      templateType: 'popup',
+      showTodayButton: true,
+      dateFormat: 'yyyy年MM月dd日'
+    };
+    ionicDatePickerProvider.configDatePicker(datePickerObj);
+  });
+
   /**
    * 判断请求 url 是否需要添加服务端上下文根前缀
    * @param url

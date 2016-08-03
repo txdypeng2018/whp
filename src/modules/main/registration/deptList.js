@@ -39,6 +39,9 @@
       if (type === '1') {
         $state.go('mainRegistrationDoctorList', {id: id});
       }
+      else if (type === '2') {
+        $state.go('mainRegistrationDateList', {id: id});
+      }
     };
 
     $http.get('/main/registration/district').success(function(data) {

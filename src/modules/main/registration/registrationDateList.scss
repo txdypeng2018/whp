@@ -1,0 +1,77 @@
+.registrationDateList-content {
+  background-color: #ffffff !important;
+
+  .registrationDateList-date {
+    padding-bottom: 8px;
+
+    .month {
+      padding: 5px 0 0 5px;
+    }
+
+    .day-selected {
+      border-radius: 50%;
+      background-color: #d0eaeb;
+      height: 22px;
+      width: 22px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+
+        i {
+          font-size: 18px;
+        }
+      }
+
+      td.week {
+        color: #999999;
+        font-size: 12px;
+      }
+
+      td.day {
+        border-right: 1px solid #dddddd;
+        font-size: 17px;
+        line-height: 22px;
+      }
+    }
+  }
+
+  #registrationDateList_doctor {
+    border-top: 1px solid #dddddd;
+  }
+
+  .registrationDateList-List {
+    li:first-child {
+      border-top: 0;
+    }
+
+    .list-name {
+      display: flex;
+      flex-direction: row;
+
+      h2 {
+        display: inline-block;
+      }
+
+      p {
+        display: inline-block;
+        margin-left: 8px;
+      }
+
+      div {
+        display: inline-block;
+        margin-left: 8px;
+
+        img {
+          width: 12px;
+        }
+      }
+    }
+  }
+}
