@@ -51,11 +51,11 @@
 
     $scope.$watch('$viewContentLoaded', function() {
       document.getElementById('registrationDateList_doctor').style.height =
-        (document.getElementById('registrationDateList_content').offsetHeight - 50) + 'px';
+        (document.getElementById('registrationDateList_content').offsetHeight - 75) + 'px';
     });
     angular.element($window).bind('resize', function() {
       document.getElementById('registrationDateList_doctor').style.height =
-        (document.getElementById('registrationDateList_content').offsetHeight - 50) + 'px';
+        (document.getElementById('registrationDateList_content').offsetHeight - 75) + 'px';
     });
   };
 

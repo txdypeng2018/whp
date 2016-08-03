@@ -1,0 +1,104 @@
+<ion-header-bar class="bar-light registrationDate-title">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    姓名1
+  </div>
+  <img src="./assets/images/doctor_man.png">
+</ion-header-bar>
+<ion-content scroll="false" id="registrationDate_content" class="has-header registrationDate-content">
+  <div class="registrationDate-date">
+    <div class="positive month">8月</div>
+    <table>
+      <tr>
+        <td class="week" width="13%" ng-click="dayClk('1')">周一</td>
+        <td class="week" width="13%" ng-click="dayClk('2')">周二</td>
+        <td class="week" width="13%" ng-click="dayClk('3')">周三</td>
+        <td width="13%"></td>
+        <td width="13%"></td>
+        <td width="13%"></td>
+        <td width="13%"></td>
+        <td rowspan="2" width="9%"></td>
+      </tr>
+      <tr>
+        <td class="day" ng-click="dayClk('1')">
+          <div ng-class="{true: ['positive','day-selected']}[daySelected.select_1]">1</div>
+        </td>
+        <td class="day" ng-click="dayClk('2')">
+          <div ng-class="{true: ['positive','day-selected']}[daySelected.select_2]">2</div>
+        </td>
+        <td class="day" ng-click="dayClk('3')">
+          <div ng-class="{true: ['positive','day-selected']}[daySelected.select_3]">3</div>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <ion-scroll id="registrationDate_doctor">
+    <ul class="list registrationDate-List">
+      <li class="item item-divider">
+        第八普通外科结直肠肛门病门诊（南湖）
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">9:10</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">9:20</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">9:30</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">9:40</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">9:50</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:00</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:10</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:20</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:30</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:40</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+      <li class="item item-icon-right" ng-click="dateSelect()">
+        <h2 class="positive">10:50</h2>
+        <i class="badge">教授<br>￥7.00</i>
+        <i class="icon ion-ios-arrow-right list-right-icon"></i>
+      </li>
+    </ul>
+  </ion-scroll>
+</ion-content>
