@@ -10,7 +10,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('mainDoctorIntroductionView', {
       url: '/main/doctorIntroduction/introductionView/:id',
-      cache: 'false',
       templateUrl: 'modules/main/doctorIntroduction/introductionView/introductionView.html',
       controller: introductionViewCtrl
     });

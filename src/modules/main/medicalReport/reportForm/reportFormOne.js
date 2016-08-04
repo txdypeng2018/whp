@@ -10,7 +10,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('mainMedicalReportFormOne', {
       url: '/main/medicalReport/reportFormOne/:id',
-      cache: 'false',
       templateUrl: 'modules/main/medicalReport/reportForm/reportFormOne.html',
       controller: reportFormOneCtrl
     });

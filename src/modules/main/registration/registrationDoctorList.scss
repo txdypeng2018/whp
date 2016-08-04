@@ -1,0 +1,39 @@
+.registrationDoctorList-content {
+  background-color: #ffffff !important;
+
+  .registrationDoctorList-List {
+    li:first-child {
+      border-top: 0;
+    }
+
+    .list-name {
+      display: flex;
+      flex-direction: row;
+
+      h2 {
+        display: inline-block;
+      }
+
+      p {
+        display: inline-block;
+        margin-left: 8px;
+      }
+
+      div {
+        display: inline-block;
+        margin-left: 8px;
+
+        img {
+          width: 12px;
+        }
+      }
+    }
+  }
+
+  .no-doctor {
+    text-align: center;
+    padding-top: 150px;
+    font-size: 18px;
+    color: #999999;
+  }
+}

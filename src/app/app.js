@@ -4,6 +4,7 @@
 
   var deps = [
     'ionic',
+    'ionic-datepicker',
     'angular-carousel'
   ];
   angular.module('isj', deps);

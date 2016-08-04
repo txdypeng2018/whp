@@ -1,0 +1,44 @@
+<ion-header-bar class="bar-light">
+  <a class="a-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    支付
+  </div>
+</ion-header-bar>
+<ion-content class="has-header paySelect-content">
+  <ul class="list">
+    <li class="item item-divider">
+      请选择支付方式
+    </li>
+    <li class="item item-avatar-left item-icon-right" ng-click="paySelect('1')">
+      <img src="./assets/images/CMB_icon.jpg">
+      一网通银行卡支付
+      <i id="select_no_1" class="icon ion-ios-circle-outline positive select-no"></i>
+      <i id="select_yes_1" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+    </li>
+    <li class="item item-avatar-left item-icon-right" ng-click="paySelect('2')">
+      <img src="./assets/images/alipay_icon.png">
+      支付宝移动支付
+      <i id="select_no_2" class="icon ion-ios-circle-outline positive select-no"></i>
+      <i id="select_yes_2" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+    </li>
+    <li class="item item-avatar-left item-icon-right" ng-click="paySelect('3')">
+      <img src="./assets/images/weixin_icon.jpg">
+      微信移动支付
+      <i id="select_no_3" class="icon ion-ios-circle-outline positive select-no"></i>
+      <i id="select_yes_3" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+    </li>
+    <li class="item">
+      总额
+      <span class="money">￥5.00元</span>
+    </li>
+  </ul>
+  <div class="countDown">
+    请在30分钟内完成支付
+  </div>
+  <div class="confirm">
+    <button class="button button-positive">支付</button>
+  </div>
+</ion-content>
