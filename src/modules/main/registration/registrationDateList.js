@@ -3,21 +3,21 @@
 
   var registrationDateListCtrl = function($scope, $window, $state, ionicDatePicker) {
     $scope.daySelected = {
-      select_1 : false,
-      select_2 : false,
-      select_3 : false,
-      select_4 : false,
-      select_5 : false,
-      select_6 : false,
-      select_7 : false
+      select1 : false,
+      select2 : false,
+      select3 : false,
+      select4 : false,
+      select5 : false,
+      select6 : false,
+      select7 : false
     };
     $scope.dayClk = function(index) {
       for (var key in $scope.daySelected) {
-        if (key !== ('select_'+index)) {
+        if (key !== ('select'+index)) {
           $scope.daySelected[key] = false;
         }
       }
-      $scope.daySelected['select_'+index] = !$scope.daySelected['select_'+index];
+      $scope.daySelected['select'+index] = !$scope.daySelected['select'+index];
     };
 
     var ipObj1 = {
@@ -30,7 +30,7 @@
         new Date(2015, 4, 16),
         new Date(2015, 5, 16),
         new Date('Wednesday, August 12, 2015'),
-        new Date("08-16-2016"),
+        new Date('08-16-2016'),
         new Date(1439676000000)
       ],
       from: new Date(2012, 1, 1),

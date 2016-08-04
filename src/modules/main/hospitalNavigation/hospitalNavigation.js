@@ -24,7 +24,7 @@
       $state.go('mainFloorList');
     };
 
-    $scope.districtClk = function(event, id) {
+    $scope.districtClk = function(event) {
       var districtDocuments = document.querySelectorAll('.district-button');
       for (var i = 0 ; i < districtDocuments.length ; i++) {
         if (!angular.element(districtDocuments[i]).hasClass('button-outline')) {

@@ -3,17 +3,17 @@
 
   var registrationDateCtrl = function($scope, $window, $state) {
     $scope.daySelected = {
-      select_1 : false,
-      select_2 : false,
-      select_3 : false
+      select1 : false,
+      select2 : false,
+      select3 : false
     };
     $scope.dayClk = function(index) {
       for (var key in $scope.daySelected) {
-        if (key !== ('select_'+index)) {
+        if (key !== ('select'+index)) {
           $scope.daySelected[key] = false;
         }
       }
-      $scope.daySelected['select_'+index] = !$scope.daySelected['select_'+index];
+      $scope.daySelected['select'+index] = !$scope.daySelected['select'+index];
     };
 
     $scope.dateSelect = function(id) {
