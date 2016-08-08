@@ -1,0 +1,17 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">列表</h1>
+    <button class="button button-clear button-positive" ng-click="modal.hide()">取消</button>
+  </ion-header-bar>
+  <ion-content scroll="false" class="has-header content-gray buildingList-content">
+    <ul class="list card">
+      <li class="item item-positive">
+        {{districtSelectedName}}
+      </li>
+      <li ng-repeat="build in buildList" class="item" ng-click="buildingClk('{{build.id}}')">
+        {{build.name}}
+        <span ng-if="build.function != ''">（{{build.function}}）</span>
+      </li>
+    </ul>
+  </ion-content>
+</ion-modal-view>

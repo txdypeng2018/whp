@@ -1,0 +1,47 @@
+<ion-header-bar class="bar-light registerDoctorTimeSelect-title">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    {{doctor.name}}
+  </div>
+  <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
+  <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+</ion-header-bar>
+<div class="registerDoctorTimeSelect-date has-header">
+  <div class="positive month">{{selectDays[0].month}}月</div>
+  <table>
+    <tr>
+      <td ng-repeat="oneDay in selectDays" class="week" width="13%" ng-click="dayClk($index, '{{oneDay.date}}')">
+        {{oneDay.week}}
+      </td>
+      <td ng-if="allDays.length > 7" rowspan="2" width="9%" ng-click="dayPicker()">
+        <i class="icon ion-ios-arrow-down positive"></i>
+      </td>
+      <td ng-if="allDays.length <= 7" rowspan="2" width="9%">
+        &nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td ng-repeat="oneDay in selectDays" class="day" ng-class="{'': 'border-none'}[oneDay.date]" ng-click="dayClk($index, '{{oneDay.date}}')">
+        <div class="day-select">{{oneDay.day}}</div>
+      </td>
+    </tr>
+  </table>
+  <ul class="list">
+    <li class="item item-divider">
+      {{dept.name}}
+    </li>
+  </ul>
+</div>
+<ion-content class="has-header content-fill registerDoctorTimeSelect-content">
+  <ul ng-if="times.length > 0" class="list">
+    <li ng-repeat="time in times" class="item item-icon-right" ng-click="timeClk('{{time.time}}')">
+      <h2 class="positive">{{time.time}}</h2>
+      <i class="badge">{{time.title}}<br>￥{{time.amount}}</i>
+      <i class="icon ion-ios-arrow-right icon-right"></i>
+    </li>
+  </ul>
+  <div ng-if="times.length == 0" class="no-content-center">暂无医生排班信息</div>
+</ion-content>

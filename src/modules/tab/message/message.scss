@@ -1,0 +1,20 @@
+.message-content {
+  .list {
+    li {
+      padding: 10px 15px;
+      min-height: 80px;
+      border-top-width: 6px;
+
+      .time {
+        color: #999999;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .message {
+        font-size: 14px;
+        white-space: normal;
+      }
+    }
+  }
+}

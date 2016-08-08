@@ -1,0 +1,17 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">楼层索引</div>
+</ion-header-bar>
+<ion-content class="has-header content-gray floorList-content">
+  <ul class="list card">
+    <li ng-repeat="floor in floorList" class="item">
+      <div class="floor positive-bg">{{floor.name}}</div>
+      <div class="floor-introduce">
+        <span ng-repeat="dept in floor.depts">{{dept}}</span>
+      </div>
+    </li>
+  </ul>
+</ion-content>

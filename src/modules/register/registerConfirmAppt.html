@@ -1,0 +1,52 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title"></div>
+</ion-header-bar>
+<ion-content class="has-header registerConfirmAppt-content">
+  <div class="patient">
+    <img src="./assets/images/pic_man.png" class="photo">
+    <span>就诊人：{{patient.name}}</span>
+    <span>
+      <a class="positive">
+        换人
+        <i class="icon ion-ios-loop-strong"></i>
+      </a>
+    </span>
+    <p>身份证号：{{patient.idCard}}</p>
+  </div>
+  <div class="register-info">
+    <table>
+      <tr>
+        <td class="label">就诊时间：</td>
+        <td width="100%">{{dateDisplay}}</td>
+      </tr>
+      <tr>
+        <td class="label">就诊科室：</td>
+        <td width="100%">{{dept.name}}</td>
+      </tr>
+      <tr>
+        <td class="label">看诊医生：</td>
+        <td width="100%">{{doctor.name}}</td>
+      </tr>
+      <tr>
+        <td class="label positive">温馨提示：</td>
+        <td width="100%" class="positive">
+          <div ng-bind-html="prompt"></div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="agreement" ng-click="showAgreement()">
+    我已了解并同意一下挂号规则（点击查看详细）
+    <i class="icon ion-ios-arrow-down positive"></i>
+  </div>
+  <div class="amount">
+    合计：{{doctor.amount}}元
+  </div>
+  <div class="confirm">
+    <button class="button button-positive" ng-click="registerConfirm()">确定</button>
+  </div>
+</ion-content>

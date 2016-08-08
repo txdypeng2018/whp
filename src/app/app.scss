@@ -1,9 +1,108 @@
-ion-content {
-  background-color: #f4f4f4 !important;
+$positiveColor: #387ef5;
+
+/* ion-header-bar common css */
+ion-header-bar {
+  .icon-return {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 8px;
+    margin-top: 2px;
+
+    i {
+      font-size: 28px;
+      margin-right: 3px;
+    }
+
+    div {
+      font-size: 17px;
+    }
+  }
+
+  .title  {
+    .photo {
+      height: 35px;
+      width: 35px;
+      vertical-align: middle;
+      margin: -5px 20px 0 -20px;
+    }
+
+    i.operation-down {
+      margin-left: 3px;
+    }
+  }
 }
 
-ion-content.content-introduce {
-  padding: 25px;
+/* ion-content common css */
+ion-content {
+  &.content-gray {
+    background-color: #f4f4f4;
+  }
+
+  &.content-fill {
+    > .scroll {
+      height: 100%;
+    }
+  }
+
+  &.content-introduce {
+    padding: 25px;
+  }
+
+  .no-content-center {
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #999999;
+  }
+
+  .no-content-padding {
+    text-align: center;
+    padding-top: 120px;
+    font-size: 20px;
+    color: #999999;
+  }
+}
+
+/* control common css */
+.list {
+  .item {
+    &.item-splitLine {
+      border-top: 8px solid #f0f0f0;
+    }
+
+    i.icon-left {
+      font-size: 28px;
+    }
+
+    i.icon-right {
+      color: #999999;
+      font-size: 22px;
+    }
+  }
+}
+
+.district-select {
+  position: absolute;
+  width: 100%;
+  padding: 8px 35px;
+
+  .district-button {
+    min-height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+  }
+}
+
+.has-header-district {
+  top: 94px;
+}
+
+.positive {
+  color: $positiveColor !important;
 }
 
 a {
@@ -11,61 +110,37 @@ a {
   color: #000000;
 }
 
-.positive {
-  color: #387ef5 !important;
+.button {
+  min-height: 42px;
 }
 
-.a-return {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 8px;
-  margin-top: 2px;
+.ionic_datepicker_popup {
+  .popup-body {
+    .selected_date_full {
+      background-color: $positiveColor !important;
+    }
 
-  i {
-    font-size: 28px;
-    margin-right: 3px;
+    .button-clear {
+      color: $positiveColor !important;
+    }
+    .month_select, .year_select {
+      border-bottom: 1px solid $positiveColor !important;
+    }
+
+    .month_select:after, .year_select:after {
+      color: $positiveColor !important;
+    }
   }
 
-  div {
-    font-size: 17px;
+  .popup-buttons button {
+    background-color: $positiveColor !important;
   }
-}
 
-.title-photo {
-  height: 35px;
-  width: 35px;
-  vertical-align: middle;
-  margin: -5px 20px 0 -20px;
-}
+  .selected_date {
+    background-color: $positiveColor !important;
+  }
 
-.title-operation-down {
-  margin-left: 3px;
-}
-
-.list-right-icon {
-  color: #999999;
-  font-size: 22px !important;
-}
-
-.ionic_datepicker_popup .popup-body .selected_date_full {
-  background-color: #387ef5 !important;
-}
-.ionic_datepicker_popup .popup-buttons button {
-  background-color: #387ef5 !important;
-}
-.ionic_datepicker_popup .selected_date {
-  background-color: #387ef5 !important;
-}
-.ionic_datepicker_popup .today {
-  border: 1px solid #387ef5 !important;
-}
-.ionic_datepicker_popup .popup-body .button-clear {
-  color: #387ef5 !important;
-}
-.ionic_datepicker_popup .popup-body .month_select, .ionic_datepicker_popup .popup-body .year_select {
-  border-bottom: 1px solid #387ef5 !important;
-}
-.ionic_datepicker_popup .popup-body .month_select:after, .ionic_datepicker_popup .popup-body .year_select:after {
-  color: #387ef5 !important;
+  .today {
+    border: 1px solid $positiveColor !important;
+  }
 }

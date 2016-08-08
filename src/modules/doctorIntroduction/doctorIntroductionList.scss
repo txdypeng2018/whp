@@ -1,0 +1,71 @@
+.doctorIntroductionList-subheader {
+  position: relative;
+
+  form {
+    width: 100%;
+  }
+
+  .search-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -33px;
+    white-space: nowrap;
+
+    span {
+      color: #999999;
+    }
+  }
+
+  .item-input-wrapper {
+    background: #ffffff;
+
+    input {
+      width: 100%;
+      margin-top: -2px;
+    }
+  }
+}
+
+.doctorIntroductionList-content {
+  .list {
+    li:first-child {
+      border-top: 0;
+    }
+
+    .item.item-avatar-left {
+      padding-left: 92px;
+    }
+
+    .photo {
+      width: 60px !important;
+      height: 60px !important;
+      max-width: 60px !important;
+      max-height: 60px !important;
+    }
+
+    .authenticate {
+      position: absolute;
+      top: 80px;
+      left: 19px;
+
+      img {
+        height: 18px;
+      }
+    }
+
+    .name {
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    .professional {
+      display: inline-block;
+      margin-left: 8px;
+    }
+
+    .dept {
+      margin-top: 4px;
+    }
+  }
+}

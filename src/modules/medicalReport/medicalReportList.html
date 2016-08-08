@@ -1,0 +1,49 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    我的报告单
+    <i class="icon ion-ios-arrow-down positive operation-down"></i>
+  </div>
+</ion-header-bar>
+<ion-content id="medicalReportList_content" scroll="false" has-bouncing="false" class="has-header medicalReportList-content">
+  <div class="prompt">
+    <div class="prompt-icon">
+      <i class="icon ion-ios-information-outline"></i>
+    </div>
+    <div>
+      温馨提示：无法查看到结果的患者请确认病历号是否绑定正确，部分结果无法在手机上查看。
+    </div>
+  </div>
+  <div class="reportSearch-form">
+    <div>
+      <label class="item-input item-select">
+        <select ng-model="searchStr.searchTime" ng-change="searchReport()"
+                ng-options="node.code as node.name for node in searchTimeTypes"></select>
+        <i class="icon ion-ios-arrow-down positive"></i>
+      </label>
+    </div>
+    <div>
+      <label class="item-input item-select">
+        <select ng-model="searchStr.searchStatus" ng-change="searchReport()"
+                ng-options="node.code as node.name for node in searchStatusTypes"></select>
+        <i class="icon ion-ios-arrow-down positive"></i>
+      </label>
+    </div>
+  </div>
+  <ion-scroll id="medicalReportList_reports" class="reports">
+    <ion-refresher pulling-icon="" on-refresh="searchReport()"></ion-refresher>
+    <ul ng-if="reports.length > 0" class="list">
+      <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.reportCategory, report.status)">
+        <h2>{{report.name}}</h2>
+        <p>检查时间：{{report.examinationDate}}</p>
+        <i ng-if="report.status == '0'" class="badge assertive">未出</i>
+        <i ng-if="report.status == '1'" class="badge positive">已出</i>
+        <i class="icon ion-ios-arrow-right icon-right"></i>
+      </li>
+    </ul>
+    <div ng-if="reports.length == 0" class="no-content-padding">暂时没有报告</div>
+  </ion-scroll>
+</ion-content>

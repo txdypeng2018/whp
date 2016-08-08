@@ -1,0 +1,65 @@
+.registerConfirmToday-content {
+  padding: 0 10px;
+
+  .patient {
+    border-bottom: 1px solid #dddddd;
+    padding: 15px 0 15px 55px;
+    font-size: 18px;
+    position: relative;
+
+    .photo {
+      width: 40px;
+      position: absolute;
+      top: 5px;
+      left: 0;
+    }
+
+    a {
+      margin-left: 12px;
+    }
+  }
+
+  .register-info {
+    border-bottom: 1px solid #dddddd;
+    padding: 12px 0;
+    font-size: 15px;
+
+    table {
+      width: 100%;
+
+      td {
+        padding: 3px 0;
+      }
+
+      .label {
+        white-space: nowrap;
+        color: #999999;
+      }
+    }
+  }
+
+  .agreement {
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0;
+    position: relative;
+    color: #999999;
+
+    i {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+    }
+  }
+
+  .amount {
+    padding: 15px 0;
+    font-size: 18px;
+    text-align: right;
+  }
+
+  .confirm {
+    .button {
+      width: 100%;
+    }
+  }
+}

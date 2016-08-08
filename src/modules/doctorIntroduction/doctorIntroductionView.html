@@ -1,0 +1,41 @@
+<ion-header-bar class="bar-light doctorIntroductionView-title">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">
+    医生主页
+  </div>
+  <a class="button button-clear icon ion-ios-star-outline positive"></a>
+</ion-header-bar>
+<ion-content class="has-header has-footer doctorIntroductionView-content">
+  <ul class="list">
+    <li class="item item-avatar-left">
+      <img ng-if="introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
+      <img ng-if="introduction.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+      <div>
+        <h2 class="name">{{introduction.name}}</h2>
+        <p class="professional">{{introduction.title}}</p>
+      </div>
+      <p>{{introduction.hospital}}</p>
+      <p class="dept">{{introduction.dept}}</p>
+    </li>
+    <li class="item introduction-content item-splitLine">
+      <h2>
+        <i class="icon ion-ios-medkit-outline positive"></i>
+        擅长
+      </h2>
+      <p>{{introduction.skill}}</p>
+    </li>
+    <li class="item introduction-content">
+      <h2>
+        <i class="icon ion-ios-chatboxes-outline positive"></i>
+        简介
+      </h2>
+      <p>{{introduction.summary}}</p>
+    </li>
+  </ul>
+</ion-content>
+<ion-footer-bar class="doctorIntroductionView-footer">
+  <button class="button positive-bg doctorIntroduction-register">挂号</button>
+</ion-footer-bar>

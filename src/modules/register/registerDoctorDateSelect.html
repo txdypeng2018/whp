@@ -1,0 +1,40 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title"></div>
+</ion-header-bar>
+<div class="registerDoctorDateSelect-date has-header">
+  <div class="positive month">{{selectDays[0].month}}月</div>
+  <table>
+    <tr>
+      <td ng-repeat="oneDay in selectDays" class="week" width="13%" ng-click="dayClk($index, '{{oneDay.date}}')">{{oneDay.week}}</td>
+      <td rowspan="2" width="9%" ng-click="dayPicker()">
+        <i class="icon ion-ios-arrow-down positive"></i>
+      </td>
+    </tr>
+    <tr>
+      <td ng-repeat="oneDay in selectDays" class="day" ng-click="dayClk($index, '{{oneDay.date}}')">
+        <div class="day-select">{{oneDay.day}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+<ion-content class="has-header content-fill registerDoctorDateSelect-content">
+  <ul ng-if="doctors.length > 0" class="list">
+    <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk('{{doctor.id}}')">
+      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png">
+      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png">
+      <div class="name">
+        <h2>{{doctor.name}}</h2>
+        <p>{{doctor.title}}</p>
+        <div class="img-registration">
+          <img src="./assets/images/appointment_available.png">
+        </div>
+      </div>
+      <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
+    </li>
+  </ul>
+  <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
+</ion-content>

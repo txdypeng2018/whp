@@ -1,0 +1,64 @@
+.medicalReportList-content {
+  .prompt {
+    padding: 10px 15px 10px 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #777777;
+
+    .prompt-icon {
+      margin: 7px;
+      font-size: 18px;
+    }
+  }
+
+  .reportSearch-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 10px;
+
+    > div {
+      width: 50%;
+      text-align: center;
+    }
+
+    > div:first-child {
+      border-right: 1px solid #777777;
+    }
+
+    .item-select {
+      padding: 0;
+
+      select {
+        background: transparent;
+        position: inherit;
+        font-size: 17px;
+        padding: 0 6px 0 0;
+        margin-left: auto;
+        direction: inherit;
+      }
+
+      &:after {
+        border-top: 0;
+      }
+
+      i {
+        font-size: 20px;
+        margin-right: auto;
+      }
+    }
+  }
+
+  .reports {
+    h2 {
+      padding-bottom: 5px;
+    }
+
+    .badge {
+      align-items: center;
+      height: 100%;
+      top: 0;
+    }
+  }
+}

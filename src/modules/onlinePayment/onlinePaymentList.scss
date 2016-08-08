@@ -1,0 +1,32 @@
+.onlinePaymentList-subheader {
+  justify-content: center;
+
+  .payStatus-select {
+    padding: 0;
+
+    select {
+      background: transparent;
+      position: inherit;
+      font-size: 17px;
+      padding: 0 6px 0 0;
+      margin-left: auto;
+      direction: inherit;
+      width: 75px;
+    }
+
+    &:after {
+      border-top: 0;
+    }
+
+    i {
+      font-size: 20px;
+      margin-right: auto;
+    }
+  }
+}
+
+.onlinePaymentList-footer {
+  .pay-button {
+    width: 100px;
+  }
+}
