@@ -1,0 +1,30 @@
+.appAbout-content {
+  .logo {
+    text-align: center;
+    padding: 20px 0 0 0;
+
+    img {
+      width: 100px;
+    }
+  }
+
+  .version {
+    color: #999999;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .list {
+    margin-top: 20px;
+
+    .item {
+      font-size: 14px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+  }
+
+  .service-phone {
+    text-align: center;
+  }
+}
