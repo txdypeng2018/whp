@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "name": "王二",
+    "sexCode": "1",
+    "age": "35",
+    "idCard": "210106198010101234",
+    "phone": "13603001234",
+    "medicalNum": "M001234567",
+    "relationship": "00",
+    "patientVisits": "1"
+  },
+  {
+    "id": "2",
+    "name": "王三",
+    "sexCode": "2",
+    "age": "30",
+    "idCard": "210106198510101235",
+    "phone": "13603001235",
+    "medicalNum": "M001234568",
+    "relationship": "03",
+    "patientVisits": "0"
+  }
+]

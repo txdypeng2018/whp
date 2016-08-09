@@ -1,0 +1,24 @@
+.feedback-content {
+  .inputs {
+    padding: 15px;
+
+    > div {
+      background-color: #ffffff;
+      padding: 10px;
+
+      textarea {
+        width: 100%;
+        height: 150px;
+        resize: none;
+      }
+    }
+  }
+
+  .operation {
+    padding: 10px 15px 0 15px;
+
+    .button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+.medicalCardEdit-content {
+  .list.list-inset {
+    margin: 12px 20px;
+
+    .item-input {
+      padding-left: 20px;
+
+      .input-label {
+        width: 40px;
+        padding-bottom: 2px;
+
+        img {
+          width: 23px;
+        }
+      }
+
+      input {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .operation {
+    padding: 5px 20px 0 20px;
+
+    .button {
+      width: 100%;
+    }
+  }
+
+  .create {
+    border-top: 1px solid #dddddd;
+    margin: 45px 20px 0 20px;
+    text-align: center;
+    position: relative;
+
+    span {
+      position: absolute;
+      font-size: 18px;
+      display: inline-block;
+      width: 130px;
+      background-color: #f4f4f4;
+      top: -10px;
+      left: 50%;
+      margin-left: -65px;
+    }
+  }
+}

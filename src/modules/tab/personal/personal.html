@@ -1,29 +1,32 @@
 <ion-content scroll="false" has-bouncing="false" class="content-gray">
   <div class="personal-title positive-bg">
-    <div><img class="photo" src="/assets/images/pic_man.png"></div>
-    <div class="name">王二</div>
-    <div class="phone">136****1234</div>
+    <div>
+      <img ng-if="patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+      <img ng-if="patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+    </div>
+    <div class="name">{{patient.name}}</div>
+    <div class="phone">{{patient.phone}}</div>
   </div>
   <div>
     <ul class="list personal-list">
-      <li class="item item-icon-left item-icon-right">
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('familyMemberList')">
         <i class="icon ion-ios-people-outline positive icon-left"></i>
         家庭成员
-        <i class="badge">1</i>
+        <i class="badge">2</i>
         <i class="icon ion-ios-arrow-right icon-right"></i>
       </li>
-      <li class="item item-icon-left item-icon-right">
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('collectionDoctorList')">
         <i class="icon ion-ios-personadd-outline positive icon-left"></i>
         收藏的医生
-        <i class="badge">0</i>
+        <i class="badge">{{doctorCount}}</i>
         <i class="icon ion-ios-arrow-right icon-right"></i>
       </li>
-      <li class="item item-icon-left item-icon-right">
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('medicalCardList')">
         <i class="icon ion-ios-list-outline positive icon-left"></i>
         绑定就诊卡
         <i class="icon ion-ios-arrow-right icon-right"></i>
       </li>
-      <li class="item item-icon-left item-icon-right">
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingIndex')">
         <i class="icon ion-ios-gear-outline positive list-icon-left"></i>
         设置
         <i class="icon ion-ios-arrow-right icon-right"></i>

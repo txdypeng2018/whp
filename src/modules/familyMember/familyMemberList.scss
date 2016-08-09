@@ -1,0 +1,88 @@
+.familyMemberList-subheader {
+  background-color: #f4f4f4 !important;
+  border-bottom: transparent;
+
+  .title {
+    font-size: 16px;
+  }
+}
+
+.familyMemberList-content {
+  .list {
+    .item {
+      position: relative;
+      padding-left: 92px;
+
+      &:first-child {
+        border-top: 0;
+      }
+
+      .photo {
+        top: 12px;
+        width: 60px !important;
+        height: 60px !important;
+        max-width: 60px !important;
+        max-height: 60px !important;
+      }
+
+      .relationship-name {
+        position: absolute;
+        width: 60px;
+        color: #999999;
+        text-align: center;
+        top: 78px;
+        left: 15px;
+      }
+
+      .name-sex-age {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .name {
+          font-size: 18px;
+        }
+
+        .sex {
+          margin-top: -5px;
+          margin-left: 8px;
+          width: 18px;
+        }
+
+        .age {
+          font-size: 18px;
+          margin-left: 16px;
+        }
+      }
+
+      > p {
+        margin-top: 8px;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+
+        .photo-card {
+          width: 18px;
+          height: 16px;
+        }
+
+        .photo-tel {
+          width: 18px;
+          height: 18px;
+        }
+
+        span {
+          margin-left: 5px;
+        }
+      }
+
+      .patient-visits {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50px;
+      }
+    }
+  }
+}

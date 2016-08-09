@@ -1,0 +1,38 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">家庭成员</div>
+  <button class="button button-clear button-positive" ng-click="familyMemberAdd()">添加</button>
+</ion-header-bar>
+<ion-header-bar class="bar-subheader bar-light familyMemberList-subheader">
+  <div class="title">已添加2位家庭成员，还可以添加7位</div>
+</ion-header-bar>
+<ion-content class="has-header has-subheader content-gray familyMemberList-content">
+  <ul class="list">
+    <li ng-repeat="member in members" class="item item-avatar-left" ng-click="medicalCardEdit()">
+      <img src="{{relationshipTypes[member.relationship].img}}" class="photo">
+      <div class="relationship-name">
+        {{relationshipTypes[member.relationship].name}}
+      </div>
+      <div class="name-sex-age">
+        <h2 class="name">{{member.name}}</h2>
+        <img ng-if="member.sexCode == '1'" src="./assets/images/man.png" class="sex">
+        <img ng-if="member.sexCode == '2'" src="./assets/images/woman.png" class="sex">
+        <p class="age">{{member.age}}</p>
+      </div>
+      <p>
+        <img ng-if="member.patientVisits == '1'" src="./assets/images/id_s.png" class="photo-card">
+        <img ng-if="member.patientVisits == '0'" src="./assets/images/id_d.png" class="photo-card">
+        <span>{{member.idCard}}</span>
+      </p>
+      <p>
+        <img ng-if="member.patientVisits == '1'" src="./assets/images/telephone_s.png" class="photo-tel">
+        <img ng-if="member.patientVisits == '0'" src="./assets/images/telephone_s.png" class="photo-tel">
+        <span>{{member.phone}}</span>
+      </p>
+      <img ng-if="member.patientVisits == '1'" src="./assets/images/client.png" class="patient-visits">
+    </li>
+  </ul>
+</ion-content>

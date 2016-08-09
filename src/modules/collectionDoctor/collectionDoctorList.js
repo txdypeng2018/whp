@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout) {
-    $scope.title = '医生介绍';
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout) {
+    $scope.title = '收藏的医生';
 
-    //取得医生介绍列表
+    //取得收藏医生介绍列表
     var getDoctorIntroductions = function(param) {
-      $http.get('/doctors', {params: param}).success(function(data) {
+      $http.get('/collection/doctors', {params: param}).success(function(data) {
         $scope.introductions = data;
       });
     };
@@ -31,10 +31,10 @@
   };
 
   var mainRouter = function($stateProvider) {
-    $stateProvider.state('doctorIntroductionList', {
-      url: '/doctorIntroductionList',
+    $stateProvider.state('collectionDoctorList', {
+      url: '/collectionDoctor/collectionDoctorList',
       templateUrl: 'modules/doctorIntroduction/doctorIntroductionList.html',
-      controller: doctorIntroductionListCtrl
+      controller: collectionDoctorListCtrl
     });
   };
 
