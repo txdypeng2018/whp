@@ -1,0 +1,69 @@
+<ion-header-bar class="bar-light registrationView-head">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">就诊单</div>
+  <a class="button button-clear icon ion-ios-telephone-outline positive"></a>
+</ion-header-bar>
+<ion-content class="has-header content-gray registrationView-content">
+  <ul class="list registration-card">
+    <li class="item item-card-head">
+      <h2 class="odd-number">单号：<span class="positive">S2112345</span></h2>
+      <span class="positive status">未支付</span>
+    </li>
+    <li class="item item-card-content">
+      <table>
+        <tr>
+          <td class="label"><img src="./assets/images/pic_man.png"></td>
+          <td>
+            <span class="name">王二</span><br/>
+            <span class="number">门诊号：<span class="positive">M004123456</span></span>
+            <button class="button button-outline button-positive">条码</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="label"><i class="icon ion-ios-location-outline"></i></td>
+          <td>第一内分泌科门诊（南湖）</td>
+        </tr>
+        <tr>
+          <td class="label"><i class="icon ion-ios-person-outline"></i></td>
+          <td>医生1</td>
+        </tr>
+      </table>
+    </li>
+  </ul>
+  <ul class="list registration-other">
+    <li class="item item-other-head">
+      <h2>挂号</h2>
+    </li>
+    <li class="item item-other-content">
+      <table>
+        <tr>
+          <td class="label">就诊时间</td>
+          <td>请到分诊台咨询</td>
+        </tr>
+        <tr>
+          <td class="label">排队序号</td>
+          <td>看诊前查看就诊序号</td>
+        </tr>
+        <tr>
+          <td class="label">就诊科室</td>
+          <td>看诊前查看就诊科室</td>
+        </tr>
+        <tr>
+          <td class="label">挂号费</td>
+          <td>3.00</td>
+        </tr>
+      </table>
+    </li>
+    <li class="item item-icon-right" ng-click="illustrationClk()">
+      <h2 class="positive">就诊、退号说明</h2>
+      <i class="icon ion-ios-arrow-right icon-right"></i>
+    </li>
+  </ul>
+  <div class="operation">
+    <button class="button button-positive">支付</button>
+    <button class="button button-outline button-positive">退号</button>
+  </div>
+</ion-content>

@@ -1,8 +1,10 @@
 (function(app) {
   'use strict';
 
-  var tabRegistrationCtrl = function() {
-
+  var tabRegistrationCtrl = function($scope, $state) {
+    $scope.registrationClk = function() {
+      $state.go('registrationView');
+    };
   };
 
   var mainRouter = function($stateProvider) {

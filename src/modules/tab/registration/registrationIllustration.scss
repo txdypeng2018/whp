@@ -1,0 +1,54 @@
+.registrationIllustration-content {
+  .illustration {
+    background-color: #ffffff;
+
+    &.illustration-marge {
+      margin-top: 15px;
+    }
+
+    .head {
+      padding: 0 8px;
+
+      .title {
+        padding: 16px 4px 12px 4px;
+        font-size: 20px;
+        border-bottom: 1px solid #dddddd;
+      }
+    }
+
+    .content {
+      padding: 16px 12px;
+      color: #999999;
+
+      table {
+        td {
+          color: #666666;
+          vertical-align: middle;
+          padding-top: 6px;
+
+          &:not(.label) {
+            padding-left: 10px;
+          }
+
+          &.label {
+            text-align: center;
+            width: 85px;
+
+            img {
+              width: 60px;
+              height: 60px;
+            }
+          }
+
+          &.medical-guide {
+            text-align: center;
+
+            a {
+              text-decoration: underline !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
