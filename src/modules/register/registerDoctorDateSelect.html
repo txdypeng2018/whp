@@ -23,9 +23,9 @@
 </div>
 <ion-content class="has-header content-fill registerDoctorDateSelect-content">
   <ul ng-if="doctors.length > 0" class="list">
-    <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk('{{doctor.id}}')">
-      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png">
-      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png">
+    <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.deptId)">
+      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
+      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
       <div class="name">
         <h2>{{doctor.name}}</h2>
         <p>{{doctor.title}}</p>
@@ -34,6 +34,7 @@
         </div>
       </div>
       <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
+      <p>科室：{{doctor.dept}}</p>
     </li>
   </ul>
   <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>

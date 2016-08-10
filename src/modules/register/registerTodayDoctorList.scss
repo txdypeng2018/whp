@@ -4,25 +4,35 @@
       border-top: 0;
     }
 
-    .name {
-      display: flex;
-      flex-direction: row;
+    .item.item-avatar-left {
+      padding-left: 86px;
 
-      h2 {
-        display: inline-block;
+      .photo {
+        max-width: 55px;
+        max-height: 55px;
+        top: 18px;
       }
 
-      p {
-        display: inline-block;
-        margin-left: 8px;
-      }
+      .name {
+        display: flex;
+        flex-direction: row;
 
-      .img-registration {
-        display: inline-block;
-        margin-left: 8px;
+        h2 {
+          display: inline-block;
+        }
 
-        img {
-          width: 12px;
+        p {
+          display: inline-block;
+          margin-left: 8px;
+        }
+
+        .img-registration {
+          display: inline-block;
+          margin-left: 8px;
+
+          img {
+            width: 12px;
+          }
         }
       }
     }
