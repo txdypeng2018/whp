@@ -15,7 +15,7 @@
 
     //取得科室下的医生
     var getDeptDoctors = function(){
-      $http.get('/doctors', {params: {deptId: $stateParams.id}}).success(function(data) {
+      $http.get('/doctors', {params: {subjectId: $stateParams.subjectId}}).success(function(data) {
         $scope.doctors = data;
       });
     };
@@ -89,8 +89,8 @@
     };
 
     //医生选中事件
-    $scope.doctorClk = function(id) {
-      $state.go('registerDoctorTimeSelect', {deptId: $stateParams.id, doctorId: id, date: daySelected});
+    $scope.doctorClk = function(doctorId, deptId) {
+      $state.go('registerDoctorTimeSelect', {deptId: deptId, doctorId: doctorId, date: daySelected});
     };
   };
 

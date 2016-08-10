@@ -1,0 +1,125 @@
+.registrationView-head {
+  a.button.button-clear.icon:before {
+    font-size: 26px;
+  }
+
+  a.button {
+    margin-top: -2px;
+    margin-right: 2px;
+  }
+}
+
+.registrationView-content {
+  .list.registration-card {
+    li:first-child {
+      border-top: 0;
+    }
+
+    .item {
+      position: relative;
+
+      &.item-card-head {
+        padding: 9px 8px 7px 12px;
+        font-size: 15px;
+
+        .odd-number {
+          color: #999999;
+        }
+
+        .status {
+          position: absolute;
+          right: 12px;
+          top: 8px;
+        }
+      }
+
+      &.item-card-content {
+        padding: 12px 0;
+
+        table {
+          width: 100%;
+
+          td {
+            vertical-align: middle;
+            padding: 1px 0;
+
+            &.label {
+              width: 80px;
+              text-align: center;
+
+              img {
+                width: 45px;
+                height: 45px;
+              }
+
+              i {
+                font-size: 22px;
+              }
+            }
+
+            .button {
+              line-height: 15px;
+              min-height: 15px;
+              font-size: 13px;
+              padding: 1px 8px 0 8px;
+              min-width: 0;
+              margin-left: 3px;
+            }
+
+            .name {
+              font-size: 18px;
+            }
+
+            .number {
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .registration-other {
+    .item {
+      &.item-other-head {
+        padding: 9px 8px 7px 12px;
+        font-size: 15px;
+
+        h2 {
+          color: #999999;
+        }
+      }
+
+      &.item-other-content {
+        padding: 12px 0;
+
+        table {
+          width: 100%;
+
+          td {
+            padding: 3px 0;
+            font-size: 14px;
+
+            &.label {
+              padding-left: 12px;
+              width: 80px;
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .operation {
+    padding: 0 15px;
+
+    .button {
+      width: 100%;
+
+      &:not(:first-child) {
+        margin-top: 5px;
+      }
+    }
+  }
+}

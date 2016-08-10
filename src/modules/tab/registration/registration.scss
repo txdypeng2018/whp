@@ -1,0 +1,87 @@
+.registration-content {
+  .time-line {
+    display: flex;
+    flex-direction: row;
+
+    .time-line-left {
+      position: relative;
+      border-right: 1px solid #dddddd;
+      text-align: center;
+      padding: 12px 15px 0 15px;
+      white-space: nowrap;
+
+      .time-line-mark {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        position: absolute;
+        top: 16px;
+        right: -5px;
+      }
+    }
+
+    .time-line-right {
+      flex-grow: 1;
+      padding: 5px 8px 20px 15px;
+
+      .time-line-panel {
+        background-color: #ffffff;
+        position: relative;
+        border-radius: 2px;
+        padding: 10px 6px;
+
+        &:before {
+          position: absolute;
+          top: 8px;
+          display: inline-block;
+          border-top: 8px solid transparent;
+          border-left: 0 solid #ffffff;
+          border-right: 8px solid #ffffff;
+          border-bottom: 8px solid transparent;
+          content: " ";
+          left: -8px;
+          right: auto;
+        }
+
+        .title {
+          font-size: 16px;
+          color: #666666;
+        }
+
+        .content {
+          padding: 1px 0 0 0;
+
+          &.content-hospital {
+            padding: 3px 0 0 0;
+          }
+
+          .content-icon {
+            display: inline-block;
+            width: 12px;
+            text-align: center;
+            font-size: 17px;
+            width: 20px;
+          }
+
+          .content-name {
+            margin-left: 5px;
+          }
+        }
+
+        .bottom {
+          padding: 3px 0 0 0;
+          color: #666666;
+        }
+      }
+    }
+
+    .time-line-bottom {
+      color: #999999;
+      padding: 2px 3px;
+
+      .pay-status {
+        float:right
+      }
+    }
+  }
+}

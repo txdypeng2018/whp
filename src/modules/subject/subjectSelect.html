@@ -1,0 +1,23 @@
+<ion-header-bar class="bar-light">
+  <a class="icon-return positive" href="javascript:history.go(-1)">
+    <i class="icon ion-ios-arrow-left"></i>
+    <div>返回</div>
+  </a>
+  <div class="title">科室选择</div>
+</ion-header-bar>
+<ion-header-bar class="bar-subheader bar-light subjectSelect-subheader">
+  <div ng-if="searchName == null || searchName == ''" ng-click="placeholderClk()" class="search-placeholder">
+    <i class="icon ion-ios-search-strong positive"></i>
+    <span>专业/专长</span>
+  </div>
+  <form ng-submit="doSearch()">
+    <input id="subjectSelect_search" type="search" ng-model="searchName">
+  </form>
+</ion-header-bar>
+<ion-content class="has-header has-subheader subjectSelect-content">
+  <div class="subjects">
+    <div ng-repeat="subject in subjects" class="subject">
+      <button class="button button-outline button-positive" ng-click="subjectClk('{{subject.id}}','{{subject.hasNext}}')">{{subject.name}}</button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,43 @@
+.subjectSelect-subheader {
+  position: relative;
+
+  .search-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -33px;
+    white-space: nowrap;
+
+    span {
+      color: #999999;
+    }
+  }
+
+  form {
+    width: 100%;
+
+    input {
+      width: 100%;
+      margin-top: -2px;
+    }
+  }
+}
+
+.subjectSelect-content {
+  padding: 15px;
+
+  .subjects {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .subject {
+      width: 50%;
+      padding: 10px;
+
+      .button {
+        width: 100%;
+      }
+    }
+  }
+}
