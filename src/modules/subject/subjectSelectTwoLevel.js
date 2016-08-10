@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectTwoLevelCtrl = function($scope, $http, $state, $stateParams) {
+  var subjectSelectTwoLevelCtrl = function($scope, $http, $state, $stateParams, $timeout) {
     //取得二级学科
     var getSubjects = function() {
       $http.get('/subjects', {params: {subjectId: $stateParams.subjectId, searchName: $scope.searchName}}).success(function(data) {
@@ -31,7 +31,7 @@
       else if ($stateParams.type === '2') {
         $state.go('registerDoctorDateSelect', {subjectId: id});
       }
-    }
+    };
   };
 
   var mainRouter = function($stateProvider) {

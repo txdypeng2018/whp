@@ -4,7 +4,7 @@
   var registrationIllustrationCtrl = function($scope, $state) {
     $scope.medicalGuideClk = function() {
       $state.go('medicalGuide');
-    }
+    };
   };
 
   var mainRouter = function($stateProvider) {

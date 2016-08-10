@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectOneLevelCtrl = function($scope, $http, $state, $stateParams) {
+  var subjectSelectOneLevelCtrl = function($scope, $http, $state, $stateParams, $timeout) {
     //取得一级学科
     var getSubjects = function() {
       $http.get('/subjects', {params: {subjectId: '', searchName: $scope.searchName}}).success(function(data) {
@@ -36,7 +36,7 @@
           $state.go('registerDoctorDateSelect', {subjectId: id});
         }
       }
-    }
+    };
   };
 
   var mainRouter = function($stateProvider) {

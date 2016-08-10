@@ -4,7 +4,7 @@
   var registrationViewCtrl = function($scope, $state) {
     $scope.illustrationClk = function() {
       $state.go('registrationIllustration');
-    }
+    };
   };
 
   var mainRouter = function($stateProvider) {
