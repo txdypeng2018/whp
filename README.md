@@ -28,3 +28,11 @@ android 生成发布版本命令
 ```bash
 $ ionic build android --release --  --buildConfig=build.json
 ```
+安装Cordova微信支付插件
+```
+$ ionic plugin add https://github.com/mrwutong/cordova-qdc-wxpay.git
+```
+安装Cordova支付宝支付插件
+```
+$ ionic plugin add https://github.com/mrwutong/cordova-qdc-alipay.git
+```
