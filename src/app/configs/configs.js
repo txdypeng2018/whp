@@ -40,6 +40,11 @@
       isNeed = false;
     }
 
+    // 过滤支付请求
+    if(url.indexOf('pay') >= 0) {
+      isNeed = false;
+    }
+
     return isNeed;
   };
 
@@ -79,6 +84,27 @@
       }
     };
   });
+
+  //piwik 统计代码
+  app.run(function($rootScope, $location, appConstants) {
+    $rootScope.location = $location;
+    $rootScope.$watch( 'location.url()', function( url ) {
+      var _paq = _paq || [];
+      //Prepend the site domain to the page title when tracking
+      _paq.push(['setDocumentTitle', document.domain + '/' + document.title]);
+      //In the 'Outlinks' report, hide clicks to known alias URLs of pea
+      _paq.push(['setDomains', ['*.' + appConstants.piwikTrackTarget]]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      //Get piwik tracker
+      var piwikTracker = Piwik.getTracker( '//' + appConstants.piwikServer + '/piwik.php', 3 );
+      //Set custom url
+      piwikTracker.setCustomUrl(url);
+      //Track the page view
+      piwikTracker.trackPageView();
+    });
+  });
+
   app.config(function($httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
   });

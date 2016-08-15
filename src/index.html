@@ -48,66 +48,68 @@
 </head>
 <body>
 
-  <ion-nav-view></ion-nav-view>
+<ion-nav-view></ion-nav-view>
 
-  <!-- build:js(.) scripts/vendor.js -->
-  <!-- bower:js -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-  <script src="bower_components/ionic/release/js/ionic.js"></script>
-  <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
-  <script src="bower_components/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
-  <script src="bower_components/angular-touch/angular-touch.js"></script>
-  <script src="bower_components/angular-carousel/dist/angular-carousel.js"></script>
-  <!-- endbower -->
-  <!-- endbuild -->
-  <script src="cordova.js"></script>
-  <script src="cordova_plugins.js"></script>
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/ionic/release/js/ionic.js"></script>
+<script src="bower_components/ionic/release/js/ionic-angular.js"></script>
+<script src="bower_components/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-carousel/dist/angular-carousel.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<script src="cordova.js"></script>
+<script src="cordova_plugins.js"></script>
+<script src="//cdn.bootcss.com/piwik/2.16.1/piwik.js"></script>
 
-  <!-- build:js({.tmp,app}) scripts/scripts.js -->
-  <!-- injector:js -->
-  <script src="/app/app.js"></script>
-  <script src="/app/configs/configs.js"></script>
-  <script src="/modules/collectionDoctor/collectionDoctorList.js"></script>
-  <script src="/modules/doctorIntroduction/doctorIntroductionList.js"></script>
-  <script src="/modules/doctorIntroduction/doctorIntroductionView.js"></script>
-  <script src="/modules/familyMember/familyMemberEdit.js"></script>
-  <script src="/modules/familyMember/familyMemberList.js"></script>
-  <script src="/modules/familyMember/familyMemberSelect.js"></script>
-  <script src="/modules/hospitalIntroduce/hospitalIntroduce.js"></script>
-  <script src="/modules/hospitalNavigation/floorList.js"></script>
-  <script src="/modules/hospitalNavigation/hospitalNavigation.js"></script>
-  <script src="/modules/medicalCard/medicalCardEdit.js"></script>
-  <script src="/modules/medicalCard/medicalCardList.js"></script>
-  <script src="/modules/medicalGuide/medicalGuide.js"></script>
-  <script src="/modules/medicalReport/medicalReportList.js"></script>
-  <script src="/modules/medicalReport/medicalReportView1.js"></script>
-  <script src="/modules/onlinePayment/onlinePaymentList.js"></script>
-  <script src="/modules/onlinePayment/paymentSelect.js"></script>
-  <script src="/modules/organization/deptList.js"></script>
-  <script src="/modules/register/registerConfirmAppt.js"></script>
-  <script src="/modules/register/registerConfirmToday.js"></script>
-  <script src="/modules/register/registerDoctorDateSelect.js"></script>
-  <script src="/modules/register/registerDoctorTimeSelect.js"></script>
-  <script src="/modules/register/registerTodayDoctorList.js"></script>
-  <script src="/modules/setting/appAbout.js"></script>
-  <script src="/modules/setting/changePassword.js"></script>
-  <script src="/modules/setting/feedback.js"></script>
-  <script src="/modules/setting/settingIndex.js"></script>
-  <script src="/modules/setting/versionDescription.js"></script>
-  <script src="/modules/subject/subjectSelectOneLevel.js"></script>
-  <script src="/modules/subject/subjectSelectTwoLevel.js"></script>
-  <script src="/modules/tab/main/main.js"></script>
-  <script src="/modules/tab/message/message.js"></script>
-  <script src="/modules/tab/personal/personal.js"></script>
-  <script src="/modules/tab/registration/registration.js"></script>
-  <script src="/modules/tab/registration/registrationIllustration.js"></script>
-  <script src="/modules/tab/registration/registrationView.js"></script>
-  <script src="/modules/tab/tabs.js"></script>
-  <!-- endinjector -->
-  <!-- endbuild -->
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<!-- injector:js -->
+<script src="/app/app.js"></script>
+<script src="/app/configs/configs.js"></script>
+<script src="/app/constants/constants.js"></script>
+<script src="/modules/collectionDoctor/collectionDoctorList.js"></script>
+<script src="/modules/doctorIntroduction/doctorIntroductionList.js"></script>
+<script src="/modules/doctorIntroduction/doctorIntroductionView.js"></script>
+<script src="/modules/familyMember/familyMemberEdit.js"></script>
+<script src="/modules/familyMember/familyMemberList.js"></script>
+<script src="/modules/familyMember/familyMemberSelect.js"></script>
+<script src="/modules/hospitalIntroduce/hospitalIntroduce.js"></script>
+<script src="/modules/hospitalNavigation/floorList.js"></script>
+<script src="/modules/hospitalNavigation/hospitalNavigation.js"></script>
+<script src="/modules/medicalCard/medicalCardEdit.js"></script>
+<script src="/modules/medicalCard/medicalCardList.js"></script>
+<script src="/modules/medicalGuide/medicalGuide.js"></script>
+<script src="/modules/medicalReport/medicalReportList.js"></script>
+<script src="/modules/medicalReport/medicalReportView1.js"></script>
+<script src="/modules/onlinePayment/onlinePaymentList.js"></script>
+<script src="/modules/onlinePayment/paymentSelect.js"></script>
+<script src="/modules/organization/deptList.js"></script>
+<script src="/modules/register/registerConfirmAppt.js"></script>
+<script src="/modules/register/registerConfirmToday.js"></script>
+<script src="/modules/register/registerDoctorDateSelect.js"></script>
+<script src="/modules/register/registerDoctorTimeSelect.js"></script>
+<script src="/modules/register/registerTodayDoctorList.js"></script>
+<script src="/modules/setting/appAbout.js"></script>
+<script src="/modules/setting/changePassword.js"></script>
+<script src="/modules/setting/feedback.js"></script>
+<script src="/modules/setting/settingIndex.js"></script>
+<script src="/modules/setting/versionDescription.js"></script>
+<script src="/modules/subject/subjectSelectOneLevel.js"></script>
+<script src="/modules/subject/subjectSelectTwoLevel.js"></script>
+<script src="/modules/tab/main/main.js"></script>
+<script src="/modules/tab/message/message.js"></script>
+<script src="/modules/tab/personal/personal.js"></script>
+<script src="/modules/tab/registration/registration.js"></script>
+<script src="/modules/tab/registration/registrationIllustration.js"></script>
+<script src="/modules/tab/registration/registrationView.js"></script>
+<script src="/modules/tab/tabs.js"></script>
+<!-- endinjector -->
+<!-- endbuild -->
 </body>
 </html>
