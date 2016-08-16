@@ -1,0 +1,42 @@
+{
+  "01" : {
+    "name": "爸爸",
+    "img": "./assets/images/pic_old_man.png"
+  },
+  "02" : {
+    "name": "妈妈",
+    "img": "./assets/images/pic_old_woman.png"
+  },
+  "03" : {
+    "name": "配偶",
+    "img": "./assets/images/pic_woman.png"
+  },
+  "04" : {
+    "name": "儿子",
+    "img": "./assets/images/pic_boy.png"
+  },
+  "05" : {
+    "name": "女儿",
+    "img": "./assets/images/pic_girl.png"
+  },
+  "06" : {
+    "name": "兄弟",
+    "img": "./assets/images/pic_man.png"
+  },
+  "07" : {
+    "name": "配姐妹",
+    "img": "./assets/images/pic_woman.png"
+  },
+  "08" : {
+    "name": "亲属",
+    "img": "./assets/images/pic_man.png"
+  },
+  "09" : {
+    "name": "朋友",
+    "img": "./assets/images/pic_man.png"
+  },
+  "10" : {
+    "name": "其他",
+    "img": "./assets/images/pic_man.png"
+  }
+}
