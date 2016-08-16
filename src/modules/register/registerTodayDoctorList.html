@@ -1,15 +1,25 @@
-<ion-header-bar class="bar-light">
+<ion-header-bar class="bar-light registerTodayDoctorList-title">
   <a class="icon-return positive" href="javascript:history.go(-1)">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>
   <div class="title"></div>
+  <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
 </ion-header-bar>
-<ion-content class="has-header content-fill registerTodayDoctorList-content">
+<div class="head-search search-none">
+  <form ng-submit="doSearch()">
+    <input id="subjectSelect_search" type="search" ng-model="major" placeholder="专业/专长">
+  </form>
+  <div class="search-icon">
+    <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
+  </div>
+</div>
+<ion-content class="has-header has-footer content-fill registerTodayDoctorList-content">
+  <isj-spinner is-show="$root.inProcess"></isj-spinner>
   <ul ng-if="doctors.length > 0" class="list">
     <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id, doctor.deptId)">
-      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
+      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id, $event)">
       <div class="name">
         <h2>{{doctor.name}}</h2>
         <p>{{doctor.title}}</p>
@@ -17,9 +27,16 @@
           <img src="./assets/images/appointment_available.png">
         </div>
       </div>
-      <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
       <p>科室：{{doctor.dept}}</p>
+      <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
     </li>
   </ul>
   <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
 </ion-content>
+<ion-footer-bar ng-if="isChild != ''" class="bar-light">
+  <div style="width: 100%;text-align: center">
+    <button class="button button-clear button-positive" ng-click="isChildClk()">
+      <span ng-if="isChild == '0'">小儿</span><span ng-if="isChild == '1'">成人</span>消化
+    </button>
+  </div>
+</ion-footer-bar>

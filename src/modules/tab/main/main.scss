@@ -49,10 +49,6 @@
       text-align: center;
       display: flex;
 
-      &:active {
-        background-color: #d4d4d4;
-      }
-
       > a {
         flex-grow: 1;
         display: flex;

@@ -1,11 +1,20 @@
-.buildingList-content {
+.hospitalNavigation-district {
+  background-color: #f4f4f4;
+}
+
+.hospitalNavigation-content {
   padding: 15px;
 
-  .card {
-    margin: 0 !important;
-  }
+  .list.list-inset {
+    margin: 0 0 15px 0;
 
-  .item {
-    padding: 10px 16px;
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
+
+    .item {
+      padding: 10px 16px;
+      font-size: 14px !important;
+    }
   }
 }

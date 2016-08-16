@@ -6,8 +6,8 @@
   <div class="title">
     {{doctor.name}}
   </div>
-  <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-  <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+  <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
+  <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
 </ion-header-bar>
 <div class="registerDoctorTimeSelect-date has-header">
   <div class="positive month">{{selectDays[0].month}}月</div>

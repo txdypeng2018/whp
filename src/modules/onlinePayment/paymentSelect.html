@@ -36,7 +36,7 @@
     </li>
   </ul>
   <div class="countDown">
-    请在<span id="payment_countDown"></span>内完成支付
+    请在<span id="payment_countDown"><span ng-bind="time.minute"></span>分<span ng-bind="time.second"></span>秒</span>内完成支付
   </div>
   <div class="confirm">
     <button class="button button-positive" ng-click="pay()">支付</button>

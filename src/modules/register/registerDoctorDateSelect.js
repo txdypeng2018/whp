@@ -88,6 +88,12 @@
       ionicDatePicker.openDatePicker(dayPicker1);
     };
 
+    //选择照片事件
+    $scope.photoClk = function(id, event) {
+      event.stopPropagation();
+      $state.go('doctorIntroductionView', {id: id});
+    };
+
     //医生选中事件
     $scope.doctorClk = function(doctorId, deptId) {
       $state.go('registerDoctorTimeSelect', {deptId: deptId, doctorId: doctorId, date: daySelected});

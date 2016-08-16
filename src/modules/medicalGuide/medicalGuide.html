@@ -6,5 +6,6 @@
   <div class="title">就医指南</div>
 </ion-header-bar>
 <ion-content class="has-header content-introduce content-gray">
+  <isj-spinner is-show="$root.inProcess" style="padding: 0"></isj-spinner>
   <div ng-bind-html="medicalGuide"></div>
 </ion-content>

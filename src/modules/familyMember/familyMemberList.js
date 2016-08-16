@@ -33,7 +33,7 @@
 
     //添加事件
     $scope.familyMemberAdd = function() {
-      $state.go('familyMemberSelect');
+      $state.go('familyMemberAdd');
     };
 
     //家庭成员选择事件

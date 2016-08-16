@@ -1,62 +1,42 @@
 (function(app) {
   'use strict';
 
-  var familyMemberSelectCtrl = function($scope, $state, $timeout) {
-    //家庭关系类别
-    $scope.relationshipTypes = [
-      {
-        'name': '爸爸',
-        'img': './assets/images/pic_old_man.png'
-      },
-      {
-        'name': '妈妈',
-        'img': './assets/images/pic_old_woman.png'
-      },
-      {
-        'name': '配偶',
-        'img': './assets/images/pic_woman.png'
-      },
-      {
-        'name': '儿子',
-        'img': './assets/images/pic_boy.png'
-      },
-      {
-        'name': '女儿',
-        'img': './assets/images/pic_girl.png'
-      },
-      {
-        'name': '兄弟',
-        'img': './assets/images/pic_man.png'
-      },
-      {
-        'name': '配姐妹',
-        'img': './assets/images/pic_woman.png'
-      },
-      {
-        'name': '亲属',
-        'img': './assets/images/pic_man.png'
-      },
-      {
-        'name': '朋友',
-        'img': './assets/images/pic_man.png'
-      },
-      {
-        'name': '其他',
-        'img': './assets/images/pic_man.png'
-      }
-    ];
+  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams) {
+    $scope.memberId = $stateParams.memberId;
+
+    //取得家庭成员类别
+    $http.get('/dataBase/familyMenberTypes').success(function(data) {
+      $scope.memberTypes = data;
+    });
+
+    //取得登录患者家庭成员
+    $http.get('/familyMembers').success(function(data) {
+      $scope.members = data;
+    });
+
+    //家庭成员管理
+    $scope.memberManage = function() {
+      $state.go('familyMemberList');
+    };
 
     //家庭成员选择事件
-    $scope.medicalCardEdit = function() {
-      $timeout(function(){
-        $state.go('familyMemberEdit');
-      }, 10);
+    $scope.memberSelect = function(code, id) {
+      if (code === '00') {
+        id = '';
+      }
+      $state.go($stateParams.skipId, {memberId: id});
+    };
+
+    //添加家庭成员
+    $scope.addMember = function() {
+      $state.go('familyMemberAdd', {skipId: $stateParams.skipId, memberId: $stateParams.memberId, type: '2'});
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('familyMemberSelect', {
-      url: '/familyMember/familyMemberSelect',
+      url: '/familyMember/familyMemberSelect/:skipId/:memberId',
+      cache: 'false',
       templateUrl: 'modules/familyMember/familyMemberSelect.html',
       controller: familyMemberSelectCtrl
     });

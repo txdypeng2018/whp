@@ -6,7 +6,8 @@
   <div class="title">楼层索引</div>
 </ion-header-bar>
 <ion-content class="has-header content-gray floorList-content">
-  <ul class="list card">
+  <isj-spinner is-show="$root.inProcess" style="padding-top: 5px"></isj-spinner>
+  <ul class="list list-inset">
     <li ng-repeat="floor in floorList" class="item">
       <div class="floor positive-bg">{{floor.name}}</div>
       <div class="floor-introduce">

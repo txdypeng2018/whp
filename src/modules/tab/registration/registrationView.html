@@ -9,26 +9,27 @@
 <ion-content class="has-header content-gray registrationView-content">
   <ul class="list registration-card">
     <li class="item item-card-head">
-      <h2 class="odd-number">单号：<span class="positive">S2112345</span></h2>
-      <span class="positive status">未支付</span>
+      <h2 class="odd-number">单号：<span class="positive">{{registration.num}}</span></h2>
+      <span class="positive status">{{registration.status}}</span>
     </li>
     <li class="item item-card-content">
       <table>
         <tr>
-          <td class="label"><img src="./assets/images/pic_man.png"></td>
+          <td class="label">
+            <img src="./assets/images/pic_man.png">
+          </td>
           <td>
-            <span class="name">王二</span><br/>
-            <span class="number">门诊号：<span class="positive">M004123456</span></span>
-            <button class="button button-outline button-positive">条码</button>
+            <span class="name">{{registration.patientName}}</span><br/>
+            <span class="number">门诊号：<span class="positive">{{registration.clinicNum}}</span></span>
           </td>
         </tr>
         <tr>
           <td class="label"><i class="icon ion-ios-location-outline"></i></td>
-          <td>第一内分泌科门诊（南湖）</td>
+          <td>{{registration.dept}}（{{registration.district}}）</td>
         </tr>
         <tr>
           <td class="label"><i class="icon ion-ios-person-outline"></i></td>
-          <td>医生1</td>
+          <td>{{registration.doctor}}</td>
         </tr>
       </table>
     </li>
@@ -53,7 +54,7 @@
         </tr>
         <tr>
           <td class="label">挂号费</td>
-          <td>3.00</td>
+          <td>{{registration.amount}}</td>
         </tr>
       </table>
     </li>
@@ -63,7 +64,7 @@
     </li>
   </ul>
   <div class="operation">
-    <button class="button button-positive">支付</button>
-    <button class="button button-outline button-positive">退号</button>
+    <button ng-if="registration.statusCode == '0'" class="button button-positive">支付</button>
+    <button ng-if="registration.statusCode != '9'" class="button button-outline button-positive">退号</button>
   </div>
 </ion-content>

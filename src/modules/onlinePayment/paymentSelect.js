@@ -122,31 +122,33 @@
     };
 
     //倒计时
-    angular.element(document.getElementById('payment_countDown')).html('30分钟');
-    var time = {
+    $scope.time = {
       minute: 30,
       second: 0
     };
-    setInterval(function(){
+    var updateTime = function() {
       //倒计时结束终止支付
-      if (time.minute === 0 && time.second === 0) {
+      if ($scope.time.minute === 0 && $scope.time.second === 0) {
         $state.go('tab.main');
       }
 
-      if (time.second === 0) {
-        --time.minute;
-        time.second = 59;
+      if ($scope.time.second === 0) {
+        --$scope.time.minute;
+        $scope.time.second = 59;
       }
       else {
-        --time.second;
+        --$scope.time.second;
       }
-      angular.element(document.getElementById('payment_countDown')).html(time.minute + '分钟' + time.second + '秒');
+    };
+    setInterval(function(){
+      $scope.$apply(updateTime);
     }, 1000);
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('paymentSelect', {
       url: '/onlinePayment/paymentSelect/:category/:id',
+      cache: 'false',
       templateUrl: 'modules/onlinePayment/paymentSelect.html',
       controller: paymentSelectCtrl
     });

@@ -4,16 +4,14 @@
     <div>返回</div>
   </a>
   <div class="title">医院导航</div>
-  <button class="button button-clear button-positive" ng-click="modal.show()">列表</button>
 </ion-header-bar>
-<div class="district-select has-header">
-  <div class="button-bar">
-    <button ng-repeat="district in districts" class="button button-outline button-positive district-button"
-            ng-click="districtClk($event, '{{district.id}}', '{{district.name}}')">
-      {{district.name}}
-    </button>
-  </div>
-</div>
-<ion-content class="has-header has-header-district">
-
+<ion-content class="has-header content-gray hospitalNavigation-content">
+  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <ul ng-repeat="district in districtBuilds" class="list list-inset">
+    <li class="item item-positive">{{district.name}}</li>
+    <li ng-repeat="build in district.builds" class="item" ng-click="buildingClk('{{build.id}}')">
+      {{build.name}}
+      <span ng-if="build.function != ''">（{{build.function}}）</span>
+    </li>
+  </ul>
 </ion-content>

@@ -135,6 +135,11 @@
       });
     }
 
+    //选择照片事件
+    $scope.photoClk = function(id) {
+      $state.go('doctorIntroductionView', {id: id});
+    };
+
     //日期选择事件
     $scope.dayClk = function(index, date) {
       if (date !== '' && daySelected !== date) {

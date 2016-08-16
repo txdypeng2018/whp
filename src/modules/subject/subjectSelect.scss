@@ -1,42 +1,59 @@
-.subjectSelect-subheader {
-  position: relative;
-
-  .search-placeholder {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -10px 0 0 -33px;
-    white-space: nowrap;
-
-    span {
-      color: #999999;
-    }
+.subjectSelect-title {
+  a.button.button-clear.icon:before {
+    font-size: 26px;
   }
 
-  form {
-    width: 100%;
-
-    input {
-      width: 100%;
-      margin-top: -2px;
-    }
+  a.button {
+    margin-top: -1px;
+    margin-right: 2px;
   }
 }
 
 .subjectSelect-content {
-  padding: 15px;
+  border-top: 1px solid #f0f0f0;
 
-  .subjects {
+  .subject-select {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    height: 100%;
 
-    .subject {
-      width: 50%;
-      padding: 10px;
+    .subject-scroll {
+      height: 100%;
 
-      .button {
-        width: 100%;
+      .subject-div {
+        font-size: 15px;
+        color: #666666;
+        padding: 12px 0 12px 20px;
+
+        .icon-subject-select {
+          display: none;
+          margin-right: 3px;
+        }
+
+        .icon-subject-selected {
+          display: inline-block !important;
+        }
+
+        .left-activated-icon {
+          display: none;
+        }
+      }
+
+      .left-activated {
+        background-color: #ffffff;
+
+        .left-activated-icon {
+          display: inline-block !important;
+        }
+      }
+
+      &.subject-scroll-left {
+        width: 50%;
+        background: #f0f0f0;
+      }
+
+      &.subject-scroll-right {
+        width: 50%;
       }
     }
   }
