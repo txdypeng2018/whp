@@ -68,6 +68,4 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
-    <plugin name="cordova-plugin-splashscreen" spec="~3.2.2" />
-    <plugin name="cordova-plugin-whitelist" spec="~1.2.2" />
 </widget>
