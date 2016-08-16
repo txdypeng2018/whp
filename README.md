@@ -9,32 +9,28 @@ Ionic SJ App
 $ npm install -g cordova ionic
 $ npm install
 $ bower install
+# 编译静态资源并发布至 www 路径下
+$ grunt
 
-# 需要先执行grunt命令生成www文件夹
+# 发布静态资源，通过浏览器访问，自动更新变化
+$ grunt serve
+# 或仅发布资源
+$ ionic serve
+
+# 一步恢复/重置平台和插件
+$ ionic state restore/reset
+
+# 也可根据情况选择添加 ios 或 android 平台
 $ ionic platform add ios
 $ ionic platform add android
+# 恢复/重置所需插件
+$ ionic state restore/reset --plugins
 
-# 需要先安装SDK，并配置环境变量；JDK必须是1.8
 $ ionic build ios
 $ ionic emulate ios
 
+# 需要先安装SDK，并配置环境变量；JDK必须是1.8
 $ ionic run android
-
-$ ionic serve
-
-$ grunt serve
-```
-android 生成发布版本命令
-```bash
+# android 生成发布版本命令
 $ ionic build android --release --  --buildConfig=build.json
 ```
-安装Cordova微信支付插件
-```
-$ ionic plugin add https://github.com/propersoft-cn/cordova-qdc-alipay.git
-```
-安装Cordova支付宝支付插件
-```
-$ ionic plugin add https://github.com/mrwutong/cordova-qdc-alipay.git
-```
-
-

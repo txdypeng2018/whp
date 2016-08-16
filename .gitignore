@@ -1,7 +1,6 @@
 platforms/
 plugins/
 www/
-ionic.project
 
 # ignore node and bower root
 bower_components
