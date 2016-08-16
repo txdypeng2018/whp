@@ -52,9 +52,11 @@
             alipay.payment(
               data,
               function (retData) {
-                alert(retData); //TODO
+                console.debug('retData', retData);
+                //alert(retData); //TODO
               }, function (retData) {
-                alert(retData); //TODO
+                console.debug('retData', retData);
+                //alert(retData); //TODO
               });
           }
         });
@@ -112,9 +114,11 @@
             wxpay.payment(
               reqdata,
               function (retData) {
-                alert(retData); //TODO
+                console.debug('retData', retData);
+                //alert(retData); //TODO
               }, function (retData) {
-                alert(retData); //TODO
+                console.debug('retData', retData);
+                //alert(retData); //TODO
               });
           }
         });

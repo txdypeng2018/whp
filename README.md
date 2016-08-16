@@ -30,9 +30,11 @@ $ ionic build android --release --  --buildConfig=build.json
 ```
 安装Cordova微信支付插件
 ```
-$ ionic plugin add https://github.com/mrwutong/cordova-qdc-wxpay.git
+$ ionic plugin add https://github.com/propersoft-cn/cordova-qdc-alipay.git
 ```
 安装Cordova支付宝支付插件
 ```
 $ ionic plugin add https://github.com/mrwutong/cordova-qdc-alipay.git
 ```
+
+
