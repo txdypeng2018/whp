@@ -433,11 +433,16 @@ module.exports = function(grunt) {
             {
               match: /\/styles\/fonts\//g,
               replacement: './fonts/'
+            },
+            {
+              match: /\.\/api/g,
+              replacement: 'https://server.propersoft.cn/isj/api'
             }
           ]
         },
         files: [
-          {expand: true, flatten: true, src: ['<%= app.dist %>/styles/*.css'], dest: '<%= app.dist %>/styles/'}
+          {expand: true, flatten: true, src: ['<%= app.dist %>/styles/main*.css'], dest: '<%= app.dist %>/styles/'},
+          {expand: true, flatten: true, src: ['<%= app.dist %>/scripts/scripts*.js'], dest: '<%= app.dist %>/scripts/'}
         ]
       }
     }
