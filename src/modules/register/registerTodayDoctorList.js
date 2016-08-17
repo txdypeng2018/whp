@@ -6,7 +6,12 @@
     var getSubjectInfo = function(subjectId) {
       $http.get('/subjects/'+subjectId).success(function(data) {
         $scope.subjectInfo = data;
-        $scope.isChild = data.hasChild;
+        if (data.hasChild === '1') {
+          $scope.isChild = '0';
+        }
+        else {
+          $scope.isChild = '';
+        }
       });
     };
 
@@ -39,7 +44,7 @@
       if (angular.element(document.querySelector('.head-search')).hasClass('search-none')) {
         angular.element(document.querySelector('.head-search')).removeClass('search-none');
         $timeout(function(){
-          document.getElementById('head_search').focus();
+          document.getElementById('registerTodayDoctorList_search').focus();
         });
       }
       else {
@@ -49,6 +54,17 @@
 
     //查询事件
     $scope.doSearch = function() {
+      getDoctors();
+    };
+
+    //选择儿科事件
+    $scope.isChildClk = function() {
+      if($scope.isChild === '1') {
+        $scope.isChild = '0';
+      }
+      else {
+        $scope.isChild = '1';
+      }
       getDoctors();
     };
 

@@ -6,12 +6,11 @@
     var getSubjects = function() {
       $http.get('/subjects', {params: {districtId: $scope.districtId}}).success(function(data) {
         $scope.subjects = data;
-        document.querySelector('.subject-select').style.height = '100%';
 
         //默认选中第一个一级学科
         $timeout(function(){
           angular.element(document.querySelectorAll('.subject-div-left')[0]).addClass('left-activated');
-          if (angular.isUndefined(data[0].subjects)) {
+          if (angular.isUndefined(data[0].subjects) || data[0].subjects.length === 0) {
             $scope.subjectRights = [data[0]];
           }
           else {
@@ -22,7 +21,6 @@
     };
 
     //取得院区信息
-    document.querySelector('.subject-select').style.height = '0';
     $http.get('/organization/district').success(function(data) {
       $scope.districts = data;
       getSubjects();
@@ -33,7 +31,7 @@
       if (angular.element(document.querySelector('.head-search')).hasClass('search-none')) {
         angular.element(document.querySelector('.head-search')).removeClass('search-none');
         $timeout(function(){
-          document.getElementById('head_search').focus();
+          document.getElementById('subjectSelect_search').focus();
         });
       }
       else {
@@ -70,7 +68,6 @@
         angular.element(event.currentTarget).removeClass('button-outline');
       }
 
-      document.querySelector('.subject-select').style.height = '0';
       getSubjects();
     };
 
@@ -80,7 +77,7 @@
       angular.element(event.currentTarget).addClass('left-activated');
       for (var i = 0 ; i < $scope.subjects.length ; i++) {
         if ($scope.subjects[i].id === id) {
-          if (angular.isUndefined($scope.subjects[i].subjects)) {
+          if (angular.isUndefined($scope.subjects[i].subjects) || $scope.subjects[i].subjects.length === 0) {
             $scope.subjectRights = [$scope.subjects[i]];
           }
           else {

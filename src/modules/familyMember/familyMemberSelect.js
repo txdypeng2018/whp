@@ -20,11 +20,16 @@
     };
 
     //家庭成员选择事件
-    $scope.memberSelect = function(code, id) {
-      if (code === '00') {
-        id = '';
+    $scope.memberSelect = function(id) {
+      if ($stateParams.skipId === 'registerConfirmToday') {
+        $state.go($stateParams.skipId, {memberId: id, doctorId: $stateParams.doctorId});
       }
-      $state.go($stateParams.skipId, {memberId: id});
+      else if ($stateParams.skipId === 'registerConfirmAppt') {
+        $state.go($stateParams.skipId, {memberId: id, doctorId: $stateParams.doctorId, date: $stateParams.date});
+      }
+      else {
+        $state.go($stateParams.skipId, {memberId: id});
+      }
     };
 
     //添加家庭成员
@@ -35,7 +40,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('familyMemberSelect', {
-      url: '/familyMember/familyMemberSelect/:skipId/:memberId',
+      url: '/familyMember/familyMemberSelect/:skipId/:memberId/:doctorId/:date',
       cache: 'false',
       templateUrl: 'modules/familyMember/familyMemberSelect.html',
       controller: familyMemberSelectCtrl

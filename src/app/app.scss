@@ -1,4 +1,6 @@
 $positiveColor: #387ef5;
+$balancedColor: #33cd5f;
+$royalColor: #886aea;
 
 /* ion-header-bar common css */
 ion-header-bar {
@@ -145,6 +147,32 @@ a {
       font-size: 26px;
     }
   }
+}
+
+.district-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+}
+.district-icon-positive {
+  border-top: 50px solid $positiveColor;
+}
+.district-icon-balanced {
+  border-top: 50px solid $balancedColor;
+}
+.district-icon-royal {
+  border-top: 50px solid $royalColor;
+}
+.district-icon-font {
+  position: absolute;
+  color: #ffffff;
+  font-size: 14px;
+  top: 7px;
+  right: 2px;
+  transform: rotate(45deg);
 }
 
 .ionic_datepicker_popup {

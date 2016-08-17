@@ -4,17 +4,32 @@
     "name": "姓名1",
     "sexCode": "1",
     "title": "主任医师",
-    "skill": "擅长于风湿科常见疾病",
+    "districtId": "1",
+    "district": "南湖",
     "deptId": "1",
-    "dept": "第一内分泌科门诊（南湖）"
+    "dept": "第一内分泌科门诊",
+    "skill": "擅长于风湿科常见疾病"
   },
   {
     "id": "2",
     "name": "姓名2",
     "sexCode": "2",
     "title": "副主任医师",
-    "skill": "",
+    "districtId": "2",
+    "district": "滑翔",
     "deptId": "2",
-    "dept": "第二内分泌科门诊（滑翔）"
+    "dept": "第二内分泌科门诊",
+    "skill": ""
+  },
+  {
+    "id": "3",
+    "name": "姓名3",
+    "sexCode": "2",
+    "title": "副主任医师",
+    "districtId": "3",
+    "district": "沈北",
+    "deptId": "2",
+    "dept": "第二内分泌科门诊",
+    "skill": ""
   }
 ]

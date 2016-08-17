@@ -7,7 +7,7 @@
 
     if (category === '1') {
       //取得挂号单信息
-      $http.get('/register/registration', {params: {id: id}}).success(function(data) {
+      $http.get('/register/registrations/registration', {params: {id: id}}).success(function(data) {
         $scope.amount = data.amount;
       });
     }

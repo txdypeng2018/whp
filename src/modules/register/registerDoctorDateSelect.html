@@ -1,10 +1,19 @@
-<ion-header-bar class="bar-light">
+<ion-header-bar class="bar-light registerDoctorDateSelect-title">
   <a class="icon-return positive" href="javascript:history.go(-1)">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>
   <div class="title"></div>
+  <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
 </ion-header-bar>
+<div class="head-search search-none">
+  <form ng-submit="doSearch()">
+    <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="专业/专长">
+  </form>
+  <div class="search-icon">
+    <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
+  </div>
+</div>
 <div class="registerDoctorDateSelect-date has-header">
   <div class="positive month">{{selectDays[0].month}}月</div>
   <table>
@@ -21,9 +30,9 @@
     </tr>
   </table>
 </div>
-<ion-content class="has-header content-fill registerDoctorDateSelect-content">
+<ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="{'1': 'has-footer', '0': 'has-footer'}[isChild]">
   <ul ng-if="doctors.length > 0" class="list">
-    <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.deptId)">
+    <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id)">
       <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
       <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id, $event)">
       <div class="name">
@@ -33,9 +42,19 @@
           <img src="./assets/images/appointment_available.png">
         </div>
       </div>
+      <p>出诊地点：{{doctor.dept}}</p>
       <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-      <p>科室：{{doctor.dept}}</p>
+      <div class="positive-border district-icon" ng-class="{'1': 'district-icon-positive', '2': 'district-icon-balanced', '3': 'district-icon-royal'}[doctor.districtId]"></div>
+      <div class="district-icon-font balanced">{{doctor.district}}</div>
     </li>
   </ul>
   <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
 </ion-content>
+<ion-footer-bar ng-if="isChild != ''" class="bar-light">
+  <div style="width: 100%;text-align: center">
+    <button class="button button-clear button-positive" ng-click="isChildClk()">
+      <i class="icon ion-ios-eye-outline"></i>
+      <span ng-if="isChild == '0'">小儿</span><span ng-if="isChild == '1'">成人</span>{{subjectInfo.name}}
+    </button>
+  </div>
+</ion-footer-bar>

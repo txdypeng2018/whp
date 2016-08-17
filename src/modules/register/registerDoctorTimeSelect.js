@@ -16,9 +16,17 @@
     };
 
     //取得排班时间
+    $scope.timeTypes = [];
     var getScheduleTimes = function(date) {
       $http.get('/schedule/times', {params: {deptId: $stateParams.deptId, doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
+        $scope.input = {
+          time: ''
+        };
         $scope.times = data;
+        $scope.timeTypes[0] = {code: '', name: '请选择'};
+        for (var i = 1 ; i <= $scope.times.length ; i++) {
+          $scope.timeTypes[i] = {code: $scope.times[i-1], name: $scope.times[i-1]};
+        }
       });
     };
 
@@ -33,12 +41,13 @@
     });
 
     //设置可选择的日期
-    var setSelectDay = function(date) {
+    var setSelectDay = function(date, data) {
       return {
         date: $filter('date')(date, 'yyyy-MM-dd'),
         month: date.getMonth()+1,
         day: date.getDate(),
-        week: weekStr[date.getDay()]
+        week: weekStr[date.getDay()],
+        data: data
       };
     };
 
@@ -56,32 +65,37 @@
 
     //取得医生排班时间
     var daySelected = $stateParams.date;
+    $scope.dataSelected = {};
     var dateTmp = null;
     if (daySelected !== null && daySelected !== '') {
-      dateTmp = new Date(daySelected);
-      $scope.allDays = [{date: daySelected}];
-      $scope.selectDays[0] = setSelectDay(dateTmp);
-      fillSelectDays();
-      $timeout(function(){
-        angular.element(document.querySelectorAll('.day-select')[0]).addClass('positive day-selected');
-      }, 600);
-      getScheduleTimes(daySelected);
+      $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: daySelected}}).success(function(data) {
+        dateTmp = new Date(daySelected);
+        $scope.allDays = [{date: daySelected, data: data[0]}];
+        $scope.selectDays[0] = setSelectDay(dateTmp, data[0]);
+        fillSelectDays();
+        $timeout(function(){
+          angular.element(document.querySelectorAll('.day-select')[0]).addClass('positive day-selected');
+        }, 600);
+        $scope.dataSelected = $scope.allDays[0].data;
+        getScheduleTimes(daySelected);
+      });
     }
     else {
-      $http.get('/schedule/dates', {params: {deptId: $stateParams.deptId, doctorId: $stateParams.doctorId}}).success(function(data) {
+      $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
         $scope.allDays = data;
         for (var j = 0 ; j < data.length ; j++) {
           if (j === displayDays) {
             break;
           }
           dateTmp = new Date(data[j].date);
-          $scope.selectDays[j] = setSelectDay(dateTmp);
+          $scope.selectDays[j] = setSelectDay(dateTmp, data[j]);
         }
         if ($scope.selectDays.length < 7) {
           fillSelectDays();
         }
         if ($scope.selectDays.length > 0) {
           daySelected = data[0].date;
+          $scope.dataSelected = data[0];
           $timeout(function(){
             angular.element(document.querySelectorAll('.day-select')[0]).addClass('positive day-selected');
           }, 600);
@@ -113,7 +127,7 @@
               var indexTmp = 0;
               for (var x = 0 ; x < $scope.allDays.length ; x++) {
                 if ((indexTmp === 0 && daySelected === $scope.allDays[x].date) || indexTmp > 0) {
-                  $scope.selectDays[indexTmp] = setSelectDay(new Date($scope.allDays[x].date));
+                  $scope.selectDays[indexTmp] = setSelectDay(new Date($scope.allDays[x].date), $scope.allDays[x]);
                   indexTmp++;
                 }
                 if (indexTmp === displayDays) {
@@ -123,6 +137,7 @@
               fillSelectDays();
               $timeout(function(){
                 angular.element(document.querySelectorAll('.day-select')[0]).addClass('positive day-selected');
+                $scope.dataSelected = $scope.selectDays[0].data;
               });
             },
             from: new Date($scope.allDays[0].date),
@@ -150,26 +165,28 @@
             angular.element(document.querySelectorAll('.day-select')[m]).removeClass('positive day-selected');
           }
         }
+        $scope.dataSelected = $scope.selectDays[index].data;
         angular.element(document.querySelectorAll('.day-select')[index]).addClass('positive day-selected');
       }
     };
 
     //日期插件选择
     $scope.dayPicker = function() {
+      dayPicker1.inputDate = new Date(daySelected);
       ionicDatePicker.openDatePicker(dayPicker1);
     };
 
     //时间选中事件
-    $scope.timeClk = function(time) {
-      if (daySelected !== null && daySelected !== '') {
-        $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, deptId: $stateParams.deptId, date: daySelected+' '+time});
+    $scope.timeClk = function() {
+      if (daySelected !== null && daySelected !== '' && $scope.input.time !== '') {
+        $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, deptId: $stateParams.deptId, date: daySelected+' '+$scope.input.time});
       }
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerDoctorTimeSelect', {
-      url: '/register/registerDoctorTimeSelect/:deptId/:doctorId/:date',
+      url: '/register/registerDoctorTimeSelect/:doctorId/:date',
       cache: 'false',
       templateUrl: 'modules/register/registerDoctorTimeSelect.html',
       controller: registerDoctorTimeSelectCtrl
