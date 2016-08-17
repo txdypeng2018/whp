@@ -1,14 +1,38 @@
 [
   {
-    "id": "1",
-    "date": "2016-08-20"
+    "date": "2016-08-20",
+    "registerNumTotal": 20,
+    "registerNum": 3,
+    "districtId": "1",
+    "district": "南湖",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "categoryCode": "1",
+    "category": "普通",
+    "amount": "5.00"
   },
   {
-    "id": "2",
-    "date": "2016-08-25"
+    "date": "2016-08-25",
+    "registerNumTotal": 20,
+    "registerNum": 5,
+    "districtId": "1",
+    "district": "南湖",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "categoryCode": "1",
+    "category": "普通",
+    "amount": "6.00"
   },
   {
-    "id": "3",
-    "date": "2016-08-29"
+    "date": "2016-08-29",
+    "registerNumTotal": 20,
+    "registerNum": 6,
+    "districtId": "1",
+    "district": "南湖",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "categoryCode": "1",
+    "category": "普通",
+    "amount": "7.00"
   }
 ]
