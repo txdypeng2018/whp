@@ -8,7 +8,7 @@
 </ion-header-bar>
 <ion-content class="has-header content-gray familyMemberSelect-content">
   <ul>
-    <li ng-repeat="member in members" ng-click="memberSelect(member.memberCode, member.id)">
+    <li ng-repeat="member in members" ng-click="memberSelect(member.id)">
       <div>
         <span>
           <img ng-if="member.memberCode == '00' && member.sexCode == '1'" src="./assets/images/pic_man.png">
@@ -18,7 +18,7 @@
         <span class="name">
           {{member.member}}-{{member.name}}
         </span>
-        <i ng-if="memberId == member.id || (memberId == '' && member.memberCode == '00')" class="icon ion-checkmark-circled positive selected"></i>
+        <i ng-if="memberId == member.id" class="icon ion-checkmark-circled positive selected"></i>
       </div>
     </li>
     <li ng-click="addMember()">

@@ -7,10 +7,12 @@
 </ion-header-bar>
 <ion-content class="has-header registerConfirmToday-content">
   <div class="patient">
-    <img src="./assets/images/pic_man.png" class="photo">
+    <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+    <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+    <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}" class="photo">
     <span>就诊人：{{patient.name}}</span>
     <span>
-      <a class="positive">
+      <a class="positive" ng-click="selectMember()">
         换人
         <i class="icon ion-ios-loop-strong"></i>
       </a>
@@ -23,8 +25,8 @@
         <td width="100%">{{todayDisplay}}</td>
       </tr>
       <tr>
-        <td class="label">就诊科室：</td>
-        <td width="100%">{{dept.name}}</td>
+        <td class="label">就诊地点：</td>
+        <td width="100%">{{doctor.dept}}（{{doctor.district}}）</td>
       </tr>
       <tr>
         <td class="label">看诊医生：</td>

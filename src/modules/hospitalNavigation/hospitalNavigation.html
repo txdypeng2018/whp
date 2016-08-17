@@ -6,9 +6,8 @@
   <div class="title">医院导航</div>
 </ion-header-bar>
 <ion-content class="has-header content-gray hospitalNavigation-content">
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
   <ul ng-repeat="district in districtBuilds" class="list list-inset">
-    <li class="item item-positive">{{district.name}}</li>
+    <li class="item item-positive">{{district.name}}院区</li>
     <li ng-repeat="build in district.builds" class="item" ng-click="buildingClk('{{build.id}}')">
       {{build.name}}
       <span ng-if="build.function != ''">（{{build.function}}）</span>

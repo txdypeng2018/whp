@@ -7,7 +7,6 @@
   </div>
 </ion-header-bar>
 <ion-content class="has-header content-gray content-fill registration-content">
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
   <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
     <div class="time-line-left">
       {{registration.apptDate.substring(5,11)}}
