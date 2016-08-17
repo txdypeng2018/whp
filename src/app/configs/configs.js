@@ -97,7 +97,7 @@
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       //Get piwik tracker
-      var piwikTracker = Piwik.getTracker( '//' + appConstants.piwikServer + '/piwik.php', 3 );
+      var piwikTracker = Piwik.getTracker(appConstants.piwikServer + '/piwik.php', 3 );
       //Set custom url
       piwikTracker.setCustomUrl(url);
       //Track the page view
