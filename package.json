@@ -51,7 +51,9 @@
     {
       "locator": "https://github.com/mrwutong/cordova-qdc-wxpay.git",
       "id": "com.qdc.plugins.wxpay"
-    }
+    },
+    "cordova-plugin-proper-kvstore",
+    "cordova-plugin-x-toast"
   ],
   "cordovaPlatforms": [
     "android",

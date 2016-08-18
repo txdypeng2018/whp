@@ -1,3 +1,4 @@
+
 Ionic SJ App
 ============
 
@@ -34,3 +35,13 @@ $ ionic run android
 # android 生成发布版本命令
 $ ionic build android --release --  --buildConfig=build.json
 ```
+
+### 添加ngCordova相关插件方法
+
+- 上[ngCordova](http://ngcordova.com/docs/plugins/)官网查找对应的插件
+- 按照提示的方法安装插件
+   例如安装toast插件,如果安装的url是一个github地址，则打开对应的地址，打开`package.json`查看这个插件的id。注意，要使用`ionic plugin add`，而不是官网上用的`cordova plugin add`
+```bash
+$ ionic plugin add cordova-plugin-x-toast
+```
+- 按ngCordova中文档的说明，使用相关插件
