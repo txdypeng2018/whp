@@ -1,0 +1,52 @@
+<ion-header-bar class="bar-light">
+    <a class="icon-return positive" href="javascript:history.go(-1)">
+        <i class="icon ion-ios-arrow-left"></i>
+        <div>返回</div>
+    </a>
+    <div class="title">注册</div>
+</ion-header-bar>
+<ion-content class="has-header content-gray registSetting-content"  has-bouncing="false">
+    <div class="prompt">
+        验证码已发送到133****3333
+    </div>
+    <div class="list">
+        <label class="item item-input">
+            验证码
+            <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字">
+            <button class="button button-resend button-positive"ng-bind="'重新发送'+secondString" ng-disabled="!isResend"></button>
+        </label>
+    </div>
+
+    <div class="prompt">
+        密码需要填写6-20个字符，可由英文字母、数字、下划线组成
+    </div>
+
+    <div class="list">
+        <label class="item item-input">
+            密码
+            <input id="registSetting-password" class="password-input" type="password" placeholder="6-20个字符">
+        </label>
+    </div>
+
+    <div class="prompt">
+        体验快速预约挂号，请填写您的信息
+    </div>
+
+    <div class="list">
+
+        <label class="item item-input">
+            姓名
+            <input class="name-input" type="text" placeholder="必填">
+        </label>
+        <label class="item item-input">
+            身份证号
+                <input class="idCard-input"  type="number" placeholder="必填">
+        </label>
+    </div>
+
+    <div class="div-button">
+        <button class="button button-positive" ng-click="regist()">注册</button>
+    </div>
+
+
+</ion-content>

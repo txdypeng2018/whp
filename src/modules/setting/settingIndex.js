@@ -6,6 +6,9 @@
     $scope.itemRouter = function(routerId) {
       $state.go(routerId);
     };
+      $scope.quit = function(){
+          $state.go('login');
+      };
   };
 
   var mainRouter = function($stateProvider) {
