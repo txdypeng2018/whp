@@ -90,17 +90,18 @@ ion-content {
 .district-select {
   position: absolute;
   width: 100%;
-  padding: 8px 35px;
+  padding: 8px 15px;
 
   .district-button {
     min-height: 32px;
     line-height: 32px;
     font-size: 14px;
+    padding: 0 12px !important;
   }
 }
 
 .has-header-district {
-  top: 94px;
+  top: 94px !important;
 }
 
 .positive {
