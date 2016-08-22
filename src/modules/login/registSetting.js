@@ -1,8 +1,13 @@
 (function(app) {
     'use strict';
 
-    var registSettingCtrl = function($scope) {
+    var registSettingCtrl = function($scope,$ionicHistory) {
         $scope.isResend = false;
+
+        $scope.back = function(){
+            $ionicHistory.goBack();
+        };
+
         $scope.time = {
             second:5
         };

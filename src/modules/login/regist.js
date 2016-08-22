@@ -1,11 +1,14 @@
 (function(app) {
     'use strict';
 
-    var registCtrl = function($scope,$state) {
+    var registCtrl = function($scope,$state,$ionicHistory) {
        $scope.input = {
            phone: ''
        };
 
+        $scope.back = function(){
+            $ionicHistory.goBack();
+        };
 
         $scope.getCode = function(){
             $state.go('registSetting');

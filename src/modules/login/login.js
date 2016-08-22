@@ -1,10 +1,14 @@
 (function(app) {
     'use strict';
 
-    var loginCtrl = function($scope, $http,$state) {
+    var loginCtrl = function($scope, $http,$state,$ionicHistory) {
         $scope.input = {
             phone: '',
             password:''
+        };
+
+        $scope.back = function(){
+            $ionicHistory.goBack();
         };
         $scope.login = function(){
             var phoneAndPwd = {

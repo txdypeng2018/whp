@@ -1,9 +1,14 @@
 (function(app) {
     'use strict';
 
-    var forgetPasswordSettingCtrl = function($scope) {
+    var forgetPasswordSettingCtrl = function($scope,$ionicHistory) {
 
         $scope.isResend = false;
+
+        $scope.back = function(){
+            $ionicHistory.goBack();
+        };
+
         $scope.time = {
             second:5
         };

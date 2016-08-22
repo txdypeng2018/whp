@@ -1,11 +1,12 @@
 <ion-header-bar class="bar-light">
-    <a class="icon-return positive" href="javascript:history.go(-1)">
+    <a class="icon-return positive" ng-click="back()">
         <i class="icon ion-ios-arrow-left"></i>
         <div>返回</div>
     </a>
     <div class="title">注册</div>
 </ion-header-bar>
-<ion-content class="has-header content-gray registSetting-content"  has-bouncing="false">
+<ion-content class="has-header content-gray registSetting-content"  overflow-scroll="true"
+style="overflow:auto">
     <div class="prompt">
         验证码已发送到133****3333
     </div>
