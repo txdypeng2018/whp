@@ -53,7 +53,8 @@
       "id": "com.qdc.plugins.wxpay"
     },
     "cordova-plugin-proper-kvstore",
-    "cordova-plugin-x-toast"
+    "cordova-plugin-x-toast",
+    "cordova-plugin-proper-properpush"
   ],
   "cordovaPlatforms": [
     "android",
