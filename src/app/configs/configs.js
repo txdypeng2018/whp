@@ -53,7 +53,9 @@
   app.factory('authInterceptor', function($q, $window, $rootScope) {
     return {
       request: function(config) {
-        $rootScope.inProcess = true;
+        if (config.url.indexOf('modules') < 0) {
+          $rootScope.inProcess = true;
+        }
         // Add JWT token in header
         config.headers = config.headers || {};
         if ($window.localStorage.token) {

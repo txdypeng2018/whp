@@ -6,25 +6,24 @@
     'ionic',
     'ionic-datepicker',
     'angular-carousel',
+    'ngProgress',
     'ngCordova'
-    
   ];
-  angular.module('isj', deps)
-  .run(function($ionicPlatform,$window) {
-	$ionicPlatform.ready(function() {
-		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-		// for form inputs)
-		if($window.cordova && $window.cordova.plugins && $window.cordova.plugins.Keyboard) {
-			$window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-			$window.cordova.plugins.Keyboard.disableScroll(true);
-		}
-		if($window.StatusBar) {
-			// org.apache.cordova.statusbar required
-			$window.StatusBar.styleDefault();
-		}
-		
-	});
-});
+
+  angular.module('isj', deps).run(function($ionicPlatform,$window) {
+    $ionicPlatform.ready(function() {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      if($window.cordova && $window.cordova.plugins && $window.cordova.plugins.Keyboard) {
+        $window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        $window.cordova.plugins.Keyboard.disableScroll(true);
+      }
+      if($window.StatusBar) {
+        // org.apache.cordova.statusbar required
+        $window.StatusBar.styleDefault();
+      }
+    });
+  });
 
   if (typeof String.prototype.startsWith !== 'function') {
     String.prototype.startsWith = function (prefix){

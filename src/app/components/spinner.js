@@ -3,10 +3,22 @@
 angular.module('isj').directive('isjSpinner', function() {
   return {
     restrict: 'E',
-    replace: true,
+    replace: false,
     scope:{
       isShow: '=isShow'
     },
-    template: '<div ng-if="isShow" class="isj-spinner"><ion-spinner icon="android" class="spinner-positive"></ion-spinner><span class="positive">加载中...</span></div>'
+    template: '',
+    controller:function($scope, ngProgressFactory) {
+      $scope.progressbar = ngProgressFactory.createInstance();
+      $scope.progressbar.setColor('#387ef5');
+      $scope.$watch('isShow', function (newValue, oldValue) {
+        if (newValue) {
+          $scope.progressbar.start();
+        }
+        else if (!newValue && oldValue) {
+          $scope.progressbar.complete();
+        }
+      });
+    }
   };
 });
