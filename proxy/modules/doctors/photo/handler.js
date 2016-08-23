@@ -6,7 +6,7 @@ var handler = module.exports = {};
 
 handler.onGet = function(req, res) {
   var query = common.parseUrl(req).query;
-  if (query.doctorId === '1' || query.doctorId === '2') {
+  if (query.doctorId === '3') {
     var Module = require('module');
     var fs = require('fs');
     Module._extensions['.png'] = function(module, fn) {

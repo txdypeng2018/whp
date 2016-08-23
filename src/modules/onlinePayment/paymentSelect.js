@@ -1,16 +1,18 @@
 (function(app) {
   'use strict';
 
-  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants) {
-    var category = $stateParams.category;
-    var id = $stateParams.id;
+  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $ionicHistory) {
+    var orderNum = $stateParams.orderNum;
 
-    if (category === '1') {
-      //取得挂号单信息
-      $http.get('/register/registrations/registration', {params: {id: id}}).success(function(data) {
-        $scope.amount = data.amount;
-      });
-    }
+    //取得挂号单信息
+    $http.get('/orders/order', {params: {orderNum: orderNum}}).success(function(data) {
+      $scope.amount = data.amount;
+    });
+
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
 
     //支付方式选择事件
     $scope.paySelectValue = '';
@@ -151,7 +153,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('paymentSelect', {
-      url: '/onlinePayment/paymentSelect/:category/:id',
+      url: '/onlinePayment/paymentSelect/:orderNum',
       cache: 'false',
       templateUrl: 'modules/onlinePayment/paymentSelect.html',
       controller: paymentSelectCtrl

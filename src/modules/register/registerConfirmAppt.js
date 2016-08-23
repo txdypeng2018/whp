@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $timeout) {
+  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $timeout, $ionicHistory) {
     var doctorId = $stateParams.doctorId;
     var date = $stateParams.date;
     $scope.dateDisplay = date.substring(0,4)+'年'+date.substring(5,7)+'月'+date.substring(8,10)+'日'+date.substring(10,16);
@@ -32,6 +32,11 @@
     $http.get('/register/apptPrompt').success(function(data) {
       $scope.prompt = data;
     });
+
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
 
     //挂号须知提示框
     $scope.showAgreement = function() {
@@ -75,7 +80,7 @@
       };
       $http.put('/register/registration', registration).success(function(data) {
         if (angular.isUndefined(data.errMsg)) {
-          $state.go('paymentSelect',{category: '1', id: data.id});
+          $state.go('paymentSelect', {orderNum: data.orderNum});
         }
       });
     };
@@ -84,7 +89,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerConfirmAppt', {
       url: '/register/registerConfirmAppt/:doctorId/:date/:memberId',
-      cache: 'false',
       templateUrl: 'modules/register/registerConfirmAppt.html',
       controller: registerConfirmApptCtrl
     });

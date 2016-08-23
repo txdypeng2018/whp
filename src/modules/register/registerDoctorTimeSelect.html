@@ -1,5 +1,6 @@
+<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
 <ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
+  <a class="icon-return positive" ng-click="goBack()">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>
@@ -21,7 +22,7 @@
     </tr>
     <tr>
       <td ng-repeat="oneDay in selectDays" class="day" ng-class="{'': 'border-none'}[oneDay.date]" ng-click="dayClk($index, '{{oneDay.date}}')">
-        <div class="day-select">
+        <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">
           {{oneDay.day}}
         </div>
       </td>
@@ -38,8 +39,9 @@
 <ion-content class="has-header content-fill registerDoctorTimeSelect-content">
   <ul class="list">
     <li class="item item-avatar-left">
-      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
-      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="(photo == null || photo == '') && doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="photo != null && photo != ''" ng-src="{{photo}}" class="photo" ng-click="photoClk(doctor.id)">
       <div class="name">
         <h2>{{doctor.name}}</h2>
         <p>{{doctor.title}}</p>

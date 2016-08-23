@@ -55,7 +55,7 @@
     $rootScope.refreshProcess = 0;
     return {
       request: function(config) {
-        if (config.url.indexOf('modules') < 0) {
+        if (config.url.indexOf('modules') < 0 && config.url.indexOf('/photo') < 0) {
           requestIndex++;
           $rootScope.inProcess = true;
           $rootScope.refreshProcess++;
@@ -79,7 +79,7 @@
         return $q.reject(rejection);
       },
       response: function(response) {
-        if (response.config.url.indexOf('modules') < 0) {
+        if (response.config.url.indexOf('modules') < 0 && response.config.url.indexOf('/photo') < 0) {
           requestIndex--;
           if (requestIndex <= 0) {
             $rootScope.inProcess = false;

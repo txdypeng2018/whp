@@ -1,9 +1,10 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker) {
+  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $ionicHistory) {
+    $scope.hideSearch = true;
+    $scope.daySelected = '';
     var displayDays = 7;
-    var daySelected = '';
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
     //取得指定天数以后的日期
@@ -13,14 +14,21 @@
       return date;
     };
 
+    //取得医生照片
+    var getDoctorPhoto = function(doctorId, index) {
+      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+        $scope.doctors[config.params.index].photo = data;
+      });
+    };
+
     //取得科室下的医生
     $scope.major = $stateParams.major;
     var getDoctors = function(){
       var startDate = '';
       var endDate = '';
-      if (daySelected !== '') {
-        startDate = daySelected;
-        endDate = daySelected;
+      if ($scope.daySelected !== '') {
+        startDate = $scope.daySelected;
+        endDate = $scope.daySelected;
       }
       else {
         startDate = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
@@ -35,6 +43,9 @@
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
         $scope.doctors = data;
+        for (var i = 0 ; i < data.length ; i++) {
+          getDoctorPhoto(data[i].id, i);
+        }
       });
     };
 
@@ -82,19 +93,12 @@
 
     //日期选择事件
     $scope.dayClk = function(index, date) {
-      if (daySelected === date) {
-        daySelected = '';
-        angular.element(document.querySelectorAll('.day-select')[index]).removeClass('positive day-selected');
+      if ($scope.daySelected === date) {
+        $scope.daySelected = '';
         getDoctors();
       }
       else {
-        daySelected = date;
-        for (var m = 0 ; m < displayDays ; m++) {
-          if (m !== index) {
-            angular.element(document.querySelectorAll('.day-select')[m]).removeClass('positive day-selected');
-          }
-        }
-        angular.element(document.querySelectorAll('.day-select')[index]).addClass('positive day-selected');
+        $scope.daySelected = date;
         getDoctors();
       }
     };
@@ -103,15 +107,8 @@
     var dayPicker1 = {
       callback: function (date) {
         $scope.selectDays = selectDayInit(new Date(date));
-        daySelected = $filter('date')(date, 'yyyy-MM-dd');
+        $scope.daySelected = $filter('date')(date, 'yyyy-MM-dd');
         getDoctors();
-        $timeout(function(){
-          for (var i = 0 ; i < displayDays ; i++) {
-            if (daySelected === $scope.selectDays[i].date) {
-              angular.element(document.querySelectorAll('.day-select')[i]).addClass('positive day-selected');
-            }
-          }
-        });
       },
       from: getNextDay(new Date(), 1),
       to: getNextDay(new Date(), 60),
@@ -119,8 +116,8 @@
       howTodayButton: false
     };
     $scope.dayPicker = function() {
-      if (daySelected !== '') {
-        dayPicker1.inputDate = new Date(daySelected);
+      if ($scope.daySelected !== '') {
+        dayPicker1.inputDate = new Date($scope.daySelected);
       }
       else {
         dayPicker1.inputDate = new Date();
@@ -128,16 +125,18 @@
       ionicDatePicker.openDatePicker(dayPicker1);
     };
 
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
+
     //查询框显示隐藏事件
     $scope.searchClk = function() {
-      if (angular.element(document.querySelector('.head-search')).hasClass('search-none')) {
-        angular.element(document.querySelector('.head-search')).removeClass('search-none');
+      $scope.hideSearch = !$scope.hideSearch;
+      if (!$scope.hideSearch) {
         $timeout(function(){
           document.getElementById('registerDoctorDateSelect_search').focus();
-        });
-      }
-      else {
-        angular.element(document.querySelector('.head-search')).addClass('search-none');
+        }, 50);
       }
     };
     //查询事件
@@ -148,19 +147,18 @@
     //选择照片事件
     $scope.photoClk = function(id, event) {
       event.stopPropagation();
-      $state.go('doctorIntroductionView', {id: id});
+      $state.go('doctorIntroductionView', {doctorId: id, type: '0'});
     };
 
     //医生选中事件
     $scope.doctorClk = function(doctorId) {
-      $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: daySelected});
+      $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected});
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerDoctorDateSelect', {
       url: '/register/registerDoctorDateSelect/:districtId/:subjectId/:major',
-      cache: 'false',
       templateUrl: 'modules/register/registerDoctorDateSelect.html',
       controller: registerDoctorDateSelectCtrl
     });
