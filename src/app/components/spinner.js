@@ -5,18 +5,25 @@ angular.module('isj').directive('isjSpinner', function() {
     restrict: 'E',
     replace: false,
     scope:{
-      isShow: '=isShow'
+      isShow: '=isShow',
+      isRefresh: '=isRefresh'
     },
     template: '',
     controller:function($scope, $element, ngProgressFactory) {
       $scope.progressbar = ngProgressFactory.createInstance();
       $scope.progressbar.setParent($element[0]);
       $scope.progressbar.setColor('#387ef5');
-      $scope.$watch('isShow', function (newValue, oldValue) {
-        if (newValue) {
-          $scope.progressbar.start();
+      $scope.$watch('isRefresh', function (newValue) {
+        if ($scope.isShow) {
+          if (newValue === 1) {
+            $scope.progressbar.start();
+          }
+          else {
+            $scope.progressbar.set(0);
+            $scope.progressbar.start();
+          }
         }
-        else if (!newValue && oldValue) {
+        else {
           $scope.progressbar.complete();
         }
       });

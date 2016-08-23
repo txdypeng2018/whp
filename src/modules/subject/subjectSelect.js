@@ -24,7 +24,7 @@
     };
 
     //取得院区信息
-    $http.get('/organization/district').success(function(data) {
+    $http.get('/organization/districts').success(function(data) {
       $scope.districts = [{id:'', name:'全部'}];
       for (var i = 0 ; i < data.length ; i++) {
         data[i].name = data[i].name + '院区';

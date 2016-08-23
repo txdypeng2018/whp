@@ -3,14 +3,14 @@
 
   var doctorIntroductionViewCtrl = function($scope, $http, $stateParams) {
     //取得医生简介
-    $http.get('/doctors/'+$stateParams.id).success(function(data) {
+    $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {
       $scope.introduction = data;
     });
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('doctorIntroductionView', {
-      url: '/doctorIntroductionList/doctorIntroductionView/:id',
+      url: '/doctorIntroductionList/doctorIntroductionView/:doctorId',
       templateUrl: 'modules/doctorIntroduction/doctorIntroductionView.html',
       controller: doctorIntroductionViewCtrl
     });

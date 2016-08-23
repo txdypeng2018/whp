@@ -50,12 +50,46 @@
       <p>出诊地点：{{dataSelected.dept}}（{{dataSelected.district}}）</p>
       <p>挂号费：￥{{dataSelected.amount}}</p>
     </li>
-    <li class="item time-item">
-      <label class="item-input item-select">
-        预约时间：
-        <select ng-model="input.time" ng-change="timeClk()"
-                ng-options="node.code as node.name for node in timeTypes"></select>
-      </label>
+    <li class="item item-divider">
+      预约时间
     </li>
   </ul>
+  <div class="time-select">
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>09:10</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>09:20</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>09:30</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>09:40</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>09:50</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>10:00</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>10:10</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>10:20</span>
+    </div>
+    <div>
+      <i class="icon ion-ios-clock-outline"></i>
+      <span>10:30</span>
+    </div>
+  </div>
 </ion-content>

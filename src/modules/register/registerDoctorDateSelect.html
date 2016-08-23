@@ -30,7 +30,7 @@
     </tr>
   </table>
 </div>
-<ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="{'1': 'has-footer', '0': 'has-footer'}[isChild]">
+<ion-content class="has-header content-fill registerDoctorDateSelect-content">
   <ul ng-if="doctors.length > 0" class="list">
     <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id)">
       <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
@@ -50,11 +50,3 @@
   </ul>
   <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
 </ion-content>
-<ion-footer-bar ng-if="isChild != ''" class="bar-light">
-  <div style="width: 100%;text-align: center">
-    <button class="button button-clear button-positive" ng-click="isChildClk()">
-      <i class="icon ion-ios-eye-outline"></i>
-      <span ng-if="isChild == '0'">小儿</span><span ng-if="isChild == '1'">成人</span>{{subjectInfo.name}}
-    </button>
-  </div>
-</ion-footer-bar>

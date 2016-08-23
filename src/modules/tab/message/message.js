@@ -11,7 +11,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('tab.message', {
       url: '/message',
-      cache: 'false',
       views:{
         'tab-message':{
           templateUrl: 'modules/tab/message/message.html',

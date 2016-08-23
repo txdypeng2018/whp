@@ -13,28 +13,8 @@
       return date;
     };
 
-    //取得学科信息
-    var getSubjectInfo = function(subjectId) {
-      $http.get('/subjects/'+subjectId).success(function(data) {
-        $scope.subjectInfo = data;
-        if (data.hasChild === '1') {
-          $scope.isChild = '0';
-        }
-        else {
-          $scope.isChild = '';
-        }
-      });
-    };
-
-    $scope.major = $stateParams.major;
-    if (angular.isUndefined($stateParams.subjectId) || $stateParams.subjectId === '') {
-      $scope.isChild = '';
-    }
-    else {
-      getSubjectInfo($stateParams.subjectId);
-    }
-
     //取得科室下的医生
+    $scope.major = $stateParams.major;
     var getDoctors = function(){
       var startDate = '';
       var endDate = '';
@@ -49,7 +29,6 @@
       var params = {
         districtId: $stateParams.districtId,
         subjectId: $stateParams.subjectId,
-        isChild: $scope.isChild,
         major: $scope.major,
         startDate: startDate,
         endDate: endDate
@@ -163,17 +142,6 @@
     };
     //查询事件
     $scope.doSearch = function() {
-      getDoctors();
-    };
-
-    //选择儿科事件
-    $scope.isChildClk = function() {
-      if($scope.isChild === '1') {
-        $scope.isChild = '0';
-      }
-      else {
-        $scope.isChild = '1';
-      }
       getDoctors();
     };
 

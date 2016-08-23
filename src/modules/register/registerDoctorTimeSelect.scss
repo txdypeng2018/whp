@@ -49,9 +49,11 @@
 }
 
 .registerDoctorTimeSelect-content {
-  top: 135px;
+  top: 135px !important;
 
   .list {
+    margin-bottom: 0;
+
     .item.item-avatar-left {
       padding-left: 86px;
 
@@ -84,20 +86,27 @@
         }
       }
     }
+  }
 
-    .time-item {
-      padding: 9px 16px 9px 2px;
+  .time-select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-      .item-select {
-        font-size: 16px;
+    > div {
+      width: 33.3%;
+      font-size: 16px;
+      color: #666666;
+      padding: 12px 16px;
+      border-left: 1px solid #dddddd;
+      border-bottom: 1px solid #dddddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-        &:after {
-          border-top-color: #387ef5;
-        }
-
-        select {
-          font-size: 16px;
-        }
+      i {
+        font-size: 20px;
+        margin-right: 5px;
       }
     }
   }

@@ -1,54 +1,48 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout) {
-    //取得学科信息
-    var getSubjectInfo = function(subjectId) {
-      $http.get('/subjects/'+subjectId).success(function(data) {
-        $scope.subjectInfo = data;
-        if (data.hasChild === '1') {
-          $scope.isChild = '0';
-        }
-        else {
-          $scope.isChild = '';
-        }
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicHistory) {
+    $scope.hideSearch = true;
+
+    //取得医生照片
+    var getDoctorPhoto = function(doctorId, index) {
+      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+        $scope.doctors[config.params.index].photo = data;
       });
     };
 
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
-    if (angular.isUndefined($stateParams.subjectId) || $stateParams.subjectId === '') {
-      $scope.isChild = '';
-    }
-    else {
-      getSubjectInfo($stateParams.subjectId);
-    }
     var getDoctors = function() {
       var params = {
         districtId: $stateParams.districtId,
         subjectId: $stateParams.subjectId,
-        isChild: $scope.isChild,
         major: $scope.major,
         startDate: today,
         endDate: today
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
         $scope.doctors = data;
+        for (var i = 0 ; i < data.length ; i++) {
+          getDoctorPhoto(data[i].id, i);
+        }
       });
     };
     getDoctors();
 
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
+
     //查询框显示隐藏事件
     $scope.searchClk = function() {
-      if (angular.element(document.querySelector('.head-search')).hasClass('search-none')) {
-        angular.element(document.querySelector('.head-search')).removeClass('search-none');
+      $scope.hideSearch = !$scope.hideSearch;
+      if (!$scope.hideSearch) {
         $timeout(function(){
           document.getElementById('registerTodayDoctorList_search').focus();
-        });
-      }
-      else {
-        angular.element(document.querySelector('.head-search')).addClass('search-none');
+        }, 50);
       }
     };
 
@@ -57,21 +51,10 @@
       getDoctors();
     };
 
-    //选择儿科事件
-    $scope.isChildClk = function() {
-      if($scope.isChild === '1') {
-        $scope.isChild = '0';
-      }
-      else {
-        $scope.isChild = '1';
-      }
-      getDoctors();
-    };
-
     //选择照片事件
     $scope.photoClk = function(id, event) {
       event.stopPropagation();
-      $state.go('doctorIntroductionView', {id: id});
+      $state.go('doctorIntroductionView', {doctorId: id, type: '0'});
     };
 
     //医生选择事件
@@ -83,7 +66,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerTodayDoctorList', {
       url: '/register/registerTodayDoctorList/:districtId/:subjectId/:major',
-      cache: 'false',
       templateUrl: 'modules/register/registerTodayDoctorList.html',
       controller: registerTodayDoctorListCtrl
     });
