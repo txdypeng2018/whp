@@ -46,13 +46,10 @@
   .border-none {
     border-right-color: transparent !important;
   }
-}
-
-.registerDoctorTimeSelect-content {
-  top: 135px !important;
 
   .list {
     margin-bottom: 0;
+    margin-top: 3px;
 
     .item.item-avatar-left {
       padding-left: 86px;
@@ -75,18 +72,13 @@
           display: inline-block;
           margin-left: 8px;
         }
-
-        .img-registration {
-          display: inline-block;
-          margin-left: 8px;
-
-          img {
-            width: 12px;
-          }
-        }
       }
     }
   }
+}
+
+.registerDoctorTimeSelect-content {
+  top: 268px !important;
 
   .time-select {
     display: flex;
@@ -106,7 +98,11 @@
 
       i {
         font-size: 20px;
-        margin-right: 5px;
+        margin-right: 8px;
+      }
+
+      &.time-disable {
+        background-color: #f0f0f0;
       }
     }
   }

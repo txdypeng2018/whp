@@ -58,8 +58,10 @@
     };
 
     //医生选择事件
-    $scope.doctorClk = function(doctorId) {
-      $state.go('registerConfirmToday', {doctorId: doctorId});
+    $scope.doctorClk = function(doctorId, overCount) {
+      if (overCount > 0) {
+        $state.go('registerConfirmToday', {doctorId: doctorId});
+      }
     };
   };
 

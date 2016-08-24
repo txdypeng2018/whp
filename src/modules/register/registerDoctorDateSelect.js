@@ -151,8 +151,10 @@
     };
 
     //医生选中事件
-    $scope.doctorClk = function(doctorId) {
-      $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected});
+    $scope.doctorClk = function(doctorId, overCount) {
+      if (overCount > 0) {
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected});
+      }
     };
   };
 

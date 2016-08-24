@@ -18,15 +18,14 @@
     //取得排班时间
     $scope.timeTypes = [];
     var getScheduleTimes = function(date) {
-      $http.get('/schedule/times', {params: {deptId: $stateParams.deptId, doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
-        $scope.input = {
-          time: ''
-        };
-        $scope.times = data;
-        $scope.timeTypes[0] = {code: '', name: '请选择'};
-        for (var i = 1 ; i <= $scope.times.length ; i++) {
-          $scope.timeTypes[i] = {code: $scope.times[i-1], name: $scope.times[i-1]};
+      $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
+        if (data.length%3 != 0) {
+          var count = 3 - data.length%3;
+          for (var i = 0 ; i < count ; i++) {
+            data.push({time:''});
+          }
         }
+        $scope.times = data;
       });
     };
 
@@ -170,9 +169,9 @@
     };
 
     //时间选中事件
-    $scope.timeClk = function() {
-      if ($scope.daySelected !== null && $scope.daySelected !== '' && $scope.input.time !== '') {
-        $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, deptId: $stateParams.deptId, date: daySelected+' '+$scope.input.time});
+    $scope.timeClk = function(time, overCount) {
+      if ($scope.daySelected !== null && $scope.daySelected !== '' && overCount > 0) {
+        $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
       }
     };
   };

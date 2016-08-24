@@ -30,13 +30,11 @@
     <tr>
       <td ng-repeat="oneDay in selectDays" class="week">
         <div>
-          {{oneDay.data.registerNum}}<span ng-if="oneDay.data.registerNum != null">/</span>{{oneDay.data.registerNumTotal}}
+          <span ng-if="oneDay.data.overCount != null">{{oneDay.data.total-oneDay.data.overCount}}/</span>{{oneDay.data.total}}
         </div>
       </td>
     </tr>
   </table>
-</div>
-<ion-content class="has-header content-fill registerDoctorTimeSelect-content">
   <ul class="list">
     <li class="item item-avatar-left">
       <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
@@ -45,9 +43,6 @@
       <div class="name">
         <h2>{{doctor.name}}</h2>
         <p>{{doctor.title}}</p>
-        <div class="img-registration">
-          <img src="./assets/images/appointment_available.png">
-        </div>
       </div>
       <p>出诊地点：{{dataSelected.dept}}（{{dataSelected.district}}）</p>
       <p>挂号费：￥{{dataSelected.amount}}</p>
@@ -56,42 +51,12 @@
       预约时间
     </li>
   </ul>
+</div>
+<ion-content class="has-header content-fill registerDoctorTimeSelect-content">
   <div class="time-select">
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>09:10</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>09:20</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>09:30</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>09:40</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>09:50</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>10:00</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>10:10</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>10:20</span>
-    </div>
-    <div>
-      <i class="icon ion-ios-clock-outline"></i>
-      <span>10:30</span>
+    <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
+      <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
+      <span>{{time.time}}</span>
     </div>
   </div>
 </ion-content>

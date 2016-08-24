@@ -1,8 +1,8 @@
 [
   {
     "date": "2016-08-20",
-    "registerNumTotal": 20,
-    "registerNum": 3,
+    "total": 20,
+    "overCount": 5,
     "districtId": "1",
     "district": "南湖",
     "deptId": "1",
@@ -13,8 +13,8 @@
   },
   {
     "date": "2016-08-25",
-    "registerNumTotal": 20,
-    "registerNum": 5,
+    "total": 20,
+    "overCount": 10,
     "districtId": "1",
     "district": "南湖",
     "deptId": "1",
@@ -25,8 +25,8 @@
   },
   {
     "date": "2016-08-29",
-    "registerNumTotal": 20,
-    "registerNum": 6,
+    "total": 99,
+    "overCount": 99,
     "districtId": "1",
     "district": "南湖",
     "deptId": "1",
