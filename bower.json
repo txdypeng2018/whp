@@ -8,7 +8,7 @@
     "ionic": "1.3.1",
     "ionic-datepicker": "1.1.0",
     "angular-carousel": "1.0.1",
-    "ngprogress": "1.1.2",
+    "ngprogress": "1.1.3",
     "ngCordova": "^v0.1.27-alpha",
     "proper-ng-cordova-js": "proper-ng-cordova#^1.1.0",
     "proper-piwik-js": "proper-piwik#^2.16.1"
