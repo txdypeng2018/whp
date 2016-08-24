@@ -19,7 +19,7 @@
     $scope.timeTypes = [];
     var getScheduleTimes = function(date) {
       $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
-        if (data.length%3 != 0) {
+        if (data.length%3 !== 0) {
           var count = 3 - data.length%3;
           for (var i = 0 ; i < count ; i++) {
             data.push({time:''});
