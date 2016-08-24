@@ -5,6 +5,7 @@
   "description": "Ionic Shengjing app",
   "dependencies": {},
   "devDependencies": {
+    "bower-nexus3-resolver": "1.0.1",
     "grunt": "^0.4.5",
     "grunt-angular-templates": "^0.5.7",
     "grunt-autoprefixer": "^2.0.0",
