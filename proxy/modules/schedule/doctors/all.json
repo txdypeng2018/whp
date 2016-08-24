@@ -8,7 +8,9 @@
     "district": "南湖",
     "deptId": "1",
     "dept": "第一内分泌科门诊",
-    "skill": "擅长于风湿科常见疾病"
+    "skill": "擅长于风湿科常见疾病",
+    "total": "99",
+    "overCount": "99"
   },
   {
     "id": "2",
@@ -19,7 +21,9 @@
     "district": "滑翔",
     "deptId": "2",
     "dept": "第二内分泌科门诊",
-    "skill": ""
+    "skill": "",
+    "total": "10",
+    "overCount": "5"
   },
   {
     "id": "3",
@@ -30,6 +34,8 @@
     "district": "沈北",
     "deptId": "2",
     "dept": "第二内分泌科门诊",
-    "skill": ""
+    "skill": "",
+    "total": "10",
+    "overCount": "0"
   }
 ]
