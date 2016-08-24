@@ -46,12 +46,11 @@
   .border-none {
     border-right-color: transparent !important;
   }
-}
-
-.registerDoctorTimeSelect-content {
-  top: 135px;
 
   .list {
+    margin-bottom: 0;
+    margin-top: 3px;
+
     .item.item-avatar-left {
       padding-left: 86px;
 
@@ -73,31 +72,37 @@
           display: inline-block;
           margin-left: 8px;
         }
-
-        .img-registration {
-          display: inline-block;
-          margin-left: 8px;
-
-          img {
-            width: 12px;
-          }
-        }
       }
     }
+  }
+}
 
-    .time-item {
-      padding: 9px 16px 9px 2px;
+.registerDoctorTimeSelect-content {
+  top: 268px !important;
 
-      .item-select {
-        font-size: 16px;
+  .time-select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-        &:after {
-          border-top-color: #387ef5;
-        }
+    > div {
+      width: 33.3%;
+      font-size: 16px;
+      color: #666666;
+      padding: 12px 16px;
+      border-left: 1px solid #dddddd;
+      border-bottom: 1px solid #dddddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-        select {
-          font-size: 16px;
-        }
+      i {
+        font-size: 20px;
+        margin-right: 8px;
+      }
+
+      &.time-disable {
+        background-color: #f0f0f0;
       }
     }
   }

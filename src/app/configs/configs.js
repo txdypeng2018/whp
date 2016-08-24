@@ -50,10 +50,16 @@
 
   // Config JWT in http header and prefix of url
   var CONTEXT = './api';
+  var requestIndex = 0;
   app.factory('authInterceptor', function($q, $window, $rootScope) {
+    $rootScope.refreshProcess = 0;
     return {
       request: function(config) {
-        $rootScope.inProcess = true;
+        if (config.url.indexOf('modules') < 0 && config.url.indexOf('/photo') < 0) {
+          requestIndex++;
+          $rootScope.inProcess = true;
+          $rootScope.refreshProcess++;
+        }
         // Add JWT token in header
         config.headers = config.headers || {};
         if ($window.localStorage.token) {
@@ -66,19 +72,29 @@
         return config;
       },
       requestError: function(rejection) {
+        requestIndex = 0;
         $rootScope.inProcess = false;
+        $rootScope.refreshProcess = 0;
         console.debug('requestError %o', rejection);
         return $q.reject(rejection);
       },
       response: function(response) {
-        $rootScope.inProcess = false;
+        if (response.config.url.indexOf('modules') < 0 && response.config.url.indexOf('/photo') < 0) {
+          requestIndex--;
+          if (requestIndex <= 0) {
+            $rootScope.inProcess = false;
+            $rootScope.refreshProcess = 0;
+          }
+        }
         if (response.status === 401) {
           console.debug('handle the case where the user is not authenticated');
         }
         return response || $q.when(response);
       },
       responseError: function(rejection) {
+        requestIndex = 0;
         $rootScope.inProcess = false;
+        $rootScope.refreshProcess = 0;
         console.debug('responseError %o', rejection);
         return $q.reject(rejection);
       }

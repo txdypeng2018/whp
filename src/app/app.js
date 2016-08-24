@@ -6,6 +6,7 @@
     'ionic',
     'ionic-datepicker',
     'angular-carousel',
+    'ngProgress',
     'ngCordova',
     'properNgCordova'
   ];
@@ -22,7 +23,7 @@
 			// org.apache.cordova.statusbar required
 			$window.StatusBar.styleDefault();
 		}
-		
+
 	//push start
 	//推送相关的参数
 	var params=appConstants.properpush;
@@ -46,12 +47,12 @@
   		//_proper_userid 通知对应的userid
   		//_proper_title 通知的标题
   		//_proper_content 通知的正文
-  		
+
   	}
   	//添加打开通知的事件
   	document.addEventListener('Properpush.openNotification', onOpenNotification, false);
   	//push end
-		
+
 	});
 });
 

@@ -1,5 +1,6 @@
+<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
 <ion-header-bar class="bar-light">
-  <a class="positive icon-return" href="javascript:history.go(-1)">
+  <a class="positive icon-return" ng-click="goBack()">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>

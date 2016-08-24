@@ -27,6 +27,7 @@
       .name {
         display: flex;
         flex-direction: row;
+        align-items: baseline;
 
         h2 {
           display: inline-block;
@@ -37,13 +38,14 @@
           margin-left: 8px;
         }
 
-        .img-registration {
+        .can-register {
+          color: #ffffff;
+          font-size: 12px;
           display: inline-block;
+          border-radius: 3px;
+          padding: 0 5px;
           margin-left: 8px;
-
-          img {
-            width: 12px;
-          }
+          transform: scale(0.9,0.9);
         }
       }
     }

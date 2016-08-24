@@ -1,5 +1,6 @@
+<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
 <ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
+  <a class="icon-return positive" ng-click="goBack()">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>
@@ -21,7 +22,7 @@
     </tr>
     <tr>
       <td ng-repeat="oneDay in selectDays" class="day" ng-class="{'': 'border-none'}[oneDay.date]" ng-click="dayClk($index, '{{oneDay.date}}')">
-        <div class="day-select">
+        <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">
           {{oneDay.day}}
         </div>
       </td>
@@ -29,33 +30,33 @@
     <tr>
       <td ng-repeat="oneDay in selectDays" class="week">
         <div>
-          {{oneDay.data.registerNum}}<span ng-if="oneDay.data.registerNum != null">/</span>{{oneDay.data.registerNumTotal}}
+          <span ng-if="oneDay.data.overCount != null">{{oneDay.data.total-oneDay.data.overCount}}/</span>{{oneDay.data.total}}
         </div>
       </td>
     </tr>
   </table>
-</div>
-<ion-content class="has-header content-fill registerDoctorTimeSelect-content">
   <ul class="list">
     <li class="item item-avatar-left">
-      <img ng-if="doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
-      <img ng-if="doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="(photo == null || photo == '') && doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
+      <img ng-if="photo != null && photo != ''" ng-src="{{photo}}" class="photo" ng-click="photoClk(doctor.id)">
       <div class="name">
         <h2>{{doctor.name}}</h2>
         <p>{{doctor.title}}</p>
-        <div class="img-registration">
-          <img src="./assets/images/appointment_available.png">
-        </div>
       </div>
       <p>出诊地点：{{dataSelected.dept}}（{{dataSelected.district}}）</p>
       <p>挂号费：￥{{dataSelected.amount}}</p>
     </li>
-    <li class="item time-item">
-      <label class="item-input item-select">
-        预约时间：
-        <select ng-model="input.time" ng-change="timeClk()"
-                ng-options="node.code as node.name for node in timeTypes"></select>
-      </label>
+    <li class="item item-divider">
+      预约时间
     </li>
   </ul>
+</div>
+<ion-content class="has-header content-fill registerDoctorTimeSelect-content">
+  <div class="time-select">
+    <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
+      <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
+      <span>{{time.time}}</span>
+    </div>
+  </div>
 </ion-content>

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmTodayCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $timeout, $filter) {
+  var registerConfirmTodayCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $timeout, $filter, $ionicHistory) {
     var doctorId = $stateParams.doctorId;
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.todayDisplay = $filter('date')(new Date(),'yyyy年MM月dd日');
@@ -32,6 +32,11 @@
     $http.get('/register/todayPrompt').success(function(data) {
       $scope.prompt = data;
     });
+
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
 
     //挂号须知提示框
     $scope.showAgreement = function() {
@@ -75,7 +80,7 @@
       };
       $http.put('/register/registrations/registration', registration).success(function(data) {
         if (angular.isUndefined(data.errMsg)) {
-          $state.go('paymentSelect',{category: '1', id: data.id});
+          $state.go('paymentSelect', {orderNum: data.orderNum});
         }
       });
     };
@@ -84,7 +89,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerConfirmToday', {
       url: '/register/registerConfirmToday/:doctorId/:memberId',
-      cache: 'false',
       templateUrl: 'modules/register/registerConfirmToday.html',
       controller: registerConfirmTodayCtrl
     });

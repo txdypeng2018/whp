@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams) {
+  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $ionicHistory) {
     $scope.memberId = $stateParams.memberId;
 
     //取得家庭成员类别
@@ -13,6 +13,11 @@
     $http.get('/familyMembers').success(function(data) {
       $scope.members = data;
     });
+
+    //返回上页
+    $scope.goBack = function() {
+      $ionicHistory.goBack();
+    };
 
     //家庭成员管理
     $scope.memberManage = function() {

@@ -1,14 +1,15 @@
+<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
 <ion-header-bar class="bar-light subjectSelect-title">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
+  <a class="icon-return positive" ng-click="goBack()">
     <i class="icon ion-ios-arrow-left"></i>
     <div>返回</div>
   </a>
   <div class="title">科室列表</div>
   <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
 </ion-header-bar>
-<div class="head-search search-none">
+<div ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
   <form ng-submit="doSearch()">
-    <input id="subjectSelect_search" type="search" ng-model="major" placeholder="专业/专长">
+    <input id="subjectSelect_search_{{type}}" type="search" ng-model="major" placeholder="专业/专长">
   </form>
   <div class="search-icon">
     <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
@@ -16,8 +17,8 @@
 </div>
 <div class="district-select has-header">
   <div class="button-bar">
-    <button ng-repeat="district in districts" class="button button-outline button-positive district-button"
-            ng-click="districtClk($event, '{{district.id}}')">
+    <button ng-repeat="district in districts" ng-class="{false: 'button-outline'}[districtId == district.id]" class="button button-positive district-button"
+            ng-click="districtClk(district.id)">
       {{district.name}}
     </button>
   </div>
@@ -25,13 +26,13 @@
 <ion-content class="has-header has-header-district content-fill subjectSelect-content">
   <div class="subject-select">
     <ion-scroll class="subject-scroll subject-scroll-left">
-      <div ng-repeat="subject in subjects" class="subject-div subject-div-left" ng-click="subjectLeftClk($event, '{{subject.id}}')">
+      <div ng-repeat="subject in subjects" ng-class="{true: 'left-activated'}[subjectId == subject.id]" class="subject-div subject-div-left" ng-click="subjectLeftClk(subject.id)">
         <i class="icon ion-ios-play positive left-activated-icon"></i>
         {{subject.name}}
       </div>
     </ion-scroll>
     <ion-scroll class="subject-scroll subject-scroll-right">
-      <div ng-repeat="subjectRight in subjectRights" class="subject-div subject-div-right" ng-click="subjectRightClk('{{subjectRight.id}}')">
+      <div ng-repeat="subjectRight in subjectRights" class="subject-div subject-div-right" ng-click="subjectRightClk(subjectRight.id)">
         {{subjectRight.name}}
       </div>
     </ion-scroll>
