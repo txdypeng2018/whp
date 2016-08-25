@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $ionicHistory) {
+  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker) {
     $scope.hideSearch = true;
     $scope.daySelected = '';
     var displayDays = 7;
@@ -123,11 +123,6 @@
         dayPicker1.inputDate = new Date();
       }
       ionicDatePicker.openDatePicker(dayPicker1);
-    };
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
     };
 
     //查询框显示隐藏事件

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $ionicHistory) {
+  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
     $scope.districtId = '';
@@ -33,11 +33,6 @@
 
       getSubjects();
     });
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
 
     //查询框显示隐藏事件
     $scope.searchClk = function() {

@@ -1,18 +1,13 @@
 (function(app) {
   'use strict';
 
-  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $ionicHistory) {
+  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants) {
     var orderNum = $stateParams.orderNum;
 
     //取得挂号单信息
     $http.get('/orders/order', {params: {orderNum: orderNum}}).success(function(data) {
       $scope.amount = data.amount;
     });
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
 
     //支付方式选择事件
     $scope.paySelectValue = '';

@@ -176,6 +176,16 @@ a {
   transform: rotate(45deg);
 }
 
+.agreement-popup {
+  .popup {
+    width: 80% !important;
+
+    .popup-title {
+      font-size: 18px !important;
+    }
+  }
+}
+
 .ionic_datepicker_popup {
   .popup-body {
     .selected_date_full {

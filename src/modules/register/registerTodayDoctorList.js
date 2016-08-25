@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicHistory) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout) {
     $scope.hideSearch = true;
 
     //取得医生照片
@@ -30,11 +30,6 @@
       });
     };
     getDoctors();
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
 
     //查询框显示隐藏事件
     $scope.searchClk = function() {

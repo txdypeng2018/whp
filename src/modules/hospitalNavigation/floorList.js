@@ -1,16 +1,11 @@
 (function(app) {
   'use strict';
 
-  var hospitalNavigationDloorListCtrl = function($scope, $http, $stateParams, $ionicHistory) {
+  var hospitalNavigationDloorListCtrl = function($scope, $http, $stateParams) {
     //取得各楼层信息
     $http.get('/hospitalNavigation/builds/floors', {params: {buildId: $stateParams.id}}).success(function(data) {
       $scope.floorList = data;
     });
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
   };
 
   var mainRouter = function($stateProvider) {

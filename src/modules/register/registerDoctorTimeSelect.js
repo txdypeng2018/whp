@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $ionicHistory) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker) {
     var displayDays = 7;
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     $scope.selectDays = [];
@@ -142,11 +142,6 @@
         }
       });
     }
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
 
     //选择照片事件
     $scope.photoClk = function(id) {

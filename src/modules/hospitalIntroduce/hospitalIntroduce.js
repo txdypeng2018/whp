@@ -1,16 +1,11 @@
 (function(app) {
   'use strict';
 
-  var hospitalIntroduceCtrl = function($scope, $http, $ionicHistory) {
+  var hospitalIntroduceCtrl = function($scope, $http) {
     //取得医院简介信息
     $http.get('/hospitalIntroduce').success(function(data) {
       $scope.hospitalIntroduce = data;
     });
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
   };
 
   var mainRouter = function($stateProvider) {

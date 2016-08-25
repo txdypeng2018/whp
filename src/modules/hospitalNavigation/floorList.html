@@ -1,9 +1,6 @@
 <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
 <ion-header-bar class="bar-light">
-  <a class="icon-return positive" ng-click="goBack()">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
+  <isj-back-button></isj-back-button>
   <div class="title">楼层索引</div>
 </ion-header-bar>
 <ion-content class="has-header content-gray floorList-content">

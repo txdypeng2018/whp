@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $timeout, $ionicHistory) {
+  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory) {
     var doctorId = $stateParams.doctorId;
     var date = $stateParams.date;
     $scope.dateDisplay = date.substring(0,4)+'年'+date.substring(5,7)+'月'+date.substring(8,10)+'日'+date.substring(10,16);
@@ -35,14 +35,24 @@
 
     //返回上页
     $scope.goBack = function() {
-      $ionicHistory.goBack();
+      var index = 0;
+      for (var i in $ionicHistory.viewHistory().views) {
+        var view = $ionicHistory.viewHistory().views[i];
+        if (view.stateName === 'registerDoctorTimeSelect') {
+          index = view.index;
+          break;
+        }
+      }
+      $ionicHistory.goBack(index-$ionicHistory.currentView().index);
     };
 
     //挂号须知提示框
+    var myPopup = null;
     $scope.showAgreement = function() {
-      var myPopup = $ionicPopup.show({
+      myPopup = $ionicPopup.show({
         template: '<div style="padding: 3px;font-size:15px">'+$scope.agreement+'</div>',
         title: '挂号须知',
+        cssClass: 'agreement-popup',
         buttons: [
           {
             text: '确定',
@@ -53,10 +63,6 @@
             }
           }
         ]
-      });
-      $timeout(function() {
-        angular.element(document.querySelector('.popup')).css('width','80%');
-        angular.element(document.querySelector('.popup-title')).css('font-size','18px');
       });
     };
 
@@ -84,6 +90,12 @@
         }
       });
     };
+
+    $scope.$on('$ionicView.beforeLeave', function(){
+      if (myPopup !== null) {
+        myPopup.close();
+      }
+    });
   };
 
   var mainRouter = function($stateProvider) {

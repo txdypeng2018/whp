@@ -1,55 +1,54 @@
-<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" ng-click="goBack()">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title"></div>
-</ion-header-bar>
-<ion-content class="has-header registerConfirmAppt-content">
-  <div class="patient">
-    <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
-    <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
-    <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}" class="photo">
-    <span>就诊人：{{patient.name}}</span>
-    <span>
-      <a class="positive" ng-click="selectMember()">
-        换人
-        <i class="icon ion-ios-loop-strong"></i>
-      </a>
-    </span>
-    <p>身份证号：{{patient.idCard}}</p>
-  </div>
-  <div class="register-info">
-    <table>
-      <tr>
-        <td class="label">就诊时间：</td>
-        <td width="100%">{{dateDisplay}}</td>
-      </tr>
-      <tr>
-        <td class="label">就诊地点：</td>
-        <td width="100%">{{doctor.dept}}（{{doctor.district}}）</td>
-      </tr>
-      <tr>
-        <td class="label">看诊医生：</td>
-        <td width="100%">{{doctor.name}}</td>
-      </tr>
-      <tr>
-        <td class="label positive">温馨提示：</td>
-        <td width="100%" class="positive">
-          <div ng-bind-html="prompt"></div>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="agreement" ng-click="showAgreement()">
-    我已了解并同意一下挂号规则（点击查看详细）
-    <i class="icon ion-ios-arrow-down positive"></i>
-  </div>
-  <div class="amount">
-    合计：{{doctor.amount}}元
-  </div>
-  <div class="confirm">
-    <button class="button button-positive" ng-click="registerConfirm()">确定</button>
-  </div>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button go-back="goBack()"></isj-back-button>
+    <div class="title"></div>
+  </ion-header-bar>
+  <ion-content class="has-header registerConfirmAppt-content">
+    <div class="patient">
+      <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+      <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+      <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}" class="photo">
+      <span>就诊人：{{patient.name}}</span>
+      <span>
+        <a class="positive" ng-click="selectMember()">
+          换人
+          <i class="icon ion-ios-loop-strong"></i>
+        </a>
+      </span>
+      <p>身份证号：{{patient.idCard}}</p>
+    </div>
+    <div class="register-info">
+      <table>
+        <tr>
+          <td class="label">就诊时间：</td>
+          <td width="100%">{{dateDisplay}}</td>
+        </tr>
+        <tr>
+          <td class="label">就诊地点：</td>
+          <td width="100%">{{doctor.dept}}（{{doctor.district}}）</td>
+        </tr>
+        <tr>
+          <td class="label">看诊医生：</td>
+          <td width="100%">{{doctor.name}}</td>
+        </tr>
+        <tr>
+          <td class="label positive">温馨提示：</td>
+          <td width="100%" class="positive">
+            <div ng-bind-html="prompt"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="agreement" ng-click="showAgreement()">
+      我已了解并同意一下挂号规则（点击查看详细）
+      <i class="icon ion-ios-arrow-down positive"></i>
+    </div>
+    <div class="amount">
+      合计：{{doctor.amount}}元
+    </div>
+    <div class="confirm">
+      <button class="button button-positive" ng-click="registerConfirm()">确定</button>
+    </div>
+  </ion-content>
+</ion-view>
