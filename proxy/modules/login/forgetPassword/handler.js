@@ -7,14 +7,11 @@ var handler = module.exports = {};
 };*/
 
 handler.onPost = function(req, res, data) {
+
+  //console.info(data.phone);
   res.setHeader('Content-Type', 'application/json');
-  if(data.phone === '123'){
-    if(data.password === '123'){
-      res.write(JSON.stringify({ status: 'success' }));
-    }else{
-    res.write(JSON.stringify({ status: 'fail' }));
-    }
-  		
+  if(data.phone === '13322487608'){
+  		res.write(JSON.stringify({ status: 'success' }));
   }	else{
   	res.write(JSON.stringify({ status: 'fail' }));
   }

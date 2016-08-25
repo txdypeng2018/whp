@@ -1,11 +1,38 @@
 (function(app) {
     'use strict';
 
-    var registSettingCtrl = function($scope,$ionicHistory) {
+
+    var registSettingCtrl = function($scope,$ionicHistory,$stateParams,$http,$state) {
+        $scope.isResend = false;
+        $scope.input = {
+            name:'',
+            password:'',
+            code:'',
+            idCard:''
+        };
+        $scope.phone = $stateParams.phone.toString().substring(0,3)+'****'+$stateParams.phone.toString().substring(7,11);
+
+
         $scope.isResend = false;
 
         $scope.back = function(){
             $ionicHistory.goBack();
+        };
+
+
+        $scope.regist = function(){
+            var idCard = {
+                idCard:$scope.input.idCard.toString()
+            };
+            $http.post('/login/registSetting', idCard).success(function(data) {
+                if (angular.isUndefined(data.errMsg)) {
+                    if(data.status === 'success'){
+                        $state.go('tab.main');
+                    }else{
+                        alert('身份证号不存在！');
+                    }
+                }
+            });
         };
 
         $scope.time = {
@@ -35,6 +62,7 @@
         $stateProvider.state('registSetting', {
             url: '/registSetting',
             cache:'false',
+            params:{'phone':''},
             templateUrl: 'modules/login/registSetting.html',
             controller: registSettingCtrl
         });

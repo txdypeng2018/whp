@@ -8,12 +8,12 @@
 <ion-content class="has-header content-gray registSetting-content"  overflow-scroll="true"
 style="overflow:auto">
     <div class="prompt">
-        验证码已发送到133****3333
+        <p ng-bind="'验证码已发送到'+phone"></p>
     </div>
     <div class="list">
         <label class="item item-input">
             验证码
-            <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字">
+            <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字" ng-model="input.code">
             <button class="button button-resend button-positive"ng-bind="'重新发送'+secondString" ng-disabled="!isResend"></button>
         </label>
     </div>
@@ -25,7 +25,7 @@ style="overflow:auto">
     <div class="list">
         <label class="item item-input">
             密码
-            <input id="registSetting-password" class="password-input" type="password" placeholder="6-20个字符">
+            <input id="registSetting-password" class="password-input" type="password" placeholder="6-20个字符" ng-model="input.password">
         </label>
     </div>
 
@@ -37,11 +37,11 @@ style="overflow:auto">
 
         <label class="item item-input">
             姓名
-            <input class="name-input" type="text" placeholder="必填">
+            <input class="name-input" type="text" placeholder="必填" ng-model="input.name">
         </label>
         <label class="item item-input">
             身份证号
-                <input class="idCard-input"  type="number" placeholder="必填">
+            <input class="idCard-input"  type="number" placeholder="必填" ng-model="input.idCard">
         </label>
     </div>
 
