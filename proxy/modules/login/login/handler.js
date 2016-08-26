@@ -6,17 +6,15 @@ var handler = module.exports = {};
   common.jsonRes(req, res, '/all');
 };*/
 
-handler.onPut = function(req, res, data) {
-
-  //console.info(data.phone);
+handler.onPost = function(req, res, data) {
   res.setHeader('Content-Type', 'application/json');
   if(data.phone === '123'){
-  	if(data.password === '123'){
-  		res.write(JSON.stringify({ status: 'success' }));
-  	}else{
-  		res.write(JSON.stringify({ status: 'fail' }));
-  	}
-	
+    if(data.password === '123'){
+      res.write(JSON.stringify({ status: 'success' }));
+    }else{
+    res.write(JSON.stringify({ status: 'fail' }));
+    }
+  		
   }	else{
   	res.write(JSON.stringify({ status: 'fail' }));
   }
