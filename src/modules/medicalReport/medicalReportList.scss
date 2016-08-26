@@ -1,4 +1,7 @@
-.medicalReportList-content {
+.medicalReportList_select {
+  position: absolute;
+  width: 100%;
+
   .prompt {
     padding: 10px 15px 10px 15px;
     display: flex;
@@ -49,8 +52,12 @@
       }
     }
   }
+}
 
-  .reports {
+.medicalReportList-content {
+  top: 142px !important;
+
+  .list {
     h2 {
       padding-bottom: 5px;
     }

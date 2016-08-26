@@ -1,24 +1,24 @@
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">
-    王二的缴费
-    <i class="icon ion-ios-arrow-down positive operation-down"></i>
-  </div>
-</ion-header-bar>
-<ion-header-bar class="bar-subheader onlinePaymentList-subheader">
-  <label class="item-input item-select payStatus-select">
-    <select ng-model="searchStr.searchStatus" ng-change="searchPay()"
-            ng-options="node.code as node.name for node in searchStatusTypes"></select>
-    <i class="icon ion-ios-arrow-down positive"></i>
-  </label>
-</ion-header-bar>
-<ion-content class="has-header has-subheader has-footer content-fill">
-  <div class="no-content-center">暂时没有缴费信息</div>
-</ion-content>
-<ion-footer-bar align-title="left" class="bar-light onlinePaymentList-footer">
-  <h1 class="title">合计：&nbsp;<span class="positive">￥0.00元</span></h1>
-  <button class="button button-positive pay-button">支付</button>
-</ion-footer-bar>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">
+      王二的缴费
+      <i class="icon ion-ios-arrow-down positive operation-down"></i>
+    </div>
+  </ion-header-bar>
+  <ion-header-bar class="bar-subheader onlinePaymentList-subheader">
+    <label class="item-input item-select payStatus-select">
+      <select ng-model="searchStr.searchStatus" ng-change="searchPay()"
+              ng-options="node.code as node.name for node in searchStatusTypes"></select>
+      <i class="icon ion-ios-arrow-down positive"></i>
+    </label>
+  </ion-header-bar>
+  <ion-content class="has-header has-subheader has-footer content-fill">
+    <div class="no-content-center">暂时没有缴费信息</div>
+  </ion-content>
+  <ion-footer-bar align-title="left" class="bar-light onlinePaymentList-footer">
+    <h1 class="title">合计：&nbsp;<span class="positive">￥0.00元</span></h1>
+    <button class="button button-positive pay-button">支付</button>
+  </ion-footer-bar>
+</ion-view>

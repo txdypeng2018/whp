@@ -10,6 +10,10 @@
 }
 
 .doctorIntroductionView-content {
+  &.no-footer {
+    bottom: 0 !important;
+  }
+
   .list {
     li:first-child {
       border-top: 0;
@@ -65,6 +69,10 @@
 }
 
 .doctorIntroductionView-footer {
+  &.no-operation {
+    display: none;
+  }
+
   .button {
     color: #ffffff;
     width: 100%;

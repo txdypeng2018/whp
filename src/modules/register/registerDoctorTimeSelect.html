@@ -2,9 +2,9 @@
   <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
-    <div class="title"></div>
+    <div class="title">{{doctor.name}}</div>
   </ion-header-bar>
-  <div class="registerDoctorTimeSelect-date has-header">
+  <div ng-class="{true: 'no-dates'}[allDays.length == 0]" class="registerDoctorTimeSelect-date has-header">
     <div class="positive month">{{selectDays[0].month}}月</div>
     <table>
       <tr>
@@ -50,12 +50,13 @@
       </li>
     </ul>
   </div>
-  <ion-content class="has-header content-fill registerDoctorTimeSelect-content">
-    <div class="time-select">
+  <ion-content ng-class="{true: 'no-dates'}[allDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
+    <div ng-if="allDays.length > 0" class="time-select">
       <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
         <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
         <span>{{time.time}}</span>
       </div>
     </div>
+    <div ng-if="allDays.length == 0" class="no-content-center">暂无医生号点信息</div>
   </ion-content>
 </ion-view>

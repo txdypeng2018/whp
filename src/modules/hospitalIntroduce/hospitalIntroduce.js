@@ -1,10 +1,12 @@
 (function(app) {
   'use strict';
 
-  var hospitalIntroduceCtrl = function($scope, $http) {
+  var hospitalIntroduceCtrl = function($scope, $http, $cordovaToast) {
     //取得医院简介信息
     $http.get('/hospitalIntroduce').success(function(data) {
       $scope.hospitalIntroduce = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
   };
 

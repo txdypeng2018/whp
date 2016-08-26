@@ -1,42 +1,44 @@
-<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
-<ion-header-bar class="bar-light">
-  <isj-back-button></isj-back-button>
-  <div class="title">
-    支付
-  </div>
-</ion-header-bar>
-<ion-content class="has-header paymentSelect-content">
-  <ul class="list">
-    <li class="item item-divider">
-      请选择支付方式
-    </li>
-    <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('1')">
-      <img src="./assets/images/CMB_icon.jpg">
-      一网通银行卡支付
-      <i id="select_no_1" class="icon ion-ios-circle-outline positive select-no"></i>
-      <i id="select_yes_1" class="icon ion-ios-checkmark positive select-yes select-none"></i>
-    </li>
-    <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('2')">
-      <img src="./assets/images/alipay_icon.png">
-      支付宝移动支付
-      <i id="select_no_2" class="icon ion-ios-circle-outline positive select-no"></i>
-      <i id="select_yes_2" class="icon ion-ios-checkmark positive select-yes select-none"></i>
-    </li>
-    <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('3')">
-      <img src="./assets/images/weixin_icon.jpg">
-      微信移动支付
-      <i id="select_no_3" class="icon ion-ios-circle-outline positive select-no"></i>
-      <i id="select_yes_3" class="icon ion-ios-checkmark positive select-yes select-none"></i>
-    </li>
-    <li class="item">
-      总额
-      <span class="money">￥{{amount}}元</span>
-    </li>
-  </ul>
-  <div class="countDown">
-    请在<span id="payment_countDown"><span ng-bind="time.minute"></span>分<span ng-bind="time.second"></span>秒</span>内完成支付
-  </div>
-  <div class="confirm">
-    <button class="button button-positive" ng-click="pay()">支付</button>
-  </div>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">
+      支付
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header paymentSelect-content">
+    <ul class="list">
+      <li class="item item-divider">
+        请选择支付方式
+      </li>
+      <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('1')">
+        <img src="./assets/images/CMB_icon.jpg">
+        一网通银行卡支付
+        <i id="select_no_1" class="icon ion-ios-circle-outline positive select-no"></i>
+        <i id="select_yes_1" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+      </li>
+      <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('2')">
+        <img src="./assets/images/alipay_icon.png">
+        支付宝移动支付
+        <i id="select_no_2" class="icon ion-ios-circle-outline positive select-no"></i>
+        <i id="select_yes_2" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+      </li>
+      <li class="item item-avatar-left item-icon-right" ng-click="paymentSelect('3')">
+        <img src="./assets/images/weixin_icon.jpg">
+        微信移动支付
+        <i id="select_no_3" class="icon ion-ios-circle-outline positive select-no"></i>
+        <i id="select_yes_3" class="icon ion-ios-checkmark positive select-yes select-none"></i>
+      </li>
+      <li class="item">
+        总额
+        <span class="money">￥{{amount}}元</span>
+      </li>
+    </ul>
+    <div class="countDown">
+      请在<span id="payment_countDown"><span ng-bind="time.minute"></span>分<span ng-bind="time.second"></span>秒</span>内完成支付
+    </div>
+    <div class="confirm">
+      <button class="button button-positive" ng-click="pay()">支付</button>
+    </div>
+  </ion-content>
+</ion-view>

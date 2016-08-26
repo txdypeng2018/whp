@@ -1,97 +1,99 @@
-<ion-header-bar class="bar-light main-header">
-  <div class="title positive">掌上盛京医院</div>
-</ion-header-bar>
-<ion-content scroll="false" has-bouncing="false" class="has-header content-fill main-content">
-  <div class="row" style="height: 43%">
-    <div class="col grid-carousel">
-      <div class="carousel-footer">
-        <div>{{carouselImages[carouselIndex].name}}</div>
-        <div rn-carousel-indicators ng-if="carouselImages.length > 1"
-             slides="carouselImages" rn-carousel-index="carouselIndex"></div>
+<ion-view>
+  <ion-header-bar class="bar-light main-header">
+    <div class="title positive">掌上盛京医院</div>
+  </ion-header-bar>
+  <ion-content scroll="false" has-bouncing="false" class="has-header content-fill main-content">
+    <div class="row" style="height: 43%">
+      <div class="col grid-carousel">
+        <div class="carousel-footer">
+          <div>{{carouselImages[carouselIndex].name}}</div>
+          <div rn-carousel-indicators ng-if="carouselImages.length > 1"
+               slides="carouselImages" rn-carousel-index="carouselIndex"></div>
+        </div>
+        <ul rn-carousel rn-carousel-index="carouselIndex">
+          <li ng-repeat="carouselImage in carouselImages">
+            <div class="carousel-img" style="background-image: url({{carouselImage.url}});"></div>
+          </li>
+        </ul>
       </div>
-      <ul rn-carousel rn-carousel-index="carouselIndex">
-        <li ng-repeat="carouselImage in carouselImages">
-          <div class="carousel-img" style="background-image: url({{carouselImage.url}});"></div>
-        </li>
-      </ul>
     </div>
-  </div>
-  <div class="row" style="height: 19%">
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-row" href="#/subject/subjectSelect/2">
-        <span class="grid-icon assertive-border">
-          <i class="icon ion-ios-paper-outline assertive"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">预约挂号</span>
-      </a>
+    <div class="row" style="height: 19%">
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-row" href="#/subject/subjectSelect/2">
+          <span class="grid-icon assertive-border">
+            <i class="icon ion-ios-paper-outline assertive"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">预约挂号</span>
+        </a>
+      </div>
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-row" href="#/subject/subjectSelect/1">
+          <span class="grid-icon assertive-border">
+            <i class="icon ion-ios-paper-outline assertive"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">当日挂号</span>
+        </a>
+      </div>
     </div>
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-row" href="#/subject/subjectSelect/1">
-        <span class="grid-icon assertive-border">
-          <i class="icon ion-ios-paper-outline assertive"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">当日挂号</span>
-      </a>
+    <div class="row" style="height: 19%">
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/medicalReportList/">
+          <span class="grid-icon positive-border">
+            <i class="icon ion-ios-copy-outline positive"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">查看报告</span>
+        </a>
+      </div>
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/onlinePayment/onlinePaymentList">
+          <span class="grid-icon positive-border">
+            <i class="icon ion-ios-cart-outline positive"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">缴费</span>
+        </a>
+      </div>
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/doctorIntroductionList">
+          <span class="grid-icon positive-border">
+            <i class="icon ion-ios-personadd-outline positive"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">医生介绍</span>
+        </a>
+      </div>
     </div>
-  </div>
-  <div class="row" style="height: 19%">
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/medicalReportList">
-        <span class="grid-icon positive-border">
-          <i class="icon ion-ios-copy-outline positive"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">查看报告</span>
-      </a>
+    <div class="row" style="height: 19%">
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/hospitalNavigation">
+          <span class="grid-icon balanced-border">
+            <i class="icon ion-ios-location-outline balanced"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">医院导航</span>
+        </a>
+      </div>
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/hospitalIntroduce">
+          <span class="grid-icon balanced-border">
+            <i class="icon ion-ios-home-outline balanced"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">医院简介</span>
+        </a>
+      </div>
+      <div class="col grid-col grid-flex-column">
+        <a class="grid-flex-column" href="#/medicalGuide">
+          <span class="grid-icon balanced-border">
+            <i class="icon ion-ios-help-empty balanced"></i>
+          </span>
+          <span class="grid-space"></span>
+          <span class="grid-font">就医指南</span>
+        </a>
+      </div>
     </div>
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/onlinePayment/onlinePaymentList">
-        <span class="grid-icon positive-border">
-          <i class="icon ion-ios-cart-outline positive"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">缴费</span>
-      </a>
-    </div>
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/doctorIntroductionList">
-        <span class="grid-icon positive-border">
-          <i class="icon ion-ios-personadd-outline positive"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">医生介绍</span>
-      </a>
-    </div>
-  </div>
-  <div class="row" style="height: 19%">
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/hospitalNavigation">
-        <span class="grid-icon balanced-border">
-          <i class="icon ion-ios-location-outline balanced"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">医院导航</span>
-      </a>
-    </div>
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/hospitalIntroduce">
-        <span class="grid-icon balanced-border">
-          <i class="icon ion-ios-home-outline balanced"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">医院简介</span>
-      </a>
-    </div>
-    <div class="col grid-col grid-flex-column">
-      <a class="grid-flex-column" href="#/medicalGuide">
-        <span class="grid-icon balanced-border">
-          <i class="icon ion-ios-help-empty balanced"></i>
-        </span>
-        <span class="grid-space"></span>
-        <span class="grid-font">就医指南</span>
-      </a>
-    </div>
-  </div>
-</ion-content>
+  </ion-content>
+</ion-view>

@@ -26,7 +26,7 @@
 
     //查看医生介绍详细
     $scope.viewIntroduction = function(id) {
-      $state.go('doctorIntroductionView', {doctorId: id});
+      $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
     };
   };
 

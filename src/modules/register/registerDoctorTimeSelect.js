@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast) {
     var displayDays = 7;
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     $scope.selectDays = [];
@@ -26,6 +26,8 @@
           }
         }
         $scope.times = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -34,12 +36,11 @@
       $scope.doctor = data;
       $http.get('/doctors/photo', {params: {doctorId: $scope.doctor.id}}).success(function(data) {
         $scope.photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
-    });
-
-    //取得科室信息
-    $http.get('/organization/depts/'+$stateParams.deptId).success(function(data) {
-      $scope.dept = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
 
     //设置可选择的日期
@@ -76,7 +77,8 @@
         $scope.selectDays[0] = setSelectDay(dateTmp, data[0]);
         fillSelectDays();
         $scope.dataSelected = $scope.allDays[0].data;
-        getScheduleTimes($scope.daySelected);
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     }
     else {
@@ -95,7 +97,6 @@
         if ($scope.selectDays.length > 0) {
           $scope.daySelected = data[0].date;
           $scope.dataSelected = data[0];
-          getScheduleTimes($scope.daySelected);
         }
 
         //初始化日期选择控件
@@ -140,12 +141,18 @@
             howTodayButton: false
           };
         }
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     }
 
+    $scope.$on('$ionicView.afterEnter', function(){
+      getScheduleTimes($scope.daySelected);
+    });
+
     //选择照片事件
     $scope.photoClk = function(id) {
-      $state.go('doctorIntroductionView', {id: id});
+      $state.go('doctorIntroductionView', {doctorId: id, type: '0'});
     };
 
     //日期选择事件

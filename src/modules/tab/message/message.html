@@ -1,12 +1,14 @@
-<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
-<ion-header-bar class="bar-light">
-  <div class="title">消息</div>
-</ion-header-bar>
-<ion-content class="has-header content-gray message-content">
-  <ul class="list">
-    <li ng-repeat="message in messages" class="item">
-      <div class="time">{{message.date}}</div>
-      <div class="message">{{message.content}}</div>
-    </li>
-  </ul>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <div class="title">消息</div>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray message-content">
+    <ul class="list">
+      <li ng-repeat="message in messages" class="item">
+        <div class="time">{{message.date}}</div>
+        <div class="message">{{message.content}}</div>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>
