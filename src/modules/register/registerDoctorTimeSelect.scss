@@ -2,6 +2,10 @@
   position: absolute;
   width: 100%;
 
+  &.no-dates {
+    display: none;
+  }
+
   .month {
     padding: 5px 0 0 5px;
   }
@@ -79,6 +83,10 @@
 
 .registerDoctorTimeSelect-content {
   top: 268px !important;
+
+  &.no-dates {
+    top: 44px !important;
+  }
 
   .time-select {
     display: flex;

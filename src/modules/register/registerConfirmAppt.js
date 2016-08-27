@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory) {
+  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, $cordovaToast) {
     var doctorId = $stateParams.doctorId;
     var date = $stateParams.date;
     $scope.dateDisplay = date.substring(0,4)+'年'+date.substring(5,7)+'月'+date.substring(8,10)+'日'+date.substring(10,16);
@@ -12,25 +12,35 @@
       if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
         $scope.showAgreement();
       }
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
     //取得患者信息
     var getPatient = function() {
       $http.get('/patients/patient', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
     getPatient();
     //取得关系类别
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
     //取得医生信息
     $http.get('/register/doctor', {params: {id: doctorId, date: date}}).success(function(data) {
       $scope.doctor = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
     //取得温馨提示信息
     $http.get('/register/apptPrompt').success(function(data) {
       $scope.prompt = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
 
     //返回上页
@@ -84,10 +94,10 @@
         amount: $scope.doctor.amount,
         payStatus: '0'
       };
-      $http.put('/register/registration', registration).success(function(data) {
-        if (angular.isUndefined(data.errMsg)) {
-          $state.go('paymentSelect', {orderNum: data.orderNum});
-        }
+      $http.post('/register/registrations/registration', registration).success(function(data) {
+        $state.go('paymentSelect', {orderNum: data.orderNum});
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 

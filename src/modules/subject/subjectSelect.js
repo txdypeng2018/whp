@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout) {
+  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $cordovaToast) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
     $scope.districtId = '';
@@ -20,6 +20,8 @@
         else {
           $scope.subjectRights = data[0].subjects;
         }
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -32,6 +34,8 @@
       }
 
       getSubjects();
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
 
     //查询框显示隐藏事件

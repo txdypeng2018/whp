@@ -1,12 +1,14 @@
 (function(app) {
   'use strict';
 
-  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants) {
+  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast) {
     var orderNum = $stateParams.orderNum;
 
     //取得挂号单信息
-    $http.get('/orders/order', {params: {orderNum: orderNum}}).success(function(data) {
+    $http.get('/orders/'+orderNum).success(function(data) {
       $scope.amount = data.amount;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
 
     //支付方式选择事件

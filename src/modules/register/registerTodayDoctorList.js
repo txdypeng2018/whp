@@ -1,13 +1,15 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast) {
     $scope.hideSearch = true;
 
     //取得医生照片
     var getDoctorPhoto = function(doctorId, index) {
       $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
         $scope.doctors[config.params.index].photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -27,9 +29,14 @@
         for (var i = 0 ; i < data.length ; i++) {
           getDoctorPhoto(data[i].id, i);
         }
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
-    getDoctors();
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      getDoctors();
+    });
 
     //查询框显示隐藏事件
     $scope.searchClk = function() {

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker) {
+  var registerDoctorDateSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast) {
     $scope.hideSearch = true;
     $scope.daySelected = '';
     var displayDays = 7;
@@ -18,6 +18,8 @@
     var getDoctorPhoto = function(doctorId, index) {
       $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
         $scope.doctors[config.params.index].photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -46,6 +48,8 @@
         for (var i = 0 ; i < data.length ; i++) {
           getDoctorPhoto(data[i].id, i);
         }
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -89,7 +93,9 @@
       return selectDays;
     };
     $scope.selectDays = selectDayInit(getNextDay(new Date(), 1));
-    getDoctors();
+    $scope.$on('$ionicView.beforeEnter', function(){
+      getDoctors();
+    });
 
     //日期选择事件
     $scope.dayClk = function(index, date) {

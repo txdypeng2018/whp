@@ -1,10 +1,14 @@
 (function(app) {
   'use strict';
 
-  var tabMessageCtrl = function($scope, $http) {
-    //取得消息列表
-    $http.get('/messages').success(function(data) {
-      $scope.messages = data;
+  var tabMessageCtrl = function($scope, $http, $cordovaToast) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      //取得消息列表
+      $http.get('/messages').success(function(data) {
+        $scope.messages = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
     });
   };
 

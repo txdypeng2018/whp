@@ -1,13 +1,16 @@
 (function(app) {
   'use strict';
 
-  var medicalReportListCtrl = function($scope, $http, $window, $state) {
+  var medicalReportListCtrl = function($scope, $http, $window, $state, $stateParams, $cordovaToast) {
+    $scope.memberId = $stateParams.memberId;
+
     //取得检验报告列表
     var getMedicalReports = function(param) {
+      param.memberId = $stateParams.memberId;
       $http.get('/medicalReports', {params: param}).success(function(data) {
         $scope.reports = data;
-      }).finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -33,8 +36,24 @@
     $scope.searchReport = function() {
       getMedicalReports($scope.searchStr);
     };
-    //初始化取得检验报告列表
-    getMedicalReports($scope.searchStr);
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      getMedicalReports($scope.searchStr);
+    });
+
+    //返回上页
+    $scope.goBack = function() {
+      $state.go('tab.main');
+    };
+
+    //取得就诊人
+    $http.get('/patients/patient', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+      $scope.patient = data;
+    });
+    //选择家庭成员
+    $scope.selectMember = function() {
+      $state.go('familyMemberSelect', {skipId: 'medicalReportList', memberId: $scope.patient.id});
+    };
 
     //查看检验报告详细
     $scope.viewReport = function(id, category, status) {
@@ -44,22 +63,11 @@
         }
       }
     };
-
-    //设置报告列表高度
-    $scope.$watch('$viewContentLoaded', function() {
-      document.getElementById('medicalReportList_reports').style.height =
-        (document.getElementById('medicalReportList_content').offsetHeight - 98) + 'px';
-    });
-    angular.element($window).bind('resize', function() {
-      document.getElementById('medicalReportList_reports').style.height =
-        (document.getElementById('medicalReportList_content').offsetHeight - 98) + 'px';
-    });
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('medicalReportList', {
-      url: '/medicalReportList',
-      cache: 'false',
+      url: '/medicalReportList/:memberId',
       templateUrl: 'modules/medicalReport/medicalReportList.html',
       controller: medicalReportListCtrl
     });

@@ -1,7 +1,11 @@
 (function(app) {
   'use strict';
 
-  var tabMainCtrl = function($scope) {
+  var tabMainCtrl = function($scope, $ionicHistory) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $ionicHistory.clearHistory();
+    });
+
     //轮播图片
     $scope.carouselImages = [
       {
