@@ -45,3 +45,8 @@ $ ionic build android --release --  --buildConfig=build.json
 $ ionic plugin add cordova-plugin-x-toast
 ```
 - 按ngCordova中文档的说明，使用相关插件
+
+### android及ios程序调试方法
+
+- [Chrome调试Android应用](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/69)
+- [Safari调试iOS应用](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/143)
