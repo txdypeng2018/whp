@@ -2,7 +2,7 @@
     'use strict';
 
 
-    var forgetPasswordSettingCtrl = function($scope,$stateParams,$state,$ionicHistory,$http) {
+    var forgetPasswordSettingCtrl = function($scope,$stateParams,$state,$ionicHistory,$http,$cordovaToast) {
 
         $scope.input = {
             code:'',
@@ -25,16 +25,31 @@
                 alert('密码长度过短请重新设置');
             }else{
                 var password = {
+                    category:'2',
+                    verificationCode:$scope.input.code,
                     password:$scope.input.password
                 };
-                $http.put('/login/forgetPasswordSetting', password).success(function(data) {
-                    if (angular.isUndefined(data.errMsg)) {
-                        $state.go('tab.personal');
-                    }else{
-                        console.log('error');
-                    }
+                $http.put('/permission/account', password).success(function(data) {
+                    $state.go('tab.personal');
+                    console.log(data);
+                }).error(function(data){
+                    $cordovaToast.showShortBottom(data);
                 });
             }
+        };
+
+        $scope.resend = function () {
+
+            var phone = {
+                category:'3',
+                phone:$stateParams.phone.toString()
+            };
+
+            $http.put('/permission/verificationCode', phone).success(function(data) {
+                console.log(data);
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
+            });
         };
 
         $scope.time = {

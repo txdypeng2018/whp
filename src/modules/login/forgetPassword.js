@@ -1,7 +1,7 @@
 (function(app) {
     'use strict';
 
-    var forgetPasswordCtrl = function($scope,$state,$ionicHistory,$http) {
+    var forgetPasswordCtrl = function($scope,$state,$ionicHistory,$http,$cordovaToast) {
 
         $scope.input = {
             phone: ''
@@ -13,17 +13,13 @@
 
         $scope.getCode = function(){
             var phone = {
+                category:'2',
                 phone:$scope.input.phone.toString()
             };
-            $http.post('/login/forgetPassword', phone).success(function(data) {
-                if (angular.isUndefined(data.errMsg)) {
-                    if(data.status === 'success'){
-                        $state.go('forgetPasswordSetting',{phone:$scope.input
-                            .phone});
-                    }else{
-                        alert('手机号不存在！');
-                    }
-                }
+            $http.get('/permission/verificationCode', phone).success(function(data) {
+                console.log(data);
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
             });
 
         };

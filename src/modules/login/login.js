@@ -1,7 +1,7 @@
 (function(app) {
     'use strict';
 
-    var loginCtrl = function($scope, $http,$state,$ionicHistory) {
+    var loginCtrl = function($scope, $http,$state,$ionicHistory,$cordovaToast) {
         $scope.input = {
             phone: '',
             password:''
@@ -17,16 +17,12 @@
                 phone:$scope.input.phone.toString(),
                 password:$scope.input.password
             };
-            $http.post('/login/login', phoneAndPwd).success(function(data) {
-                if (angular.isUndefined(data.errMsg)) {
-                    if(data.status === 'success'){
-                        $state.go('tab.main');
-                    }else{
-                        alert('用户名或密码错误，请核对后重试');
-                    }
-                }
+            $http.post('/permission/login', phoneAndPwd).success(function(data) {
+                    $state.go('tab.personal');
+                console.log(data);
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
             });
-
         };
     };
 

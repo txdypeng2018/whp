@@ -2,7 +2,7 @@
     'use strict';
 
 
-    var registSettingCtrl = function($scope,$ionicHistory,$stateParams,$http,$state) {
+    var registSettingCtrl = function($scope,$ionicHistory,$stateParams,$http,$cordovaToast,$state) {
         $scope.isResend = false;
         $scope.input = {
             name:'',
@@ -21,17 +21,31 @@
 
 
         $scope.regist = function(){
-            var idCard = {
-                idCard:$scope.input.idCard.toString()
+            var regist = {
+                phone:$stateParams.phone.toString(),
+                idCard:$scope.input.idCard.toString(),
+                verificationCode:$scope.input.code,
+                name:$scope.input.name,
+                password:$scope.input.password
             };
-            $http.post('/login/registSetting', idCard).success(function(data) {
-                if (angular.isUndefined(data.errMsg)) {
-                    if(data.status === 'success'){
-                        $state.go('tab.main');
-                    }else{
-                        alert('身份证号不存在！');
-                    }
-                }
+            $http.post('/permission/verificationCode', regist).success(function(data) {
+                    console.log(data);
+                    $state.go('tab.personal');
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
+            });
+        };
+
+        $scope.resend = function () {
+            var phone = {
+                category:'3',
+                phone:$stateParams.phone.toString()
+            };
+
+            $http.put('/permission/verificationCode', phone).success(function(data) {
+                console.log(data);
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
             });
         };
 
