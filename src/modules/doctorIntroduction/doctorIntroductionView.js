@@ -24,14 +24,14 @@
     });
     $scope.collectionDoctor = function() {
       if ($scope.isCollection) {
-        $http.delete('/user/collectionDoctors/'+$stateParams.doctorId).success(function(data) {
+        $http.delete('/user/collectionDoctors/'+$stateParams.doctorId).success(function() {
           $scope.isCollection = false;
         }).error(function(data){
           $cordovaToast.showShortBottom(data);
         });
       }
       else {
-        $http.post('/user/collectionDoctors', {doctorId: $stateParams.doctorId}).success(function(data) {
+        $http.post('/user/collectionDoctors', {doctorId: $stateParams.doctorId}).success(function() {
           $scope.isCollection = true;
         }).error(function(data){
           $cordovaToast.showShortBottom(data);

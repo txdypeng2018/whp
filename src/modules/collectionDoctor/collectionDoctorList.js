@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout) {
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $cordovaToast) {
     $scope.title = '收藏的医生';
     $scope.vm = {
       moreData: false,

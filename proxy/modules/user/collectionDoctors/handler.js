@@ -6,9 +6,6 @@ var handler = module.exports = {};
 
 handler.onGet = function(req, res) {
   var path = common.parseUrl(req).path;
-  if (path.substring(path.length-1, path.length) === '1') {
-    common.jsonRes(req, res, '/doctor');
-  }
   if (path.substring(path.length-5, path.length) === 'count') {
     common.jsonRes(req, res, '/count');
   }
