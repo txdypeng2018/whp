@@ -11,7 +11,7 @@
     });
 
     //取得收藏医生数量
-    $http.get('/collection/doctors/count').success(function(data) {
+    $http.get('/user/collectionDoctors/count').success(function(data) {
       $scope.doctorCount = data;
     });
 

@@ -3,11 +3,29 @@
 
   var collectionDoctorListCtrl = function($scope, $http, $state, $timeout) {
     $scope.title = '收藏的医生';
+    $scope.vm = {
+      moreData: false,
+      loadMore: function () {}
+    };
+
+    //取得医生照片
+    var getDoctorPhoto = function(doctorId, index) {
+      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+        $scope.introductions[config.params.index].photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+    };
 
     //取得收藏医生介绍列表
     var getDoctorIntroductions = function(param) {
-      $http.get('/collection/doctors', {params: param}).success(function(data) {
+      $http.get('/user/collectionDoctors', {params: param}).success(function(data) {
         $scope.introductions = data;
+        for (var i = 0 ; i < data.length ; i++) {
+          getDoctorPhoto(data[i].id,i);
+        }
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -22,12 +40,16 @@
       getDoctorIntroductions({searchName: $scope.searchName});
     };
     //初始化取得医师介绍列表
-    getDoctorIntroductions({searchName: $scope.searchName});
+    $scope.$on('$ionicView.beforeEnter', function(){
+      getDoctorIntroductions({searchName: $scope.searchName});
+    });
 
     //查看医生介绍详细
     $scope.viewIntroduction = function(id) {
-      $state.go('doctorIntroductionView', {id: id});
+      $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
     };
+
+
   };
 
   var mainRouter = function($stateProvider) {
