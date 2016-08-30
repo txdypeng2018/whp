@@ -1,7 +1,11 @@
 (function(app) {
   'use strict';
 
-  var appAboutCtrl = function($scope, $http, $state) {
+  var appAboutCtrl = function($scope, $http, $state, userService) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.isLogin = userService.hasToken();
+    });
+
     //取得客服电话
     $http.get('/service/phone').success(function(data) {
       $scope.servicePhone = data;

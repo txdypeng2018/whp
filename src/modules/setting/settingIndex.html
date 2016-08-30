@@ -5,7 +5,7 @@
   </ion-header-bar>
   <ion-content class="has-header content-gray settingIndex-content">
     <ul class="list list-inset">
-      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingChangePassword')">
+      <li ng-if="isLogin" class="item item-icon-left item-icon-right" ng-click="itemRouter('settingChangePassword')">
         <i class="icon ion-ios-unlocked-outline icon-left"></i>
         修改登录密码
         <i class="icon ion-ios-arrow-right icon-right"></i>
@@ -16,7 +16,7 @@
         <i class="icon ion-ios-arrow-right icon-right"></i>
       </li>
     </ul>
-    <div class="operation">
+    <div ng-if="isLogin" class="operation">
       <button class="button button-assertive" ng-click="quit()">退出登录</button>
     </div>
   </ion-content>
