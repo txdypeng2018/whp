@@ -1,24 +1,23 @@
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" ng-click="back()">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">设置</div>
-</ion-header-bar>
-<ion-content class="has-header content-gray settingIndex-content">
-  <ul class="list list-inset">
-    <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingChangePassword')">
-      <i class="icon ion-ios-unlocked-outline icon-left"></i>
-      修改登录密码
-      <i class="icon ion-ios-arrow-right icon-right"></i>
-    </li>
-    <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingAppAbout')">
-      <i class="icon ion-ios-information-outline icon-left"></i>
-      关于
-      <i class="icon ion-ios-arrow-right icon-right"></i>
-    </li>
-  </ul>
-  <div class="operation">
-    <button class="button button-assertive" ng-click="quit()">退出登录</button>
-  </div>
-</ion-content>
+<ion-view>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">设置</div>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray settingIndex-content">
+    <ul class="list list-inset">
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingChangePassword')">
+        <i class="icon ion-ios-unlocked-outline icon-left"></i>
+        修改登录密码
+        <i class="icon ion-ios-arrow-right icon-right"></i>
+      </li>
+      <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingAppAbout')">
+        <i class="icon ion-ios-information-outline icon-left"></i>
+        关于
+        <i class="icon ion-ios-arrow-right icon-right"></i>
+      </li>
+    </ul>
+    <div class="operation">
+      <button class="button button-assertive" ng-click="quit()">退出登录</button>
+    </div>
+  </ion-content>
+</ion-view>

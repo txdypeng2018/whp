@@ -1,19 +1,15 @@
 (function(app) {
   'use strict';
 
-  var settingIndexCtrl = function($scope, $state,$ionicHistory) {
+  var settingIndexCtrl = function($scope, $state) {
     //路由跳转
     $scope.itemRouter = function(routerId) {
       $state.go(routerId);
     };
 
-      $scope.back = function(){
-          $ionicHistory.goBack();
-      };
-
-      $scope.quit = function(){
-          $state.go('login');
-      };
+    $scope.quit = function(){
+      $state.go('login');
+    };
   };
 
   var mainRouter = function($stateProvider) {

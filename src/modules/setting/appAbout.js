@@ -3,7 +3,7 @@
 
   var appAboutCtrl = function($scope, $http, $state) {
     //取得客服电话
-    $http.get('/setting/servicePhone').success(function(data) {
+    $http.get('/service/phone').success(function(data) {
       $scope.servicePhone = data;
     });
 

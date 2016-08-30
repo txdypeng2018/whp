@@ -7,6 +7,11 @@
     //取得医生简介
     $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {
       $scope.introduction = data;
+      $http.get('/doctors/photo', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
+        $scope.introduction.photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });
