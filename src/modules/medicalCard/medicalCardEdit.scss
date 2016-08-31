@@ -34,15 +34,20 @@
     text-align: center;
     position: relative;
 
-    span {
+    .button {
+      z-index: 21;
       position: absolute;
       font-size: 18px;
       display: inline-block;
       width: 130px;
       background-color: #f4f4f4;
-      top: -10px;
+      top: -22px;
       left: 50%;
       margin-left: -65px;
+
+      &.activated {
+        opacity: 1 !important;
+      }
     }
   }
 }

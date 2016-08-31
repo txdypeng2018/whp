@@ -1,31 +1,31 @@
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">绑卡</div>
-</ion-header-bar>
-<ion-content scroll="false" class="has-header content-gray medicalCardEdit-content">
-  <div class="list list-inset">
-    <label class="item item-input">
-      <span class="input-label">
-        <img src="./assets/images/card_picture.png">
-      </span>
-      病历号
-    </label>
-  </div>
-  <div class="list list-inset">
-    <label class="item item-input">
-      <span class="input-label">
-        <img src="./assets/images/show_complete.png">
-      </span>
-      <input type="text" value="M001234567">
-    </label>
-  </div>
-  <div class="operation">
-    <button class="button button-positive">更新</button>
-  </div>
-  <div class="create">
-    <span class="positive">在线建档</span>
-  </div>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">绑卡</div>
+  </ion-header-bar>
+  <ion-content scroll="false" class="has-header content-gray medicalCardEdit-content">
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">
+          <img src="./assets/images/card_picture.png">
+        </span>
+        病历号
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">
+          <img src="./assets/images/show_complete.png">
+        </span>
+        <input type="text" ng-model="input.medicalNum">
+      </label>
+    </div>
+    <div class="operation">
+      <button class="button button-positive" ng-click="changeNum()" ng-disabled="isSubmit">更新</button>
+    </div>
+    <div class="create">
+      <button class="button button-clear button-positive" ng-click="createNum()" ng-disabled="isSubmit">在线建档</button>
+    </div>
+  </ion-content>
+</ion-view>
