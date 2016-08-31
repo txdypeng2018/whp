@@ -1,13 +1,40 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout) {
+  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $cordovaToast) {
     $scope.title = '医生介绍';
 
+    //取得医生照片
+    var getDoctorPhoto = function(doctorId, index) {
+      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+        $scope.introductions[config.params.index].photo = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+    };
+
     //取得医生介绍列表
-    var getDoctorIntroductions = function(param) {
+    var getDoctorIntroductions = function(param, isInit) {
       $http.get('/doctors', {params: param}).success(function(data) {
-        $scope.introductions = data;
+        if (data.length === 0) {
+          $scope.vm.moreData = false;
+        }
+        var index = 0;
+        if (isInit) {
+          $scope.introductions = data;
+        }
+        else {
+          index = $scope.introductions.length;
+          for (var i = 0 ; i < data.length ; i++) {
+            $scope.introductions.push(data[i]);
+          }
+        }
+        for (var j = index ; j < $scope.introductions.length ; j++) {
+          getDoctorPhoto($scope.introductions[j].id, j);
+        }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
@@ -19,15 +46,28 @@
     };
     //搜索医生事件
     $scope.doSearch = function() {
-      getDoctorIntroductions({searchName: $scope.searchName});
+      $scope.vm.init();
     };
-    //初始化取得医师介绍列表
-    getDoctorIntroductions({searchName: $scope.searchName});
 
     //查看医生介绍详细
     $scope.viewIntroduction = function(id) {
       $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
     };
+
+    //上拉加载医生
+    $scope.vm = {
+      moreData: true,
+      pageNo: 1,
+      init: function () {
+        $scope.vm.pageNo = 1;
+        getDoctorIntroductions({searchName: $scope.searchName, pageNo: $scope.vm.pageNo}, true);
+      },
+      loadMore: function () {
+        $scope.vm.pageNo++;
+        getDoctorIntroductions({searchName: $scope.searchName, pageNo: $scope.vm.pageNo}, false);
+      }
+    };
+    $scope.vm.init();
   };
 
   var mainRouter = function($stateProvider) {

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabMainCtrl = function($scope, $ionicHistory) {
+  var tabMainCtrl = function($scope, $ionicHistory, $state, userService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $ionicHistory.clearHistory();
     });
@@ -21,6 +21,25 @@
         url: './assets/images/ad3.png'
       }
     ];
+
+    //路由跳转
+    $scope.itemRouter = function(routerId, type) {
+      var isLogin = true;
+      if (routerId === 'medicalReportList' || routerId === 'onlinePaymentList') {
+        isLogin = userService.hasToken();
+      }
+      if (isLogin) {
+        if (routerId === 'subjectSelect') {
+          $state.go(routerId, {type: type});
+        }
+        else {
+          $state.go(routerId);
+        }
+      }
+      else {
+        $state.go('login');
+      }
+    };
   };
 
   var mainRouter = function($stateProvider) {

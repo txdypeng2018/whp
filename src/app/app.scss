@@ -186,6 +186,14 @@ a {
   }
 }
 
+.confirm-popup {
+  .popup {
+    .popup-body {
+      font-size: 16px !important;
+    }
+  }
+}
+
 .ionic_datepicker_popup {
   .popup-body {
     .selected_date_full {

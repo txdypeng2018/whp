@@ -1,28 +1,30 @@
-.login-content{
-  .warm-prompt{
+.login-content {
+  .warm-prompt {
     padding: 15px;
     font-size: 15px;
     color: #666666;
   }
-  .list{
+
+  .list {
     .item .login-input{
       margin-left: 40px;
     }
   }
-  .div-button{
-    padding: 10px;
+
+  .div-button {
+    padding: 2px 15px 10px 15px;
 
     .button{
       width: 100%;
     }
   }
-  .div-a{
-    padding: 10px;
-    font-size: 20px;
 
-    .forget-password{
-      position: fixed;
-      right: 20px;
+  .div-a {
+    padding: 10px 15px;
+    font-size: 18px;
+
+    .forget-password {
+      float: right;
     }
   }
 }

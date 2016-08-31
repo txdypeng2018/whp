@@ -1,89 +1,113 @@
 (function(app) {
-    'use strict';
+  'use strict';
 
+  var forgetPasswordSettingCtrl = function($scope, $stateParams, $state, $ionicHistory, $http, $cordovaToast) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.isResend = false;
+      $scope.isSubmit = false;
+      $scope.phone = $stateParams.phone.toString().substring(0,3)+'****'+$stateParams.phone.toString().substring(7,11);
 
-    var forgetPasswordSettingCtrl = function($scope,$stateParams,$state,$ionicHistory,$http,$cordovaToast) {
+      $scope.input = {
+        phone: $stateParams.phone,
+        verificationCode: '',
+        newPassword: ''
+      };
 
-        $scope.input = {
-            code:'',
-            password:''
-        };
-        //是否重新发送的标志位
-        $scope.isResend = false;
+      //倒计时
+      $scope.time = {
+        second: 60
+      };
+      $scope.secondString = '('+$scope.time.second+')';
+      var updateTime = function() {
+        if ($scope.time.second !== 0) {
+          --$scope.time.second;
+          if ($scope.time.second === 0) {
+            $scope.isResend = true;
+            $scope.secondString = '';
+          }
+          else {
+            $scope.secondString = '('+$scope.time.second+')';
+          }
+        }
+      };
 
+      setInterval(function(){
+        $scope.$apply(updateTime);
+      }, 1000);
+    });
 
-        $scope.phone = $stateParams.phone.toString().substring(0,3)+'****'+$stateParams.phone.toString().substring(7,11);
+    //返回
+    $scope.goBack = function(){
+      $ionicHistory.goBack(-2);
+    };
 
-
-        $scope.back = function(){
-            $ionicHistory.goBack();
-        };
-
-
-        $scope.changePassword = function () {
-            if($scope.input.password.length<6){
-                alert('密码长度过短请重新设置');
-            }else{
-                var password = {
-                    category:'2',
-                    verificationCode:$scope.input.code,
-                    password:$scope.input.password
-                };
-                $http.put('/permission/account', password).success(function(data) {
-                    $state.go('tab.personal');
-                    console.log(data);
-                }).error(function(data){
-                    $cordovaToast.showShortBottom(data);
-                });
-            }
-        };
-
-        $scope.resend = function () {
-
-            var phone = {
-                category:'3',
-                phone:$stateParams.phone.toString()
-            };
-
-            $http.put('/permission/verificationCode', phone).success(function(data) {
-                console.log(data);
-            }).error(function(data){
-                $cordovaToast.showShortBottom(data);
-            });
-        };
-
-        $scope.time = {
-            second:5
-        };
+    //重发验证码
+    $scope.resendCode = function() {
+      var param = {
+        category: '3',
+        phone: $stateParams.phone
+      };
+      $http.get('/permission/verificationCode', {params: param}).success(function() {
+        $scope.time.second = 60;
         $scope.secondString = '('+$scope.time.second+')';
-        var updateTime = function() {
-            //倒计时结束可以重新发送验证码
-            if ($scope.time.second === 0) {
-                $scope.secondString = '';
-            }else if($scope.time.second === 1){
-                $scope.isResend = true;
-                --$scope.time.second;
-                $scope.secondString = '';
-            }else{
-                --$scope.time.second;
-                $scope.secondString = '('+$scope.time.second+')';
-            }
-        };
-        setInterval(function(){
-            $scope.$apply(updateTime);
-
-        }, 1000);
+        $scope.isResend = false;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
     };
 
-    var mainRouter = function($stateProvider) {
-        $stateProvider.state('forgetPasswordSetting', {
-            url: '/forgetPasswordSetting',
-            cache:'false',
-            params:{'phone':''},
-            templateUrl: 'modules/login/forgetPasswordSetting.html',
-            controller: forgetPasswordSettingCtrl
+    //页面验证
+    var dataValidation = function() {
+      if ($scope.input.verificationCode === '') {
+        $cordovaToast.showShortBottom('验证码不能为空');
+        return false;
+      }
+      if ($scope.input.newPassword === '') {
+        $cordovaToast.showShortBottom('密码不能为空');
+        return false;
+      }
+      if ($scope.input.verificationCode.toString().length !== 6) {
+        $cordovaToast.showShortBottom('验证码必须6个数字');
+        return false;
+      }
+      if ($scope.input.newPassword.length < 6 || $scope.input.newPassword.length > 20) {
+        $cordovaToast.showShortBottom('密码必须6-20个字符');
+        return false;
+      }
+      var reg = /^[0-9a-zA-Z_]+$/;
+      if(!reg.test($scope.input.newPassword)){
+        $cordovaToast.showShortBottom('密码必须由英文字母、数字、下划线组成');
+        return false;
+      }
+      return true;
+    };
+
+    //修改密码
+    $scope.changePassword = function () {
+      $scope.isSubmit = true;
+      if (dataValidation()) {
+        $scope.input.category = '2';
+        $http.put('/permission/account', $scope.input).success(function() {
+          $ionicHistory.goBack(-2);
+          $cordovaToast.showShortBottom('密码修改成功');
+        }).error(function(data){
+          $scope.isSubmit = false;
+          $cordovaToast.showShortBottom(data);
         });
+      }
+      else {
+        $scope.isSubmit = false;
+      }
     };
+  };
 
-    app.config(mainRouter);
+  var mainRouter = function($stateProvider) {
+    $stateProvider.state('forgetPasswordSetting', {
+      url: '/forgetPasswordSetting/:phone',
+      templateUrl: 'modules/login/forgetPasswordSetting.html',
+      controller: forgetPasswordSettingCtrl
+    });
+  };
+
+  app.config(mainRouter);
 })(angular.module('isj'));

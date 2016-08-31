@@ -51,7 +51,7 @@
   // Config JWT in http header and prefix of url
   var CONTEXT = './api';
   var requestIndex = 0;
-  app.factory('authInterceptor', function($q, $window, $rootScope) {
+  app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.refreshProcess = 0;
     return {
       request: function(config) {
@@ -62,8 +62,8 @@
         }
         // Add JWT token in header
         config.headers = config.headers || {};
-        if ($window.localStorage.token) {
-          config.headers.Authorization = 'Bearer ' + $window.localStorage.token;
+        if (userService.hasToken()) {
+          config.headers.Authorization = 'Bearer ' + userService.getToken();
         }
         // Add context path of api server
         if (needContextPrefix(config.url)) {

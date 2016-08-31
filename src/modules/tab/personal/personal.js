@@ -1,23 +1,60 @@
 (function(app) {
   'use strict';
 
-  var tabPersonalCtrl = function($scope, $http, $state) {
-    //取得患者信息
-    $http.get('/patients/patient').success(function(data) {
-      $scope.patient = data;
-      if ($scope.patient.phone !== null && $scope.patient.phone !== '') {
-        $scope.patient.phone = $scope.patient.phone.substring(0,3)+'****'+$scope.patient.phone.substring(7,11);
-      }
-    });
+  var tabPersonalCtrl = function($scope, $http, $state, $cordovaToast, userService) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      //取得用户信息
+      $scope.isLogin = true;
+      $http.get('/user/userInfo').success(function(data) {
+        $scope.user = data;
+        if ($scope.user.phone !== null && $scope.user.phone !== '') {
+          $scope.user.phone = $scope.user.phone.substring(0,3)+'****'+$scope.user.phone.substring(7,11);
+        }
+      }).error(function(data, status){
+        if (status !== 401) {
+          $cordovaToast.showShortBottom(data);
+        }
+        else {
+          $scope.isLogin = false;
+        }
+      });
 
-    //取得收藏医生数量
-    $http.get('/collection/doctors/count').success(function(data) {
-      $scope.doctorCount = data;
+      //取得家庭成员数量
+      $http.get('/user/familyMembers/count').success(function(data) {
+        $scope.memberCount = data;
+      }).error(function(data){
+        if (status !== 401) {
+          $cordovaToast.showShortBottom(data);
+        }
+      });
+
+      //取得收藏医生数量
+      $http.get('/user/collectionDoctors/count').success(function(data) {
+        $scope.doctorCount = data;
+      }).error(function(data){
+        if (status !== 401) {
+          $cordovaToast.showShortBottom(data);
+        }
+      });
     });
 
     //路由跳转
     $scope.itemRouter = function(routerId) {
-      $state.go(routerId);
+      var isLogin = true;
+      if (routerId !== 'settingIndex') {
+        isLogin = userService.hasToken();
+      }
+      if (isLogin) {
+        $state.go(routerId);
+      }
+      else {
+        $state.go('login');
+      }
+    };
+
+    //登录点击事件
+    $scope.login = function() {
+      $state.go('login');
     };
   };
 

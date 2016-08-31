@@ -57,6 +57,6 @@
         <span>{{time.time}}</span>
       </div>
     </div>
-    <div ng-if="allDays.length == 0" class="no-content-center">暂无医生号点信息</div>
+    <div ng-if="allDays.length == 0 && !$root.inProcess" class="no-content-center">暂无医生号点信息</div>
   </ion-content>
 </ion-view>

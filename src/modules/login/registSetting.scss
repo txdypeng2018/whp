@@ -3,14 +3,19 @@
     padding: 15px;
     font-size: 15px;
     color: #666666;
-  }
-  .list{
-    margin: 0px;
 
-    .item
+    p {
+      margin: 0;
+    }
+  }
+
+  .list{
+    margin: 0;
+
+    .item {
       .idCard-input{
-          margin-left: 25px;
-       }
+        margin-left: 25px;
+      }
       .name-input{
         margin-left: 57px;
       }
@@ -20,17 +25,17 @@
       .password-input{
         margin-left: 57px;
       }
+    }
 
     .button-resend{
       min-height:25px !important;
       line-height: 25px !important;
       margin-right: 10px;
-      width: 35%;
+      width: 50%;
       padding: 0;
-
     }
-
   }
+
   .div-button{
     padding: 15px;
 

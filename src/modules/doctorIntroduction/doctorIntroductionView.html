@@ -5,19 +5,20 @@
     <div class="title">
       医生主页
     </div>
-    <a class="button button-clear icon ion-ios-star-outline positive"></a>
+    <a ng-class="{false:'ion-ios-star-outline',true:'ion-ios-star'}[isCollection]" class="button button-clear icon positive" ng-click="collectionDoctor()"></a>
   </ion-header-bar>
   <ion-content ng-class="{false: 'no-footer'}[type]" class="has-header has-footer doctorIntroductionView-content">
     <ul class="list">
       <li class="item item-avatar-left">
-        <img ng-if="introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-        <img ng-if="introduction.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo"">
+        <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}" class="photo">
         <div>
           <h2 class="name">{{introduction.name}}</h2>
           <p class="professional">{{introduction.title}}</p>
         </div>
         <p>{{introduction.hospital}}</p>
-        <p class="dept">{{introduction.dept}}</p>
+        <p class="dept">{{introduction.dept}}（{{introduction.district}}）</p>
       </li>
       <li class="item introduction-content item-splitLine">
         <h2>

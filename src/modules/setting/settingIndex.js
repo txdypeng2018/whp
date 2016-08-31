@@ -1,19 +1,38 @@
 (function(app) {
   'use strict';
 
-  var settingIndexCtrl = function($scope, $state,$ionicHistory) {
+  var settingIndexCtrl = function($scope, $state, $ionicPopup, userService) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.isLogin = userService.hasToken();
+    });
+    $scope.$on('$ionicView.beforeLeave', function(){
+      if (confirmPopup !== null) {
+        confirmPopup.close();
+      }
+    });
+
     //路由跳转
     $scope.itemRouter = function(routerId) {
       $state.go(routerId);
     };
 
-      $scope.back = function(){
-          $ionicHistory.goBack();
-      };
-
-      $scope.quit = function(){
-          $state.go('login');
-      };
+    //退出登录
+    var confirmPopup = null;
+    $scope.quit = function(){
+      confirmPopup = $ionicPopup.confirm({
+        title: '提示',
+        template: '您确定要退出当前账户?',
+        cssClass: 'confirm-popup',
+        cancelText: '取消',
+        okText: '确定'
+      });
+      confirmPopup.then(function(res) {
+        if(res) {
+          userService.clearToken();
+          $state.go('login', {skipId: 'tab.personal'});
+        }
+      });
+    };
   };
 
   var mainRouter = function($stateProvider) {

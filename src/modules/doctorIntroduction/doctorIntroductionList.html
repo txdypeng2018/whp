@@ -18,8 +18,9 @@
   <ion-content class="has-header has-subheader doctorIntroductionList-content">
     <ul class="list">
       <li class="item item-avatar-left" collection-repeat="introduction in introductions" ng-click="viewIntroduction(introduction.id)">
-        <img ng-if="introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-        <img ng-if="introduction.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo"">
+        <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}" class="photo">
         <div class="authenticate">
           <img src="./assets/images/isapprove.png">
         </div>
@@ -27,9 +28,10 @@
           <h2 class="name">{{introduction.name}}</h2>
           <p class="professional">{{introduction.title}}</p>
         </div>
-        <p>{{introduction.hospital}}</p>
-        <p class="dept">{{introduction.dept}}</p>
+        <p>出诊地点：{{introduction.dept}}（{{introduction.district}}）</p>
+        <p class="dept">擅长：{{introduction.skill===''?'暂无':introduction.skill}}</p>
       </li>
     </ul>
+    <ion-infinite-scroll ng-if="vm.moreData" on-infinite="vm.loadMore()" distance="2%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>
