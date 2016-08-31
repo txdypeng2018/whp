@@ -1,41 +1,38 @@
 (function(app) {
-    'use strict';
+  'use strict';
 
-    var registCtrl = function($scope,$state,$ionicHistory,$http,$cordovaToast) {
+  var registCtrl = function($scope,$state,$ionicHistory,$http,$cordovaToast) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.isSubmit = false;
+      $scope.input = {
+        phone: ''
+      };
+    });
 
-       $scope.input = {
-           phone: ''
-       };
-
-        $scope.back = function(){
-            $ionicHistory.goBack();
-        };
-
-        $scope.getCode = function(){
-            var phone = {
-                category:'1',
-                phone:$scope.input.phone.toString()
-            };
-            $http.get('/permission/verificationCode', phone).success(function(data) {
-                    console.log(data);
-            }).error(function(data){
-                $cordovaToast.showShortBottom(data);
-            });
-
-        };
-
+    $scope.getCode = function(){
+      var param = {
+        category: '1',
+        phone: $scope.input.phone.toString()
+      };
+      $scope.isSubmit = true;
+      $http.get('/permission/verificationCode', {params: param}).success(function() {
+        $state.go('registSetting', {phone: param.phone});
+      }).error(function(data){
+        $scope.isSubmit = false;
+        $cordovaToast.showShortBottom(data);
+      });
     };
+  };
 
-    var mainRouter = function($stateProvider) {
-        $stateProvider.state('regist', {
-            url: '/regist',
-            cache:'false',
-            templateUrl: 'modules/login/regist.html',
-            controller: registCtrl
-        });
-    };
+  var mainRouter = function($stateProvider) {
+    $stateProvider.state('regist', {
+      url: '/regist',
+      templateUrl: 'modules/login/regist.html',
+      controller: registCtrl
+    });
+  };
 
-    app.config(mainRouter);
+  app.config(mainRouter);
 })(angular.module('isj'));
 
 

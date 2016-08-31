@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast, userService) {
     var displayDays = 7;
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     $scope.selectDays = [];
@@ -173,7 +173,13 @@
     //时间选中事件
     $scope.timeClk = function(time, overCount) {
       if ($scope.daySelected !== null && $scope.daySelected !== '' && overCount > 0) {
-        $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+        var isLogin = userService.hasToken();
+        if (isLogin) {
+          $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+        }
+        else {
+          $state.go('login');
+        }
       }
     };
   };

@@ -27,8 +27,7 @@
       };
       $http.post('/permission/login', phoneAndPwd).success(function(data) {
         userService.setToken(data);
-        $window.localStorage.token = data;
-        $state.go('tab.personal');
+        $ionicHistory.goBack();
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
       });

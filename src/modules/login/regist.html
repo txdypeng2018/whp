@@ -1,20 +1,18 @@
-<ion-header-bar class="bar-light">
-    <a class="icon-return positive" ng-click="back()">
-        <i class="icon ion-ios-arrow-left"></i>
-        <div>返回</div>
-    </a>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
     <div class="title">注册</div>
-</ion-header-bar>
-<ion-content class="has-header content-gray regist-content" scroll="false" has-bouncing="false">
+  </ion-header-bar>
+  <ion-content class="has-header content-gray regist-content" scroll="false" has-bouncing="false">
     <div class="list">
-        <label class="item item-input">
-           手机号
-            <input id="regist-phone" class="regist-input" type="number" placeholder="11位数字" ng-model="input.phone">
-        </label>
+      <label class="item item-input">
+        手机号
+        <input id="regist-phone" class="regist-input" type="number" placeholder="11位数字" ng-model="input.phone">
+      </label>
     </div>
-
     <div class="div-button">
-        <button ng-disabled="!(input.phone.toString().length == 11)"  class="button button-positive" ng-click="getCode()">获取验证码</button>
+      <button ng-disabled="!(input.phone.toString().length == 11) && !isSubmit"  class="button button-positive" ng-click="getCode()">获取验证码</button>
     </div>
-
-</ion-content>
+  </ion-content>
+</ion-view>

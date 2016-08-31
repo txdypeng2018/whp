@@ -6,7 +6,7 @@
       $scope.isSubmit = false;
       $scope.input = {
         opinion: ''
-      }
+      };
     });
 
     $scope.opinionSubmit = function() {
@@ -15,7 +15,7 @@
       }
       else {
         $scope.isSubmit = true;
-        $http.post('/service/userOpinion', {opinion: $scope.input.opinion}).success(function(data) {
+        $http.post('/service/userOpinion', {opinion: $scope.input.opinion}).success(function() {
           $ionicHistory.goBack();
           $cordovaToast.showShortBottom('意见提交成功，谢谢您的支持');
         }).error(function(data){

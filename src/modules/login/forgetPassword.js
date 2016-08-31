@@ -15,7 +15,7 @@
         phone: $scope.input.phone.toString()
       };
       $scope.isSubmit = true;
-      $http.get('/permission/verificationCode', {params: param}).success(function(data) {
+      $http.get('/permission/verificationCode', {params: param}).success(function() {
         $state.go('forgetPasswordSetting', {phone: param.phone});
       }).error(function(data){
         $scope.isSubmit = false;

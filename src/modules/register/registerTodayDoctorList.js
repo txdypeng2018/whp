@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService) {
     $scope.hideSearch = true;
 
     //取得医生照片
@@ -62,7 +62,13 @@
     //医生选择事件
     $scope.doctorClk = function(doctorId, overCount) {
       if (overCount > 0) {
-        $state.go('registerConfirmToday', {doctorId: doctorId});
+        var isLogin = userService.hasToken();
+        if (isLogin) {
+          $state.go('registerConfirmToday', {doctorId: doctorId});
+        }
+        else {
+          $state.go('login');
+        }
       }
     };
   };

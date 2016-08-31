@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabPersonalCtrl = function($scope, $http, $state, $cordovaToast) {
+  var tabPersonalCtrl = function($scope, $http, $state, $cordovaToast, userService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       //取得用户信息
       $scope.isLogin = true;
@@ -40,11 +40,20 @@
 
     //路由跳转
     $scope.itemRouter = function(routerId) {
-      $state.go(routerId);
+      var isLogin = true;
+      if (routerId !== 'settingIndex') {
+        isLogin = userService.hasToken();
+      }
+      if (isLogin) {
+        $state.go(routerId);
+      }
+      else {
+        $state.go('login');
+      }
     };
 
     //登录点击事件
-    $scope.login = function(routerId) {
+    $scope.login = function() {
       $state.go('login');
     };
   };

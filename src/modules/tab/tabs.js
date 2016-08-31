@@ -14,11 +14,28 @@
     $ionicConfigProvider.platform.android.views.transition('android');
   });
 
+  var tabCtrl = function($scope, $http, $state, $cordovaToast, userService) {
+    //路由跳转
+    $scope.tabRouter = function(routerId) {
+      var isLogin = true;
+      if (routerId === 'tab.message' || routerId === 'tab.registration') {
+        isLogin = userService.hasToken();
+      }
+      if (isLogin) {
+        $state.go(routerId);
+      }
+      else {
+        $state.go('login');
+      }
+    };
+  };
+
   var mainRouter = function($stateProvider) {
     $stateProvider.state('tab', {
       url: '/tab',
       abstract: true,
-      templateUrl: 'modules/tab/tabs.html'
+      templateUrl: 'modules/tab/tabs.html',
+      controller: tabCtrl
     });
   };
 

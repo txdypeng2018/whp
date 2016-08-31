@@ -1,54 +1,49 @@
-<ion-header-bar class="bar-light">
-    <a class="icon-return positive" ng-click="back()">
-        <i class="icon ion-ios-arrow-left"></i>
-        <div>返回</div>
-    </a>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button go-back="goBack()"></isj-back-button>
     <div class="title">注册</div>
-</ion-header-bar>
-<ion-content class="has-header content-gray registSetting-content"  overflow-scroll="true"
-style="overflow:auto">
+  </ion-header-bar>
+  <ion-content class="has-header content-gray registSetting-content">
     <div class="prompt">
-        <p ng-bind="'验证码已发送到'+phone"></p>
+      <p ng-bind="'验证码已发送到'+phone"></p>
     </div>
-    <div class="list">
+      <div class="list">
+        <div class="item item-input">
+          验证码
+          <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字" ng-model="input.verificationCode">
+          <button class="button button-resend button-positive" ng-disabled="!isResend" ng-click="resendCode()">重新发送{{secondString}}</button>
+        </div>
+      </div>
+
+      <div class="prompt">
+          密码需要填写6-20个字符，可由英文字母、数字、下划线组成
+      </div>
+
+      <div class="list">
         <label class="item item-input">
-            验证码
-            <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字" ng-model="input.code">
-            <button class="button button-resend button-positive"ng-bind="'重新发送'+secondString"
-                    ng-disabled="!isResend" ng-click="resend()"></button>
+          密码
+          <input id="registSetting-password" class="password-input" type="password" placeholder="6-20个字符" ng-model="input.password">
         </label>
-    </div>
+      </div>
 
-    <div class="prompt">
-        密码需要填写6-20个字符，可由英文字母、数字、下划线组成
-    </div>
+      <div class="prompt">
+          体验快速预约挂号，请填写您的信息
+      </div>
 
-    <div class="list">
+      <div class="list">
         <label class="item item-input">
-            密码
-            <input id="registSetting-password" class="password-input" type="password" placeholder="6-20个字符" ng-model="input.password">
-        </label>
-    </div>
-
-    <div class="prompt">
-        体验快速预约挂号，请填写您的信息
-    </div>
-
-    <div class="list">
-
-        <label class="item item-input">
-            姓名
-            <input class="name-input" type="text" placeholder="必填" ng-model="input.name">
+          姓名
+          <input class="name-input" type="text" placeholder="必填" ng-model="input.name">
         </label>
         <label class="item item-input">
-            身份证号
-            <input class="idCard-input"  type="number" placeholder="必填" ng-model="input.idCard">
+          身份证号
+          <input class="idCard-input" type="text" placeholder="必填" ng-model="input.idCard">
         </label>
-    </div>
+      </div>
 
-    <div class="div-button">
-        <button class="button button-positive" ng-click="regist()">注册</button>
-    </div>
-
-
-</ion-content>
+      <div class="div-button">
+          <button class="button button-positive" ng-click="regist()" ng-disabled="isSubmit">注册</button>
+      </div>
+  </ion-content>
+</ion-view>

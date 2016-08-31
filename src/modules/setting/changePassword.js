@@ -61,7 +61,7 @@
       $scope.isSubmit = true;
       if (dataValidation()) {
         $scope.input.category = '1';
-        $http.put('/permission/account', $scope.input).success(function(data) {
+        $http.put('/permission/account', $scope.input).success(function() {
           $ionicHistory.goBack();
           $cordovaToast.showShortBottom('密码修改成功');
         }).error(function(data){
