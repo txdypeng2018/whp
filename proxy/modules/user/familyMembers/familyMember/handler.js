@@ -1,6 +1,6 @@
 'use strict';
 
-var common = require('../../common.js');
+var common = require('../../../common.js');
 
 var handler = module.exports = {};
 

@@ -1,38 +1,48 @@
 (function(app) {
   'use strict';
 
-  var tabRegistrationCtrl = function($scope, $state, $stateParams, $http) {
+  var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, $cordovaToast) {
+    //家庭关系类别
+    $http.get('/dataBase/familyMenberTypes').success(function(data) {
+      $scope.memberTypes = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
+    });
+
+    //取得就诊人
+    $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+      $scope.patient = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
+    });
+
     //取得挂号单
-    var registrationList = function(memberId) {
-      $http.get('/register/registrations', {params: {memberId: memberId}}).success(function(data) {
+    var registrationList = function() {
+      $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.registrations = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
     };
 
-    //取得登录的患者信息
-    var getPatientInfo = function(memberId) {
-      $http.get('/patients/patient', {params: {memberId: memberId}}).success(function(data) {
-        $scope.patient = data;
-        registrationList(memberId);
-      });
-    };
-    getPatientInfo($stateParams.memberId);
+    $scope.$on('$ionicView.beforeEnter', function(){
+      registrationList();
+    });
 
     //选择家庭成员
     $scope.selectMember = function() {
-      $state.go('familyMemberSelect', {skipId: 'tab.registration', memberId: $stateParams.memberId});
+      $state.go('familyMemberSelect', {skipId: 'tab.registration', memberId: $scope.patient.id});
     };
 
     //挂号单选择
     $scope.registrationClk = function(id) {
-      $state.go('registrationView', {registrationId: id});
+      $state.go('registrationView', {registrationId: id, memberId: $scope.patient.id});
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('tab.registration', {
       url: '/registration/:memberId',
-      cache: 'false',
       views:{
         'tab-registration':{
           templateUrl: 'modules/tab/registration/registration.html',

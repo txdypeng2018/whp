@@ -17,7 +17,7 @@
     });
     //取得登录账号就医人
     var getPatient = function() {
-      $http.get('/patients/patient', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
         $cordovaToast.showShortBottom(data);

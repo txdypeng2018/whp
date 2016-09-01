@@ -1,43 +1,47 @@
-<ion-header-bar class="bar-light">
-  <div class="title" ng-click="selectMember()">
-    <img ng-if="patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
-    <img ng-if="patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
-    {{patient.member}}-{{patient.name}}
-    <i class="icon ion-ios-arrow-down positive operation-down"></i>
-  </div>
-</ion-header-bar>
-<ion-content class="has-header content-gray content-fill registration-content">
-  <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
-    <div class="time-line-left">
-      {{registration.apptDate.substring(5,11)}}
-      <div class="time-line-mark positive-bg"></div>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <div class="title" ng-click="selectMember()">
+      <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+      <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+      <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}" class="photo">
+      {{patient.member}}-{{patient.name}}
+      <i class="icon ion-ios-arrow-down positive operation-down"></i>
     </div>
-    <div class="time-line-right">
-      <div class="time-line-panel">
-        <div class="title">
-          门诊号：<span class="positive">{{registration.clinicNum}}</span>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray content-fill registration-content">
+    <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
+      <div class="time-line-left">
+        {{registration.apptDate.substring(5,11)}}
+        <div class="time-line-mark positive-bg"></div>
+      </div>
+      <div class="time-line-right">
+        <div class="time-line-panel">
+          <div class="title">
+            门诊号：<span class="positive">{{registration.clinicNum}}</span>
+          </div>
+          <div class="content content-hospital">
+            <span class="content-icon"><i class="icon ion-ios-home-outline"></i></span>
+            <span class="content-name">{{registration.hospital}}</span>
+          </div>
+          <div class="content">
+            <span class="content-icon"><i class="icon ion-ios-location-outline"></i></span>
+            <span class="content-name">{{registration.dept}}（{{registration.district}}）</span>
+          </div>
+          <div class="content">
+            <span class="content-icon"><i class="icon ion-ios-person-outline"></i></span>
+            <span class="content-name">{{registration.doctor}}</span>
+          </div>
+          <div class="bottom">
+            诊费:￥{{registration.amount}}
+          </div>
         </div>
-        <div class="content content-hospital">
-          <span class="content-icon"><i class="icon ion-ios-home-outline"></i></span>
-          <span class="content-name">{{registration.hospital}}</span>
-        </div>
-        <div class="content">
-          <span class="content-icon"><i class="icon ion-ios-location-outline"></i></span>
-          <span class="content-name">{{registration.dept}}（{{registration.district}}）</span>
-        </div>
-        <div class="content">
-          <span class="content-icon"><i class="icon ion-ios-person-outline"></i></span>
-          <span class="content-name">{{registration.doctor}}</span>
-        </div>
-        <div class="bottom">
-          诊费:￥{{registration.amount}}
+        <div class="time-line-bottom">
+          <span>{{registration.registerDate.substring(5,11)}}</span>
+          <span class="pay-status">{{registration.status}}</span>
         </div>
       </div>
-      <div class="time-line-bottom">
-        <span>{{registration.registerDate.substring(5,11)}}</span>
-        <span class="pay-status">{{registration.status}}</span>
-      </div>
     </div>
-  </div>
-  <div ng-if="registrations.length == 0" class="no-content-center">暂无挂号信息</div>
-</ion-content>
+    <div ng-if="registrations.length == 0" class="no-content-center">暂无挂号信息</div>
+  </ion-content>
+</ion-view>

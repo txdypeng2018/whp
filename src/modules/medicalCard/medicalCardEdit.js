@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalCardEditCtrl = function($scope, $http, $stateParams, $ionicHistory) {
+  var medicalCardEditCtrl = function($scope, $http, $stateParams, $ionicHistory, $cordovaToast) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.input = {
@@ -19,7 +19,7 @@
     //更新病历号
     $scope.changeNum = function() {
       $scope.isSubmit = true;
-      $http.put('/user/medicalNum', $scope.input).success(function(data) {
+      $http.put('/user/medicalNum', $scope.input).success(function() {
         $ionicHistory.goBack();
       }).error(function(data){
         $scope.isSubmit = false;
@@ -30,7 +30,7 @@
     //创建病历号
     $scope.createNum = function() {
       $scope.isSubmit = true;
-      $http.post('/user/medicalNum', $scope.input).success(function(data) {
+      $http.post('/user/medicalNum', $scope.input).success(function() {
         $ionicHistory.goBack();
       }).error(function(data){
         $scope.isSubmit = false;

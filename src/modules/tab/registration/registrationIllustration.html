@@ -1,41 +1,39 @@
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">就诊、退号说明</div>
-</ion-header-bar>
-<ion-content class="has-header content-gray registrationIllustration-content">
-  <div class="illustration">
-    <div class="head"><div class="title">就诊说明</div></div>
-    <div class="content">
-      <table>
-        <tr>
-          <td class="label"><img src="./assets/images/registration_card.png"></td>
-          <td>
-            首次看诊在盛京医院使用身份证作为就医卡的患者，可直接去自助机取号，否则需要到窗口取号
-          </td>
-        </tr>
-        <tr>
-          <td class="label"><img src="./assets/images/registration_hospital.png"></td>
-          <td>
-            挂当日号患者，直接在候诊区等待叫号
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="medical-guide">
-            <a class="positive" ng-click="medicalGuideClk()">就医指南</a>
-          </td>
-        </tr>
-      </table>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">就诊、退号说明</div>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray registrationIllustration-content">
+    <div class="illustration">
+      <div class="head"><div class="title">就诊说明</div></div>
+      <div class="content">
+        <table>
+          <tr>
+            <td class="label"><img src="./assets/images/registration_card.png"></td>
+            <td>
+              <span ng-bind-html="description.visit1"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label"><img src="./assets/images/registration_hospital.png"></td>
+            <td>
+              <span ng-bind-html="description.visit2"></span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="medical-guide">
+              <a class="positive" ng-click="medicalGuideClk()">就医指南</a>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-  </div>
-  <div class="illustration illustration-marge">
-    <div class="head"><div class="title">退号说明</div></div>
-    <div class="content">
-      1.最迟在预约的前一天办理退号，就诊当天及过号未来看诊的用户手机上无法退号，需要到窗口办理退号。<br/>
-      2.退号成功后，回家挂号费退回您使用的支付平台账户内。<br/>
-      3.如就诊单显示已退费，但未收到，可在支付使用的平台查询交易号，并致电该支付平台客服进行咨询。
+    <div class="illustration illustration-marge">
+      <div class="head"><div class="title">退号说明</div></div>
+      <div class="content">
+        <span ng-bind-html="description.backnum"></span>
+      </div>
     </div>
-  </div>
-</ion-content>
+  </ion-content>
+</ion-view>
