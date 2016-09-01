@@ -1,5 +1,7 @@
 .familyMemberEdit-content {
   .list {
+    margin-bottom: 0 !important;
+
     .item {
       &:first-child {
         border-top: 0;
@@ -16,11 +18,16 @@
           width: 30px;
         }
       }
+
+      select {
+        border: 0 !important;
+        background-color: #ffffff !important;
+      }
     }
   }
 
   .operation {
-    padding: 0 15px;
+    padding: 20px 15px 5px 15px;
 
     .button {
       width: 100%;
@@ -34,7 +41,7 @@
     margin-left: -10px;
 
     .item-checkbox {
-      margin-top: 15px;
+      margin-top: 5px;
       background-color: #f4f4f4 !important;
       border: 0;
       display: inline-block;

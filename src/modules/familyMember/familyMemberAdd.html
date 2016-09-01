@@ -1,14 +1,15 @@
 <ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
     <div class="title">选择关系</div>
   </ion-header-bar>
   <ion-content class="has-header content-gray familyMemberAdd-content">
     <ul>
-      <li ng-repeat="relationship in relationshipTypes">
-        <div ng-click="medicalCardEdit()">
-          <span><img src="{{relationship.img}}"></span>
-          <span class="name">{{relationship.name}}</span>
+      <li ng-repeat="memberType in memberTypes">
+        <div ng-click="medicalCardEdit(memberType.code)">
+          <span><img ng-src="{{memberType.img}}"></span>
+          <span class="name">{{memberType.name}}</span>
         </div>
       </li>
     </ul>

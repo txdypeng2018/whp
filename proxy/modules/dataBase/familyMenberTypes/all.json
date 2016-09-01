@@ -1,42 +1,52 @@
 {
   "01" : {
     "name": "爸爸",
+    "sexCode": "1",
     "img": "./assets/images/pic_old_man.png"
   },
   "02" : {
     "name": "妈妈",
+    "sexCode": "2",
     "img": "./assets/images/pic_old_woman.png"
   },
   "03" : {
     "name": "配偶",
+    "sexCode": "2",
     "img": "./assets/images/pic_woman.png"
   },
   "04" : {
     "name": "儿子",
+    "sexCode": "1",
     "img": "./assets/images/pic_boy.png"
   },
   "05" : {
     "name": "女儿",
+    "sexCode": "2",
     "img": "./assets/images/pic_girl.png"
   },
   "06" : {
     "name": "兄弟",
+    "sexCode": "1",
     "img": "./assets/images/pic_man.png"
   },
   "07" : {
-    "name": "配姐妹",
+    "name": "姐妹",
+    "sexCode": "2",
     "img": "./assets/images/pic_woman.png"
   },
   "08" : {
     "name": "亲属",
+    "sexCode": "",
     "img": "./assets/images/pic_man.png"
   },
   "09" : {
     "name": "朋友",
+    "sexCode": "",
     "img": "./assets/images/pic_man.png"
   },
   "10" : {
     "name": "其他",
+    "sexCode": "",
     "img": "./assets/images/pic_man.png"
   }
 }
