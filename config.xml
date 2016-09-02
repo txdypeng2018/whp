@@ -13,6 +13,11 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreen" value="screen" />
+   <!--android targetSdk 4.4-->
+    <preference name="android-targetSdkVersion" value="19" />
+    <!--android minSdk 4.1-->
+    <preference name="android-minSdkVersion" value="16" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>

@@ -1,0 +1,26 @@
+.paymentResult-content {
+  .resultDetail {
+    padding: 20px 0;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+    img {
+      height: 30px;
+      width: 30px;
+    }
+
+    span {
+      margin-left: 10px;
+      line-height: 30px;
+      font-size: 18px;
+    }
+
+    a {
+      margin-left: 20px;
+      line-height: 30px;
+      font-size: 18px;
+      color: #387ef5 !important;
+    }
+  }
+}
