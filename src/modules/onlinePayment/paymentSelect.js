@@ -4,8 +4,34 @@
   var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup) {
     var orderNum = $stateParams.orderNum;
 
+    //倒计时
+    var updateTime = function() {
+      if (!angular.isUndefined($scope.time.second)) {
+        //倒计时结束终止支付
+        if ($scope.time.minute === 0 && $scope.time.second === 0) {
+          $state.go('tab.main');
+        }
+        if ($scope.time.second === 0) {
+          --$scope.time.minute;
+          $scope.time.second = 59;
+        }
+        else {
+          --$scope.time.second;
+        }
+      }
+    };
+
     //取得挂号单信息
     $http.get('/orders/'+orderNum).success(function(data) {
+      $scope.order = data;
+      $scope.time = {
+        minute: $scope.order.closeTime[0],
+        second: $scope.order.closeTime[1]
+      };
+      setInterval(function(){
+        $scope.$apply(updateTime);
+      }, 1000);
+
       // 总金额 必填 订单总金额，单位为"元"
       $scope.amount = data.amount;
       // 商品名称
@@ -178,29 +204,6 @@
         }
       }
     };
-
-    //倒计时
-    $scope.time = {
-      minute: 30,
-      second: 0
-    };
-    var updateTime = function() {
-      //倒计时结束终止支付
-      if ($scope.time.minute === 0 && $scope.time.second === 0) {
-        $state.go('tab.main');
-      }
-
-      if ($scope.time.second === 0) {
-        --$scope.time.minute;
-        $scope.time.second = 59;
-      }
-      else {
-        --$scope.time.second;
-      }
-    };
-    setInterval(function(){
-      $scope.$apply(updateTime);
-    }, 1000);
   };
 
   var mainRouter = function($stateProvider) {

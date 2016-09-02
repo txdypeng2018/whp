@@ -1,29 +1,28 @@
-<isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" ng-click="goBack()">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">选择就诊人</div>
-  <a class="button button-clear positive" ng-click="memberManage()">管理</a>
-</ion-header-bar>
-<ion-content class="has-header content-gray familyMemberSelect-content">
-  <ul>
-    <li ng-repeat="member in members" ng-click="memberSelect(member.id)">
-      <div>
-        <span>
-          <img ng-if="member.memberCode == '00' && member.sexCode == '1'" src="./assets/images/pic_man.png">
-          <img ng-if="member.memberCode == '00' && member.sexCode == '2'" src="./assets/images/pic_woman.png">
-          <img ng-if="member.memberCode != '00'" ng-src="{{memberTypes[member.memberCode].img}}">
-        </span>
-        <span class="name">
-          {{member.member}}-{{member.name}}
-        </span>
-        <i ng-if="memberId == member.id" class="icon ion-checkmark-circled positive selected"></i>
-      </div>
-    </li>
-    <li ng-click="addMember()">
-      <div><i class="icon ion-android-add add-member"></i></div>
-    </li>
-  </ul>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">选择就诊人</div>
+    <a class="button button-clear positive" ng-click="memberManage()">管理</a>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray familyMemberSelect-content">
+    <ul>
+      <li ng-repeat="member in members" ng-click="memberSelect(member.id)">
+        <div>
+          <span>
+            <img ng-if="member.memberCode == '00' && member.sexCode == '1'" src="./assets/images/pic_man.png">
+            <img ng-if="member.memberCode == '00' && member.sexCode == '2'" src="./assets/images/pic_woman.png">
+            <img ng-if="member.memberCode != '00'" ng-src="{{memberTypes[member.memberCode].img}}">
+          </span>
+          <span class="name">
+            {{member.member}}-{{member.name}}
+          </span>
+          <i ng-if="memberId == member.id" class="icon ion-checkmark-circled positive selected"></i>
+        </div>
+      </li>
+      <li ng-click="addMember()">
+        <div><i class="icon ion-android-add add-member"></i></div>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>

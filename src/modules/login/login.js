@@ -27,7 +27,12 @@
       };
       $http.post('/permission/login', phoneAndPwd).success(function(data) {
         userService.setToken(data);
-        $ionicHistory.goBack();
+        if (angular.isUndefined($stateParams.skipId) || $stateParams.skipId === '') {
+          $ionicHistory.goBack();
+        }
+        else {
+          $state.go($stateParams.skipId);
+        }
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
       });

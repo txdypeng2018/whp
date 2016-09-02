@@ -10,7 +10,7 @@
     });
 
     //取得登录患者家庭成员
-    $http.get('/familyMembers').success(function(data) {
+    $http.get('/user/familyMembers').success(function(data) {
       $scope.members = data;
     });
 

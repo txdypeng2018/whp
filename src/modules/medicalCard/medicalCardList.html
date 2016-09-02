@@ -1,32 +1,35 @@
-<ion-header-bar class="bar-light">
-  <a class="icon-return positive" href="javascript:history.go(-1)">
-    <i class="icon ion-ios-arrow-left"></i>
-    <div>返回</div>
-  </a>
-  <div class="title">就诊卡管理</div>
-</ion-header-bar>
-<ion-content class="has-header medicalCardList-content">
-  <ul class="list">
-    <li ng-repeat="member in members" class="item item-avatar-left" ng-click="medicalCardEdit()">
-      <img src="{{relationshipTypes[member.relationship].img}}" class="photo">
-      <div class="relationship-name">
-        {{relationshipTypes[member.relationship].name}}
-      </div>
-      <div class="name-sex-age">
-        <h2 class="name">{{member.name}}</h2>
-        <img ng-if="member.sexCode == '1'" src="./assets/images/man.png" class="sex">
-        <img ng-if="member.sexCode == '2'" src="./assets/images/woman.png" class="sex">
-        <p class="age">{{member.age}}</p>
-      </div>
-      <p class="idCard">
-        <img ng-if="member.patientVisits == '1'" src="./assets/images/id_s.png">
-        <img ng-if="member.patientVisits == '0'" src="./assets/images/id_d.png">
-        {{member.idCard}}
-      </p>
-      <p class="medicalNum">
-        病历号：{{member.medicalNum}}
-      </p>
-      <img ng-if="member.patientVisits == '1'" src="./assets/images/client.png" class="patient-visits">
-    </li>
-  </ul>
-</ion-content>
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">就诊卡管理</div>
+  </ion-header-bar>
+  <ion-content class="has-header medicalCardList-content">
+    <ul class="list">
+      <li ng-repeat="member in members" class="item item-avatar-left" ng-click="medicalCardEdit(member.id)">
+        <img ng-if="member.memberCode == '00' && member.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+        <img ng-if="member.memberCode == '00' && member.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+        <img ng-if="member.memberCode != '00'" ng-src="{{memberTypes[member.memberCode].img}}" class="photo">
+        <div class="relationship-name">
+          <span ng-if="member.memberCode == '00'">我</span>
+          <span ng-if="member.memberCode != '00'">{{memberTypes[member.memberCode].name}}</span>
+        </div>
+        <div class="name-sex-age">
+          <h2 class="name">{{member.name}}</h2>
+          <img ng-if="member.sexCode == '1'" src="./assets/images/man.png" class="sex">
+          <img ng-if="member.sexCode == '2'" src="./assets/images/woman.png" class="sex">
+          <p class="age">{{member.age}}</p>
+        </div>
+        <p class="idCard">
+          <img ng-if="member.patientVisits == '1'" src="./assets/images/id_s.png">
+          <img ng-if="member.patientVisits == '0'" src="./assets/images/id_d.png">
+          {{member.idCard}}
+        </p>
+        <p class="medicalNum">
+          病历号：{{member.medicalNum}}
+        </p>
+        <img ng-if="member.patientVisits == '1'" src="./assets/images/client.png" class="patient-visits">
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>
