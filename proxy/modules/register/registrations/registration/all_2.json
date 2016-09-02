@@ -1,6 +1,7 @@
 {
   "id": "1",
   "num": "S2112345",
+  "memberId": "1",
   "patientName": "王二",
   "apptDate": "2016年08月20日 9:10",
   "clinicNum": "M001234567",
@@ -13,6 +14,7 @@
   "doctor": "医生1",
   "amount": "5.00",
   "registerDate": "2016年08月12日 10:12",
-  "statusCode": "0",
-  "status": "未支付"
+  "statusCode": "2",
+  "status": "已完成",
+  "orderNum": "1"
 }
