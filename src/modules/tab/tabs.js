@@ -12,6 +12,7 @@
     $ionicConfigProvider.platform.android.backButton.previousTitleText('').icon('ion-android-arrow-back');
     $ionicConfigProvider.platform.ios.views.transition('ios');
     $ionicConfigProvider.platform.android.views.transition('android');
+    $ionicConfigProvider.form.checkbox('circle');
   });
 
   var tabCtrl = function($scope, $http, $state, $cordovaToast, userService) {

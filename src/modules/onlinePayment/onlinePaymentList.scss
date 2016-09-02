@@ -25,6 +25,113 @@
   }
 }
 
+.onlinePaymentList-content {
+  .recipes {
+    .item-checkbox {
+      border: transparent !important;
+      padding-left: 26px !important;
+      width: 42px;
+
+      .checkbox {
+        padding: 7px 2px;
+        top: 55%;
+
+        .checkbox-icon {
+          width: 24px;
+          height: 24px;
+
+          &:after {
+            top: 30%;
+            left: 20%;
+          }
+        }
+      }
+    }
+
+    .column-check {
+      width: 42px;
+    }
+
+    .column-content {
+      flex-grow: 1;
+    }
+
+    .column-other {
+      width: 80px;
+      text-align: right;
+    }
+
+    .font-major {
+      font-size: 16px;
+    }
+
+    .font-default {
+      font-size: 15px;
+      color: #999999;
+    }
+
+    .font-money {
+      font-size: 14px;
+      color: #999999;
+    }
+
+    .recipes-flex-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .recipes-flex-row-stretch {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .recipes-border-bottom {
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .recipe-title {
+      padding: 7px 8px 7px 0;
+      .column-check {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .column-content {
+        padding-left: 8px;
+      }
+    }
+
+    .recipe-check {
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .item-checkbox {
+        background-color: #f0f0f0;
+      }
+    }
+
+    .recipe {
+      padding: 12px 8px;
+
+      .items {
+        padding: 5px 0;
+      }
+    }
+
+    .column-margin-top {
+      margin-top: 3px;
+    }
+
+    .checkbox-disable {
+      width: 24px;
+      height: 24px;
+      margin: 3px 0;
+    }
+  }
+}
+
 .onlinePaymentList-footer {
   .pay-button {
     width: 100px;
