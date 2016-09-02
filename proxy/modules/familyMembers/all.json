@@ -9,8 +9,7 @@
     "phone": "13603001234",
     "medicalNum": "M001234567",
     "memberCode": "00",
-    "member": "我",
-    "patientVisits": "1"
+    "member": "我"
   },
   {
     "id": "2",
@@ -22,7 +21,6 @@
     "phone": "13603001235",
     "medicalNum": "M001234568",
     "memberCode": "10",
-    "member": "其他",
-    "patientVisits": "0"
+    "member": "其他"
   }
 ]
