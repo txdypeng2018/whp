@@ -83,14 +83,14 @@
                 data,
                 function (retData) {
                   var converseRet = angular.fromJson(retData);
-                  $cordovaToast.showShortBottom(retData);
+                  var failImagesSrc = './assets/images/umeng_update_close_bg_tap.png';
                   // 订单支付成功
                   if(converseRet.resultStatus === '9000') {
                     $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!'});
                     // 正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                     // 支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                   } else if(converseRet.resultStatus === '8000' || converseRet.resultStatus === '6004') {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付结果未知!请查看诊疗页!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付结果未知!请查看诊疗页!'});
                     // 用户中途取消
                   } else if(converseRet.resultStatus === '6001') {
                     var myPopup = $ionicPopup.show({
@@ -109,13 +109,13 @@
                     });
                     // 订单支付失败
                   } else if(converseRet.resultStatus === '4000') {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!'});
                     // 网络连接出错
                   } else if(converseRet.resultStatus === '6002') {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!网络连接出错!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!网络连接出错!'});
                     // 其它支付错误
                   } else {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!未知错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!未知错误!'});
                   }
                 }, function (retData) {
                   console.debug('retData', retData);
@@ -124,7 +124,7 @@
             }
           }).error(function (data) {
             console.debug('data', data);
-            $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!' + data);
+            $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
           });
 
           //微信支付
@@ -163,18 +163,19 @@
                   console.debug('retData', retData);
                   var converseRet = angular.fromJson(retData);
                   $cordovaToast.showShortBottom(retData);
+                  var failImagesSrc = './assets/images/umeng_update_close_bg_tap.png';
                   // 认证被否决
                   if(converseRet.code === -4) {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!认证被否决!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!认证被否决!'});
                     // 一般错误
                   } else if(converseRet.code === -1) {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!一般错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!一般错误!'});
                     // 发送失败
                   } else if(converseRet.code === -3) {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!发送失败!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!发送失败!'});
                     // 不支持错误
                   } else if(converseRet.code === -5) {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/umeng_update_close_bg_tap.png', resultText: '支付失败!不支持错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!不支持错误!'});
                     // 用户取消
                   } else if(converseRet.code === -2) {
                     var myPopup = $ionicPopup.show({
@@ -193,7 +194,6 @@
                     });
                   } else {
                     $cordovaToast.showShortBottom('内部错误!请联系管理员!');
-                    alert('支付宝插件返回错误:' + retData);
                   }
                 }).error(function (data) {
                   console.debug('data', data);
