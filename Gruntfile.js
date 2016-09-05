@@ -162,6 +162,9 @@ module.exports = function(grunt) {
     // Empties folders to start fresh
     clean: {
       dist: {
+        options:{
+          force:true	
+        },
         files: [{
           dot: true,
           src: [
@@ -398,6 +401,14 @@ module.exports = function(grunt) {
         cwd: '<%= app.src %>',
         dest: '.tmp/styles/',
         src: '**/*.css'
+      },
+      srcDist: {
+        files: [
+          {expand: true, cwd: '<%= app.src %>', src: ['**'], dest: '<%= app.dist %>/'},
+          {expand: true, src: ['bower_components/**'], dest: '<%= app.dist %>/'},
+          {expand: true, cwd: '.tmp', src: ['styles/**'], dest: '<%= app.dist %>/'},
+          {expand: true, cwd: '<%= app.src %>/assets', src: ['fonts/**'], dest: '<%= app.dist %>/styles/app/'},
+        ]
       }
     },
 
@@ -443,6 +454,32 @@ module.exports = function(grunt) {
         files: [
           {expand: true, flatten: true, src: ['<%= app.dist %>/styles/main*.css'], dest: '<%= app.dist %>/styles/'},
           {expand: true, flatten: true, src: ['<%= app.dist %>/scripts/scripts*.js'], dest: '<%= app.dist %>/scripts/'}
+        ]
+      },
+      srcDistFont: {
+        options: {
+          patterns: [
+            {
+              match: /\/styles\/fonts\//g,
+              replacement: './fonts/'
+            }
+          ]
+        },
+        files: [
+          {expand: true, flatten: true, src: ['<%= app.dist %>/styles/app/font.css'], dest: '<%= app.dist %>/styles/app/'}
+        ]
+      },
+      srcDistIndex: {
+        options: {
+          patterns: [
+            {
+              match: /\"\//g,
+              replacement: '\"./'
+            }
+          ]
+        },
+        files: [
+          {expand: true, flatten: true, src: ['<%= app.dist %>/index.html'], dest: '<%= app.dist %>/'}
         ]
       }
     }
@@ -491,6 +528,14 @@ module.exports = function(grunt) {
     'usemin',
     'htmlmin'
   ]);
+  
+  grunt.registerTask('srcDist', 'copy html and js source files to www directory for debug', function() {
+    grunt.task.run('clean:dist');
+    grunt.task.run('compass:dist');
+    grunt.task.run('copy:srcDist');
+    grunt.task.run('replace:srcDistFont');
+    grunt.task.run('replace:srcDistIndex');
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',

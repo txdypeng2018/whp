@@ -17,6 +17,8 @@ $ grunt
 $ grunt serve
 # 或仅发布资源
 $ ionic serve
+# 生成源码格式的www目录，以便在设备上调试html和javascript
+$ grunt srcDist
 
 # 一步恢复/重置平台和插件
 $ ionic state restore/reset
