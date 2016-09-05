@@ -41,6 +41,7 @@
   "cordovaPlugins": [
     "cordova-plugin-device",
     "cordova-plugin-console",
+    //"cordova-plugin-crosswalk-webview",
     "cordova-plugin-whitelist",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
@@ -49,8 +50,7 @@
     "cordova-plugin-proper-qdc-wxpay",
     "cordova-plugin-proper-kvstore",
     "cordova-plugin-x-toast",
-    "cordova-plugin-proper-properpush",
-    "cordova-plugin-crosswalk-webview"
+    "cordova-plugin-proper-properpush"
   ],
   "cordovaPlatforms": [
     "android",
