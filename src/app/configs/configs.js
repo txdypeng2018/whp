@@ -49,7 +49,7 @@
   };
 
   // Config JWT in http header and prefix of url
-  var CONTEXT = 'http://172.28.235.106:8094/isj';
+  var CONTEXT = 'http://59.46.70.149/isj';
   var requestIndex = 0;
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.refreshProcess = 0;
