@@ -13,10 +13,7 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreen" value="screen" />
-   <!--android targetSdk 4.4-->
     <preference name="android-targetSdkVersion" value="19" />
-    <!--android minSdk 4.1-->
     <preference name="android-minSdkVersion" value="16" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
@@ -73,4 +70,7 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
+    <plugin name="cordova-plugin-proper-qdc-wxpay" spec="~1.0.0">
+        <variable name="WECHAT_APPID" value="wxc7825f86d99f3d90" />
+    </plugin>
 </widget>
