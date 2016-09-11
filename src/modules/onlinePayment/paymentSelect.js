@@ -3,7 +3,6 @@
 
   var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup) {
     var orderNum = $stateParams.orderNum;
-
     //倒计时
     var updateTime = function() {
       if (!angular.isUndefined($scope.time.second)) {
@@ -38,8 +37,6 @@
       $scope.subject = data.name;
       // 商品描述
       $scope.body  = data.description;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
     });
 
     // TODO 因为接口还没有实现,使用暂时的数据

@@ -41,7 +41,7 @@
     }
 
     // 过滤支付请求
-    if(url.indexOf('pay') >= 0 || url.indexOf('order') >= 0) {
+    if(url.indexOf('/pay/') >= 0 || url.indexOf('/order/') >= 0) {
       isNeed = false;
     }
 

@@ -1,11 +1,29 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $cordovaToast) {
+  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $cordovaToast,$ionicPopup,$ionicHistory) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
-    $scope.districtId = '';
+    //默认选中南湖院区
+    $scope.districtId = '1';
     $scope.subjectId = '';
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+        if($stateParams.type === '1' || $stateParams.type === '2'){
+            //取得挂号须知
+            $http.get('/register/agreement').success(function(data) {
+                $scope.agreement = data;
+                $scope.showAgreement();
+            }).error(function(data){
+                $cordovaToast.showShortBottom(data);
+            });
+        }
+    });
+    $scope.$on('$ionicView.beforeLeave', function(){
+          if (myPopup !== null) {
+              myPopup.close();
+          }
+    });
 
     //取得学科列表
     var getSubjects = function() {
@@ -27,12 +45,11 @@
 
     //取得院区信息
     $http.get('/organization/districts').success(function(data) {
-      $scope.districts = [{id:'', name:'全部'}];
+      $scope.districts = [];
       for (var i = 0 ; i < data.length ; i++) {
         data[i].name = data[i].name + '院区';
         $scope.districts.push(data[i]);
       }
-
       getSubjects();
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
@@ -53,9 +70,11 @@
       if (!angular.isUndefined($scope.major) && $scope.major !== '') {
         if ($stateParams.type === '1') {
           $state.go('registerTodayDoctorList', {districtId: $scope.districtId, major: $scope.major});
+          $stateParams.type = '0';
         }
         else if ($stateParams.type === '2') {
           $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, major: $scope.major});
+          $stateParams.type = '0';
         }
       }
     };
@@ -87,13 +106,42 @@
       }
     };
 
+      var myPopup = null;
+      $scope.showAgreement = function() {
+          myPopup = $ionicPopup.show({
+              template: '<div style="padding: 3px;font-size:15px">'+$scope.agreement+'</div>',
+              title: '挂号须知',
+              cssClass: 'agreement-popup',
+              buttons: [
+                  {
+                      text: '同意',
+                      type: 'button-positive',
+                      onTap: function(e) {
+                          e.preventDefault();
+                          myPopup.close();
+                      }
+                  },{
+                      text: '不同意',
+                      onTap: function(e) {
+                          e.preventDefault();
+                          myPopup.close();
+                          $ionicHistory.goBack();
+
+                      }
+                  }
+              ]
+          });
+      };
+
     //右侧一级科室选择事件
     $scope.subjectRightClk = function(id) {
       if ($stateParams.type === '1') {
         $state.go('registerTodayDoctorList', {districtId: $scope.districtId, subjectId: id});
+        $stateParams.type = '0';
       }
       else if ($stateParams.type === '2') {
         $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, subjectId: id});
+        $stateParams.type = '0';
       }
     };
   };

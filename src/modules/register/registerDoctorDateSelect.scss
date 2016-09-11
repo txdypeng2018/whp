@@ -14,27 +14,17 @@
   width: 100%;
   padding-bottom: 8px;
   border-bottom: 1px solid #dddddd;
-
+  overflow: auto;
   .month {
-    padding: 5px 0 0 5px;
-  }
-
-  .day-selected {
-    border-radius: 50%;
-    background-color: #d0eaeb;
-    height: 22px;
-    width: 22px;
-    display: inline-block;
-    text-align: center;
+    padding: 5px 0 0 7px;
   }
 
   table {
     width: 100%;
-
+    table-layout: fixed;
     td {
       text-align: center;
       vertical-align: middle !important;
-
       i {
         font-size: 18px;
       }
@@ -54,7 +44,51 @@
 }
 
 .registerDoctorDateSelect-content {
-  top: 121px !important;
+  top: 171px !important;
+
+  .list {
+    li:first-child {
+      border-top: 0;
+    }
+
+    .item.item-avatar-left {
+      padding-left: 86px;
+
+      .photo {
+        max-width: 55px;
+        max-height: 55px;
+        top: 18px;
+      }
+
+      .name {
+        display: flex;
+        flex-direction: row;
+
+        h2 {
+          display: inline-block;
+        }
+
+        p {
+          display: inline-block;
+          margin-left: 8px;
+        }
+
+        .can-register {
+          color: #ffffff;
+          font-size: 12px;
+          display: inline-block;
+          border-radius: 3px;
+          padding: 0 5px;
+          margin-left: 8px;
+          transform: scale(0.9,0.9);
+        }
+      }
+    }
+  }
+}
+
+.registerDoctorSelect-content {
+  top: 101px !important;
 
   .list {
     li:first-child {

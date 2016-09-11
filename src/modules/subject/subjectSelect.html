@@ -5,6 +5,7 @@
     <div class="title">科室列表</div>
     <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
   </ion-header-bar>
+
   <div ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
     <form ng-submit="doSearch()">
       <input id="subjectSelect_search_{{type}}" type="search" ng-model="major" placeholder="专业/专长">
@@ -13,6 +14,7 @@
       <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
     </div>
   </div>
+
   <div class="district-select has-header">
     <div class="button-bar">
       <button ng-repeat="district in districts" ng-class="{false: 'button-outline'}[districtId == district.id]" class="button button-positive district-button"
@@ -21,6 +23,7 @@
       </button>
     </div>
   </div>
+
   <ion-content class="has-header has-header-district content-fill subjectSelect-content">
     <div class="subject-select">
       <ion-scroll class="subject-scroll subject-scroll-left">
