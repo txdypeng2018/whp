@@ -6,11 +6,13 @@
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.todayDisplay = $filter('date')(new Date(),'yyyy年MM月dd日');
 
+    $scope.isChecked = true;
+
     //取得挂号须知
     $http.get('/register/agreement').success(function(data) {
       $scope.agreement = data;
       if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
-        $scope.showAgreement();
+
       }
     }).error(function(data){
       $cordovaToast.showShortBottom(data);

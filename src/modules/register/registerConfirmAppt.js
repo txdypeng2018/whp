@@ -9,9 +9,6 @@
     //取得挂号须知
     $http.get('/register/agreement').success(function(data) {
       $scope.agreement = data;
-      if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
-        $scope.showAgreement();
-      }
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });
@@ -24,6 +21,10 @@
       });
     };
     getPatient();
+
+    //若选中则代表同意规则
+    $scope.isChecked = true;
+
     //取得关系类别
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;

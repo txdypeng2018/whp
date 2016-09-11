@@ -45,16 +45,30 @@
     }
   }
 
-  .agreement {
+  .visits {
+    display: flex;
+    flex-direction: row-reverse;
     border-bottom: 1px solid #dddddd;
-    padding: 5px 0;
-    position: relative;
-    color: #999999;
 
-    i {
-      position: absolute;
-      right: 5px;
-      top: 5px;
+    .item-checkbox {
+      position:relative;
+      right: 10px;
+      border-right: none;
+      border-left: none;
+      padding: 0 15px 0 30px;
+    }
+
+    .agreement {
+      padding:  5px !important;
+      flex-basis: 97%;
+      position: relative;
+      color: #999999;
+      font-size: 15px;
+      i {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+      }
     }
   }
 

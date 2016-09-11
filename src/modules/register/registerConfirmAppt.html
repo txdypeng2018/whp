@@ -40,15 +40,23 @@
         </tr>
       </table>
     </div>
-    <div class="agreement" ng-click="showAgreement()">
-      我已了解并同意一下挂号规则（点击查看详细）
-      <i class="icon ion-ios-arrow-down positive"></i>
-    </div>
+
+
+      <div class="visits">
+          <h4  class="agreement"  ng-click="showAgreement()">
+              我已了解并同意挂号规则（点击查看详细）
+          </h4>
+          <ion-checkbox class="item-checkbox" ng-model="isChecked">
+
+          </ion-checkbox>
+      </div>
+
+
     <div class="amount">
       合计：{{doctor.amount}}元
     </div>
     <div class="confirm">
-      <button class="button button-positive" ng-click="registerConfirm()">确定</button>
+      <button class="button button-positive" ng-click="registerConfirm()" ng-disabled="!isChecked">确定</button>
     </div>
   </ion-content>
 </ion-view>

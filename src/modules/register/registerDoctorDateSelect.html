@@ -5,6 +5,7 @@
     <div class="title"></div>
     <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
   </ion-header-bar>
+
   <div ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
     <form ng-submit="doSearch()">
       <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="专业/专长">
@@ -13,23 +14,39 @@
       <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
     </div>
   </div>
-  <div class="registerDoctorDateSelect-date has-header">
-    <div class="positive month">{{selectDays[0].month}}月</div>
-    <table>
-      <tr>
-        <td ng-repeat="oneDay in selectDays" class="week" width="13%" ng-click="dayClk($index, '{{oneDay.date}}')">{{oneDay.week}}</td>
-        <td rowspan="2" width="9%" ng-click="dayPicker()">
-          <i class="icon ion-ios-arrow-down positive"></i>
-        </td>
-      </tr>
-      <tr>
-        <td ng-repeat="oneDay in selectDays" class="day" ng-click="dayClk($index, '{{oneDay.date}}')">
-          <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">{{oneDay.day}}</div>
-        </td>
-      </tr>
-    </table>
+
+  <div class="district-select has-header">
+        <div class="button-bar">
+            <button ng-class="{false: 'button-outline'}[districtId == '1']" class="button button-positive district-button"
+                    ng-click="districtClk('1')">
+                预约时间
+            </button>
+            <button ng-class="{false: 'button-outline'}[districtId == '2']" class="button button-positive district-button"
+                    ng-click="districtClk('2')">
+                预约医生
+            </button>
+        </div>
   </div>
-  <ion-content class="has-header content-fill registerDoctorDateSelect-content">
+
+  <div class="registerDoctorDateSelect-date has-header-district" ng-show="dataPicker.isShow">
+        <div class="positive month">{{selectDays[0].month}}月</div>
+      <table>
+          <tr>
+              <td ng-repeat="oneDay in selectDays" class="week" width="13%" ng-click="dayClk($index, '{{oneDay.date}}')">{{oneDay.week}}</td>
+              <td rowspan="2" width="9%" ng-click="dayPicker()">
+                  <i class="icon ion-ios-arrow-down positive"></i>
+              </td>
+          </tr>
+          <tr>
+              <td ng-repeat="oneDay in selectDays" class="day" ng-click="dayClk($index, '{{oneDay.date}}')">
+                  <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">{{oneDay.day}}</div>
+              </td>
+          </tr>
+      </table>
+  </div>
+
+  <ion-content ng-class="{false: 'registerDoctorSelect-content'}[dataPicker.isShow]"
+               class="has-header content-fill registerDoctorDateSelect-content">
     <ul ng-if="doctors.length > 0" class="list">
       <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.overCount)">
         <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
