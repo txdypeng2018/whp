@@ -9,7 +9,7 @@
     $scope.subjectId = '';
 
     $scope.$on('$ionicView.beforeEnter', function(){
-        if($stateParams.type === '1' || $stateParams.type === '2'){
+        if($scope.type === '1' || $scope.type === '2'){
             //取得挂号须知
             $http.get('/register/agreement').success(function(data) {
                 $scope.agreement = data;
@@ -70,11 +70,11 @@
       if (!angular.isUndefined($scope.major) && $scope.major !== '') {
         if ($stateParams.type === '1') {
           $state.go('registerTodayDoctorList', {districtId: $scope.districtId, major: $scope.major});
-          $stateParams.type = '0';
+          $scope.type = '0';
         }
         else if ($stateParams.type === '2') {
           $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, major: $scope.major});
-          $stateParams.type = '0';
+          $scope.type = '0';
         }
       }
     };
@@ -137,11 +137,11 @@
     $scope.subjectRightClk = function(id) {
       if ($stateParams.type === '1') {
         $state.go('registerTodayDoctorList', {districtId: $scope.districtId, subjectId: id});
-        $stateParams.type = '0';
+          $scope.type = '0';
       }
       else if ($stateParams.type === '2') {
         $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, subjectId: id});
-        $stateParams.type = '0';
+          $scope.type = '0';
       }
     };
   };
