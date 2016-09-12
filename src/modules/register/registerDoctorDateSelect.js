@@ -10,7 +10,13 @@
     $scope.dataPicker = {
         isShow:true
     };
-
+    //不同的院区的颜色
+    $scope.districtColor = new Map();
+    //颜色数组
+    var color = ['district-icon-positive','district-icon-balanced',
+        'district-icon-royal','district-icon-calm','district-icon-assertive'];
+    //院区数量
+    var districtCount = 0;
     var displayDays = 7;
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
@@ -52,7 +58,18 @@
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
         $scope.doctors = data;
+        var id;
         for (var i = 0 ; i < data.length ; i++) {
+            id = data[i].districtId;
+          if(i>0){
+              if(data[i].districtId !== data[i-1].districtId){
+                  districtCount++;
+                  $scope.districtColor.set(id,color[districtCount-1]);
+              }
+          }else{
+              districtCount = 1;
+              $scope.districtColor.set(id,color[districtCount-1]);
+          }
           getDoctorPhoto(data[i].id, i);
         }
       }).error(function(data){
