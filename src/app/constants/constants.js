@@ -8,7 +8,6 @@
     {
       'piwikServer' : 'https://server.propersoft.cn:8082',
       'piwikTrackTarget' : 'server.propersoft.cn/isj',
-      'paymentServer' : 'https://server.propersoft.cn/pep-isj',
       'properpush':{
 	  		'appId':'isj',
 	  		'pushUrl':'https://www.wideunique.top:5555/properpush',

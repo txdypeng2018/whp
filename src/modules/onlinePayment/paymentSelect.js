@@ -61,7 +61,7 @@
             body: $scope.body,
             totalFee: $scope.amount
           };
-          $http.post(appConstants.paymentServer + '/pay/ali/prepayInfo', aliprepay).success(function (data) {
+          $http.post('/pay/ali/prepayInfo', aliprepay).success(function (data) {
             console.debug('data:', data);
             // 如果请求结果正常
             if (data.resultCode === '0') {
@@ -124,7 +124,7 @@
             detail: $scope.subject,
             totalFee: totalFee
           };
-          $http.post(appConstants.paymentServer + '/pay/weixin/prepayInfo', weixinpay).success(function (data) {
+          $http.post('/pay/weixin/prepayInfo', weixinpay).success(function (data) {
             console.debug('data:', data);
             // 如果请求结果正常
             if (data.resultCode === '0') {
