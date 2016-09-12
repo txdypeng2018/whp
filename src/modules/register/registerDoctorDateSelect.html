@@ -60,8 +60,7 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-        <div class="positive-border district-icon" ng-class="{'南湖': 'district-icon-positive',
-        '滑翔': 'district-icon-balanced', '沈北': 'district-icon-royal'}[doctor.district]"></div>
+          <div class="positive-border district-icon" ng-class="districtColor.get(doctor.districtId)"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>

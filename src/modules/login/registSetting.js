@@ -60,11 +60,11 @@
 
     //验证身份证号
     var identityCodeValid = function(code) {
-        var pass = true;
-        if(code.length !== 15 || code.length !== 18){
-            pass = false;
+        var pass = false;
+        if(code.length === 15 || code.length === 18){
+            pass = true;
         }
-      return pass;
+        return pass;
     };
 
     //页面验证

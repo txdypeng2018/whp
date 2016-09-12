@@ -1,7 +1,8 @@
 $positiveColor: #387ef5;
 $balancedColor: #33cd5f;
 $royalColor: #886aea;
-
+$calmColor:#38D1EA;
+$assertive:#EA3B2E;
 /* ion-header-bar common css */
 ion-header-bar {
   .icon-return {
@@ -166,6 +167,12 @@ a {
 }
 .district-icon-royal {
   border-top: 50px solid $royalColor;
+}
+.district-icon-calm {
+  border-top: 50px solid $calmColor;
+}
+.district-icon-assertive {
+  border-top: 50px solid $assertive;
 }
 .district-icon-font {
   position: absolute;

@@ -1,9 +1,9 @@
 <ion-view>
   <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
   <ion-header-bar class="bar-light">
-    <isj-back-button></isj-back-button>
-    <div class="title">
-      王二的缴费
+    <isj-back-button go-back="goBack()"></isj-back-button>
+    <div class="title" ng-click="selectMember()">
+      <span ng-if="patient.memberCode=='00'">我</span><span ng-if="patient.memberCode!='00'">{{patient.name}}</span>的缴费
       <i class="icon ion-ios-arrow-down positive operation-down"></i>
     </div>
   </ion-header-bar>
@@ -14,11 +14,47 @@
       <i class="icon ion-ios-arrow-down positive"></i>
     </label>
   </ion-header-bar>
-  <ion-content class="has-header has-subheader has-footer content-fill">
-    <div class="no-content-center">暂时没有缴费信息</div>
+  <ion-content class="has-header has-subheader has-footer content-fill onlinePaymentList-content">
+    <div ng-if="recipes.length > 0" class="recipes">
+      <div ng-repeat="recipe in recipes">
+        <div class="recipes-flex-row recipes-border-bottom recipe-title">
+          <span class="column-check">
+            <ion-checkbox ng-if="recipe.canCheck" ng-model="recipe.isCheck" ng-change="checkClk('0', recipe.outpatientNum)"></ion-checkbox>
+            <img ng-if="!recipe.canCheck" class="checkbox-disable" src="./assets/images/btn_check_off_disable.png"/>
+          </span>
+          <span class="column-content font-major">门诊流水号：{{recipe.outpatientNum}}</span>
+          <span class="column-other font-default">{{recipe.outpatientDate.substring(5,11)}}</span>
+        </div>
+        <div ng-repeat="recipeOne in recipe.recipes">
+          <div class="recipes-flex-row-stretch recipes-border-bottom">
+            <span class="column-check recipe-check">
+              <ion-checkbox ng-if="recipeOne.statusCode == '0'" ng-model="recipeOne.isCheck" ng-change="checkClk('1', recipe.outpatientNum, recipeOne.recipeNum)"></ion-checkbox>
+              <img ng-if="recipeOne.statusCode != '0'" class="checkbox-disable" src="./assets/images/btn_check_off_disable.png"/>
+            </span>
+            <span class="column-content recipe">
+              <div class="recipes-flex-row">
+                <span class="column-content font-default">处方号：{{recipeOne.recipeNum}}</span>
+                <span class="column-other font-default positive">{{recipeOne.status}}</span></div>
+              <div class="items">
+                <div ng-repeat="item in recipeOne.items" class="recipes-flex-row column-margin-top">
+                  <span class="column-content font-major">{{item.name}}</span>
+                  <span class="column-other font-money">{{item.amount}}×{{item.number}}</span>
+                </div>
+              </div>
+              <div class="font-default column-margin-top">执行科室：{{recipeOne.dept}}</div>
+              <div class="recipes-flex-row column-margin-top">
+                <span class="column-content font-default">执行地点：{{recipeOne.location==''?'请在院内咨询':recipeOne.location}}</span>
+                <span class="column-other font-major">￥{{recipeOne.total}}</span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="recipes.length == 0" class="no-content-center">暂时没有缴费信息</div>
   </ion-content>
   <ion-footer-bar align-title="left" class="bar-light onlinePaymentList-footer">
-    <h1 class="title">合计：&nbsp;<span class="positive">￥0.00元</span></h1>
-    <button class="button button-positive pay-button">支付</button>
+    <h1 class="title">合计：&nbsp;<span class="positive">￥{{amount}}元</span></h1>
+    <button class="button button-positive pay-button" ng-disabled="isSubmit || recipeNums.length == 0" ng-click="payClk()">支付</button>
   </ion-footer-bar>
 </ion-view>
