@@ -65,9 +65,11 @@
          $scope.districtId = id;
         if(id === '1'){
             $scope.dataPicker.isShow = true;
-        }else{
-            $scope.dataPicker.isShow = false;
             $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
+        }
+        if(id === '2'){
+            $scope.dataPicker.isShow = false;
+            $scope.daySelected = '';
         }
     };
 
@@ -172,6 +174,9 @@
     //医生选中事件
     $scope.doctorClk = function(doctorId, overCount) {
       if (overCount > 0) {
+        if(!$scope.dataPicker.isShow){
+            $scope.daySelected = '';
+        }
         $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected});
       }
     };
