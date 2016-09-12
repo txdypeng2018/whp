@@ -39,16 +39,6 @@
       $scope.body  = data.description;
     });
 
-    // TODO 因为接口还没有实现,使用暂时的数据
-    // 暂时生成临时订单号
-    orderNum = new Date().getTime();
-    // 总金额 必填 订单总金额，单位为"元"
-    $scope.amount = '0.01';
-    // 商品名称
-    $scope.subject = '挂号费';
-    // 商品描述
-    $scope.body = '门诊挂号费用';
-
     //支付方式选择事件
     $scope.paySelectValue = '';
     $scope.paymentSelect = function(value) {
