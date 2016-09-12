@@ -49,8 +49,8 @@
                class="has-header content-fill registerDoctorDateSelect-content">
     <ul ng-if="doctors.length > 0" class="list">
       <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.overCount)">
-        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
-        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id, $event)">
+        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" onerror="this.src='./assets/images/doctor_man.png'" class="photo" ng-click="photoClk(doctor.id, $event)">
+        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" onerror="this.src='./assets/images/doctor_man.png'" class="photo" ng-click="photoClk(doctor.id, $event)">
         <img ng-if="doctor.photo != null && doctor.photo != ''" ng-src="{{doctor.photo}}" class="photo" ng-click="photoClk(doctor.id, $event)">
         <div class="name">
           <h2>{{doctor.name}}</h2>
@@ -60,7 +60,8 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-        <div class="positive-border district-icon" ng-class="{'1': 'district-icon-positive', '2': 'district-icon-balanced', '3': 'district-icon-royal'}[doctor.districtId]"></div>
+        <div class="positive-border district-icon" ng-class="{'南湖': 'district-icon-positive',
+        '滑翔': 'district-icon-balanced', '沈北': 'district-icon-royal'}[doctor.district]"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>
