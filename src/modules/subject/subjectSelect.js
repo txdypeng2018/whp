@@ -4,8 +4,7 @@
   var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $cordovaToast,$ionicPopup,$ionicHistory) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
-    //默认选中南湖院区
-    $scope.districtId = '1';
+
     $scope.subjectId = '';
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -47,9 +46,10 @@
     $http.get('/organization/districts').success(function(data) {
       $scope.districts = [];
       for (var i = 0 ; i < data.length ; i++) {
-        data[i].name = data[i].name + '院区';
         $scope.districts.push(data[i]);
       }
+      //默认选中南湖院区
+      $scope.districtId = data[0].id;
       getSubjects();
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
@@ -126,12 +126,11 @@
                           e.preventDefault();
                           myPopup.close();
                           $ionicHistory.goBack();
-
                       }
                   }
               ]
           });
-      };
+       };
 
     //右侧一级科室选择事件
     $scope.subjectRightClk = function(id) {
