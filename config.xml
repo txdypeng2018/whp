@@ -73,4 +73,7 @@
     <plugin name="cordova-plugin-proper-qdc-wxpay" spec="~1.0.0">
         <variable name="WECHAT_APPID" value="wxc7825f86d99f3d90" />
     </plugin>
+    <plugin name="cordova-plugin-proper-qdc-alipay" spec="~1.0.0">
+        <variable name="ALIPAY_SCHEMA" value="properijsalipay" />
+    </plugin>
 </widget>
