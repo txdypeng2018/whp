@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, $cordovaToast, userService) {
+  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, $cordovaToast, userService, $properProperpush) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.input = {
         phone: '',
@@ -26,6 +26,14 @@
         password: $scope.input.password
       };
       $http.post('/permission/login', phoneAndPwd).success(function(data) {
+        //PUSH START
+        //推送相关的参数
+        var kvs={userid:$scope.input.phone.toString(),otherInfo:''};
+        //初始化推送
+        $properProperpush.bindUserid(kvs).then(function(){
+          console.log('用户绑定成功');
+        },function(error){alert('error:'+error);});
+        //PUSH END
         userService.setToken(data);
         if (angular.isUndefined($stateParams.skipId) || $stateParams.skipId === '') {
           $ionicHistory.goBack();

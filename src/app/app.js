@@ -11,7 +11,7 @@
     'properNgCordova'
   ];
   angular.module('isj', deps)
-  .run(function($ionicPlatform,$window,$properProperpush,appConstants) {
+  .run(function($ionicPlatform,$window,$properProperpush,appConstants, $state, $ionicPopup) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -37,10 +37,38 @@
   		//说明是在ios设备上，当前应用程序正在打开状态，这时不会发送通知到状态栏
   		//而是直接在程序里接收到通知，这时，可以在程序里显示一个alert,说明收到通知了
   		if(event.properAlert){
-  			alert('ios 收到alert 通知'+JSON.stringify(event.properCustoms));
+  			//alert('ios 收到alert 通知'+JSON.stringify(event.properCustoms));
+        if('messages' === event.properCustoms.pageUrl) {
+          var myPopup = $ionicPopup.show({
+            template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'您有新的消息'+'</div>',
+            title: '掌上盛京医院',
+            buttons: [
+              {
+                text: '我知道了',
+                type: 'positive',
+                onTap: function(e) {
+                  e.preventDefault();
+                  myPopup.close();
+                }
+              },
+              {
+                text: '前往查看',
+                type: 'positive',
+                onTap: function(e) {
+                  e.preventDefault();
+                  myPopup.close();
+                  $state.go('tab.message');
+                }
+              }
+            ]
+          });
+        }
   		}else{
   			//点击状态栏的通知，进入程序
-  			alert('打开notification通知'+JSON.stringify(event.properCustoms));
+  			//alert('打开notification通知'+JSON.stringify(event.properCustoms));
+        if('messages' === event.properCustoms.pageUrl) {
+          $state.go('tab.message');
+        }
   		}
   		//event.properCustoms ，推送时自定义的键值对
   		//properCustoms 固定的系统键值对：

@@ -45,8 +45,6 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-splashscreen",
-    "cordova-plugin-proper-qdc-alipay",
-    "cordova-plugin-proper-qdc-wxpay",
     "cordova-plugin-proper-kvstore",
     "cordova-plugin-x-toast",
     "cordova-plugin-proper-properpush"
