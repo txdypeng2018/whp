@@ -83,6 +83,7 @@
     $scope.districtClk = function(id) {
       if ($scope.districtId !== id) {
         $scope.districtId = id;
+        $scope.subjectRights = '';
         getSubjects();
       }
     };
@@ -114,18 +115,19 @@
               cssClass: 'agreement-popup',
               buttons: [
                   {
-                      text: '同意',
-                      type: 'button-positive',
-                      onTap: function(e) {
-                          e.preventDefault();
-                          myPopup.close();
-                      }
-                  },{
                       text: '不同意',
                       onTap: function(e) {
                           e.preventDefault();
                           myPopup.close();
                           $ionicHistory.goBack();
+                      }
+                  },
+                  {
+                      text: '同意',
+                      type: 'button-positive',
+                      onTap: function(e) {
+                          e.preventDefault();
+                          myPopup.close();
                       }
                   }
               ]
