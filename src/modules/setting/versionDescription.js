@@ -1,8 +1,10 @@
 (function(app) {
   'use strict';
 
-  var versionDescriptionCtrl = function() {
-
+  var versionDescriptionCtrl = function($scope, $http) {
+    $http.get('/app/latest').success(function(data) {
+      $scope.description = data.note;
+    });
   };
 
   var mainRouter = function($stateProvider) {
