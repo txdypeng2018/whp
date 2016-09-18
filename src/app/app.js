@@ -85,7 +85,7 @@
   	function checkAppVersion(){
        $properProperpush.getDeviceInfo().then(function(success){
            if(success.type==='android'){
-              $http.get('app/latest', {params: {}}).success(function(data) {
+              $http.get('/app/latest', {params: {}}).success(function(data) {
                       var versionInfo={};
                       versionInfo.ver=data.ver||'0';
                       versionInfo.url=data.url||'';
