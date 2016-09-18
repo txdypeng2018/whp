@@ -18,10 +18,11 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "angular": false,
-    "Piwik": false,
+    "alert": false,
     "alipay": false,
-    "wxpay": false,
-    "alert": false
+    "angular": false,
+    "cordova": false,
+    "Piwik": false,
+    "wxpay": false
   }
 }

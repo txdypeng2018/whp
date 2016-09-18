@@ -39,6 +39,7 @@
     "node": ">=0.10.0"
   },
   "cordovaPlugins": [
+    "cordova-plugin-app-version",
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-whitelist",

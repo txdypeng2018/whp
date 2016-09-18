@@ -2,6 +2,14 @@
   'use strict';
 
   var appAboutCtrl = function($scope, $http, $state, userService) {
+    cordova.getAppVersion.getVersionNumber(function (versionNumber) {
+      $scope.versionNumber = versionNumber;
+    });
+
+    cordova.getAppVersion.getVersionCode(function (versionCode) {
+      $scope.versionCode = versionCode;
+    });
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
     });
