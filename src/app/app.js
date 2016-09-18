@@ -11,7 +11,7 @@
     'properNgCordova'
   ];
   angular.module('isj', deps)
-  .run(function($ionicPlatform,$window,$properProperpush,appConstants, $state, $ionicPopup) {
+  .run(function($ionicPlatform,$window,$properProperpush,appConstants, $state, $ionicPopup,$http,$cordovaToast) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -81,7 +81,32 @@
   	document.addEventListener('Properpush.openNotification', onOpenNotification, false);
   	//push end
 
+    //检查程序版本
+  	function checkAppVersion(){
+       $properProperpush.getDeviceInfo().then(function(success){
+           if(success.type==='android'){
+              $http.get('app/latest', {params: {}}).success(function(data) {
+                      var versionInfo={};
+                      versionInfo.ver=data.ver||'0';
+                      versionInfo.url=data.url||'';
+                      versionInfo.note=data.note||'有新版本需要更新！';
+                      window.plugins.UpdateVersion.checkVersion(versionInfo);
+                    }).error(function(data){
+                      $cordovaToast.showShortBottom(data);
+               });
+
+           }
+        },function(error){alert('error:'+error);});
+  	}
+    document.addEventListener('resume', function() {
+       //code for action on resume
+       checkAppVersion();
+    }, false);
+    checkAppVersion();
+    
 	});
+
+
 });
 
   if (typeof String.prototype.startsWith !== 'function') {
