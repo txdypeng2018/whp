@@ -144,15 +144,13 @@
                 // 支付成功
                 function (retData) {
                   console.debug('retData', retData);
-                  $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!'});
-                  // 支付异常
-                }, function (retData) {
-                  console.debug('retData', retData);
                   var converseRet = angular.fromJson(retData);
-                  $cordovaToast.showShortBottom(retData);
                   var failImagesSrc = './assets/images/umeng_update_close_bg_tap.png';
-                  // 认证被否决
-                  if(converseRet.code === -4) {
+                  // 正常支付
+                  if(converseRet.code === 0) {
+                    $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!'});
+                    // 认证被否决
+                  } else if(converseRet.code === -4) {
                     $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!认证被否决!'});
                     // 一般错误
                   } else if(converseRet.code === -1) {
@@ -179,13 +177,15 @@
                         }
                       ]
                     });
-                  } else {
-                    $cordovaToast.showShortBottom('内部错误!请联系管理员!');
                   }
-                }).error(function (data) {
-                  console.debug('data', data);
-                  $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
-                });
+                  // 支付异常
+                }, function (retData) {
+                  console.debug('retData:', retData);
+                  $cordovaToast.showShortBottom('内部错误!请联系管理员!');
+              }).error(function (data) {
+                console.debug('data', data);
+                $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
+              });
             }
           });
         }
