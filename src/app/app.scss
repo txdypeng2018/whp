@@ -102,7 +102,7 @@ ion-content {
 }
 
 .has-header-district {
-  top: 94px !important;
+  margin-top: 50px !important;
 }
 
 .positive {
@@ -137,7 +137,7 @@ a {
 
     input {
       margin-left: 12px;
-      margin-top: 4px;
+      height: 30px;
       width: 100%;
     }
   }
@@ -146,6 +146,7 @@ a {
     width: 48px;
 
     a.button.button-clear.icon:before {
+      margin-left: 16px;
       font-size: 26px;
     }
   }

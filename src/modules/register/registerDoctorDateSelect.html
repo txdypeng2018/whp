@@ -6,14 +6,14 @@
     <a class="button button-clear icon ion-ios-search-strong positive" ng-click="searchClk()"></a>
   </ion-header-bar>
 
-  <div ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
+  <ion-header-bar ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
     <form ng-submit="doSearch()">
       <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="专业/专长">
     </form>
     <div class="search-icon">
         <a class="button button-clear icon ion-ios-close-empty positive" ng-click="searchClk()"></a>
     </div>
-  </div>
+  </ion-header-bar>
 
   <div class="district-select has-header">
         <div class="button-bar">
@@ -28,7 +28,7 @@
         </div>
   </div>
 
-  <div class="registerDoctorDateSelect-date has-header-district" ng-show="dataPicker.isShow">
+  <div class="registerDoctorDateSelect-date has-header-district has-header" ng-show="dataPicker.isShow">
         <div class="positive month">{{selectDays[0].month}}月</div>
       <table>
           <tr>
