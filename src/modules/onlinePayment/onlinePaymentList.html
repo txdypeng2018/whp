@@ -28,7 +28,7 @@
         <div ng-repeat="recipeOne in recipe.recipes">
           <div class="recipes-flex-row-stretch recipes-border-bottom">
             <span class="column-check recipe-check">
-              <ion-checkbox ng-if="recipeOne.statusCode == '0'" ng-model="recipeOne.isCheck" ng-change="checkClk('1', recipe.outpatientNum, recipeOne.recipeNum)"></ion-checkbox>
+              <ion-checkbox ng-if="recipeOne.statusCode == '0'" ng-model="recipeOne.isCheck" ng-disabled="true" ng-change="checkClk('1', recipe.outpatientNum, recipeOne.recipeNum)"></ion-checkbox>
               <img ng-if="recipeOne.statusCode != '0'" class="checkbox-disable" src="./assets/images/btn_check_off_disable.png"/>
             </span>
             <span class="column-content recipe">

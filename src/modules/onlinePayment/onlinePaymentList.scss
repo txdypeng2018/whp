@@ -26,6 +26,11 @@
 }
 
 .onlinePaymentList-content {
+  .checkbox input:disabled:checked:before, .checkbox input:disabled:checked + .checkbox-icon:before {
+    background: #387ef5;
+    border-color: #387ef5;
+  }
+
   .recipes {
     .item-checkbox {
       border: transparent !important;
@@ -50,6 +55,7 @@
 
     .column-check {
       width: 42px;
+      min-width: 42px;
     }
 
     .column-content {
