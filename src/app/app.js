@@ -89,7 +89,7 @@
                       var versionInfo={};
                       versionInfo.ver=data.ver||'0';
                       versionInfo.url=data.url||'';
-                      versionInfo.note=data.note||'有新版本需要更新！';
+                      versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
                       window.plugins.UpdateVersion.checkVersion(versionInfo);
                     }).error(function(data){
                       $cordovaToast.showShortBottom(data);
@@ -103,7 +103,7 @@
        checkAppVersion();
     }, false);
     checkAppVersion();
-    
+
 	});
 
 

@@ -2,8 +2,10 @@
   'use strict';
 
   var versionDescriptionCtrl = function($scope, $http) {
-    $http.get('/app/latest').success(function(data) {
-      $scope.description = data.note;
+    cordova.getAppVersion.getVersionCode(function (versionCode) {
+      $http.get('/app/versions/' + versionCode).success(function(data) {
+        $scope.description = data.note;
+      });
     });
   };
 
