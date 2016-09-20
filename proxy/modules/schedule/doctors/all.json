@@ -15,7 +15,7 @@
   {
     "id": "2",
     "name": "姓名2",
-    "sexCode": "2",
+    "sexCode": "0",
     "title": "副主任医师",
     "districtId": "2",
     "district": "滑翔",
@@ -28,7 +28,7 @@
   {
     "id": "3",
     "name": "姓名3",
-    "sexCode": "2",
+    "sexCode": "0",
     "title": "副主任医师",
     "districtId": "3",
     "district": "沈北",

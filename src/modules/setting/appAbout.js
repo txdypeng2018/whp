@@ -12,6 +12,14 @@
 
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
+      if ($scope.isLogin) {
+        $http.get('/user/tokenVal').error(function(data, status){
+          if (status === 401) {
+            userService.clearToken();
+            $scope.isLogin = false;
+          }
+        });
+      }
     });
 
     //取得客服电话

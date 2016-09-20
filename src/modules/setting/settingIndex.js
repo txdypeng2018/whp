@@ -1,9 +1,17 @@
 (function(app) {
   'use strict';
 
-  var settingIndexCtrl = function($scope, $state, $ionicPopup, userService) {
+  var settingIndexCtrl = function($scope, $state, $http, $ionicPopup, userService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
+      if ($scope.isLogin) {
+        $http.get('/user/tokenVal').error(function(data, status){
+          if (status === 401) {
+            userService.clearToken();
+            $scope.isLogin = false;
+          }
+        });
+      }
     });
     $scope.$on('$ionicView.beforeLeave', function(){
       if (confirmPopup !== null) {
