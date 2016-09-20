@@ -11,7 +11,7 @@
         <div>
           <span>
             <img ng-if="member.memberCode == '00' && member.sexCode == '1'" src="./assets/images/pic_man.png">
-            <img ng-if="member.memberCode == '00' && member.sexCode == '2'" src="./assets/images/pic_woman.png">
+            <img ng-if="member.memberCode == '00' && member.sexCode == '0'" src="./assets/images/pic_woman.png">
             <img ng-if="member.memberCode != '00'" ng-src="{{memberTypes[member.memberCode].img}}">
           </span>
           <span class="name">

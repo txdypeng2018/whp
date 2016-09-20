@@ -16,7 +16,7 @@
           <tr>
             <td class="label">
               <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png">
-              <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png">
+              <img ng-if="patient.memberCode == '00' && patient.sexCode == '0'" src="./assets/images/pic_woman.png">
               <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}">
             </td>
             <td>

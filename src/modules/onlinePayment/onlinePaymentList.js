@@ -43,6 +43,11 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      //取得就诊人
+      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+        $scope.patient = data;
+      });
+
       $scope.isSubmit = false;
       getPayments($scope.searchStr);
     });
@@ -52,10 +57,6 @@
       $state.go('tab.main');
     };
 
-    //取得就诊人
-    $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
-      $scope.patient = data;
-    });
     //选择家庭成员
     $scope.selectMember = function() {
       $state.go('familyMemberSelect', {skipId: 'onlinePaymentList', memberId: $scope.patient.id});

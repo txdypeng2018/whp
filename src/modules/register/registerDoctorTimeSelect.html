@@ -36,7 +36,7 @@
     <ul class="list">
       <li class="item item-avatar-left">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
-        <img ng-if="(photo == null || photo == '') && doctor.sexCode == '2'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
+        <img ng-if="(photo == null || photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
         <img ng-if="photo != null && photo != ''" ng-src="{{photo}}" class="photo" ng-click="photoClk(doctor.id)">
         <div class="name">
           <h2>{{doctor.name}}</h2>

@@ -7,7 +7,7 @@
   <ion-content class="has-header registerConfirmToday-content">
     <div class="patient">
       <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
-      <img ng-if="patient.memberCode == '00' && patient.sexCode == '2'" src="./assets/images/pic_woman.png" class="photo">
+      <img ng-if="patient.memberCode == '00' && patient.sexCode == '0'" src="./assets/images/pic_woman.png" class="photo">
       <img ng-if="patient.memberCode != '00'" ng-src="{{memberTypes[patient.memberCode].img}}" class="photo">
       <span>就诊人：{{patient.name}}</span>
       <span>
