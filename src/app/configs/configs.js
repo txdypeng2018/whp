@@ -88,7 +88,7 @@
       },
       responseError: function(rejection) {
         if (rejection.status === 404) {
-          rejection.data = '服务器错误！';
+          rejection.data = '数据未找到！';
         }
         requestIndex = 0;
         $rootScope.inProcess = false;
