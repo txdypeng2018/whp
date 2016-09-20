@@ -64,7 +64,17 @@
       if (overCount > 0) {
         var isLogin = userService.hasToken();
         if (isLogin) {
-          $state.go('registerConfirmToday', {doctorId: doctorId});
+          $http.get('/user/tokenVal').success(function() {
+            $state.go('registerConfirmToday', {doctorId: doctorId});
+          }).error(function(data, status){
+            if (status !== 401) {
+              $cordovaToast.showShortBottom(data);
+            }
+            else {
+              userService.clearToken();
+              $state.go('login');
+            }
+          });
         }
         else {
           $state.go('login');

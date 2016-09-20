@@ -21,12 +21,25 @@
       var isLogin = true;
       if (routerId === 'tab.message' || routerId === 'tab.registration') {
         isLogin = userService.hasToken();
-      }
-      if (isLogin) {
-        $state.go(routerId);
+        if (isLogin) {
+          $http.get('/user/tokenVal').success(function() {
+            $state.go(routerId);
+          }).error(function(data, status){
+            if (status !== 401) {
+              $cordovaToast.showShortBottom(data);
+            }
+            else {
+              userService.clearToken();
+              $state.go('login');
+            }
+          });
+        }
+        else {
+          $state.go('login');
+        }
       }
       else {
-        $state.go('login');
+        $state.go(routerId);
       }
     };
   };

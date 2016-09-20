@@ -43,6 +43,11 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      //取得就诊人
+      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+        $scope.patient = data;
+      });
+
       $scope.isSubmit = false;
       getPayments($scope.searchStr);
     });
@@ -52,10 +57,6 @@
       $state.go('tab.main');
     };
 
-    //取得就诊人
-    $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
-      $scope.patient = data;
-    });
     //选择家庭成员
     $scope.selectMember = function() {
       $state.go('familyMemberSelect', {skipId: 'onlinePaymentList', memberId: $scope.patient.id});
@@ -131,8 +132,24 @@
     //支付
     $scope.payClk = function() {
       if ($scope.recipeNums.length > 0) {
+        var param = {
+          memberId: $scope.patient.id,
+          outpatients: []
+        };
+        for (var i = 0 ; i < $scope.recipes.length ; i++) {
+          var recipe = $scope.recipes[i];
+          var recipeNums = [];
+          for (var j = 0 ; j < recipe.recipes.length ; j++) {
+            if (recipe.recipes[j].isCheck) {
+              recipeNums.push(recipe.recipes[j].recipeNum);
+            }
+          }
+          if (recipeNums.length > 0) {
+            param.outpatients.push({outpatientNum: recipe.outpatientNum, recipeNums: recipeNums});
+          }
+        }
         $scope.isSubmit = true;
-        $http.post('/orders', {recipeNums: $scope.recipeNums}).success(function(data) {
+        $http.post('/orders', param).success(function(data) {
           $state.go('paymentSelect', {orderNum: data.orderNum});
         }).error(function(data){
           $scope.isSubmit = false;

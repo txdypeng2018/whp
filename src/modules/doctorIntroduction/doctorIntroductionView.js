@@ -4,6 +4,12 @@
   var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, $cordovaToast, userService) {
     $scope.type = ($stateParams.type==='1');
     var isLogin = userService.hasToken();
+    $http.get('/user/tokenVal').error(function(data, status){
+      if (status === 401) {
+        userService.clearToken();
+        isLogin = false;
+      }
+    });
 
     //取得医生简介
     $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {

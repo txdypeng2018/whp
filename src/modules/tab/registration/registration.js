@@ -9,13 +9,6 @@
       $cordovaToast.showShortBottom(data);
     });
 
-    //取得就诊人
-    $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
-      $scope.patient = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
-
     //取得挂号单
     var registrationList = function() {
       $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -26,6 +19,13 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      //取得就诊人
+      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+        $scope.patient = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+
       registrationList();
     });
 
