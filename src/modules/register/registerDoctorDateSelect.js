@@ -64,8 +64,13 @@
                 }
             }).success(function (data, status, headers, config) {
                 $scope.doctors[config.params.index].photo = data;
-            }).error(function (data) {
+            }).error(function (data, status, fun, config) {
+              if (status === 404) {
+                $scope.doctors[config.params.index].photo = '';
+              }
+              else {
                 $cordovaToast.showShortBottom(data);
+              }
             });
         };
 

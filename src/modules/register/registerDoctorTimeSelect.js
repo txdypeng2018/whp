@@ -36,8 +36,13 @@
       $scope.doctor = data;
       $http.get('/doctors/photo', {params: {doctorId: $scope.doctor.id}}).success(function(data) {
         $scope.photo = data;
-      }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+      }).error(function(data, status){
+        if (status === 404) {
+          $scope.photo = '';
+        }
+        else {
+          $cordovaToast.showShortBottom(data);
+        }
       });
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
