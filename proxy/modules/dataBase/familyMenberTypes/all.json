@@ -6,12 +6,12 @@
   },
   "02" : {
     "name": "妈妈",
-    "sexCode": "2",
+    "sexCode": "0",
     "img": "./assets/images/pic_old_woman.png"
   },
   "03" : {
     "name": "配偶",
-    "sexCode": "2",
+    "sexCode": "0",
     "img": "./assets/images/pic_woman.png"
   },
   "04" : {
@@ -21,7 +21,7 @@
   },
   "05" : {
     "name": "女儿",
-    "sexCode": "2",
+    "sexCode": "0",
     "img": "./assets/images/pic_girl.png"
   },
   "06" : {
@@ -31,7 +31,7 @@
   },
   "07" : {
     "name": "姐妹",
-    "sexCode": "2",
+    "sexCode": "0",
     "img": "./assets/images/pic_woman.png"
   },
   "08" : {
