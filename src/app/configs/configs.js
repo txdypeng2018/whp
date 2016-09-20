@@ -87,6 +87,9 @@
         return response || $q.when(response);
       },
       responseError: function(rejection) {
+        if (rejection.status === 404) {
+          rejection.data = '服务器错误！';
+        }
         requestIndex = 0;
         $rootScope.inProcess = false;
         $rootScope.refreshProcess = 0;
