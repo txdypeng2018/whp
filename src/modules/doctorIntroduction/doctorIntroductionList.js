@@ -8,8 +8,13 @@
     var getDoctorPhoto = function(doctorId, index) {
       $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
         $scope.introductions[config.params.index].photo = data;
-      }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+      }).error(function(data, status, fun, config){
+        if (status === 404) {
+          $scope.introductions[config.params.index].photo = '';
+        }
+        else {
+          $cordovaToast.showShortBottom(data);
+        }
       });
     };
 
