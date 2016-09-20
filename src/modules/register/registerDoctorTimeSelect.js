@@ -175,7 +175,17 @@
       if ($scope.daySelected !== null && $scope.daySelected !== '' && overCount > 0) {
         var isLogin = userService.hasToken();
         if (isLogin) {
-          $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+          $http.get('/user/tokenVal').success(function() {
+            $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+          }).error(function(data, status){
+            if (status !== 401) {
+              $cordovaToast.showShortBottom(data);
+            }
+            else {
+              userService.clearToken();
+              $state.go('login');
+            }
+          });
         }
         else {
           $state.go('login');

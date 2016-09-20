@@ -30,6 +30,9 @@
     background: #387ef5;
     border-color: #387ef5;
   }
+  .checkbox input:disabled:before, .checkbox input:disabled + .checkbox-icon:before {
+    background: #f0f0f0;
+  }
 
   .recipes {
     .item-checkbox {

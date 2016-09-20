@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabMainCtrl = function($scope, $ionicHistory, $state, userService) {
+  var tabMainCtrl = function($scope, $ionicHistory, $state, $http, userService, $cordovaToast) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $ionicHistory.clearHistory();
     });
@@ -23,21 +23,37 @@
     ];
 
     //路由跳转
+    var itemRouterGo = function(routerId, type) {
+      if (routerId === 'subjectSelect') {
+        $state.go(routerId, {type: type});
+      }
+      else {
+        $state.go(routerId);
+      }
+    };
     $scope.itemRouter = function(routerId, type) {
       var isLogin = true;
       if (routerId === 'medicalReportList' || routerId === 'onlinePaymentList') {
         isLogin = userService.hasToken();
-      }
-      if (isLogin) {
-        if (routerId === 'subjectSelect') {
-          $state.go(routerId, {type: type});
+        if (isLogin) {
+          $http.get('/user/tokenVal').success(function() {
+            itemRouterGo(routerId, type);
+          }).error(function(data, status){
+            if (status !== 401) {
+              $cordovaToast.showShortBottom(data);
+            }
+            else {
+              userService.clearToken();
+              $state.go('login');
+            }
+          });
         }
         else {
-          $state.go(routerId);
+          $state.go('login');
         }
       }
       else {
-        $state.go('login');
+        itemRouterGo(routerId, type);
       }
     };
   };
