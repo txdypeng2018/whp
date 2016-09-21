@@ -88,9 +88,7 @@
       },
       responseError: function(rejection) {
         if (rejection.status === 404) {
-          if (angular.isUndefined(rejection.data) || rejection.data === '') {
-            rejection.data = '数据未找到！';
-          }
+          rejection.data = '资源未找到';
         }
         requestIndex = 0;
         $rootScope.inProcess = false;

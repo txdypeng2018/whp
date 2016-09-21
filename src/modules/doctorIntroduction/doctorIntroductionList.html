@@ -19,7 +19,7 @@
     <ul class="list">
       <li class="item item-avatar-left" collection-repeat="introduction in introductions" ng-click="viewIntroduction(introduction.id)">
         <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo"">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo">
         <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}" class="photo">
         <div class="authenticate">
           <img src="./assets/images/isapprove.png">

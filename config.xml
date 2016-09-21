@@ -5,6 +5,7 @@
     <author email="cuiwencheng@propersoft.cn" href="http://www.propersoft.cn/">ProperSoft</author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />  //即允许跳转到任意http协议的页面
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
