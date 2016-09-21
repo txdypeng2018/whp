@@ -10,7 +10,7 @@
       'piwikTrackTarget' : 'server.propersoft.cn/isj',
       'properpush':{
 	  		'appId':'isj',
-	  		'pushUrl':'http://59.46.70.149/properpush',
+	  		'pushUrl':'https://sjh.sj-hospital.org/properpush',
 	  		'secretKey':'b2024e00064bc5d8db70fdee087eae4f',
 	  		'xiaomi':{
 	  			'theAppid':'2882303761517501901',

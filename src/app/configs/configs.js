@@ -44,7 +44,7 @@
   };
 
   // Config JWT in http header and prefix of url
-  var CONTEXT = 'http://59.46.70.149/isj';
+  var CONTEXT = 'https://sjh.sj-hospital.org/isj';
   var requestIndex = 0;
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.refreshProcess = 0;
