@@ -6,17 +6,17 @@
   </ion-header-bar>
   <div ng-class="{true: 'no-dates'}[allDays.length == 0]" class="registerDoctorTimeSelect-date has-header">
     <div class="positive month">{{selectDays[0].month}}月</div>
+      <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
+         ng-click="leftSlide()" ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}"></i>
+      <ion-scroll id="date-scroll" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
     <table>
       <tr>
-        <td ng-repeat="oneDay in selectDays" class="week" width="13%" ng-click="dayClk($index, '{{oneDay.date}}')">
+        <td ng-repeat="oneDay in selectDays" class="week" width="51px" ng-click="dayClk($index, '{{oneDay.date}}')">
           {{oneDay.week}}
         </td>
-        <td ng-if="allDays.length > 7" rowspan="3" width="9%" ng-click="dayPicker()">
-          <i class="icon ion-ios-arrow-down positive"></i>
+        <td  rowspan="3" width="9%">
         </td>
-        <td ng-if="allDays.length <= 7" rowspan="3" width="9%">
-          &nbsp;
-        </td>
+
       </tr>
       <tr>
         <td ng-repeat="oneDay in selectDays" class="day" ng-class="{'': 'border-none'}[oneDay.date]" ng-click="dayClk($index, '{{oneDay.date}}')">
@@ -33,6 +33,10 @@
         </td>
       </tr>
     </table>
+     </ion-scroll>
+      <i class="icon ion-ios-arrow-right positive" style="width: 7%;margin-left: 5px"
+         ng-click="rightSlide()" ng-style="{'visibility': rightIconIsShow ? 'visible' : 'hidden'}"></i>
+
     <ul class="list">
       <li class="item item-avatar-left">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
