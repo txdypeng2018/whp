@@ -262,7 +262,7 @@
                 if (!$scope.dataPicker.isShow) {
                     $scope.daySelected = '';
                 }
-                $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected});
+                $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected, type: '2'});
             }
         };
     };

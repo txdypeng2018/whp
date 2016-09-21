@@ -18,6 +18,13 @@
       });
     };
 
+    //不同的院区的颜色
+    $scope.districtColor = new Map();
+    //颜色数组
+    var color = ['district-icon-positive', 'district-icon-balanced',
+      'district-icon-royal', 'district-icon-calm', 'district-icon-assertive'];
+    //院区数量
+    var districtCount = 0;
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
@@ -31,7 +38,19 @@
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
         $scope.doctors = data;
+        var id;
         for (var i = 0 ; i < data.length ; i++) {
+          $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
+          id = data[i].districtId;
+          if (i > 0) {
+            if (data[i].districtId !== data[i - 1].districtId) {
+              districtCount++;
+              $scope.districtColor.set(id, color[districtCount - 1]);
+            }
+          } else {
+            districtCount = 1;
+            $scope.districtColor.set(id, color[districtCount - 1]);
+          }
           getDoctorPhoto(data[i].id, i);
         }
       }).error(function(data){
@@ -67,23 +86,7 @@
     //医生选择事件
     $scope.doctorClk = function(doctorId, overCount) {
       if (overCount > 0) {
-        var isLogin = userService.hasToken();
-        if (isLogin) {
-          $http.get('/user/tokenVal').success(function() {
-            $state.go('registerConfirmToday', {doctorId: doctorId});
-          }).error(function(data, status){
-            if (status !== 401) {
-              $cordovaToast.showShortBottom(data);
-            }
-            else {
-              userService.clearToken();
-              $state.go('login');
-            }
-          });
-        }
-        else {
-          $state.go('login');
-        }
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, type: '1'});
       }
     };
   };
