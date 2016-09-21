@@ -9,12 +9,7 @@
       $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
         $scope.doctors[config.params.index].photo = data;
       }).error(function(data, status, fun, config){
-        if (status === 404) {
-          $scope.doctors[config.params.index].photo = '';
-        }
-        else {
-          $cordovaToast.showShortBottom(data);
-        }
+        $scope.doctors[config.params.index].photo = '';
       });
     };
 
