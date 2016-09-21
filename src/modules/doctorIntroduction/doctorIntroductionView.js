@@ -3,12 +3,14 @@
 
   var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, $cordovaToast, userService) {
     $scope.type = ($stateParams.type==='1');
-    var isLogin = userService.hasToken();
-    $http.get('/user/tokenVal').error(function(data, status){
-      if (status === 401) {
-        userService.clearToken();
-        isLogin = false;
-      }
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.isLogin = userService.hasToken();
+      $http.get('/user/tokenVal').error(function(data, status){
+        if (status === 401) {
+          userService.clearToken();
+          $scope.isLogin = false;
+        }
+      });
     });
 
     //取得医生简介
@@ -40,7 +42,7 @@
       }
     });
     $scope.collectionDoctor = function() {
-      if (isLogin) {
+      if ($scope.isLogin) {
         if ($scope.isCollection) {
           $http.delete('/user/collectionDoctors/'+$stateParams.doctorId).success(function() {
             $scope.isCollection = false;
@@ -63,8 +65,8 @@
 
     //挂号点击事件
     $scope.register = function() {
-      if (isLogin) {
-        $state.go('registerDoctorTimeSelect', {doctorId: $stateParams.doctorId, date: ''});
+      if ($scope.isLogin) {
+        $state.go('registerDoctorTimeSelect', {doctorId: $stateParams.doctorId, date: '', type: '2'});
       }
       else {
         $state.go('login');

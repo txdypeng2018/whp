@@ -11,7 +11,7 @@
     <ul class="list">
       <li class="item item-avatar-left">
         <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo"">
+        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo">
         <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}" class="photo">
         <div>
           <h2 class="name">{{introduction.name}}</h2>
