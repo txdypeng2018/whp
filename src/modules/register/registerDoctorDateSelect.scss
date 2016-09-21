@@ -48,9 +48,14 @@
   }
 }
 
+.registerDoctorDateSelect-top1 {
+  margin-top: 125px;
+}
+.registerDoctorDateSelect-top2 {
+  margin-top: 50px;
+}
+
 .registerDoctorDateSelect-content {
-  margin-top: 125px !important;
-
   .list {
     li:first-child {
       border-top: 0;
@@ -92,46 +97,3 @@
   }
 }
 
-.registerDoctorSelect-content {
-  margin-top: 50px !important;
-
-  .list {
-    li:first-child {
-      border-top: 0;
-    }
-
-    .item.item-avatar-left {
-      padding-left: 86px;
-
-      .photo {
-        max-width: 55px;
-        max-height: 55px;
-        top: 18px;
-      }
-
-      .name {
-        display: flex;
-        flex-direction: row;
-
-        h2 {
-          display: inline-block;
-        }
-
-        p {
-          display: inline-block;
-          margin-left: 8px;
-        }
-
-        .can-register {
-          color: #ffffff;
-          font-size: 12px;
-          display: inline-block;
-          border-radius: 3px;
-          padding: 0 5px;
-          margin-left: 8px;
-          transform: scale(0.9,0.9);
-        }
-      }
-    }
-  }
-}

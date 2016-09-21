@@ -1,7 +1,7 @@
 (function (app) {
     'use strict';
 
-    var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast, $ionicScrollDelegate) {
+    var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, $ionicScrollDelegate) {
         $scope.hideSearch = true;
         $scope.daySelected = '';
         //默认顶部栏选中为按时间选择
@@ -70,16 +70,17 @@
         };
         //取得科室下的医生
         $scope.major = $stateParams.major;
+        $scope.hasSearchStr = ($scope.major !== '');
         var getDoctors = function () {
             var startDate = '';
             var endDate = '';
-            if ($scope.daySelected !== '') {
+            if ($scope.daySelected !== '' && !$scope.hasSearchStr) {
                 startDate = $scope.daySelected;
                 endDate = $scope.daySelected;
             }
             else {
                 startDate = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
-                endDate = $filter('date')(getNextDay(new Date(), 60), 'yyyy-MM-dd');
+                endDate = $filter('date')(getNextDay(new Date(), displayDays), 'yyyy-MM-dd');
             }
             var params = {
                 districtId: $stateParams.districtId,
@@ -115,11 +116,19 @@
             $scope.districtId = id;
             if (id === '1') {
                 $scope.dataPicker.isShow = true;
-                $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
+                if (!angular.isUndefined($scope.daySelectedTmp) && $scope.daySelectedTmp !== '') {
+                    $scope.daySelected = $scope.daySelectedTmp;
+                }
+                else {
+                    $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
+                }
+                getDoctors();
             }
             if (id === '2') {
                 $scope.dataPicker.isShow = false;
+                $scope.daySelectedTmp = $scope.daySelected;
                 $scope.daySelected = '';
+                getDoctors();
             }
         };
 
@@ -141,7 +150,7 @@
                     selectDays[i] = setSelectDay(date);
                 }
                 else {
-                    if (date.getTime() > getNextDay(new Date(), 29).getTime()) {
+                    if (date.getTime() > getNextDay(new Date(), displayDays-1).getTime()) {
                         break;
                     }
                     date = getNextDay(new Date(selectDays[i - 1].date), 1);
@@ -164,11 +173,11 @@
         };
         $scope.selectDays = selectDayInit(getNextDay(new Date(), 1));
         $scope.$on('$ionicView.beforeEnter', function () {
+            //默认选中明天
+            $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
             getDoctors();
             $scope.leftIconIsShow = false;
             $scope.rightIconIsShow = true;
-            //默认选中明天
-            $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
         });
 
         //当前滑动应该显示的月份
@@ -206,28 +215,6 @@
             getDoctors();
         };
 
-        //日期插件选择
-        var dayPicker1 = {
-            callback: function (date) {
-                $scope.selectDays = selectDayInit(new Date(date));
-                $scope.daySelected = $filter('date')(date, 'yyyy-MM-dd');
-                getDoctors();
-            },
-            from: getNextDay(new Date(), 1),
-            to: getNextDay(new Date(), 30),
-            inputDate: new Date(),
-            howTodayButton: false
-        };
-        $scope.dayPicker = function () {
-            if ($scope.daySelected !== '') {
-                dayPicker1.inputDate = new Date($scope.daySelected);
-            }
-            else {
-                dayPicker1.inputDate = new Date();
-            }
-            ionicDatePicker.openDatePicker(dayPicker1);
-        };
-
         //查询框显示隐藏事件
         $scope.searchClk = function () {
             $scope.hideSearch = !$scope.hideSearch;
@@ -239,6 +226,7 @@
         };
         //查询事件
         $scope.doSearch = function () {
+            $scope.hasSearchStr = ($scope.major !== '');
             getDoctors();
         };
 
@@ -252,11 +240,25 @@
         $scope.doctorClk = function (doctorId, overCount) {
             if (overCount > 0) {
                 //判断如果是选择医生状态，则置选择日期为空
-                if (!$scope.dataPicker.isShow) {
+                if (!$scope.dataPicker.isShow || $scope.hasSearchStr) {
                     $scope.daySelected = '';
                 }
                 $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.daySelected, type: '2'});
             }
+        };
+
+        $scope.contentMarginTop = function() {
+          if (!$scope.hasSearchStr) {
+            if ($scope.dataPicker.isShow) {
+              return 'registerDoctorDateSelect-top1';
+            }
+            else {
+              return 'registerDoctorDateSelect-top2';
+            }
+          }
+          else {
+            return '';
+          }
         };
     };
 
