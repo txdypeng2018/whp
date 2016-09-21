@@ -1,18 +1,14 @@
 (function(app) {
   'use strict';
 
-  var hospitalIntroduceCtrl = function($scope, $http, $cordovaToast) {
-    //取得医院简介信息
-    $http.get('/hospitalIntroduce').success(function(data) {
-      $scope.hospitalIntroduce = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
+  var hospitalIntroduceCtrl = function($scope, $sce) {
+    $scope.myURL = $sce.trustAsResourceUrl('http://sj-hospital.org/');
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('hospitalIntroduce', {
       url: '/hospitalIntroduce',
+      cache: false,
       templateUrl: 'modules/hospitalIntroduce/hospitalIntroduce.html',
       controller: hospitalIntroduceCtrl
     });

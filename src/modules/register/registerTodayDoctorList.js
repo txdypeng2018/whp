@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast) {
     $scope.hideSearch = true;
 
     //取得医生照片
