@@ -15,8 +15,6 @@ angular.module('isj').directive('isjBackButton', function() {
             /*  if(currentView.viewId.substring(3,4)!=='1'){
              $ionicHistory.currentView().backViewId = 'ion'+(parseInt(currentView.viewId.substring(3,4))-1).toString();
              }*/
-             console.log(currentView);
-             console.log(parseInt(currentView.viewId.substring(3,4)));
           $ionicHistory.goBack();
         };
       }
