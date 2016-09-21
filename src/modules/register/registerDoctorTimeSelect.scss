@@ -10,6 +10,13 @@
     padding: 5px 0 0 5px;
   }
 
+  .date-scroll{
+    display: inline-flex;
+    overflow: scroll;
+    width: 89%;
+    margin:0 auto;
+  }
+
   .day-selected {
     border-radius: 50%;
     background-color: #d0eaeb;
@@ -20,7 +27,9 @@
   }
 
   table {
-    width: 100%;
+    display: inline-table;
+    width: 60px;
+    table-layout: fixed;
 
     td {
       text-align: center;

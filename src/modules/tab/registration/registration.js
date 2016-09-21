@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, $cordovaToast) {
+  var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, $cordovaToast,$ionicHistory) {
     //家庭关系类别
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;
@@ -27,6 +27,7 @@
       });
 
       registrationList();
+      $ionicHistory.clearHistory();
     });
 
     //选择家庭成员

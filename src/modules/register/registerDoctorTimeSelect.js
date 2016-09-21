@@ -1,13 +1,14 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast, userService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state,$ionicScrollDelegate, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast, userService) {
     var displayDays = 7;
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     $scope.selectDays = [];
     $scope.allDays = [];
     var dayPicker1 = {};
-
+    $scope.leftIconIsShow = false;
+    $scope.rightIconIsShow = true;
     //取得指定天数以后的日期
     var getNextDay = function(date, days){
       date = +date + 1000*60*60*24*days;
@@ -84,10 +85,8 @@
     else {
       $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
         $scope.allDays = data;
+        scrollRightWidth = $scope.allDays.length * 51 - width;
         for (var j = 0 ; j < data.length ; j++) {
-          if (j === displayDays) {
-            break;
-          }
           dateTmp = new Date(data[j].date);
           $scope.selectDays[j] = setSelectDay(dateTmp, data[j]);
         }
@@ -145,6 +144,32 @@
         $cordovaToast.showShortBottom(data);
       });
     }
+      var width = document.getElementById('date-scroll').offsetWidth;
+      var scrollRightWidth ;
+
+
+      $scope.rightSlide = function () {
+          $ionicScrollDelegate.scrollBy(357, 0, true);
+      };
+      $scope.leftSlide = function () {
+          $ionicScrollDelegate.scrollBy(-357, 0, true);
+      };
+
+
+      $scope.scroll = function () {
+          if ($ionicScrollDelegate.getScrollPosition().left > 1) {
+              $scope.leftIconIsShow = true;
+          } else {
+              $scope.leftIconIsShow = false;
+          }
+          if($ionicScrollDelegate.getScrollPosition().left >= scrollRightWidth){
+              $scope.rightIconIsShow = false;
+          }else{
+              $scope.rightIconIsShow = true;
+          }
+          $scope.$apply($scope.leftIconIsShow);
+          $scope.$apply($scope.rightIconIsShow);
+      };
 
     $scope.$on('$ionicView.afterEnter', function(){
       getScheduleTimes($scope.daySelected);

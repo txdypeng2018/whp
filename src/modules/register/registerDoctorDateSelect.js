@@ -68,8 +68,6 @@
               $scope.doctors[config.params.index].photo = '';
             });
         };
-
-
         //取得科室下的医生
         $scope.major = $stateParams.major;
         var getDoctors = function () {
