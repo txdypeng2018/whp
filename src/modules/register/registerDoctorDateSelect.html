@@ -15,7 +15,7 @@
     </div>
   </ion-header-bar>
 
-  <div class="district-select has-header">
+  <div class="district-select has-header" ng-show="!hasSearchStr">
         <div class="button-bar">
             <button ng-class="{false: 'button-outline'}[districtId == '1']" class="button button-positive district-button"
                     ng-click="districtClk('1')">
@@ -28,7 +28,7 @@
         </div>
   </div>
 
-  <div class="registerDoctorDateSelect-date has-header-district has-header" ng-show="dataPicker.isShow">
+  <div class="registerDoctorDateSelect-date has-header-district has-header" ng-show="dataPicker.isShow && !hasSearchStr">
         <div class="positive month">{{selectDays[0].month}}月</div>
       <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
          ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}" ng-click="leftSlide()"></i>
@@ -48,8 +48,7 @@
          ng-style="{'visibility': rightIconIsShow ? 'visible' : 'hidden'}" ng-click="rightSlide()"></i>
   </div>
 
-  <ion-content ng-class="{false: 'registerDoctorSelect-content'}[dataPicker.isShow]"
-               class="has-header content-fill registerDoctorDateSelect-content">
+  <ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="contentMarginTop()">
     <ul ng-if="doctors.length > 0" class="list">
       <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.overCount)">
         <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" onerror="this.src='./assets/images/doctor_man.png'" class="photo" ng-click="photoClk(doctor.id, $event)">
