@@ -4,8 +4,9 @@
   var tabPersonalCtrl = function($scope, $http, $state, $cordovaToast, userService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       //取得用户信息
-      $scope.isLogin = true;
+      $scope.isLogin = userService.hasToken();
       $http.get('/user/userInfo').success(function(data) {
+        $scope.isLogin = true;
         $scope.user = data;
         if ($scope.user.phone !== null && $scope.user.phone !== '') {
           $scope.user.phone = $scope.user.phone.substring(0,3)+'****'+$scope.user.phone.substring(7,11);

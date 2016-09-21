@@ -3,8 +3,8 @@
 
   var registerConfirmTodayCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $filter, $ionicHistory, $cordovaToast) {
     var doctorId = $stateParams.doctorId;
-    var today = $filter('date')(new Date(),'yyyy-MM-dd');
-    $scope.todayDisplay = $filter('date')(new Date(),'yyyy年MM月dd日');
+    var today = $stateParams.date;
+    $scope.todayDisplay = today.substring(0,4)+'年'+today.substring(5,7)+'月'+today.substring(8,10)+'日'+today.substring(10,16);
 
     $scope.isChecked = true;
 
@@ -50,7 +50,7 @@
       var index = 0;
       for (var i in $ionicHistory.viewHistory().views) {
         var view = $ionicHistory.viewHistory().views[i];
-        if (view.stateName === 'registerTodayDoctorList') {
+        if (view.stateName === 'registerDoctorTimeSelect') {
           index = view.index;
           break;
         }
@@ -112,7 +112,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerConfirmToday', {
-      url: '/register/registerConfirmToday/:doctorId/:memberId',
+      url: '/register/registerConfirmToday/:doctorId/:date/:memberId',
       templateUrl: 'modules/register/registerConfirmToday.html',
       controller: registerConfirmTodayCtrl
     });

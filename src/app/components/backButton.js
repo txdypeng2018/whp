@@ -11,12 +11,10 @@ angular.module('isj').directive('isjBackButton', function() {
     controller:function($scope, $ionicHistory) {
       if (angular.isUndefined($scope.goBack)) {
         $scope.goBack = function() {
-           var currentView = $ionicHistory.currentView();
-            /*  if(currentView.viewId.substring(3,4)!=='1'){
-             $ionicHistory.currentView().backViewId = 'ion'+(parseInt(currentView.viewId.substring(3,4))-1).toString();
-             }*/
-             console.log(currentView);
-             console.log(parseInt(currentView.viewId.substring(3,4)));
+          /* var currentView = $ionicHistory.currentView();
+            if(currentView.viewId.substring(3,4)!=='1'){
+            $ionicHistory.currentView().backViewId = 'ion'+(parseInt(currentView.viewId.substring(3,4))-1).toString();
+          } */
           $ionicHistory.goBack();
         };
       }
