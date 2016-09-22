@@ -2,13 +2,6 @@
   'use strict';
 
   var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, $cordovaToast,$ionicHistory) {
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
-
     //取得挂号单
     var registrationList = function() {
       $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -26,6 +19,13 @@
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+      //家庭关系类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = data;
+      }).error(function(data){
+        $scope.memberTypes = {};
         $cordovaToast.showShortBottom(data);
       });
 
