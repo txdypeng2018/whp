@@ -10,6 +10,7 @@
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.members = null;
       //取得家庭成员列表
       $http.get('/user/familyMembers').success(function(data) {
         $scope.members = data;
@@ -17,6 +18,7 @@
           $scope.members[i].idCard = $scope.members[i].idCard.substring(0,6)+'********'+$scope.members[i].idCard.substring(14,18);
         }
       }).error(function(data){
+        $scope.members = [];
         $cordovaToast.showShortBottom(data);
       });
     });

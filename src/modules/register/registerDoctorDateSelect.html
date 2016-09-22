@@ -32,7 +32,7 @@
         <div class="positive month">{{selectDays[0].month}}月</div>
       <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
          ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}" ng-click="leftSlide()"></i>
-      <ion-scroll class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
+      <ion-scroll has-bouncing="false" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
               <table>
                   <tr>
                       <td ng-repeat="oneDay in selectDays" class="week" width="51px" ng-click="dayClk($index, '{{oneDay.date}}')">{{oneDay.week}}</td>
@@ -67,6 +67,7 @@
       </li>
     </ul>
     <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
+    <ion-infinite-scroll ng-if="vm.moreData" on-infinite="vm.loadMore()" distance="2%"></ion-infinite-scroll>
   </ion-content>
 
 </ion-view>

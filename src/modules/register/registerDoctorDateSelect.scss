@@ -17,11 +17,17 @@
   .month {
     padding: 5px 0 0 7px;
   }
-  .date-scroll{
+  .date-scroll {
     display: inline-flex;
     overflow: scroll;
     width: 89%;
      margin:0 auto;
+  }
+  .scroll-bar-indicator {
+    display: none !important;
+  }
+  .date-scroll::-webkit-scrollbar {
+    width: 0;
   }
   table {
     display: inline-table;

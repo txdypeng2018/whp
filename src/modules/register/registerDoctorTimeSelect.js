@@ -45,6 +45,8 @@
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.selectDays = [];
+        $scope.times = [];
         if ($scope.daySelected !== null && $scope.daySelected !== '') {
             $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.daySelected}}).success(function(data) {
                 dateTmp = new Date($scope.daySelected);

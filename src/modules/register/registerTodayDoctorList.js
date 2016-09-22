@@ -23,8 +23,9 @@
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
-    var getDoctors = function() {
+    var getDoctors = function(pageNo, isInit) {
       var params = {
+        pageNo: pageNo,
         districtId: $stateParams.districtId,
         subjectId: $stateParams.subjectId,
         major: $scope.major,
@@ -32,13 +33,25 @@
         endDate: today
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
-        $scope.doctors = data;
+        if (data.length === 0) {
+          $scope.vm.moreData = false;
+        }
+        var index = 0;
+        if (isInit) {
+          $scope.doctors = data;
+        }
+        else {
+          index = $scope.doctors.length;
+          for (var k = 0 ; k < data.length ; k++) {
+            $scope.doctors.push(data[k]);
+          }
+        }
         var id;
-        for (var i = 0 ; i < data.length ; i++) {
+        for (var i = index ; i < $scope.doctors.length ; i++) {
           $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-          id = data[i].districtId;
-          if (i > 0) {
-            if (data[i].districtId !== data[i - 1].districtId) {
+          id = $scope.doctors[i].districtId;
+          if (i > index) {
+            if ($scope.doctors[i].districtId !== $scope.doctors[i - 1].districtId) {
               districtCount++;
               $scope.districtColor.set(id, color[districtCount - 1]);
             }
@@ -46,15 +59,31 @@
             districtCount = 1;
             $scope.districtColor.set(id, color[districtCount - 1]);
           }
-          getDoctorPhoto(data[i].id, i);
+          getDoctorPhoto($scope.doctors[i].id, i);
         }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function(data){
+        $scope.doctors = [];
         $cordovaToast.showShortBottom(data);
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
-      getDoctors();
+      $scope.doctors = null;
+      //上拉加载医生
+      $scope.vm = {
+        moreData: true,
+        pageNo: 1,
+        init: function () {
+          $scope.vm.pageNo = 1;
+          getDoctors($scope.vm.pageNo, true);
+        },
+        loadMore: function () {
+          $scope.vm.pageNo++;
+          getDoctors($scope.vm.pageNo, false);
+        }
+      };
+      $scope.vm.init();
     });
 
     //查询框显示隐藏事件
@@ -69,7 +98,7 @@
 
     //查询事件
     $scope.doSearch = function() {
-      getDoctors();
+      $scope.vm.init();
     };
 
     //选择照片事件

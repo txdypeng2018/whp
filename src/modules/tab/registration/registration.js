@@ -14,11 +14,14 @@
       $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.registrations = data;
       }).error(function(data){
+        $scope.registrations = [];
         $cordovaToast.showShortBottom(data);
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.patient = {};
+      $scope.registrations = null;
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;

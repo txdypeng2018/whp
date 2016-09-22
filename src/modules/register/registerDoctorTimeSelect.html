@@ -8,7 +8,7 @@
     <div class="positive month">{{selectDays[0].month}}月</div>
       <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
          ng-click="leftSlide()" ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}"></i>
-      <ion-scroll id="date-scroll" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
+      <ion-scroll has-bouncing="false" id="date-scroll" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
     <table>
       <tr>
         <td ng-repeat="oneDay in selectDays" class="week" width="51px" ng-click="dayClk($index, '{{oneDay.date}}')">

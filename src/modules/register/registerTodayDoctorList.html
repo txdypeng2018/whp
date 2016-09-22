@@ -32,5 +32,6 @@
       </li>
     </ul>
     <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
+    <ion-infinite-scroll ng-if="vm.moreData" on-infinite="vm.loadMore()" distance="2%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>

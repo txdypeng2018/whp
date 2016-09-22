@@ -10,6 +10,7 @@
       $http.get('/medicalReports', {params: param}).success(function(data) {
         $scope.reports = data;
       }).error(function(data){
+        $scope.reports = [];
         $cordovaToast.showShortBottom(data);
       });
     };
@@ -38,13 +39,15 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.patient = {};
+      $scope.reports = null;
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
       });
-      
+
       getMedicalReports($scope.searchStr);
     });
 

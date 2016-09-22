@@ -25,6 +25,7 @@
           getDoctorPhoto(data[i].id,i);
         }
       }).error(function(data){
+        $scope.introductions = [];
         $cordovaToast.showShortBottom(data);
       });
     };
@@ -41,6 +42,7 @@
     };
     //初始化取得医师介绍列表
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.introductions = null;
       getDoctorIntroductions({searchName: $scope.searchName});
     });
 
