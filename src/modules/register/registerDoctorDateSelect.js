@@ -83,6 +83,7 @@
                 endDate = $filter('date')(getNextDay(new Date(), displayDays), 'yyyy-MM-dd');
             }
             var params = {
+                pageNo: pageNo,
                 districtId: $stateParams.districtId,
                 subjectId: $stateParams.subjectId,
                 major: $scope.major,
