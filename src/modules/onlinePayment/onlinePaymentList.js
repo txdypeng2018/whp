@@ -46,9 +46,11 @@
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.patient = {};
       $scope.recipes = null;
-        //取得就诊人
+      //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
       });
 
       $scope.isSubmit = false;
