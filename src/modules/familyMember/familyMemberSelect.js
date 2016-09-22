@@ -39,7 +39,7 @@
 
     //添加家庭成员
     $scope.addMember = function() {
-      $state.go('familyMemberAdd', {skipId: $stateParams.skipId, memberId: $stateParams.memberId, type: '2'});
+      $state.go('familyMemberAdd', {skipId: 'familyMemberSelect'});
     };
   };
 

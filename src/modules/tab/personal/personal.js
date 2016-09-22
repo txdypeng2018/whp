@@ -12,10 +12,12 @@
           $scope.user.phone = $scope.user.phone.substring(0,3)+'****'+$scope.user.phone.substring(7,11);
         }
       }).error(function(data, status){
+        $scope.user = {};
         if (status !== 401) {
           $cordovaToast.showShortBottom(data);
         }
         else {
+          userService.clearToken();
           $scope.isLogin = false;
         }
       });

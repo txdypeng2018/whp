@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberAddCtrl = function($scope, $state, $http, $cordovaToast) {
+  var familyMemberAddCtrl = function($scope, $state, $stateParams, $http, $cordovaToast) {
     //家庭关系类别
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = [];
@@ -16,13 +16,13 @@
 
     //家庭成员选择事件
     $scope.medicalCardEdit = function(code) {
-      $state.go('familyMemberEdit', {memberCode: code});
+      $state.go('familyMemberEdit', {memberCode: code, skipId: $stateParams.skipId});
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('familyMemberAdd', {
-      url: '/familyMember/familyMemberAdd',
+      url: '/familyMember/familyMemberAdd/:skipId',
       templateUrl: 'modules/familyMember/familyMemberAdd.html',
       controller: familyMemberAddCtrl
     });

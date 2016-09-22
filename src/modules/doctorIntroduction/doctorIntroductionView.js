@@ -5,8 +5,14 @@
     $scope.type = ($stateParams.type==='1');
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
-      $http.get('/user/tokenVal').error(function(data, status){
-        if (status === 401) {
+      $scope.isCollection = false;
+      $http.get('/user/collectionDoctors/'+$stateParams.doctorId).success(function(data) {
+        $scope.isCollection = !(angular.isUndefined(data.doctorId) || data.doctorId === '');
+      }).error(function(data, status){
+        if (status !== 401) {
+          $cordovaToast.showShortBottom(data);
+        }
+        else {
           userService.clearToken();
           $scope.isLogin = false;
         }
@@ -25,22 +31,7 @@
       $cordovaToast.showShortBottom(data);
     });
 
-    //收藏医生
-    $http.get('/user/collectionDoctors/'+$stateParams.doctorId).success(function(data) {
-      if (angular.isUndefined(data.doctorId) || data.doctorId === '') {
-        $scope.isCollection = false;
-      }
-      else {
-        $scope.isCollection = true;
-      }
-    }).error(function(data, status){
-      if (status === 401) {
-        $scope.isCollection = false;
-      }
-      else {
-        $cordovaToast.showShortBottom(data);
-      }
-    });
+    //收藏医生事件
     $scope.collectionDoctor = function() {
       if ($scope.isLogin) {
         if ($scope.isCollection) {

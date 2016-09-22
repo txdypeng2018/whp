@@ -71,7 +71,7 @@
         //取得科室下的医生
         $scope.major = $stateParams.major;
         $scope.hasSearchStr = ($scope.major !== '');
-        var getDoctors = function () {
+        var getDoctors = function (pageNo, isInit) {
             var startDate = '';
             var endDate = '';
             if ($scope.daySelected !== '' && !$scope.hasSearchStr) {
@@ -90,13 +90,25 @@
                 endDate: endDate
             };
             $http.get('/schedule/doctors', {params: params}).success(function (data) {
+              if (data.length === 0) {
+                $scope.vm.moreData = false;
+              }
+              var index = 0;
+              if (isInit) {
                 $scope.doctors = data;
+              }
+              else {
+                index = $scope.doctors.length;
+                for (var k = 0 ; k < data.length ; k++) {
+                  $scope.doctors.push(data[k]);
+                }
+              }
                 var id;
-                for (var i = 0; i < data.length; i++) {
+                for (var i = index; i < $scope.doctors.length; i++) {
                     $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-                    id = data[i].districtId;
-                    if (i > 0) {
-                        if (data[i].districtId !== data[i - 1].districtId) {
+                    id = $scope.doctors[i].districtId;
+                    if (i > index) {
+                        if ($scope.doctors[i].districtId !== $scope.doctors[i - 1].districtId) {
                             districtCount++;
                             $scope.districtColor.set(id, color[districtCount - 1]);
                         }
@@ -104,9 +116,11 @@
                         districtCount = 1;
                         $scope.districtColor.set(id, color[districtCount - 1]);
                     }
-                    getDoctorPhoto(data[i].id, i);
+                    getDoctorPhoto($scope.doctors[i].id, i);
                 }
+              $scope.$broadcast('scroll.infiniteScrollComplete');
             }).error(function (data) {
+                $scope.doctors = [];
                 $cordovaToast.showShortBottom(data);
             });
         };
@@ -122,13 +136,13 @@
                 else {
                     $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
                 }
-                getDoctors();
+              $scope.vm.init();
             }
             if (id === '2') {
                 $scope.dataPicker.isShow = false;
                 $scope.daySelectedTmp = $scope.daySelected;
                 $scope.daySelected = '';
-                getDoctors();
+              $scope.vm.init();
             }
         };
 
@@ -173,11 +187,26 @@
         };
         $scope.selectDays = selectDayInit(getNextDay(new Date(), 1));
         $scope.$on('$ionicView.beforeEnter', function () {
+            $scope.doctors = null;
             //默认选中明天
             $scope.daySelected = $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd');
-            getDoctors();
             $scope.leftIconIsShow = false;
             $scope.rightIconIsShow = true;
+
+          //上拉加载医生
+          $scope.vm = {
+            moreData: true,
+            pageNo: 1,
+            init: function () {
+              $scope.vm.pageNo = 1;
+              getDoctors($scope.vm.pageNo, true);
+            },
+            loadMore: function () {
+              $scope.vm.pageNo++;
+              getDoctors($scope.vm.pageNo, false);
+            }
+          };
+          $scope.vm.init();
         });
 
         //当前滑动应该显示的月份
@@ -212,7 +241,7 @@
         $scope.dayClk = function (index, date) {
             $scope.daySelected = date;
             $scope.selectDays[0].month = parseInt(date.substring(5,7));
-            getDoctors();
+          $scope.vm.init();
         };
 
         //查询框显示隐藏事件
@@ -227,7 +256,7 @@
         //查询事件
         $scope.doSearch = function () {
             $scope.hasSearchStr = ($scope.major !== '');
-            getDoctors();
+          $scope.vm.init();
         };
 
         //选择照片事件

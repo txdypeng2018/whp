@@ -10,6 +10,8 @@
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.registration = {};
+      $scope.patient = {};
       //取得挂号单
       $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
         $scope.registration = data;

@@ -15,7 +15,9 @@
         }
 
         .photo {
+          vertical-align: middle;
           width: 30px;
+          margin: 3px 0;
         }
       }
 
@@ -23,6 +25,11 @@
         border: 0 !important;
         background-color: #ffffff !important;
       }
+    }
+
+    input[disabled] {
+      background-color: #ffffff;
+      color: #dddddd;
     }
   }
 
