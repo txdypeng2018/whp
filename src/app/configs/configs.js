@@ -112,6 +112,7 @@
       _paq.push(['enableLinkTracking']);
       //Get piwik tracker
       var piwikTracker = Piwik.getTracker(appConstants.piwikServer + '/piwik.php', 3 );
+      piwikTracker.setRequestMethod('POST');
       //Set custom url
       piwikTracker.setCustomUrl(url);
       //Track the page view
