@@ -8,20 +8,25 @@
     $scope.subjectId = '';
 
     $scope.$on('$ionicView.beforeEnter', function(){
-        if($scope.type === '1' || $scope.type === '2'){
-            //取得挂号须知
-            $http.get('/register/agreement').success(function(data) {
-                $scope.agreement = data;
-                $scope.showAgreement();
-            }).error(function(data){
-                $cordovaToast.showShortBottom(data);
-            });
+      if($scope.type === '1' || $scope.type === '2'){
+        if (angular.isUndefined($scope.agreement) || $scope.agreement === '') {
+          //取得挂号须知
+          $http.get('/register/agreement').success(function(data) {
+            $scope.agreement = data;
+            $scope.showAgreement();
+          }).error(function(data){
+            $cordovaToast.showShortBottom(data);
+          });
         }
+        else {
+          $scope.showAgreement();
+        }
+      }
     });
     $scope.$on('$ionicView.beforeLeave', function(){
-          if (myPopup !== null) {
-              myPopup.close();
-          }
+      if (myPopup !== null) {
+        myPopup.close();
+      }
     });
 
     //取得学科列表
@@ -107,32 +112,32 @@
       }
     };
 
-      var myPopup = null;
-      $scope.showAgreement = function() {
-          myPopup = $ionicPopup.show({
-              template: '<div style="padding: 3px;font-size:15px">'+$scope.agreement+'</div>',
-              title: '挂号须知',
-              cssClass: 'agreement-popup',
-              buttons: [
-                  {
-                      text: '不同意',
-                      onTap: function(e) {
-                          e.preventDefault();
-                          myPopup.close();
-                          $ionicHistory.goBack();
-                      }
-                  },
-                  {
-                      text: '同意',
-                      type: 'button-positive',
-                      onTap: function(e) {
-                          e.preventDefault();
-                          myPopup.close();
-                      }
-                  }
-              ]
-          });
-       };
+    var myPopup = null;
+    $scope.showAgreement = function() {
+      myPopup = $ionicPopup.show({
+        template: '<div style="padding: 3px;font-size:15px">'+$scope.agreement+'</div>',
+        title: '挂号须知',
+        cssClass: 'agreement-popup',
+        buttons: [
+          {
+            text: '不同意',
+            onTap: function(e) {
+              e.preventDefault();
+              myPopup.close();
+              $ionicHistory.goBack();
+            }
+          },
+          {
+            text: '同意',
+            type: 'button-positive',
+            onTap: function(e) {
+              e.preventDefault();
+              myPopup.close();
+            }
+          }
+        ]
+      });
+    };
 
     //右侧一级科室选择事件
     $scope.subjectRightClk = function(id) {

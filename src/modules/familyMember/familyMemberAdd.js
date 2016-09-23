@@ -2,16 +2,18 @@
   'use strict';
 
   var familyMemberAddCtrl = function($scope, $state, $stateParams, $http, $cordovaToast) {
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = [];
-      for (var i in data) {
-        data[i].code = i;
-        $scope.memberTypes.push(data[i]);
-      }
-      $scope.memberTypes.sort(function(a,b){return a.code - b.code;});
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+    $scope.$on('$ionicView.beforeEnter', function(){
+      //家庭关系类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = [];
+        for (var i in data) {
+          data[i].code = i;
+          $scope.memberTypes.push(data[i]);
+        }
+        $scope.memberTypes.sort(function(a,b){return a.code - b.code;});
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
     });
 
     //家庭成员选择事件

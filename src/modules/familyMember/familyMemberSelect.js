@@ -1,23 +1,25 @@
 (function(app) {
   'use strict';
 
-  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $ionicHistory) {
+  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
     $scope.memberId = $stateParams.memberId;
 
-    //取得家庭成员类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.members = null;
+      //取得家庭成员类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+      //取得登录患者家庭成员
+      $http.get('/user/familyMembers').success(function(data) {
+        $scope.members = data;
+      }).error(function(data){
+        $scope.members = [];
+        $cordovaToast.showShortBottom(data);
+      });
     });
-
-    //取得登录患者家庭成员
-    $http.get('/user/familyMembers').success(function(data) {
-      $scope.members = data;
-    });
-
-    //返回上页
-    $scope.goBack = function() {
-      $ionicHistory.goBack();
-    };
 
     //家庭成员管理
     $scope.memberManage = function() {
@@ -46,7 +48,6 @@
   var mainRouter = function($stateProvider) {
     $stateProvider.state('familyMemberSelect', {
       url: '/familyMember/familyMemberSelect/:skipId/:memberId/:doctorId/:date',
-      cache: 'false',
       templateUrl: 'modules/familyMember/familyMemberSelect.html',
       controller: familyMemberSelectCtrl
     });

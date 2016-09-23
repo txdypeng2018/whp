@@ -32,10 +32,10 @@
         <input type="text" placeholder="必填" ng-model="member.phone">
       </label>
     </div>
-    <div ng-if="!isAdd && member.memberCode != '00'" class="operation">
+    <div ng-if="!isAdd && member.memberCode != '00' && member.memberCode != null" class="operation">
       <button class="button button-assertive" ng-disabled="isSubmit" ng-click="deleteMember()">删除该成员</button>
     </div>
-    <div class="visits" ng-if="isAdd || !member.patientVisitsInit">
+    <div class="visits" ng-if="isAdd || (member.patientVisits != null && !member.patientVisitsInit)">
       <ion-checkbox class="positive" ng-model="member.patientVisits">设为默认就诊人</ion-checkbox>
     </div>
   </ion-content>

@@ -50,8 +50,6 @@
     $scope.viewIntroduction = function(id) {
       $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
     };
-
-
   };
 
   var mainRouter = function($stateProvider) {
