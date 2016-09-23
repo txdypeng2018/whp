@@ -2,12 +2,6 @@
   'use strict';
 
   var familyMemberEditCtrl = function($scope, $http, $stateParams, $cordovaToast, $ionicHistory) {
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
     //性别类别
     $http.get('/dataBase/sexTypes').success(function(data) {
       $scope.sexTypes = data;
@@ -23,6 +17,15 @@
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.hasSex = false;
+      $scope.member = {};
+
+      //家庭关系类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+
       if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
         $scope.isAdd = true;
         $http.get('/dataBase/familyMenberTypes/'+$stateParams.memberCode).success(function(data) {

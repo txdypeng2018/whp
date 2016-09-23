@@ -2,16 +2,15 @@
   'use strict';
 
   var familyMemberListCtrl = function($scope, $http, $state, $cordovaToast) {
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
-
     $scope.$on('$ionicView.beforeEnter', function(){
-      //取得家庭成员列表
       $scope.members = null;
+      //家庭关系类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+      //取得家庭成员列表
       $http.get('/user/familyMembers').success(function(data) {
         $scope.members = data;
         for (var i = 0 ; i < $scope.members.length ; i++) {
