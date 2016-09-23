@@ -2,16 +2,22 @@
   'use strict';
 
   var registrationViewCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, $cordovaToast) {
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
-
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.registration = {};
       $scope.patient = {};
+      //取得就诊人
+      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
+        $scope.patient = data;
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+      //家庭关系类别
+      $http.get('/dataBase/familyMenberTypes').success(function(data) {
+        $scope.memberTypes = data;
+      }).error(function(data){
+        $scope.memberTypes = {};
+        $cordovaToast.showShortBottom(data);
+      });
       //取得挂号单
       $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
         $scope.registration = data;
@@ -21,12 +27,6 @@
         else {
           $scope.visitTime = $scope.registration.registerDate;
         }
-      }).error(function(data){
-        $cordovaToast.showShortBottom(data);
-      });
-      //取得就诊人
-      $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
-        $scope.patient = data;
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
       });

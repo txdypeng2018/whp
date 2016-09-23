@@ -27,6 +27,9 @@
       if (routerId === 'subjectSelect') {
         $state.go(routerId, {type: type});
       }
+      else if (routerId === 'medicalReportList') {
+        $state.go('upgrading', {title: '查看报告'});
+      }
       else {
         $state.go(routerId);
       }
