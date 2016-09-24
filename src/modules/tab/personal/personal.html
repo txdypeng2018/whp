@@ -1,14 +1,14 @@
 <ion-view>
-  <ion-content scroll="false" has-bouncing="false" class="content-gray">
-    <div class="personal-title positive-bg">
-      <div>
-        <img ng-if="!isLogin || user.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
-        <img ng-if="user.sexCode == '0'" src="./assets/images/pic_woman.png" class="photo">
-      </div>
-      <div class="name" ng-if="isLogin">{{user.name}}</div>
-      <div class="phone" ng-if="isLogin">{{user.phone}}</div>
-      <div class="name" ng-if="!isLogin" ng-click="login()">登录</div>
+  <div class="personal-title positive-bg">
+    <div>
+      <img ng-if="!isLogin || user.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
+      <img ng-if="user.sexCode == '0'" src="./assets/images/pic_woman.png" class="photo">
     </div>
+    <div class="name" ng-if="isLogin">{{user.name}}</div>
+    <div class="phone" ng-if="isLogin">{{user.phone}}</div>
+    <div class="name" ng-if="!isLogin" ng-click="login()">登录</div>
+  </div>
+  <ion-content has-bouncing="false" class="content-gray personal-content">
     <div>
       <ul class="list personal-list">
         <li class="item item-icon-left item-icon-right" ng-click="itemRouter('familyMemberList')">
@@ -28,6 +28,16 @@
           绑定就诊卡
           <i class="icon ion-ios-arrow-right icon-right"></i>
         </li> -->
+        <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingFeedbackList')">
+          <i class="icon ion-ios-chatboxes-outline positive icon-left"></i>
+          意见反馈
+          <i class="icon ion-ios-arrow-right icon-right"></i>
+        </li>
+        <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingAppAbout')">
+          <i class="icon ion-ios-information-outline positive icon-left"></i>
+          关于我们
+          <i class="icon ion-ios-arrow-right icon-right"></i>
+        </li>
         <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingIndex')">
           <i class="icon ion-ios-gear-outline positive list-icon-left"></i>
           设置

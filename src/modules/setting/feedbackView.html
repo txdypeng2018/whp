@@ -1,0 +1,29 @@
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">用户意见</div>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray feedbackView-content">
+    <ul class="list list-first">
+      <li class="item">
+        <p class="title positive">
+          <i class="icon ion-ios-compose-outline positive"></i>
+          <span>用户意见</span>
+        </p>
+        <p class="content">{{feedback.opinion}}</p>
+        <p class="time">{{feedback.createTime}}</p>
+      </li>
+    </ul>
+    <ul class="list">
+      <li class="item">
+        <p class="title positive">
+          <i class="icon ion-ios-chatboxes-outline positive"></i>
+          <span>医院反馈</span>
+        </p>
+        <p class="content">{{feedback.feedback}}</p>
+        <p class="time">{{feedback.feedbackTime}}</p>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>

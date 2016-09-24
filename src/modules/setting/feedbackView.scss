@@ -1,0 +1,40 @@
+.feedbackView-content {
+  .list-first {
+    margin-bottom: 15px;
+
+    li:first-child {
+      border-top: 0;
+    }
+  }
+
+  .item {
+    padding: 16px 16px 8px 16px;
+
+    .title {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 22px;
+        margin-right: 8px;
+      }
+
+      span {
+        line-height: 22px;
+      }
+    }
+
+    .content {
+      font-size: 16px;
+      padding-top: 10px;
+      white-space: normal;
+    }
+
+    .time {
+      padding-top: 10px;
+      font-size: 13px;
+      color: #999999;
+    }
+  }
+}
