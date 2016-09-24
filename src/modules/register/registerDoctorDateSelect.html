@@ -11,42 +11,22 @@
       <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="专业/专长">
     </form>
     <div class="search-icon">
-        <a class="button button-clear icon ion-ios-close-empty positive" ng-click="searchClk()"></a>
+      <a class="button button-clear icon ion-ios-close-empty positive" ng-click="searchClk()"></a>
     </div>
   </ion-header-bar>
 
   <div class="district-select has-header" ng-show="!hasSearchStr">
-        <div class="button-bar">
-            <button ng-class="{false: 'button-outline'}[districtId == '1']" class="button button-positive district-button"
-                    ng-click="districtClk('1')">
-                预约时间
-            </button>
-            <button ng-class="{false: 'button-outline'}[districtId == '2']" class="button button-positive district-button"
-                    ng-click="districtClk('2')">
-                预约医生
-            </button>
-        </div>
+    <div class="button-bar">
+      <button ng-class="{false: 'button-outline'}[appointmentMode == '1']" class="button button-positive district-button" ng-click="appointmentModeClk('1')">
+        预约时间
+      </button>
+      <button ng-class="{false: 'button-outline'}[appointmentMode == '2']" class="button button-positive district-button" ng-click="appointmentModeClk('2')">
+        预约医生
+      </button>
+    </div>
   </div>
 
-  <div class="registerDoctorDateSelect-date has-header-district has-header" ng-show="dataPicker.isShow && !hasSearchStr">
-        <div class="positive month">{{selectDays[0].month}}月</div>
-      <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
-         ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}" ng-click="leftSlide()"></i>
-      <ion-scroll has-bouncing="false" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
-              <table>
-                  <tr>
-                      <td ng-repeat="oneDay in selectDays" class="week" width="51px" ng-click="dayClk($index, '{{oneDay.date}}')">{{oneDay.week}}</td>
-                  </tr>
-                  <tr>
-                      <td ng-repeat="oneDay in selectDays" class="day" ng-click="dayClk($index, '{{oneDay.date}}')">
-                          <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">{{oneDay.day}}</div>
-                      </td>
-                  </tr>
-              </table>
-      </ion-scroll>
-      <i class="icon ion-ios-arrow-right positive" style="width: 5%;margin-left: 8px"
-         ng-style="{'visibility': rightIconIsShow ? 'visible' : 'hidden'}" ng-click="rightSlide()"></i>
-  </div>
+  <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header-district has-header registerDoctorDateSelect-date" ng-show="appointmentMode == '1' && !hasSearchStr"></isj-date-select>
 
   <ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="contentMarginTop()">
     <ul ng-if="doctors.length > 0" class="list">
@@ -62,7 +42,7 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-          <div class="positive-border district-icon" ng-class="districtColor.get(doctor.districtId)"></div>
+          <div class="positive-border district-icon" ng-class="districtColor[doctor.districtId]"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>

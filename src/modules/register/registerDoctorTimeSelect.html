@@ -4,40 +4,11 @@
     <isj-back-button></isj-back-button>
     <div class="title">{{doctor.name}}</div>
   </ion-header-bar>
-  <div ng-class="{true: 'no-dates'}[allDays.length == 0]" class="registerDoctorTimeSelect-date has-header">
-    <div class="positive month">{{selectDays[0].month}}月</div>
-      <i class="icon ion-ios-arrow-left positive" style="width: 7%;margin-left: 5px"
-         ng-click="leftSlide()" ng-style="{'visibility': leftIconIsShow ? 'visible' : 'hidden'}"></i>
-      <ion-scroll has-bouncing="false" id="date-scroll" class="date-scroll" direction="x" scrollbar-y="false" on-scroll="scroll()">
-    <table>
-      <tr>
-        <td ng-repeat="oneDay in selectDays" class="week" width="51px" ng-click="dayClk($index, '{{oneDay.date}}')">
-          {{oneDay.week}}
-        </td>
-        <td  rowspan="3" width="9%">
-        </td>
 
-      </tr>
-      <tr>
-        <td ng-repeat="oneDay in selectDays" class="day" ng-class="{'': 'border-none'}[oneDay.date]" ng-click="dayClk($index, '{{oneDay.date}}')">
-          <div class="day-select" ng-class="{true: 'positive day-selected'}[oneDay.date==daySelected]">
-            {{oneDay.day}}
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td ng-repeat="oneDay in selectDays" class="week">
-          <div>
-            <span ng-if="oneDay.data.overCount != null">{{oneDay.data.total-oneDay.data.overCount}}/</span>{{oneDay.data.total}}
-          </div>
-        </td>
-      </tr>
-    </table>
-     </ion-scroll>
-      <i class="icon ion-ios-arrow-right positive" style="width: 7%;margin-left: 5px"
-         ng-click="rightSlide()" ng-style="{'visibility': rightIconIsShow ? 'visible' : 'hidden'}"></i>
+  <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date"></isj-date-select>
 
-    <ul class="list">
+  <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
+    <ul ng-if="dateSelectParam.selectDays.length > 0" class="list">
       <li class="item item-avatar-left">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
@@ -46,21 +17,19 @@
           <h2>{{doctor.name}}</h2>
           <p>{{doctor.title}}</p>
         </div>
-        <p>出诊地点：{{dataSelected.dept}}（{{dataSelected.district}}）</p>
-        <p>挂号费：￥{{dataSelected.amount}}</p>
+        <p>出诊地点：{{dataInfo.dept}}（{{dataInfo.district}}）</p>
+        <p>挂号费：￥{{dataInfo.amount}}</p>
       </li>
       <li class="item item-divider">
         预约时间
       </li>
     </ul>
-  </div>
-  <ion-content ng-class="{true: 'no-dates'}[allDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
-    <div ng-if="allDays.length > 0" class="time-select">
+    <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
       <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
         <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
         <span>{{time.time}}</span>
       </div>
     </div>
-    <div ng-if="allDays.length == 0 && !$root.inProcess" class="no-content-center">暂无医生号点信息</div>
+    <div ng-if="dateSelectParam.selectDays.length == 0 && !$root.inProcess" class="no-content-center">暂无医生号点信息</div>
   </ion-content>
 </ion-view>
