@@ -108,13 +108,14 @@
       return selectDays;
     };
 
+    $scope.dateSelectParam = {
+      selectDays: selectDayInit(getNextDay(new Date(), 1)),
+      daySelected: $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd')
+    };
+
     $scope.$on('$ionicView.beforeEnter', function () {
       //数据初始化
       $scope.doctors = null;
-      $scope.dateSelectParam = {
-        selectDays: selectDayInit(getNextDay(new Date(), 1)),
-        daySelected: $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd')
-      };
       //默认隐藏搜索栏
       $scope.hideSearch = true;
       //默认选中预约时间方式

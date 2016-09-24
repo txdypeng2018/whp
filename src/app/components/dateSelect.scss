@@ -1,0 +1,62 @@
+.isj-date-select {
+  width: 100%;
+
+  .month {
+    padding: 5px 0 2px 15px;
+  }
+
+  .date-nav {
+    display: flex;
+    flex-direction: row;
+
+    .scroll-bar-indicator {
+      display: none !important;
+    }
+
+    .date-scroll::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .date-move {
+      text-align: center;
+      background-color: transparent;
+      i {
+        line-height: 50px;
+      }
+    }
+
+    .date-scroll {
+      table {
+        width: 100%;
+
+        td {
+          text-align: center;
+          vertical-align: middle !important;
+        }
+
+        td.week {
+          color: #999999;
+          font-size: 12px;
+        }
+
+        td.day {
+          font-size: 17px;
+          line-height: 22px;
+
+          .day-selected {
+            border-radius: 50%;
+            background-color: #d0eaeb;
+            height: 22px;
+            width: 22px;
+            display: inline-block;
+            text-align: center;
+          }
+        }
+
+        td.day:not(:last-child) {
+          border-right: 1px solid #dddddd;
+        }
+      }
+    }
+  }
+}

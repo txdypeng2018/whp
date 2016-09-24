@@ -43,10 +43,12 @@
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.dateSelectParam = {};
+      $scope.dateSelectParam = {
+        selectDays: [],
+        daySelected: ''
+      };
       $scope.times = [];
       $scope.dataInfos = {};
-
       $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.daySelected}}).success(function(data) {
         if (data.length > 0) {
           var selectDays = [];
@@ -60,12 +62,6 @@
           };
           getScheduleTimes($scope.dateSelectParam.daySelected);
           $scope.dataInfo = data[0];
-        }
-        else {
-          $scope.dateSelectParam = {
-            selectDays: [],
-            daySelected: ''
-          };
         }
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
