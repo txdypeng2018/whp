@@ -11,6 +11,8 @@
     var districtCount = 0;
     $scope.major = $stateParams.major;
     $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
+    //默认选中预约时间方式
+    $scope.appointmentMode = '1';
 
     //取得指定天数以后的日期
     var getNextDay = function (date, days) {
@@ -108,6 +110,20 @@
       return selectDays;
     };
 
+    //上拉加载医生
+    $scope.vm = {
+      moreData: true,
+      pageNo: 1,
+      init: function () {
+        $scope.vm.pageNo = 1;
+        getDoctors($scope.vm.pageNo, true);
+      },
+      loadMore: function () {
+        $scope.vm.pageNo++;
+        getDoctors($scope.vm.pageNo, false);
+      }
+    };
+
     $scope.dateSelectParam = {
       selectDays: selectDayInit(getNextDay(new Date(), 1)),
       daySelected: $filter('date')(getNextDay(new Date(), 1), 'yyyy-MM-dd')
@@ -118,22 +134,7 @@
       $scope.doctors = null;
       //默认隐藏搜索栏
       $scope.hideSearch = true;
-      //默认选中预约时间方式
-      $scope.appointmentMode = '1';
 
-      //上拉加载医生
-      $scope.vm = {
-        moreData: true,
-        pageNo: 1,
-        init: function () {
-          $scope.vm.pageNo = 1;
-          getDoctors($scope.vm.pageNo, true);
-        },
-        loadMore: function () {
-          $scope.vm.pageNo++;
-          getDoctors($scope.vm.pageNo, false);
-        }
-      };
       $scope.vm.init();
     });
 
@@ -173,10 +174,11 @@
     $scope.doctorClk = function (doctorId, overCount) {
       if (overCount > 0) {
         //判断如果是选择医生状态，则置选择日期为空
+        var date = $scope.dateSelectParam.daySelected;
         if ($scope.appointmentMode === '2' || $scope.hasSearchStr) {
-          $scope.dateSelectParam.daySelected = '';
+          date = '';
         }
-        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: $scope.dateSelectParam.daySelected, type: '2'});
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, type: '2'});
       }
     };
 

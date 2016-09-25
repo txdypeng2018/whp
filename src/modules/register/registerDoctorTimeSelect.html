@@ -5,10 +5,10 @@
     <div class="title">{{doctor.name}}</div>
   </ion-header-bar>
 
-  <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date"></isj-date-select>
+  <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date" ng-if="dateSelectParam.selectDays.length > 0"></isj-date-select>
 
-  <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
-    <ul ng-if="dateSelectParam.selectDays.length > 0" class="list">
+  <div class=" registerDoctorTimeSelect-doctor" ng-if="dateSelectParam.selectDays.length > 0">
+    <ul class="list">
       <li class="item item-avatar-left">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
@@ -24,6 +24,9 @@
         预约时间
       </li>
     </ul>
+  </div>
+
+  <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
     <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
       <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
         <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>

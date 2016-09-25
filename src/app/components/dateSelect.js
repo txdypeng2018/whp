@@ -13,27 +13,27 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
 
   //设置控件宽度
   $scope.width = {};
-  var surplusWidth = (document.body.clientWidth-40)%7;
-  var scrollWidth = document.body.clientWidth-40-surplusWidth;
+  var surplusWidth = (document.body.clientWidth-34)%7;
+  var scrollWidth = document.body.clientWidth-34-surplusWidth;
   $scope.width.scroll = (scrollWidth+1)+'px';
   var tdWidth = scrollWidth/7;
   $scope.width.td = tdWidth+'px';
   surplusWidth = surplusWidth - 1;
   if (surplusWidth < 0) {
-    $scope.width.left = '19px';
-    $scope.width.right = '20px';
+    $scope.width.left = '16px';
+    $scope.width.right = '17px';
   }
   else if (surplusWidth > 0 && surplusWidth%2 === 0) {
-    $scope.width.left = (20+surplusWidth/2)+'px';
-    $scope.width.right = (20+surplusWidth/2)+'px';
+    $scope.width.left = (17+surplusWidth/2)+'px';
+    $scope.width.right = (17+surplusWidth/2)+'px';
   }
   else if (surplusWidth > 0) {
-    $scope.width.left = (20+(surplusWidth-1)/2)+'px';
-    $scope.width.right = (20+(surplusWidth-1)/2+1)+'px';
+    $scope.width.left = (17+(surplusWidth-1)/2)+'px';
+    $scope.width.right = (17+(surplusWidth-1)/2+1)+'px';
   }
   else {
-    $scope.width.left = '20px';
-    $scope.width.right = '20px';
+    $scope.width.left = '17px';
+    $scope.width.right = '17px';
   }
 
   //滚动事件

@@ -1,14 +1,11 @@
 .registerDoctorTimeSelect-date {
   position: absolute;
   width: 100%;
+  padding-top: 3px;
 }
 
-.registerDoctorTimeSelect-content {
-  margin-top: 80px !important;
-
-  &.no-dates {
-    margin-top: 0 !important;
-  }
+.registerDoctorTimeSelect-doctor {
+  margin-top: 125px !important;
 
   .list {
     margin-bottom: 0;
@@ -37,6 +34,14 @@
         }
       }
     }
+  }
+}
+
+.registerDoctorTimeSelect-content {
+  margin-top: 213px !important;
+
+  &.no-dates {
+    margin-top: 0 !important;
   }
 
   .time-select {

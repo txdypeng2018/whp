@@ -42,30 +42,34 @@
       $cordovaToast.showShortBottom(data);
     });
 
-    $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.dateSelectParam = {
-        selectDays: [],
-        daySelected: ''
-      };
-      $scope.times = [];
-      $scope.dataInfos = {};
-      $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.daySelected}}).success(function(data) {
-        if (data.length > 0) {
-          var selectDays = [];
-          for (var i = 0 ; i < data.length ; i++) {
-            selectDays.push(setSelectDay(new Date(data[i].date)));
-            $scope.dataInfos[data[i].date] = data[i];
-          }
-          $scope.dateSelectParam = {
-            selectDays: selectDays,
-            daySelected: data[0].date
-          };
-          getScheduleTimes($scope.dateSelectParam.daySelected);
-          $scope.dataInfo = data[0];
+    $scope.dateSelectParam = {
+      selectDays: [],
+      daySelected: $stateParams.date
+    };
+    $scope.times = [];
+    $scope.dataInfos = {};
+    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected}}).success(function(data) {
+      if (data.length > 0) {
+        var selectDays = [];
+        for (var i = 0 ; i < data.length ; i++) {
+          selectDays.push(setSelectDay(new Date(data[i].date)));
+          $scope.dataInfos[data[i].date] = data[i];
         }
-      }).error(function(data){
-        $cordovaToast.showShortBottom(data);
-      });
+        $scope.dateSelectParam = {
+          selectDays: selectDays,
+          daySelected: data[0].date
+        };
+        getScheduleTimes($scope.dateSelectParam.daySelected);
+        $scope.dataInfo = data[0];
+      }
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
+    });
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if ($scope.dateSelectParam.selectDays.length > 0) {
+        getScheduleTimes($scope.dateSelectParam.daySelected);
+      }
     });
 
     //选择照片事件
