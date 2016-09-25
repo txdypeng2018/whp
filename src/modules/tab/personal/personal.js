@@ -48,7 +48,7 @@
     //路由跳转
     $scope.itemRouter = function(routerId) {
       var isLogin = true;
-      if (routerId !== 'settingIndex') {
+      if (routerId !== 'settingIndex' && routerId !== 'settingAppAbout') {
         isLogin = userService.hasToken();
         if (isLogin) {
           $http.get('/user/tokenVal').success(function() {

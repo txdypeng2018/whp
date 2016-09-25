@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2016-09-30",
+    "total": 20,
+    "overCount": 5,
+    "districtId": "1",
+    "district": "南湖",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "categoryCode": "1",
+    "category": "普通",
+    "amount": "5.00"
+  }
+]

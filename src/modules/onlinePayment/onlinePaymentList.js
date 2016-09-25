@@ -4,6 +4,7 @@
   var onlinePaymentListCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
     //取得缴费列表
     var getPayments = function(param) {
+      $scope.recipes = null;
       param.memberId = $stateParams.memberId;
       $http.get('/recipes', {params: param}).success(function(data) {
         $scope.recipes = data;
@@ -45,7 +46,6 @@
 
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.patient = {};
-      $scope.recipes = null;
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;

@@ -1,0 +1,32 @@
+<ion-view>
+  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">意见列表</div>
+    <button class="button button-clear button-positive" ng-click="opinionAdd()">提意</button>
+  </ion-header-bar>
+  <ion-header-bar class="bar-subheader feedbackList-subheader">
+    <label class="item-input item-select feedbackStatus-select">
+      <select ng-model="searchStr.feedbackStatus" ng-change="searchFeedback()"
+              ng-options="node.code as node.name for node in feedbackStatusTypes"></select>
+      <i class="icon ion-ios-arrow-down positive"></i>
+    </label>
+  </ion-header-bar>
+  <ion-content class="has-header has-subheader content-gray feedbackList-content">
+    <ul class="list">
+      <li ng-repeat="feedback in feedbacks" class="item" ng-click="opinionView(feedback.id)">
+        <p class="opinion-time">
+          <span>{{feedback.createTime}}</span>
+          <span class="positive opinion-status">{{feedback.status}}</span>
+        </p>
+        <p class="opinion">
+          {{feedback.opinion}}
+        </p>
+        <p class="feedback">
+          <i class="icon ion-ios-chatboxes-outline positive"></i>
+          <span>{{feedback.feedback}}</span>
+        </p>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>

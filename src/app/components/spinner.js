@@ -1,32 +1,21 @@
 'use strict';
 
+var template = '<div class="isj-spinner" ng-show="isShow" ng-click="hideSpinner()">';
+template += '<div class="loading-div"><ion-spinner icon="ios" class="spinner-dark"></ion-spinner><span>请稍后...</span></div>';
+template += '</div>';
+
 angular.module('isj').directive('isjSpinner', function() {
   return {
     restrict: 'E',
     replace: false,
     scope:{
-      isShow: '=isShow',
-      isRefresh: '=isRefresh'
+      isShow: '=isShow'
     },
-    template: '',
-    controller:function($scope, $element, ngProgressFactory) {
-      $scope.progressbar = ngProgressFactory.createInstance();
-      $scope.progressbar.setParent($element[0]);
-      $scope.progressbar.setColor('#387ef5');
-      $scope.$watch('isRefresh', function (newValue) {
-        if ($scope.isShow) {
-          if (newValue === 1) {
-            $scope.progressbar.start();
-          }
-          else {
-            $scope.progressbar.set(0);
-            $scope.progressbar.start();
-          }
-        }
-        else {
-          $scope.progressbar.complete();
-        }
-      });
+    template: template,
+    controller: function($scope) {
+      $scope.hideSpinner = function() {
+        $scope.isShow = false;
+      };
     }
   };
 });

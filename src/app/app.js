@@ -4,9 +4,7 @@
 
   var deps = [
     'ionic',
-    'ionic-datepicker',
     'angular-carousel',
-    'ngProgress',
     'ngCordova',
     'properNgCordova'
   ];

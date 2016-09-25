@@ -1,12 +1,12 @@
 <ion-view>
-  <isj-spinner is-show="$root.inProcess" is-refresh="$root.refreshProcess"></isj-spinner>
+  <isj-spinner is-show="$root.inProcess"></isj-spinner>
   <ion-header-bar class="bar-light">
     <div class="title">消息</div>
   </ion-header-bar>
   <ion-content class="has-header content-gray message-content">
     <ul class="list">
       <li ng-repeat="message in messages" class="item">
-        <div class="time">{{message.createTime}}</div>
+        <div class="time">{{message.date}}</div>
         <div class="message"><span ng-bind-html="message.content"></span></div>
       </li>
     </ul>
