@@ -1,24 +1,23 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state,$ionicScrollDelegate, $stateParams, $filter, $timeout, ionicDatePicker, $cordovaToast, userService) {
-    var displayDays = 7;
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService) {
+    //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-    $scope.selectDays = [];
-    $scope.allDays = [];
-    var dayPicker1 = {};
-    $scope.leftIconIsShow = false;
-    $scope.rightIconIsShow = false;
-    //取得指定天数以后的日期
-    var getNextDay = function(date, days){
-      date = +date + 1000*60*60*24*days;
-      date = new Date(date);
-      return date;
+
+    //设置可选择的日期
+    var setSelectDay = function(date) {
+      return {
+        date: $filter('date')(date, 'yyyy-MM-dd'),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+        week: weekStr[date.getDay()]
+      };
     };
 
     //取得排班时间
-    $scope.timeTypes = [];
     var getScheduleTimes = function(date) {
+      $scope.times = [];
       $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
         if (data.length%3 !== 0) {
           var count = 3 - data.length%3;
@@ -44,147 +43,34 @@
       $cordovaToast.showShortBottom(data);
     });
 
-    $scope.$on('$ionicView.beforeEnter', function(){
-        $scope.selectDays = [];
-        $scope.times = [];
-        if ($scope.daySelected !== null && $scope.daySelected !== '') {
-            $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.daySelected}}).success(function(data) {
-                dateTmp = new Date($scope.daySelected);
-                $scope.allDays = [{date: $scope.daySelected, data: data[0]}];
-                $scope.selectDays[0] = setSelectDay(dateTmp, data[0]);
-                fillSelectDays();
-                $scope.dataSelected = $scope.allDays[0].data;
-            }).error(function(data){
-                $cordovaToast.showShortBottom(data);
-            });
-        }
-        else {
-            $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
-                $scope.allDays = data;
-                scrollRightWidth = $scope.allDays.length * 51 - width;
-                if($scope.allDays.length>7){
-                    $scope.rightIconIsShow = true;
-                }
-                for (var j = 0 ; j < data.length ; j++) {
-                    dateTmp = new Date(data[j].date);
-                    $scope.selectDays[j] = setSelectDay(dateTmp, data[j]);
-                }
-                if ($scope.selectDays.length < 7) {
-                    fillSelectDays();
-                }
-                if ($scope.selectDays.length > 0) {
-                    $scope.daySelected = data[0].date;
-                    $scope.dataSelected = data[0];
-                }
-
-                //初始化日期选择控件
-                if ($scope.allDays.length > 7) {
-                    var disabledDates = [];
-                    var indexTmp = 0;
-                    dateTmp = new Date($scope.allDays[0].date);
-                    while (true) {
-                        if (dateTmp.getTime() !== new Date($scope.allDays[indexTmp].date).getTime()) {
-                            disabledDates.push(dateTmp);
-                        }
-                        else {
-                            indexTmp++;
-                        }
-                        dateTmp = getNextDay(dateTmp, 1);
-                        if (indexTmp === $scope.allDays.length - 1) {
-                            break;
-                        }
-                    }
-
-                    dayPicker1 = {
-                        callback: function (date) {
-                            $scope.daySelected = $filter('date')(date, 'yyyy-MM-dd');
-                            $scope.selectDays = [];
-                            var indexTmp = 0;
-                            for (var x = 0 ; x < $scope.allDays.length ; x++) {
-                                if ((indexTmp === 0 && $scope.daySelected === $scope.allDays[x].date) || indexTmp > 0) {
-                                    $scope.selectDays[indexTmp] = setSelectDay(new Date($scope.allDays[x].date), $scope.allDays[x]);
-                                    indexTmp++;
-                                }
-                                if (indexTmp === displayDays) {
-                                    break;
-                                }
-                            }
-                            fillSelectDays();
-                            $scope.dataSelected = $scope.selectDays[0].data;
-                        },
-                        from: new Date($scope.allDays[0].date),
-                        to: new Date($scope.allDays[$scope.allDays.length-1].date),
-                        inputDate: new Date($scope.daySelected),
-                        disabledDates: disabledDates,
-                        howTodayButton: false
-                    };
-                }
-            }).error(function(data){
-                $cordovaToast.showShortBottom(data);
-            });
-        }
-    });
-    //设置可选择的日期
-    var setSelectDay = function(date, data) {
-      return {
-        date: $filter('date')(date, 'yyyy-MM-dd'),
-        month: date.getMonth()+1,
-        day: date.getDate(),
-        week: weekStr[date.getDay()],
-        data: data
-      };
+    $scope.dateSelectParam = {
+      selectDays: [],
+      daySelected: $stateParams.date
     };
-
-    //填充满时间栏
-    var fillSelectDays = function() {
-      for (var i = $scope.selectDays.length; i < displayDays ; i++) {
-        $scope.selectDays[i] = {
-          date: '',
-          month: '',
-          day: '',
-          week: ''
+    $scope.dataInfos = {};
+    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected}}).success(function(data) {
+      if (data.length > 0) {
+        var selectDays = [];
+        for (var i = 0 ; i < data.length ; i++) {
+          selectDays.push(setSelectDay(new Date(data[i].date)));
+          $scope.dataInfos[data[i].date] = data[i];
+        }
+        $scope.dateSelectParam = {
+          selectDays: selectDays,
+          daySelected: data[0].date
         };
+        getScheduleTimes($scope.dateSelectParam.daySelected);
+        $scope.dataInfo = data[0];
       }
-    };
-
-    //取得医生排班时间
-    $scope.daySelected = $stateParams.date;
-    $scope.dataSelected = {};
-    var dateTmp = null;
-
-    var width = document.getElementById('date-scroll').offsetWidth;
-    var scrollRightWidth ;
-
-
-      $scope.rightSlide = function () {
-          $ionicScrollDelegate.scrollBy(357, 0, true);
-      };
-      $scope.leftSlide = function () {
-          $ionicScrollDelegate.scrollBy(-357, 0, true);
-      };
-
-
-      $scope.scroll = function () {
-          if ($ionicScrollDelegate.getScrollPosition().left > 1) {
-              $scope.leftIconIsShow = true;
-          } else {
-              $scope.leftIconIsShow = false;
-          }
-          if($ionicScrollDelegate.getScrollPosition().left > scrollRightWidth){
-              $scope.rightIconIsShow = false;
-          }else{
-              if($scope.dataSelected.length>7){
-                  $scope.rightIconIsShow = true;
-              }
-          }
-          $scope.$apply($scope.leftIconIsShow);
-          $scope.$apply($scope.rightIconIsShow);
-      };
-
-    $scope.$on('$ionicView.afterEnter', function(){
-      getScheduleTimes($scope.daySelected);
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
     });
 
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if ($scope.dateSelectParam.selectDays.length > 0) {
+        getScheduleTimes($scope.dateSelectParam.daySelected);
+      }
+    });
 
     //选择照片事件
     $scope.photoClk = function(id) {
@@ -192,31 +78,22 @@
     };
 
     //日期选择事件
-    $scope.dayClk = function(index, date) {
-      if (date !== '' && $scope.daySelected !== date) {
-        $scope.daySelected = date;
-        getScheduleTimes($scope.daySelected);
-        $scope.dataSelected = $scope.selectDays[index].data;
-      }
-    };
-
-    //日期插件选择
-    $scope.dayPicker = function() {
-      dayPicker1.inputDate = new Date($scope.daySelected);
-      ionicDatePicker.openDatePicker(dayPicker1);
+    $scope.dateSelectFun = function() {
+      getScheduleTimes($scope.dateSelectParam.daySelected);
+      $scope.dataInfo = $scope.dataInfos[$scope.dateSelectParam.daySelected];
     };
 
     //时间选中事件
     $scope.timeClk = function(time, overCount) {
-      if ($scope.daySelected !== null && $scope.daySelected !== '' && overCount > 0) {
+      if ($scope.dateSelectParam.daySelected !== null && $scope.dateSelectParam.daySelected !== '' && overCount > 0) {
         var isLogin = userService.hasToken();
         if (isLogin) {
           $http.get('/user/tokenVal').success(function() {
             if ($stateParams.type === '1') {
-              $state.go('registerConfirmToday', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+              $state.go('registerConfirmToday', {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected+' '+time});
             }
             else {
-              $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.daySelected+' '+time});
+              $state.go('registerConfirmAppt', {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected+' '+time});
             }
           }).error(function(data, status){
             if (status !== 401) {

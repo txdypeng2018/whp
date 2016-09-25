@@ -1,0 +1,27 @@
+<div class="isj-date-select">
+  <div class="month positive">
+    {{month}}月
+  </div>
+  <div class="date-nav">
+    <span class="date-move date-move-left" style="width: {{width.left}}" ng-click="leftSlide()">
+      <i class="icon ion-ios-arrow-left positive" ng-show="leftIconIsShow"></i>
+    </span>
+    <ion-scroll delegate-handle="dateScroll" has-bouncing="false" class="date-scroll" style="width: {{width.scroll}}" direction="x" scrollbar-y="false" on-scroll="scroll()">
+      <table>
+        <tr>
+          <td ng-repeat="oneDay in dateSelectParam.selectDays" class="week" style="min-width: {{width.td}}" ng-click="dateClk(oneDay.date)">
+            {{oneDay.week}}
+          </td>
+        </tr>
+        <tr>
+          <td ng-repeat="oneDay in dateSelectParam.selectDays" class="day">
+            <div ng-class="{true: 'positive day-selected'}[oneDay.date == dateSelectParam.daySelected]" ng-click="dateClk(oneDay.date)">{{oneDay.day}}</div>
+          </td>
+        </tr>
+      </table>
+    </ion-scroll>
+    <span class="date-move date-move-right" style="width: {{width.right}}" ng-click="rightSlide()">
+      <i class="icon ion-ios-arrow-right positive" ng-show="rightIconIsShow"></i>
+    </span>
+  </div>
+</div>

@@ -12,56 +12,18 @@
 .registerDoctorDateSelect-date {
   position: absolute;
   width: 100%;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #dddddd;
-  .month {
-    padding: 5px 0 0 7px;
-  }
-  .date-scroll {
-    display: inline-flex;
-    overflow: scroll;
-    width: 89%;
-     margin:0 auto;
-  }
-  .scroll-bar-indicator {
-    display: none !important;
-  }
-  .date-scroll::-webkit-scrollbar {
-    width: 0;
-  }
-  table {
-    display: inline-table;
-    width: 60px;
-    table-layout: fixed;
-    td {
-      text-align: center;
-      vertical-align: middle !important;
-      i {
-        font-size: 18px;
-      }
-    }
-
-    td.week {
-      color: #999999;
-      font-size: 12px;
-    }
-
-    td.day {
-      border-right: 1px solid #dddddd;
-      font-size: 17px;
-      line-height: 22px;
-    }
-  }
 }
 
 .registerDoctorDateSelect-top1 {
-  margin-top: 125px;
+  margin-top: 130px;
 }
 .registerDoctorDateSelect-top2 {
   margin-top: 50px;
 }
 
 .registerDoctorDateSelect-content {
+  border-top: 1px solid #dddddd;
+
   .list {
     li:first-child {
       border-top: 0;

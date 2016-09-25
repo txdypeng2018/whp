@@ -20,11 +20,13 @@
     //取得收藏医生介绍列表
     var getDoctorIntroductions = function(param) {
       $http.get('/user/collectionDoctors', {params: param}).success(function(data) {
+        $scope.spinnerShow = false;
         $scope.introductions = data;
         for (var i = 0 ; i < data.length ; i++) {
           getDoctorPhoto(data[i].id,i);
         }
       }).error(function(data){
+        $scope.spinnerShow = false;
         $scope.introductions = [];
         $cordovaToast.showShortBottom(data);
       });
@@ -38,11 +40,14 @@
     };
     //搜索医生事件
     $scope.doSearch = function() {
+      $scope.introductions = null;
+      $scope.spinnerShow = true;
       getDoctorIntroductions({searchName: $scope.searchName});
     };
     //初始化取得医师介绍列表
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.introductions = null;
+      $scope.spinnerShow = true;
       getDoctorIntroductions({searchName: $scope.searchName});
     });
 
