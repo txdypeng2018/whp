@@ -22,6 +22,7 @@
 
     //取得意见列表
     var getFeedbackList = function(param) {
+      $scope.feedbacks = null;
       $http.get('/service/userOpinion', {params: param}).success(function(data) {
         $scope.feedbacks = data;
       }).error(function(data){
@@ -31,7 +32,6 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.feedbacks = null;
       getFeedbackList($scope.searchStr);
     });
 
