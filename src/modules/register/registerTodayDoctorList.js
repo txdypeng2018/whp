@@ -33,6 +33,7 @@
         endDate: today
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
+        $scope.spinnerShow = false;
         if (data.length === 0) {
           $scope.vm.moreData = false;
         }
@@ -63,18 +64,20 @@
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function(data){
+        $scope.spinnerShow = false;
         $scope.doctors = [];
         $cordovaToast.showShortBottom(data);
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.doctors = null;
       //上拉加载医生
       $scope.vm = {
         moreData: true,
         pageNo: 1,
         init: function () {
+          $scope.spinnerShow = true;
+          $scope.doctors = null;
           $scope.vm.pageNo = 1;
           getDoctors($scope.vm.pageNo, true);
         },

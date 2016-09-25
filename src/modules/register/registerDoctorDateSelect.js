@@ -13,6 +13,8 @@
     $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
     //默认选中预约时间方式
     $scope.appointmentMode = '1';
+    //默认隐藏搜索栏
+    $scope.hideSearch = true;
 
     //取得指定天数以后的日期
     var getNextDay = function (date, days) {
@@ -59,6 +61,7 @@
         endDate: endDate
       };
       $http.get('/schedule/doctors', {params: params}).success(function (data) {
+        $scope.spinnerShow = false;
         if (data.length === 0) {
           $scope.vm.moreData = false;
         }
@@ -79,6 +82,7 @@
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function (data) {
+        $scope.spinnerShow = false;
         $scope.doctors = [];
         $cordovaToast.showShortBottom(data);
       });
@@ -115,6 +119,8 @@
       moreData: true,
       pageNo: 1,
       init: function () {
+        $scope.spinnerShow = true;
+        $scope.doctors = null;
         $scope.vm.pageNo = 1;
         getDoctors($scope.vm.pageNo, true);
       },
@@ -130,11 +136,6 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function () {
-      //数据初始化
-      $scope.doctors = null;
-      //默认隐藏搜索栏
-      $scope.hideSearch = true;
-
       $scope.vm.init();
     });
 

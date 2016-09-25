@@ -31,6 +31,8 @@
 
     //取得学科列表
     var getSubjects = function() {
+      $scope.subjects = [];
+      $scope.subjectRights = '';
       $http.get('/subjects', {params: {districtId: $scope.districtId}}).success(function(data) {
         $scope.subjects = data;
 
@@ -88,7 +90,6 @@
     $scope.districtClk = function(id) {
       if ($scope.districtId !== id) {
         $scope.districtId = id;
-        $scope.subjectRights = '';
         getSubjects();
       }
     };

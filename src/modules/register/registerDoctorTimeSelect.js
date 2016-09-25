@@ -17,6 +17,7 @@
 
     //取得排班时间
     var getScheduleTimes = function(date) {
+      $scope.times = [];
       $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
         if (data.length%3 !== 0) {
           var count = 3 - data.length%3;
@@ -46,7 +47,6 @@
       selectDays: [],
       daySelected: $stateParams.date
     };
-    $scope.times = [];
     $scope.dataInfos = {};
     $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected}}).success(function(data) {
       if (data.length > 0) {
