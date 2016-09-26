@@ -7,8 +7,9 @@
     var updateTime = function() {
       if (!angular.isUndefined($scope.time.second)) {
         //倒计时结束终止支付
-        if ($scope.time.minute === 0 && $scope.time.second === 0) {
+        if ($scope.time.minute <= 0 && $scope.time.second <= 0) {
           $state.go('tab.main');
+          $cordovaToast.showShortBottom('交易超时');
         }
         if ($scope.time.second === 0) {
           --$scope.time.minute;
