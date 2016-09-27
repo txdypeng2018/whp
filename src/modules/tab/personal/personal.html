@@ -38,7 +38,7 @@
           关于我们
           <i class="icon ion-ios-arrow-right icon-right"></i>
         </li>
-        <li class="item item-icon-left item-icon-right" ng-click="itemRouter('settingIndex')">
+        <li ng-if="isLogin" class="item item-icon-left item-icon-right" ng-click="itemRouter('settingIndex')">
           <i class="icon ion-ios-gear-outline positive list-icon-left"></i>
           设置
           <i class="icon ion-ios-arrow-right icon-right"></i>
