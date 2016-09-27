@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, $cordovaToast, $ionicPopup, $ionicHistory) {
+  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, $cordovaToast, $ionicPopup) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
 
