@@ -14,17 +14,40 @@
       $cordovaToast.showShortBottom(data);
     });
 
+    //取得家庭成员信息
+    var getFamilyMember = function() {
+      $http.get('/user/familyMembers/familyMember',{params: {memberId: $stateParams.memberId}}).success(function(data) {
+        var img = '';
+        if (data.memberCode === '00' && data.sexCode === '1') {
+          img = './assets/images/pic_man.png';
+        }
+        else if (data.memberCode === '00' && data.sexCode === '0') {
+          img = './assets/images/pic_woman.png';
+        }
+        else {
+          img = $scope.memberTypes[data.memberCode].img;
+        }
+        $scope.member = {
+          memberCode: data.memberCode,
+          member: data.member,
+          sexCode: data.sexCode,
+          sex: data.sex,
+          name: data.name,
+          img: img,
+          idCard: data.idCard,
+          phone: data.phone,
+          patientVisits: (data.patientVisits === '1'),
+          patientVisitsInit: (data.patientVisits === '1')
+        };
+      }).error(function(data){
+        $cordovaToast.showShortBottom(data);
+      });
+    };
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.hasSex = false;
       $scope.member = {};
-
-      //家庭关系类别
-      $http.get('/dataBase/familyMenberTypes').success(function(data) {
-        $scope.memberTypes = data;
-      }).error(function(data){
-        $cordovaToast.showShortBottom(data);
-      });
 
       if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
         $scope.isAdd = true;
@@ -51,30 +74,10 @@
       else {
         $scope.isAdd = false;
         $scope.hasSex = true;
-        $scope.member = {};
-        $http.get('/user/familyMembers/familyMember',{params: {memberId: $stateParams.memberId}}).success(function(data) {
-          var img = '';
-          if (data.memberCode === '00' && data.sexCode === '1') {
-            img = './assets/images/pic_man.png';
-          }
-          else if (data.memberCode === '00' && data.sexCode === '0') {
-            img = './assets/images/pic_woman.png';
-          }
-          else {
-            img = $scope.memberTypes[data.memberCode].img;
-          }
-          $scope.member = {
-            memberCode: data.memberCode,
-            member: data.member,
-            sexCode: data.sexCode,
-            sex: data.sex,
-            name: data.name,
-            img: img,
-            idCard: data.idCard,
-            phone: data.phone,
-            patientVisits: (data.patientVisits === '1'),
-            patientVisitsInit: (data.patientVisits === '1')
-          };
+        //家庭关系类别
+        $http.get('/dataBase/familyMenberTypes').success(function(data) {
+          $scope.memberTypes = data;
+          getFamilyMember();
         }).error(function(data){
           $cordovaToast.showShortBottom(data);
         });
