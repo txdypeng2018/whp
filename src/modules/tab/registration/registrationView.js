@@ -1,9 +1,8 @@
 (function(app) {
   'use strict';
 
-  var registrationViewCtrl = function($scope, $http, $state, $stateParams, $filter, $ionicPopup, $ionicHistory, $cordovaToast) {
+  var registrationViewCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, $cordovaToast) {
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.isToday = true;
       $scope.registration = {};
       $scope.patient = {};
       //取得就诊人
@@ -27,10 +26,6 @@
         }
         else {
           $scope.visitTime = $scope.registration.registerDate;
-        }
-        var today = $filter('date')(new Date(), 'yyyy年MM月dd日');
-        if (today < $scope.registration.registerDate.substring(0, 11)) {
-          $scope.isToday = false;
         }
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
