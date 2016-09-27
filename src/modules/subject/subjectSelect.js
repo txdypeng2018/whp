@@ -118,15 +118,7 @@
         cssClass: 'agreement-popup',
         buttons: [
           {
-            text: '不同意',
-            onTap: function(e) {
-              e.preventDefault();
-              myPopup.close();
-              $ionicHistory.goBack();
-            }
-          },
-          {
-            text: '同意',
+            text: '我知道了',
             type: 'button-positive',
             onTap: function(e) {
               e.preventDefault();
