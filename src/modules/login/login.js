@@ -9,6 +9,13 @@
       };
     });
 
+    //取得提示信息
+    $http.get('/permission/loginPrompt').success(function(data) {
+      $scope.loginPrompt = data;
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
+    });
+
     //返回
     $scope.goBack = function() {
       if (angular.isUndefined($stateParams.skipId) || $stateParams.skipId === '') {

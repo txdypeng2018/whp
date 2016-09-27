@@ -33,11 +33,14 @@
             <span class="content-name">{{registration.doctor}}</span>
           </div>
           <div class="bottom">
-            诊费:￥{{registration.amount}}
+            就诊时间：{{registration.apptDate}}
+          </div>
+          <div class="bottom">
+            挂号费：￥{{registration.amount}}
           </div>
         </div>
         <div class="time-line-bottom">
-          <span>{{registration.registerDate.substring(5,11)}}</span>
+          <span>预约时间：{{registration.registerDate.substring(5,11)}}</span>
           <span class="pay-status">{{registration.status}}</span>
         </div>
       </div>
