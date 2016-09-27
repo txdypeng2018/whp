@@ -38,7 +38,7 @@
       请在<span id="payment_countDown"><span ng-bind="time.minute"></span>分<span ng-bind="time.second"></span>秒</span>内完成支付
     </div>
     <div class="confirm">
-      <button class="button button-positive" ng-click="pay()">支付</button>
+      <button class="button button-positive" ng-click="pay()" ng-disabled="paySelectValue == null || paySelectValue == ''">支付</button>
     </div>
   </ion-content>
 </ion-view>

@@ -23,6 +23,7 @@
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
+    $scope.majorTmp = $stateParams.major;
     var getDoctors = function(pageNo, isInit) {
       var params = {
         pageNo: pageNo,
@@ -101,6 +102,7 @@
 
     //查询事件
     $scope.doSearch = function() {
+      $scope.majorTmp = $scope.major;
       $scope.vm.init();
     };
 
@@ -113,7 +115,7 @@
     //医生选择事件
     $scope.doctorClk = function(doctorId, overCount) {
       if (overCount > 0) {
-        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, type: '1'});
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, districtId: $stateParams.districtId,  type: '1'});
       }
     };
   };

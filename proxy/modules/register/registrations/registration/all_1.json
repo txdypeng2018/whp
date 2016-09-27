@@ -16,5 +16,6 @@
   "registerDate": "2016年08月12日 10:12",
   "statusCode": "1",
   "status": "已支付",
+  "canBack": "0",
   "orderNum": "1"
 }

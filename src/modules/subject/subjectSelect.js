@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $http, $state, $stateParams, $timeout, $cordovaToast,$ionicPopup,$ionicHistory) {
+  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, $cordovaToast, $ionicPopup) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
 
@@ -9,18 +9,15 @@
 
     $scope.$on('$ionicView.beforeEnter', function(){
       if($scope.type === '1' || $scope.type === '2'){
-        if (angular.isUndefined($scope.agreement) || $scope.agreement === '') {
-          //取得挂号须知
-          $http.get('/register/agreement').success(function(data) {
-            $scope.agreement = data;
+        //取得挂号须知
+        $http.get('/register/agreement').success(function(data) {
+          if (angular.isUndefined($rootScope.agreement) || $rootScope.agreement === '' || $rootScope.agreement !== data) {
+            $rootScope.agreement = data;
             $scope.showAgreement();
-          }).error(function(data){
-            $cordovaToast.showShortBottom(data);
-          });
-        }
-        else {
-          $scope.showAgreement();
-        }
+          }
+        }).error(function(data){
+          $cordovaToast.showShortBottom(data);
+        });
       }
     });
     $scope.$on('$ionicView.beforeLeave', function(){
@@ -116,20 +113,12 @@
     var myPopup = null;
     $scope.showAgreement = function() {
       myPopup = $ionicPopup.show({
-        template: '<div style="padding: 3px;font-size:15px">'+$scope.agreement+'</div>',
+        template: '<div style="padding: 3px;font-size:15px">'+$rootScope.agreement+'</div>',
         title: '挂号须知',
         cssClass: 'agreement-popup',
         buttons: [
           {
-            text: '不同意',
-            onTap: function(e) {
-              e.preventDefault();
-              myPopup.close();
-              $ionicHistory.goBack();
-            }
-          },
-          {
-            text: '同意',
+            text: '我知道了',
             type: 'button-positive',
             onTap: function(e) {
               e.preventDefault();

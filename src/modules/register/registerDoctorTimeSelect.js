@@ -18,7 +18,7 @@
     //取得排班时间
     var getScheduleTimes = function(date) {
       $scope.times = [];
-      $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date}}).success(function(data) {
+      $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date, districtId: $stateParams.districtId}}).success(function(data) {
         if (data.length%3 !== 0) {
           var count = 3 - data.length%3;
           for (var i = 0 ; i < count ; i++) {
@@ -48,7 +48,7 @@
       daySelected: $stateParams.date
     };
     $scope.dataInfos = {};
-    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected}}).success(function(data) {
+    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected, districtId: $stateParams.districtId}}).success(function(data) {
       if (data.length > 0) {
         var selectDays = [];
         for (var i = 0 ; i < data.length ; i++) {
@@ -114,7 +114,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerDoctorTimeSelect', {
-      url: '/register/registerDoctorTimeSelect/:doctorId/:date/:type',
+      url: '/register/registerDoctorTimeSelect/:doctorId/:date/:districtId/:type',
       templateUrl: 'modules/register/registerDoctorTimeSelect.html',
       controller: registerDoctorTimeSelectCtrl
     });
