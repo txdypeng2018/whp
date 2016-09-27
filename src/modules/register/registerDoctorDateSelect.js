@@ -1,7 +1,7 @@
 (function (app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast) {
+  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, doctorPhotoService) {
     //数据初始化
     var color = ['district-icon-positive', 'district-icon-balanced',
       'district-icon-royal', 'district-icon-calm', 'district-icon-assertive'];
@@ -34,11 +34,18 @@
 
     //取得医生照片
     var getDoctorPhoto = function (doctorId, index) {
-      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function (data, status, headers, config) {
-        $scope.doctors[config.params.index].photo = data;
-      }).error(function (data, status, fun, config) {
-        $scope.doctors[config.params.index].photo = '';
-      });
+      var image = doctorPhotoService.getPhoto(doctorId);
+      if (!angular.isUndefined(image) && image !== '') {
+        $scope.doctors[index].photo = image;
+      }
+      else {
+        $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function (data, status, headers, config) {
+          $scope.doctors[config.params.index].photo = data;
+          doctorPhotoService.setPhoto(doctorId, data);
+        }).error(function (data, status, fun, config) {
+          $scope.doctors[config.params.index].photo = '';
+        });
+      }
     };
 
     //取得医生列表

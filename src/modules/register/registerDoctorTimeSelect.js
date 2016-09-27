@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService, doctorPhotoService) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
@@ -34,11 +34,18 @@
     //取得医生信息
     $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {
       $scope.doctor = data;
-      $http.get('/doctors/photo', {params: {doctorId: $scope.doctor.id}}).success(function(data) {
-        $scope.photo = data;
-      }).error(function(){
-        $scope.photo = '';
-      });
+      var image = doctorPhotoService.getPhoto($scope.doctor.id);
+      if (!angular.isUndefined(image) && image !== '') {
+        $scope.photo = image;
+      }
+      else {
+        $http.get('/doctors/photo', {params: {doctorId: $scope.doctor.id}}).success(function(data) {
+          $scope.photo = data;
+          doctorPhotoService.setPhoto($scope.doctor.id, data);
+        }).error(function(){
+          $scope.photo = '';
+        });
+      }
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });
