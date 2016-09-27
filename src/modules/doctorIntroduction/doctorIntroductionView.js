@@ -57,7 +57,7 @@
     //挂号点击事件
     $scope.register = function() {
       if ($scope.isLogin) {
-        $state.go('registerDoctorTimeSelect', {doctorId: $stateParams.doctorId, date: '', type: '2'});
+        $state.go('registerDoctorTimeSelect', {doctorId: $stateParams.doctorId, date: '', districtId: '', type: '2'});
       }
       else {
         $state.go('login');
