@@ -7,7 +7,7 @@
 
   <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date" ng-if="dateSelectParam.selectDays.length > 0"></isj-date-select>
 
-  <div class=" registerDoctorTimeSelect-doctor" ng-if="dateSelectParam.selectDays.length > 0">
+  <div class="has-header registerDoctorTimeSelect-doctor" ng-if="dateSelectParam.selectDays.length > 0">
     <ul class="list">
       <li class="item item-avatar-left">
         <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
