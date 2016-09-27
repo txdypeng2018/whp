@@ -10,6 +10,7 @@
     $scope.districtColor = {};
     var districtCount = 0;
     $scope.major = $stateParams.major;
+    $scope.majorTmp = $stateParams.major;
     $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
     //默认选中预约时间方式
     $scope.appointmentMode = '1';
@@ -162,6 +163,7 @@
     //查询事件
     $scope.doSearch = function () {
       $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
+      $scope.majorTmp = $scope.major;
       $scope.vm.init();
     };
 

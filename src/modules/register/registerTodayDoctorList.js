@@ -23,6 +23,7 @@
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
+    $scope.majorTmp = $stateParams.major;
     var getDoctors = function(pageNo, isInit) {
       var params = {
         pageNo: pageNo,
@@ -101,6 +102,7 @@
 
     //查询事件
     $scope.doSearch = function() {
+      $scope.majorTmp = $scope.major;
       $scope.vm.init();
     };
 
