@@ -13,8 +13,9 @@
   "doctorId": "1",
   "doctor": "医生1",
   "amount": "5.00",
-  "registerDate": "2016年08月12日 10:12",
+  "registerDate": "2016年12月12日 10:12",
   "statusCode": "0",
   "status": "未支付",
+  "canBack": "1",
   "orderNum": "1"
 }

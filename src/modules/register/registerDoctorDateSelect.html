@@ -8,7 +8,7 @@
 
   <ion-header-bar ng-class="{true: 'search-none'}[hideSearch]" class="head-search">
     <form ng-submit="doSearch()">
-      <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="专业/专长">
+      <input id="registerDoctorDateSelect_search" type="search" ng-model="major" placeholder="姓名或专长">
     </form>
     <div class="search-icon">
       <a class="button button-clear icon ion-ios-close-empty positive" ng-click="searchClk()"></a>
@@ -46,7 +46,10 @@
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>
-    <div ng-if="doctors.length == 0" class="no-content-center">暂无医生排班信息</div>
+    <div ng-if="doctors.length == 0" class="no-content-center">
+      <span ng-if="majorTmp == null || majorTmp == ''">暂无医生排班信息</span>
+      <span ng-if="majorTmp != null && majorTmp != ''">暂无结果，请重新输入关键字</span>
+    </div>
     <ion-infinite-scroll ng-if="vm.moreData" on-infinite="vm.loadMore()" distance="2%"></ion-infinite-scroll>
   </ion-content>
 

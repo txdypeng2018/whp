@@ -10,7 +10,7 @@
           <div rn-carousel-indicators ng-if="carouselImages.length > 1"
                slides="carouselImages" rn-carousel-index="carouselIndex"></div>
         </div>
-        <ul rn-carousel rn-carousel-index="carouselIndex">
+        <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-auto-slide="">
           <li ng-repeat="carouselImage in carouselImages">
             <div class="carousel-img"  style="background-image: url({{carouselImage.url}});"></div>
           </li>

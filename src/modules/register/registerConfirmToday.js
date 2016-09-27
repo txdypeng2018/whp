@@ -67,8 +67,8 @@
         cssClass: 'agreement-popup',
         buttons: [
           {
-            text: '确定',
-            type: 'positive',
+            text: '我知道了',
+            type: 'button-positive',
             onTap: function(e) {
               e.preventDefault();
               myPopup.close();
