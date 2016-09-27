@@ -21,11 +21,11 @@
       //取得挂号单
       $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
         $scope.registration = data;
-        if ($scope.registration.registerDate.length <= 11) {
+        if ($scope.registration.apptDate.length <= 11) {
           $scope.visitTime = '请到分诊台咨询';
         }
         else {
-          $scope.visitTime = $scope.registration.registerDate;
+          $scope.visitTime = $scope.registration.apptDate;
         }
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
