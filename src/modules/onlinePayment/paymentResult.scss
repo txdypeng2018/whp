@@ -1,26 +1,26 @@
 .paymentResult-content {
-  .resultDetail {
+  .payResult-info {
+    margin: 15px;
+    background-color: #ffffff;
+    text-align: center;
     padding: 20px 0;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+    font-size: 18px;
 
     img {
-      height: 30px;
-      width: 30px;
+      width: 70px;
+      height: 70px;
     }
 
-    span {
-      margin-left: 10px;
-      line-height: 30px;
-      font-size: 18px;
+    .payResult-font {
+      padding-top: 12px;
     }
+  }
 
-    a {
-      margin-left: 20px;
-      line-height: 30px;
-      font-size: 18px;
-      color: #387ef5 !important;
+  .payResult-link {
+    padding: 0 15px;
+
+    .button {
+      width: 100%;
     }
   }
 }

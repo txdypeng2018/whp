@@ -11,6 +11,10 @@
       $state.go('tab.main');
     };
 
+    //跳转到挂号页
+    $scope.viewRegistration = function() {
+      $state.go('tab.registration');
+    };
   };
 
   var mainRouter = function($stateProvider) {

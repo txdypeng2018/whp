@@ -78,7 +78,7 @@
                     // 正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                     // 支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                   } else if(converseRet.resultStatus === '8000' || converseRet.resultStatus === '6004') {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付结果未知!请查看诊疗页!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付结果未知!请查看挂号页!'});
                     // 用户中途取消
                   } else if(converseRet.resultStatus === '6001') {
                     var myPopup = $ionicPopup.show({
