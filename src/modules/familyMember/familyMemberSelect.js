@@ -3,6 +3,7 @@
 
   var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
     $scope.memberId = $stateParams.memberId;
+    $scope.canAdd = false;
 
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.members = null;
@@ -15,6 +16,9 @@
       //取得登录患者家庭成员
       $http.get('/user/familyMembers').success(function(data) {
         $scope.members = data;
+        if ((9-$scope.members.length) > 0) {
+          $scope.canAdd = true;
+        }
       }).error(function(data){
         $scope.members = [];
         $cordovaToast.showShortBottom(data);

@@ -2,6 +2,7 @@
   'use strict';
 
   var familyMemberListCtrl = function($scope, $http, $state, $cordovaToast) {
+    $scope.canAdd = false;
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.members = null;
       //家庭关系类别
@@ -13,6 +14,9 @@
       //取得家庭成员列表
       $http.get('/user/familyMembers').success(function(data) {
         $scope.members = data;
+        if ((9-$scope.members.length) > 0) {
+          $scope.canAdd = true;
+        }
         for (var i = 0 ; i < $scope.members.length ; i++) {
           $scope.members[i].idCard = $scope.members[i].idCard.substring(0,6)+'********'+$scope.members[i].idCard.substring(14,18);
           $scope.members[i].phone = $scope.members[i].phone.substring(0,3)+'****'+$scope.members[i].phone.substring(7,11);

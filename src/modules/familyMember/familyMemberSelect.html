@@ -20,7 +20,7 @@
           <i ng-if="memberId == member.id" class="icon ion-checkmark-circled positive selected"></i>
         </div>
       </li>
-      <li ng-if="(9-members.length) > 0" ng-click="addMember()">
+      <li ng-if="canAdd" ng-click="addMember()">
         <div><i class="icon ion-android-add add-member"></i></div>
       </li>
     </ul>
