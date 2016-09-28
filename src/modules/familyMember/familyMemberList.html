@@ -3,7 +3,7 @@
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
     <div class="title">家庭成员</div>
-    <button class="button button-clear button-positive" ng-click="familyMemberAdd()">添加</button>
+    <button class="button button-clear button-positive" ng-click="familyMemberAdd()" ng-disabled="(9-members.length) <= 0">添加</button>
   </ion-header-bar>
   <ion-header-bar class="bar-subheader bar-light familyMemberList-subheader">
     <div class="title">已添加{{members.length}}位家庭成员，还可以添加{{9-members.length}}位</div>
