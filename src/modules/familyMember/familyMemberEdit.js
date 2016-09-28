@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberEditCtrl = function($scope, $http, $stateParams, $cordovaToast, $ionicHistory) {
+  var familyMemberEditCtrl = function($scope, $http, $stateParams, $ionicPopup, $cordovaToast, $ionicHistory) {
     //性别类别
     $http.get('/dataBase/sexTypes').success(function(data) {
       $scope.sexTypes = data;
@@ -152,7 +152,7 @@
           var param1 = {
             name: $scope.member.name,
             sexCode: $scope.member.sexCode,
-            sex: $scope.member.sex,
+            sex: $scope.sexTypes[$scope.member.sexCode].name,
             idCard: $scope.member.idCard,
             phone: $scope.member.phone,
             memberCode: $scope.member.memberCode,
@@ -188,16 +188,33 @@
     };
 
     //删除家庭成员
+    var myPopup = null;
     $scope.deleteMember = function() {
-      $scope.isSubmit = true;
-      $http.delete('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function() {
-        goBack();
-        $cordovaToast.showShortBottom('删除成功');
-      }).error(function(data){
-        $scope.isSubmit = false;
-        $cordovaToast.showShortBottom(data);
+      myPopup = $ionicPopup.confirm({
+        title: '提示',
+        template: '<span style="font-size: 16px">是否删除该家庭成员?</span>',
+        cancelText: '取消',
+        okText: '确定'
+      });
+      myPopup.then(function(res) {
+        if(res) {
+          $scope.isSubmit = true;
+          $http.delete('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function() {
+            goBack();
+            $cordovaToast.showShortBottom('删除成功');
+          }).error(function(data){
+            $scope.isSubmit = false;
+            $cordovaToast.showShortBottom(data);
+          });
+        }
       });
     };
+
+    $scope.$on('$ionicView.beforeLeave', function(){
+      if (myPopup !== null) {
+        myPopup.close();
+      }
+    });
   };
 
   var mainRouter = function($stateProvider) {
