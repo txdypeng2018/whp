@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, $cordovaToast, userService) {
+  var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, $cordovaToast, userService, doctorPhotoService) {
     $scope.type = ($stateParams.type==='1');
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
@@ -22,11 +22,18 @@
     //取得医生简介
     $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {
       $scope.introduction = data;
-      $http.get('/doctors/photo', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
-        $scope.introduction.photo = data;
-      }).error(function(){
-        $scope.introduction.photo = '';
-      });
+      var image = doctorPhotoService.getPhoto($stateParams.doctorId);
+      if (!angular.isUndefined(image) && image !== '') {
+        $scope.introduction.photo = image;
+      }
+      else {
+        $http.get('/doctors/photo', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
+          $scope.introduction.photo = data;
+          doctorPhotoService.setPhoto($stateParams.doctorId, data);
+        }).error(function(){
+          $scope.introduction.photo = '';
+        });
+      }
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });

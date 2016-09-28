@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $cordovaToast) {
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $cordovaToast, doctorPhotoService) {
     $scope.title = '收藏的医生';
     $scope.vm = {
       moreData: false,
@@ -10,11 +10,18 @@
 
     //取得医生照片
     var getDoctorPhoto = function(doctorId, index) {
-      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
-        $scope.introductions[config.params.index].photo = data;
-      }).error(function(data, status, fun, config){
-        $scope.introductions[config.params.index].photo = '';
-      });
+      var image = doctorPhotoService.getPhoto(doctorId);
+      if (!angular.isUndefined(image) && image !== '') {
+        $scope.introductions[index].photo = image;
+      }
+      else {
+        $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+          $scope.introductions[config.params.index].photo = data;
+          doctorPhotoService.setPhoto(doctorId, data);
+        }).error(function(data, status, fun, config){
+          $scope.introductions[config.params.index].photo = '';
+        });
+      }
     };
 
     //取得收藏医生介绍列表

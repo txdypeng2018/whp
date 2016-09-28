@@ -1,16 +1,23 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, doctorPhotoService) {
     $scope.hideSearch = true;
 
     //取得医生照片
     var getDoctorPhoto = function(doctorId, index) {
-      $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
-        $scope.doctors[config.params.index].photo = data;
-      }).error(function(data, status, fun, config){
-        $scope.doctors[config.params.index].photo = '';
-      });
+      var image = doctorPhotoService.getPhoto(doctorId);
+      if (!angular.isUndefined(image) && image !== '') {
+        $scope.doctors[index].photo = image;
+      }
+      else {
+        $http.get('/doctors/photo', {params: {doctorId: doctorId, index: index}}).success(function(data, status, headers, config) {
+          $scope.doctors[config.params.index].photo = data;
+          doctorPhotoService.setPhoto(doctorId, data);
+        }).error(function(data, status, fun, config){
+          $scope.doctors[config.params.index].photo = '';
+        });
+      }
     };
 
     //不同的院区的颜色

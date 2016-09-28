@@ -19,9 +19,19 @@
       padding-left: 86px;
 
       .photo {
+        position: absolute;
+        top: 18px;
+        left: 16px;
+        width: 55px;
+        height: 55px;
         max-width: 55px;
         max-height: 55px;
-        top: 18px;
+        overflow: hidden;
+        border-radius: 50%;
+
+        img {
+          width: 100%;
+        }
       }
 
       .name {

@@ -10,9 +10,11 @@
   <ion-content ng-class="{false: 'no-footer'}[type]" class="has-header has-footer doctorIntroductionView-content">
     <ul class="list">
       <li class="item item-avatar-left">
-        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo">
-        <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo">
-        <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}" class="photo">
+        <div class="photo">
+          <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png">
+          <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png">
+          <img ng-if="introduction.photo != null && introduction.photo != ''" ng-src="{{introduction.photo}}">
+        </div>
         <div>
           <h2 class="name">{{introduction.name}}</h2>
           <p class="professional">{{introduction.title}}</p>

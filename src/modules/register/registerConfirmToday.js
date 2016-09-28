@@ -11,9 +11,6 @@
     //取得挂号须知
     $http.get('/register/agreement').success(function(data) {
       $scope.agreement = data;
-      if (angular.isUndefined($stateParams.memberId) || $stateParams.memberId === '') {
-
-      }
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });
@@ -80,7 +77,7 @@
 
     //选择家庭成员
     $scope.selectMember = function() {
-      $state.go('familyMemberSelect', {skipId: 'registerConfirmToday', doctorId: doctorId, memberId: $scope.patient.id});
+      $state.go('familyMemberSelect', {skipId: 'registerConfirmToday', doctorId: doctorId, memberId: $scope.patient.id, date: $stateParams.date});
     };
 
     //挂号确认事件
