@@ -32,23 +32,19 @@
     };
 
     //取得医生信息
-    $http.get('/doctors/'+$stateParams.doctorId).success(function(data) {
-      $scope.doctor = data;
-      var image = doctorPhotoService.getPhoto($scope.doctor.id);
-      if (!angular.isUndefined(image) && image !== '') {
-        $scope.photo = image;
-      }
-      else {
-        $http.get('/doctors/photo', {params: {doctorId: $scope.doctor.id}}).success(function(data) {
-          $scope.photo = data;
-          doctorPhotoService.setPhoto($scope.doctor.id, data);
-        }).error(function(){
-          $scope.photo = '';
-        });
-      }
-    }).error(function(data){
-      $cordovaToast.showShortBottom(data);
-    });
+    $scope.doctorId = $stateParams.doctorId;
+    var image = doctorPhotoService.getPhoto($stateParams.doctorId);
+    if (!angular.isUndefined(image) && image !== '') {
+      $scope.photo = image;
+    }
+    else {
+      $http.get('/doctors/photo', {params: {doctorId: $stateParams.doctorId}}).success(function(data) {
+        $scope.photo = data;
+        doctorPhotoService.setPhoto($stateParams.doctorId, data);
+      }).error(function(){
+        $scope.photo = '';
+      });
+    }
 
     $scope.dateSelectParam = {
       selectDays: [],

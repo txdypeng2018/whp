@@ -2,7 +2,7 @@
   <isj-spinner is-show="$root.inProcess"></isj-spinner>
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
-    <div class="title">{{doctor.name}}</div>
+    <div class="title">{{dataInfo.name}}</div>
   </ion-header-bar>
 
   <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date" ng-if="dateSelectParam.selectDays.length > 0"></isj-date-select>
@@ -10,12 +10,12 @@
   <div class="has-header registerDoctorTimeSelect-doctor" ng-if="dateSelectParam.selectDays.length > 0">
     <ul class="list">
       <li class="item item-avatar-left">
-        <img ng-if="(photo == null || photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id)">
-        <img ng-if="(photo == null || photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id)">
-        <img ng-if="photo != null && photo != ''" ng-src="{{photo}}" class="photo" ng-click="photoClk(doctor.id)">
+        <img ng-if="(photo == null || photo == '') && dataInfo.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctorId)">
+        <img ng-if="(photo == null || photo == '') && dataInfo.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctorId)">
+        <img ng-if="photo != null && photo != ''" ng-src="{{photo}}" class="photo" ng-click="photoClk(doctorId)">
         <div class="name">
-          <h2>{{doctor.name}}</h2>
-          <p>{{doctor.title}}</p>
+          <h2>{{dataInfo.name}}</h2>
+          <p>{{dataInfo.title}}</p>
         </div>
         <p>出诊地点：{{dataInfo.dept}}（{{dataInfo.district}}）</p>
         <p>挂号费：￥{{dataInfo.amount}}</p>
