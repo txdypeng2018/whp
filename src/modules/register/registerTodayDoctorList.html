@@ -16,9 +16,11 @@
   <ion-content class="has-header content-fill registerTodayDoctorList-content">
     <ul ng-if="doctors.length > 0" class="list">
       <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id, doctor.overCount)">
-        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" class="photo" ng-click="photoClk(doctor.id, $event)">
-        <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" class="photo" ng-click="photoClk(doctor.id, $event)">
-        <img ng-if="doctor.photo != null && doctor.photo != ''" ng-src="{{doctor.photo}}" class="photo" ng-click="photoClk(doctor.id, $event)">
+        <div class="photo">
+          <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" ng-click="photoClk(doctor.id, $event)">
+          <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" ng-click="photoClk(doctor.id, $event)">
+          <img ng-if="doctor.photo != null && doctor.photo != ''" ng-src="{{doctor.photo}}" ng-click="photoClk(doctor.id, $event)">
+        </div>
         <div class="name">
           <h2>{{doctor.name}}</h2>
           <p>{{doctor.title}}</p>
