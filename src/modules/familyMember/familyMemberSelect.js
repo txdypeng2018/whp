@@ -33,7 +33,7 @@
     //家庭成员选择事件
     $scope.memberSelect = function(id) {
       if ($stateParams.skipId === 'registerConfirmToday') {
-        $state.go($stateParams.skipId, {memberId: id, doctorId: $stateParams.doctorId});
+        $state.go($stateParams.skipId, {memberId: id, doctorId: $stateParams.doctorId, date: $stateParams.date});
       }
       else if ($stateParams.skipId === 'registerConfirmAppt') {
         $state.go($stateParams.skipId, {memberId: id, doctorId: $stateParams.doctorId, date: $stateParams.date});
