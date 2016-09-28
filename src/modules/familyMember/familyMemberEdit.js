@@ -152,7 +152,7 @@
           var param1 = {
             name: $scope.member.name,
             sexCode: $scope.member.sexCode,
-            sex: $scope.member.sex,
+            sex: $scope.sexTypes[$scope.member.sexCode].name,
             idCard: $scope.member.idCard,
             phone: $scope.member.phone,
             memberCode: $scope.member.memberCode,
