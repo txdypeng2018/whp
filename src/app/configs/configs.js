@@ -69,6 +69,9 @@
         return response || $q.when(response);
       },
       responseError: function(rejection) {
+        if (rejection.status === 401) {
+          rejection.data = '请先登录';
+        }
         if (rejection.status === 404) {
           rejection.data = '资源未找到';
         }

@@ -3,9 +3,9 @@
 
   var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
     $scope.memberId = $stateParams.memberId;
-    $scope.canAdd = false;
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.canAdd = false;
       $scope.members = null;
       //取得家庭成员类别
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
@@ -18,6 +18,9 @@
         $scope.members = data;
         if ((9-$scope.members.length) > 0) {
           $scope.canAdd = true;
+        }
+        else {
+          $scope.canAdd = false;
         }
       }).error(function(data){
         $scope.members = [];
