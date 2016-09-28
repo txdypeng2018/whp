@@ -83,14 +83,21 @@
   	function checkAppVersion(){
        $properProperpush.getDeviceInfo().then(function(success){
            if(success.type==='android'){
-              $http.get('/app/latest', {params: {}}).success(function(data) {
-                      var versionInfo={};
-                      versionInfo.ver=data.ver||'0';
-                      versionInfo.url=data.url||'';
-                      versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
-                      window.plugins.UpdateVersion.checkVersion(versionInfo);
-                    }).error(function(data){
-                      $cordovaToast.showShortBottom(data);
+           	 window.plugins.UpdateVersion.isUpdating(function(s){
+           	 	 //如果不是处在正在更新中，则检查程序版本
+                 if(!s.updating){
+		              $http.get('/app/latest', {params: {}}).success(function(data) {
+		                      var versionInfo={};
+		                      versionInfo.ver=data.ver||'0';
+		                      versionInfo.url=data.url||'';
+		                      versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
+		                      window.plugins.UpdateVersion.checkVersion(versionInfo);
+		                    }).error(function(data){
+		                      $cordovaToast.showShortBottom(data);
+		               });
+	              }
+              },function(err){
+                    alert(err);
                });
 
            }
