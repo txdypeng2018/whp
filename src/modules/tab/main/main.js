@@ -7,7 +7,7 @@
     $http.get('/service/appName').success(function(data) {
       $scope.appName = data;
       $window.localStorage.appName = data;
-    }).error(function(data, status){
+    }).error(function(){
       if (angular.isUndefined($scope.appName) || $scope.appName === '') {
         $scope.appName = '掌上盛京';
       }
@@ -64,16 +64,16 @@
           $window.localStorage['carousel_'+index+'_name'] = data[i].name;
           $window.localStorage['carousel_'+index+'_img'] = data[i].img;
         }
-        $window.localStorage.carousel_version = newVersion;
+        $window.localStorage.carouselVersion = newVersion;
       });
     };
     var flg = getWindowCarouselImages();
-    var carouselVersion = $window.localStorage.carousel_version;
+    var carouselVersion = $window.localStorage.carouselVersion;
     $http.get('/service/carouselPhoto/version').success(function(data) {
       if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data || !flg) {
         getHttpCarouselImages(data);
       }
-    }).error(function(data, status){
+    }).error(function(){
       if (angular.isUndefined($scope.carouselImages) || $scope.carouselImages.length === 0) {
         $scope.carouselImages = [
           {
