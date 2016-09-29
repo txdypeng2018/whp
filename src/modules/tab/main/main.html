@@ -1,6 +1,6 @@
 <ion-view>
   <ion-header-bar class="bar-light main-header">
-    <div class="title positive">盛京医院</div>
+    <div class="title positive">{{appName}}</div>
   </ion-header-bar>
   <ion-content scroll="false" has-bouncing="false" class="has-header content-fill main-content">
     <div class="row" style="height: 43%">
@@ -12,7 +12,7 @@
         </div>
         <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-auto-slide="">
           <li ng-repeat="carouselImage in carouselImages">
-            <div class="carousel-img"  style="background-image: url({{carouselImage.url}});"></div>
+            <img class="carousel-img" ng-src="{{carouselImage.img}}">
           </li>
         </ul>
       </div>

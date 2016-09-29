@@ -1,26 +1,73 @@
 (function(app) {
   'use strict';
 
-  var tabMainCtrl = function($scope, $ionicHistory, $state, $http, userService, $cordovaToast) {
+  var tabMainCtrl = function($scope, $ionicHistory, $state, $http, $window, userService, $cordovaToast) {
+    //取得软件名称
+    $scope.appName = $window.localStorage.appName;
+    $http.get('/service/appName').success(function(data) {
+      $scope.appName = data;
+      $window.localStorage.appName = data;
+    });
+
+    //取得轮播图片
+    var getWindowCarouselImages = function() {
+      $scope.carouselImages = [];
+      var index = 0;
+      while(true) {
+        index++;
+        var imageName = $window.localStorage['carousel_'+index+'_name'];
+        if (angular.isUndefined(imageName) || imageName === '') {
+          break;
+        }
+        else {
+          $scope.carouselImages.push({
+            name: imageName,
+            img: $window.localStorage['carousel_'+index+'_img']
+          });
+        }
+      }
+    };
+    var clearWindowCarouselImages = function() {
+      var index = 0;
+      while(true) {
+        index++;
+        var imageName = $window.localStorage['carousel_'+index+'_name'];
+        if (angular.isUndefined(imageName) || imageName === '') {
+          break;
+        }
+        else {
+          $window.localStorage.removeItem('carousel_'+index+'_name');
+          $window.localStorage.removeItem('carousel_'+index+'_img');
+        }
+      }
+    };
+    var getHttpCarouselImages = function(newVersion) {
+      $http.get('/service/carouselPhoto').success(function(data) {
+        $scope.carouselImages = [];
+        clearWindowCarouselImages();
+        for (var i = 0 ; i < data.length ; i++) {
+          $scope.carouselImages.push({
+            name: data[i].name,
+            img: data[i].img
+          });
+          var index = i + 1;
+          $window.localStorage['carousel_'+index+'_name'] = data[i].name;
+          $window.localStorage['carousel_'+index+'_img'] = data[i].img;
+        }
+        $window.localStorage.carousel_version = newVersion;
+      });
+    };
+    getWindowCarouselImages();
+    var carouselVersion = $window.localStorage.carousel_version;
+    $http.get('/service/carouselPhoto/version').success(function(data) {
+      if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data) {
+        getHttpCarouselImages(data);
+      }
+    });
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $ionicHistory.clearHistory();
     });
-
-    //轮播图片
-    $scope.carouselImages = [
-      {
-        name: '预约挂号',
-        url: './assets/images/ad1.jpg'
-      },
-      {
-        name: '在线缴费',
-        url: './assets/images/ad2.png'
-      },
-      {
-        name: '查看报告',
-        url: './assets/images/ad3.png'
-      }
-    ];
 
     //路由跳转
     var itemRouterGo = function(routerId, type) {
