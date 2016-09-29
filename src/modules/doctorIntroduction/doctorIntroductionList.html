@@ -17,7 +17,7 @@
   </ion-header-bar>
   <ion-content class="has-header has-subheader doctorIntroductionList-content">
     <ul class="list">
-      <li class="item item-avatar-left" collection-repeat="introduction in introductions" ng-class="{true: 'li-first'}[$index == 0]" ng-click="viewIntroduction(introduction.id)">
+      <li class="item item-avatar-left" ng-repeat="introduction in introductions" ng-class="{true: 'li-first'}[$index == 0]" ng-click="viewIntroduction(introduction.id)">
         <div class="photo">
           <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png">
           <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '0'" src="./assets/images/doctor_woman.png">
