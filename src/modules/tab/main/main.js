@@ -7,6 +7,10 @@
     $http.get('/service/appName').success(function(data) {
       $scope.appName = data;
       $window.localStorage.appName = data;
+    }).error(function(data, status){
+      if (angular.isUndefined($scope.appName) || $scope.appName === '') {
+        $scope.appName = '掌上盛京';
+      }
     });
 
     //取得轮播图片
@@ -25,6 +29,12 @@
             img: $window.localStorage['carousel_'+index+'_img']
           });
         }
+      }
+      if ($scope.carouselImages.length === 0) {
+        return false;
+      }
+      else {
+        return true;
       }
     };
     var clearWindowCarouselImages = function() {
@@ -57,11 +67,28 @@
         $window.localStorage.carousel_version = newVersion;
       });
     };
-    getWindowCarouselImages();
+    var flg = getWindowCarouselImages();
     var carouselVersion = $window.localStorage.carousel_version;
     $http.get('/service/carouselPhoto/version').success(function(data) {
-      if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data) {
+      if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data || !flg) {
         getHttpCarouselImages(data);
+      }
+    }).error(function(data, status){
+      if (angular.isUndefined($scope.carouselImages) || $scope.carouselImages.length === 0) {
+        $scope.carouselImages = [
+          {
+            name: '预约挂号',
+            img: './assets/images/ad1.png'
+          },
+          {
+            name: '在线缴费',
+            img: './assets/images/ad2.png'
+          },
+          {
+            name: '查看报告',
+            img: './assets/images/ad3.png'
+          }
+        ];
       }
     });
 
