@@ -3,6 +3,7 @@
 
   var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $cordovaToast, doctorPhotoService) {
     $scope.title = '医生介绍';
+    $scope.searchNameTmp = '';
 
     //取得医生照片
     var getDoctorPhoto = function(doctorId, index) {
@@ -56,6 +57,7 @@
     };
     //搜索医生事件
     $scope.doSearch = function() {
+      $scope.searchNameTmp = $scope.searchName;
       $scope.vm.init();
     };
 

@@ -15,8 +15,12 @@
       </label>
     </form>
   </ion-header-bar>
-  <ion-content class="has-header has-subheader doctorIntroductionList-content">
-    <ul class="list">
+  <ion-content class="has-header has-subheader content-fill doctorIntroductionList-content">
+    <div ng-if="introductions.length == 0" class="no-content-center">
+      <span ng-if="searchNameTmp == null || searchNameTmp == ''">暂无医生列表</span>
+      <span ng-if="searchNameTmp != null && searchNameTmp != ''">暂无结果，请重新输入关键字</span>
+    </div>
+    <ul ng-if="introductions.length > 0" class="list">
       <li class="item item-avatar-left" ng-repeat="introduction in introductions" ng-class="{true: 'li-first'}[$index == 0]" ng-click="viewIntroduction(introduction.id)">
         <div class="photo">
           <img ng-if="(introduction.photo == null || introduction.photo == '') && introduction.sexCode == '1'" src="./assets/images/doctor_man.png">
