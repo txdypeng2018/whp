@@ -10,7 +10,10 @@
       <div class="positive payResult-font">{{resultText}}</div>
     </div>
     <div class="payResult-link">
-      <button class="button button-positive" ng-click="viewRegistration()">查看挂号单</button>
+      <button class="button button-positive" ng-click="viewRegistration()">
+        <span ng-if="fromPage == 'pay'">查看缴费单</span>
+        <span ng-if="fromPage == 'register'">查看挂号单</span>
+      </button>
     </div>
   </ion-content>
 </ion-view>

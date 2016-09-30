@@ -1,10 +1,20 @@
 (function(app) {
   'use strict';
 
-  var paymentResultCtrl = function($scope, $http, $state, $stateParams) {
-
+  var paymentResultCtrl = function($scope, $http, $state, $stateParams, $ionicHistory) {
     $scope.resultImgSrc = $stateParams.resultImgSrc;
     $scope.resultText = $stateParams.resultText;
+
+    var getFromPage = function() {
+      $scope.fromPage = 'register';
+      for (var i in $ionicHistory.viewHistory().views) {
+        var view = $ionicHistory.viewHistory().views[i];
+        if (view.stateName === 'onlinePaymentList') {
+          $scope.fromPage = 'pay';
+        }
+      }
+    };
+    getFromPage();
 
     //返回主页
     $scope.goBack = function() {
@@ -13,7 +23,12 @@
 
     //跳转到挂号页
     $scope.viewRegistration = function() {
-      $state.go('tab.registration');
+      if ($scope.fromPage === 'pay') {
+        $state.go('onlinePaymentList');
+      }
+      else {
+        $state.go('tab.registration');
+      }
     };
   };
 
