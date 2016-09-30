@@ -49,12 +49,14 @@
     $scope.doSearch = function() {
       $scope.introductions = null;
       $scope.spinnerShow = true;
+      $scope.searchNameTmp = $scope.searchName;
       getDoctorIntroductions({searchName: $scope.searchName});
     };
     //初始化取得医师介绍列表
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.introductions = null;
       $scope.spinnerShow = true;
+      $scope.searchNameTmp = '';
       getDoctorIntroductions({searchName: $scope.searchName});
     });
 
