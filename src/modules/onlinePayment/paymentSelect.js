@@ -1,15 +1,29 @@
 (function(app) {
   'use strict';
 
-  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup) {
+  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup, $ionicHistory) {
     var orderNum = $stateParams.orderNum;
+
+    var getFromPage = function() {
+      $scope.fromPage = 'register';
+      for (var i in $ionicHistory.viewHistory().views) {
+        var view = $ionicHistory.viewHistory().views[i];
+        if (view.stateName === 'onlinePaymentList') {
+          $scope.fromPage = 'pay';
+        }
+      }
+    };
+    getFromPage();
+
     //倒计时
     var updateTime = function() {
       if (!angular.isUndefined($scope.time.second)) {
         //倒计时结束终止支付
         if ($scope.time.minute <= 0 && $scope.time.second <= 0) {
-          $state.go('tab.main');
-          $cordovaToast.showShortBottom('交易超时');
+          if ($scope.fromPage === 'register') {
+            $state.go('tab.main');
+            $cordovaToast.showShortBottom('交易超时');
+          }
         }
         if ($scope.time.second === 0) {
           --$scope.time.minute;
