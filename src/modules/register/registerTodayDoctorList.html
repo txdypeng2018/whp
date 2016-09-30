@@ -14,6 +14,10 @@
     </div>
   </ion-header-bar>
   <ion-content class="has-header content-fill registerTodayDoctorList-content">
+    <div ng-if="doctors.length == 0" class="no-content-center">
+      <span ng-if="majorTmp == null || majorTmp == ''">暂无医生排班信息</span>
+      <span ng-if="majorTmp != null && majorTmp != ''">暂无结果，请重新输入关键字</span>
+    </div>
     <ul ng-if="doctors.length > 0" class="list">
       <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id, doctor.overCount)">
         <div class="photo">
@@ -33,10 +37,6 @@
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>
-    <div ng-if="doctors.length == 0" class="no-content-center">
-      <span ng-if="majorTmp == null || majorTmp == ''">暂无医生排班信息</span>
-      <span ng-if="majorTmp != null && majorTmp != ''">暂无结果，请重新输入关键字</span>
-    </div>
     <ion-infinite-scroll ng-if="vm.moreData" on-infinite="vm.loadMore()" distance="2%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>
