@@ -12,7 +12,7 @@
   <ion-content class="has-header content-gray content-fill registration-content">
     <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
       <div class="time-line-left">
-        {{registration.apptDate.substring(5,11)}}
+        {{registration.apptDate.substring(5,11)}}<br>{{registration.apptDate.substring(12)}}
         <div class="time-line-mark positive-bg"></div>
       </div>
       <div class="time-line-right">
