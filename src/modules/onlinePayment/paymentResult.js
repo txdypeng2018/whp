@@ -24,17 +24,17 @@
     //跳转到挂号页
     $scope.viewRegistration = function() {
       if ($scope.fromPage === 'pay') {
-        $state.go('onlinePaymentList');
+        $state.go('onlinePaymentList', {memberId: $stateParams.memberId});
       }
       else {
-        $state.go('tab.registration');
+        $state.go('tab.registration', {memberId: $stateParams.memberId});
       }
     };
   };
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('paymentResult', {
-      url: '/onlinePayment/paymentResult/:resultImgSrc/:resultText',
+      url: '/onlinePayment/paymentResult/:resultImgSrc/:resultText/:memberId',
       cache: 'false',
       templateUrl: 'modules/onlinePayment/paymentResult.html',
       controller: paymentResultCtrl

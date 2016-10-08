@@ -144,7 +144,7 @@
         }
         $scope.isSubmit = true;
         $http.post('/orders', param).success(function(data) {
-          $state.go('paymentSelect', {orderNum: data.orderNum});
+          $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
         }).error(function(data){
           $scope.isSubmit = false;
           $cordovaToast.showShortBottom(data);

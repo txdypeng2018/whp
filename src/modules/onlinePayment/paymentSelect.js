@@ -88,11 +88,11 @@
                   var failImagesSrc = './assets/images/umeng_update_close_bg_tap.png';
                   // 订单支付成功
                   if(converseRet.resultStatus === '9000') {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!'});
+                    $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!', memberId: $stateParams.memberId});
                     // 正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                     // 支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                   } else if(converseRet.resultStatus === '8000' || converseRet.resultStatus === '6004') {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付结果未知!请查看挂号页!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付结果未知!请查看挂号页!', memberId: $stateParams.memberId});
                     // 用户中途取消
                   } else if(converseRet.resultStatus === '6001') {
                     var myPopup = $ionicPopup.show({
@@ -111,13 +111,13 @@
                     });
                     // 订单支付失败
                   } else if(converseRet.resultStatus === '4000') {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!', memberId: $stateParams.memberId});
                     // 网络连接出错
                   } else if(converseRet.resultStatus === '6002') {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!网络连接出错!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!网络连接出错!', memberId: $stateParams.memberId});
                     // 其它支付错误
                   } else {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!未知错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!未知错误!', memberId: $stateParams.memberId});
                   }
                 }, function (retData) {
                   console.debug('retData', retData);
@@ -166,19 +166,19 @@
                   var failImagesSrc = './assets/images/umeng_update_close_bg_tap.png';
                   // 正常支付
                   if(converseRet.code === 0) {
-                    $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!'});
+                    $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!', memberId: $stateParams.memberId});
                     // 认证被否决
                   } else if(converseRet.code === -4) {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!认证被否决!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!认证被否决!', memberId: $stateParams.memberId});
                     // 一般错误
                   } else if(converseRet.code === -1) {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!一般错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!一般错误!', memberId: $stateParams.memberId});
                     // 发送失败
                   } else if(converseRet.code === -3) {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!发送失败!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!发送失败!', memberId: $stateParams.memberId});
                     // 不支持错误
                   } else if(converseRet.code === -5) {
-                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!不支持错误!'});
+                    $state.go('paymentResult', {resultImgSrc: failImagesSrc, resultText: '支付失败!不支持错误!', memberId: $stateParams.memberId});
                     // 用户取消
                   } else if(converseRet.code === -2) {
                     var myPopup = $ionicPopup.show({
@@ -216,7 +216,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('paymentSelect', {
-      url: '/onlinePayment/paymentSelect/:orderNum',
+      url: '/onlinePayment/paymentSelect/:orderNum/:memberId',
       cache: 'false',
       templateUrl: 'modules/onlinePayment/paymentSelect.html',
       controller: paymentSelectCtrl
