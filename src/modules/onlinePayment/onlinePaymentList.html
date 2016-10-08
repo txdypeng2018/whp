@@ -19,7 +19,7 @@
       <div ng-repeat="recipe in recipes">
         <div class="recipes-flex-row recipes-border-bottom recipe-title">
           <span class="column-check">
-            <ion-checkbox ng-if="recipe.canCheck" ng-model="recipe.isCheck" ng-change="checkClk('0', recipe.outpatientNum)"></ion-checkbox>
+            <ion-checkbox ng-if="recipe.canCheck" ng-model="recipe.isCheck" ng-change="checkClk(recipe.outpatientNum)"></ion-checkbox>
             <img ng-if="!recipe.canCheck" class="checkbox-disable" src="./assets/images/btn_check_off_disable.png"/>
           </span>
           <span class="column-content font-major">门诊流水号：{{recipe.outpatientNum}}</span>
@@ -28,7 +28,7 @@
         <div ng-repeat="recipeOne in recipe.recipes">
           <div class="recipes-flex-row-stretch recipes-border-bottom">
             <span class="column-check recipe-check">
-              <ion-checkbox ng-if="recipeOne.statusCode == '0'" ng-model="recipeOne.isCheck" ng-disabled="true" ng-change="checkClk('1', recipe.outpatientNum, recipeOne.recipeNum)"></ion-checkbox>
+              <ion-checkbox ng-if="recipeOne.statusCode == '0'" ng-model="recipeOne.isCheck" ng-disabled="true"></ion-checkbox>
               <img ng-if="recipeOne.statusCode != '0'" class="checkbox-disable" src="./assets/images/btn_check_off_disable.png"/>
             </span>
             <span class="column-content recipe">
