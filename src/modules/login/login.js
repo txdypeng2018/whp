@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, $cordovaToast, userService, $properProperpush) {
+  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, $cordovaToast, userService, $properProperpush, $sce) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.input = {
         phone: '',
@@ -11,7 +11,7 @@
 
     //取得提示信息
     $http.get('/permission/loginPrompt').success(function(data) {
-      $scope.loginPrompt = data;
+      $scope.loginPrompt = $sce.trustAsHtml(data);
     }).error(function(data){
       $cordovaToast.showShortBottom(data);
     });
