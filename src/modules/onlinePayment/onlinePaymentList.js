@@ -93,42 +93,31 @@
       }
     };
 
-    $scope.checkClk = function(type, outpatientNum, recipeNum) {
+    $scope.checkClk = function(outpatientNum) {
       var outpatient = {};
-      if (type === '0') {
-        for (var i = 0 ; i < $scope.recipes.length ; i++) {
-          outpatient = $scope.recipes[i];
-          if (outpatient.outpatientNum === outpatientNum) {
-            for (var j = 0 ; j < outpatient.recipes.length ; j++) {
-              if (outpatient.recipes[j].statusCode === '0') {
-                if (outpatient.isCheck !== outpatient.recipes[j].isCheck) {
-                  setAmount(outpatient.recipes[j].total, outpatient.isCheck);
-                }
-                outpatient.recipes[j].isCheck = outpatient.isCheck;
-                setRecipeNums(outpatient.recipes[j].recipeNum, outpatient.isCheck);
+      for (var i = 0 ; i < $scope.recipes.length ; i++) {
+        outpatient = $scope.recipes[i];
+        if (outpatient.outpatientNum === outpatientNum) {
+          for (var j = 0 ; j < outpatient.recipes.length ; j++) {
+            if (outpatient.recipes[j].statusCode === '0') {
+              if (outpatient.isCheck !== outpatient.recipes[j].isCheck) {
+                setAmount(outpatient.recipes[j].total, outpatient.isCheck);
               }
+              outpatient.recipes[j].isCheck = outpatient.isCheck;
+              setRecipeNums(outpatient.recipes[j].recipeNum, outpatient.isCheck);
             }
           }
         }
-      }
-      else {
-        for (var m = 0 ; m < $scope.recipes.length ; m++) {
-          outpatient = $scope.recipes[m];
-          if (outpatient.outpatientNum === outpatientNum) {
-            var isCheck = true;
-            for (var n = 0 ; n < outpatient.recipes.length ; n++) {
-              if (outpatient.recipes[n].statusCode === '0') {
-                if (outpatient.recipes[n].recipeNum === recipeNum) {
-                  setRecipeNums(recipeNum, outpatient.recipes[n].isCheck);
-                  setAmount(outpatient.recipes[n].total, outpatient.recipes[n].isCheck);
-                }
-                if (!outpatient.recipes[n].isCheck) {
-                  isCheck = false;
-                }
-
+        else {
+          if (outpatient.isCheck) {
+            outpatient.isCheck = false;
+            for (var k = 0 ; k < outpatient.recipes.length ; k++) {
+              if (outpatient.recipes[k].statusCode === '0') {
+                setAmount(outpatient.recipes[k].total, outpatient.isCheck);
+                outpatient.recipes[k].isCheck = false;
+                setRecipeNums(outpatient.recipes[k].recipeNum, outpatient.isCheck);
               }
             }
-            outpatient.isCheck = isCheck;
           }
         }
       }
