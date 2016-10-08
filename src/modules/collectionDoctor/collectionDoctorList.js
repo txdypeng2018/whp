@@ -56,6 +56,7 @@
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.introductions = null;
       $scope.spinnerShow = true;
+      $scope.searchName = '';
       $scope.searchNameTmp = '';
       getDoctorIntroductions({searchName: $scope.searchName});
     });

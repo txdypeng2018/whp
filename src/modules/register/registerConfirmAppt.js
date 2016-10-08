@@ -96,7 +96,7 @@
         payStatus: '0'
       };
       $http.post('/register/registrations/registration', registration).success(function(data) {
-        $state.go('paymentSelect', {orderNum: data.orderNum});
+        $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
       }).error(function(data){
         $cordovaToast.showShortBottom(data);
       });
