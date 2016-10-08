@@ -123,6 +123,9 @@
                   console.debug('retData', retData);
                   $cordovaToast.showShortBottom('内部错误!请联系管理员!');
               });
+            } else if(data.resultCode === '-1'){
+              console.debug('data', data);
+              $cordovaToast.showShortBottom(data.resultMsg);
             }
           }).error(function (data) {
             console.debug('data', data);
@@ -201,6 +204,9 @@
                 console.debug('data', data);
                 $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
               });
+            } else if (data.resultCode === '-1') {
+              console.debug('data', data);
+              $cordovaToast.showShortBottom(data.resultMsg);
             }
           });
         }
