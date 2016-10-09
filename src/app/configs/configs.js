@@ -75,6 +75,9 @@
         if (rejection.status === 404) {
           rejection.data = '资源未找到';
         }
+        if (rejection.status === 503) {
+          rejection.data = '连接数过多，请稍后...';
+        }
         requestIndex--;
         if (requestIndex <= 0) {
           $rootScope.inProcess = false;
