@@ -21,6 +21,7 @@
       }
       .code-input{
         margin-left: 42px;
+        padding-right: 5px;
       }
       .password-input{
         margin-left: 57px;
@@ -30,9 +31,11 @@
     .button-resend{
       min-height:25px !important;
       line-height: 25px !important;
-      margin-right: 10px;
-      width: 50%;
-      padding: 0;
+      padding: 0 5px;
+      font-size: 14px;
+      position: absolute;
+      right: 10px;
+      top: 9px;
     }
   }
 
