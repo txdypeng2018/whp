@@ -126,7 +126,7 @@
   }
   if (typeof String.prototype.replaceAll !== 'function') {
     String.prototype.replaceAll  = function(s1, s2){
-      return this.replace(new RegExp(s1, "gm"), s2);
-    }
+      return this.replace(new RegExp(s1, 'gm'), s2);
+    };
   }
 })();
