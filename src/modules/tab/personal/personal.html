@@ -1,6 +1,6 @@
 <ion-view>
   <div class="personal-title positive-bg">
-    <div>
+    <div ng-click="login()">
       <img ng-if="!isLogin || user.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
       <img ng-if="user.sexCode == '0'" src="./assets/images/pic_woman.png" class="photo">
     </div>
