@@ -74,7 +74,9 @@
 
     //登录点击事件
     $scope.login = function() {
-      $state.go('login');
+      if (!$scope.isLogin) {
+        $state.go('login');
+      }
     };
   };
 
