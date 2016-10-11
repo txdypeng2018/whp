@@ -3,13 +3,13 @@
 
   var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup, $ionicHistory) {
     var orderNum = $stateParams.orderNum;
+    $scope.needTime = true;
 
     var getFromPage = function() {
-      $scope.fromPage = 'register';
       for (var i in $ionicHistory.viewHistory().views) {
         var view = $ionicHistory.viewHistory().views[i];
         if (view.stateName === 'onlinePaymentList') {
-          $scope.fromPage = 'pay';
+          $scope.needTime = false;
         }
       }
     };
@@ -20,7 +20,7 @@
       if (!angular.isUndefined($scope.time.second)) {
         //倒计时结束终止支付
         if ($scope.time.minute <= 0 && $scope.time.second <= 0) {
-          if ($scope.fromPage === 'register') {
+          if ($scope.needTime) {
             $state.go('tab.main');
             $cordovaToast.showShortBottom('交易超时');
           }
@@ -38,6 +38,9 @@
     //取得挂号单信息
     $http.get('/orders/'+orderNum).success(function(data) {
       $scope.order = data;
+      if ($scope.order.isAppointment === '0') {
+        $scope.needTime = false;
+      }
       $scope.time = {
         minute: $scope.order.closeTime[0],
         second: $scope.order.closeTime[1]
