@@ -3,5 +3,6 @@
   "name": "费用",
   "description": "挂号",
   "amount": "5.00",
+  "isAppointment": "1",
   "closeTime": [30,0]
 }

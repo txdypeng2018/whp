@@ -34,7 +34,7 @@
         <span class="money">￥{{order.amount}}元</span>
       </li>
     </ul>
-    <div ng-if="fromPage == 'register'" class="countDown">
+    <div ng-if="needTime" class="countDown">
       请在<span id="payment_countDown"><span ng-bind="time.minute"></span>分<span ng-bind="time.second"></span>秒</span>内完成支付
     </div>
     <div class="confirm">

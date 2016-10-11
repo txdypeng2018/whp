@@ -44,6 +44,7 @@
         if ($scope.isCollection) {
           $http.delete('/user/collectionDoctors/'+$stateParams.doctorId).success(function() {
             $scope.isCollection = false;
+            $cordovaToast.showShortBottom('取消收藏成功');
           }).error(function(data){
             $cordovaToast.showShortBottom(data);
           });
@@ -51,6 +52,7 @@
         else {
           $http.post('/user/collectionDoctors', {doctorId: $stateParams.doctorId}).success(function() {
             $scope.isCollection = true;
+            $cordovaToast.showShortBottom('收藏成功');
           }).error(function(data){
             $cordovaToast.showShortBottom(data);
           });

@@ -2,7 +2,7 @@
   'use strict';
 
   var hospitalIntroduceCtrl = function($scope, $sce) {
-    $scope.myURL = $sce.trustAsResourceUrl('http://sj-hospital.org/');
+    $scope.myURL = $sce.trustAsResourceUrl('http://sj-hospital.org/yygk/jianjie/');
   };
 
   var mainRouter = function($stateProvider) {
