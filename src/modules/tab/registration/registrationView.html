@@ -66,7 +66,7 @@
     </ul>
     <div class="operation">
       <button ng-if="registration.statusCode == '0'" class="button button-positive" ng-click="registrationPay()">支付</button>
-      <button ng-if="(registration.statusCode == '0' || registration.statusCode == '1') && registration.canBack == '1'" class="button button-outline button-positive" ng-click="registrationBack()">退号</button>
+      <button ng-if="registration.canBack == '1'" class="button button-outline button-positive" ng-click="registrationBack()">退号</button>
     </div>
   </ion-content>
 </ion-view>
