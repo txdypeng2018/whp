@@ -30,7 +30,7 @@
     var getSubjects = function() {
       $scope.subjects = [];
       $scope.subjectRights = '';
-      $http.get('/subjects', {params: {districtId: $scope.districtId}}).success(function(data) {
+      $http.get('/subjects', {params: {districtId: $scope.districtId, type: $scope.type}}).success(function(data) {
         $scope.subjects = data;
 
         //默认选中第一个一级学科
