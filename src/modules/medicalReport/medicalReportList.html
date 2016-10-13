@@ -1,20 +1,21 @@
 <ion-view>
   <isj-spinner is-show="$root.inProcess"></isj-spinner>
-  <ion-header-bar class="bar-light">
+  <ion-header-bar class="bar-light medicalReportList_head">
     <isj-back-button go-back="goBack()"></isj-back-button>
     <div class="title" ng-click="selectMember()">
-      <span ng-if="patient.memberCode=='00'">我</span><span ng-if="patient.memberCode!='00'">{{patient.name}}</span>的报告单
+      {{patient.name}}的报告单
       <i class="icon ion-ios-arrow-down positive operation-down"></i>
     </div>
+    <a class="button button-clear icon ion-ios-information-outline positive prompt" ng-click="promptClk()"></a>
   </ion-header-bar>
   <div class="medicalReportList_select has-header">
-    <div class="prompt">
-      <div class="prompt-icon">
-        <i class="icon ion-ios-information-outline"></i>
-      </div>
-      <div>
-        温馨提示：无法查看到结果的患者请确认病历号是否绑定正确，部分结果无法在手机上查看。
-      </div>
+    <div class="button-bar">
+      <button ng-class="{false: 'button-outline'}[category == '1']" class="button button-positive" ng-click="categoryClk('1')">
+        检验报告
+      </button>
+      <button ng-class="{false: 'button-outline'}[category == '2']" class="button button-positive" ng-click="categoryClk('2')">
+        检查报告
+      </button>
     </div>
     <div class="reportSearch-form">
       <div>
@@ -35,7 +36,7 @@
   </div>
   <ion-content class="has-header medicalReportList-content">
     <ul ng-if="reports.length > 0" class="list">
-      <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.reportCategory, report.status)">
+      <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.status)">
         <h2>{{report.name}}</h2>
         <p>检查时间：{{report.examinationDate}}</p>
         <i ng-if="report.status == '0'" class="badge assertive">未出</i>
