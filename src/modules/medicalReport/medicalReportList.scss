@@ -1,17 +1,26 @@
+.medicalReportList_head {
+  .button {
+    top: 3px !important;
+
+    &:before {
+      font-size: 26px !important;
+    }
+  }
+}
+
 .medicalReportList_select {
   position: absolute;
   width: 100%;
 
-  .prompt {
-    padding: 10px 15px 10px 15px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: #777777;
+  .button-bar {
+    width: 100%;
+    padding: 8px 15px;
 
-    .prompt-icon {
-      margin: 7px;
-      font-size: 18px;
+    .button {
+      min-height: 32px;
+      line-height: 32px;
+      font-size: 14px;
+      padding: 0 12px !important;
     }
   }
 
@@ -19,6 +28,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding-top: 5px;
     padding-bottom: 10px;
 
     > div {
@@ -55,7 +65,7 @@
 }
 
 .medicalReportList-content {
-  margin-top: 108px !important;
+  margin-top: 98px !important;
 
   .list {
     h2 {

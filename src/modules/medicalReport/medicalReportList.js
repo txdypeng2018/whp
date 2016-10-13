@@ -1,13 +1,56 @@
 (function(app) {
   'use strict';
 
-  var medicalReportListCtrl = function($scope, $http, $window, $state, $stateParams, $cordovaToast) {
+  var medicalReportListCtrl = function($scope, $rootScope, $http, $window, $state, $stateParams, $ionicPopup, $cordovaToast) {
     $scope.memberId = $stateParams.memberId;
+
+    //温馨提示
+    $http.get('/medicalReports/prompt').success(function(data) {
+      if (angular.isUndefined($rootScope.reportPrompt) || $rootScope.reportPrompt === '' || $rootScope.reportPrompt !== data) {
+        $rootScope.reportPrompt = data;
+        showAgreement();
+      }
+    }).error(function(data){
+      $cordovaToast.showShortBottom(data);
+    });
+    var myPopup = null;
+    var showAgreement = function() {
+      myPopup = $ionicPopup.show({
+        template: '<div style="padding: 3px;font-size:15px">'+$rootScope.reportPrompt+'</div>',
+        title: '温馨提示',
+        cssClass: 'agreement-popup',
+        buttons: [
+          {
+            text: '我知道了',
+            type: 'button-positive',
+            onTap: function(e) {
+              e.preventDefault();
+              myPopup.close();
+            }
+          }
+        ]
+      });
+    };
+    $scope.promptClk = function() {
+      showAgreement();
+    };
+    $scope.$on('$ionicView.beforeLeave', function(){
+      if (myPopup !== null) {
+        myPopup.close();
+      }
+    });
+
+    //报告类别切换
+    $scope.categoryClk = function(category) {
+      $scope.category = category;
+      getMedicalReports($scope.searchStr);
+    };
 
     //取得检验报告列表
     var getMedicalReports = function(param) {
       $scope.reports = null;
       param.memberId = $stateParams.memberId;
+      param.category = $scope.category;
       $http.get('/medicalReports', {params: param}).success(function(data) {
         $scope.reports = data;
       }).error(function(data){
@@ -17,6 +60,7 @@
     };
 
     //初始化检验报告查询条件
+    $scope.category = '1';
     $scope.searchStr = {
       searchTime: '',
       searchStatus: ''
@@ -62,11 +106,17 @@
     };
 
     //查看检验报告详细
-    $scope.viewReport = function(id, category, status) {
+    $scope.viewReport = function(id, status) {
       if (status === '1') {
-        if (category === '1') {
-          $state.go('medicalReportView1', {id: id, category: category});
+        if ($scope.category === '1') {
+          $state.go('medicalReportView1', {id: id, category: $scope.category});
         }
+        else {
+          $state.go('medicalReportView2', {id: id, category: $scope.category});
+        }
+      }
+      else {
+        $cordovaToast.showShortBottom('报告未出，请稍后查看');
       }
     };
   };
