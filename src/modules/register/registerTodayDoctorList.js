@@ -38,7 +38,8 @@
         subjectId: $stateParams.subjectId,
         major: $scope.major,
         startDate: today,
-        endDate: today
+        endDate: today,
+        isAppointment: '0'
       };
       $http.get('/schedule/doctors', {params: params}).success(function(data) {
         $scope.spinnerShow = false;
