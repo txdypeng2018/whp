@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, $cordovaToast, $ionicPopup, $ionicHistory) {
+  var paymentSelectCtrl = function($scope, $http, $state, $stateParams, appConstants, toastService, $ionicPopup, $ionicHistory) {
     var orderNum = $stateParams.orderNum;
     $scope.needTime = true;
 
@@ -22,7 +22,7 @@
         if ($scope.time.minute <= 0 && $scope.time.second <= 0) {
           if ($scope.needTime) {
             $state.go('tab.main');
-            $cordovaToast.showShortBottom('交易超时');
+            toastService.show('交易超时');
           }
         }
         if ($scope.time.second === 0) {
@@ -69,7 +69,7 @@
 
     $scope.pay = function() {
       if(angular.isUndefined($scope.amount)) {
-        $cordovaToast.showShortBottom('获取订单信息失败,请稍后重试!');
+        toastService.show('获取订单信息失败,请稍后重试!');
       } else {
         //支付宝支付
         if ($scope.paySelectValue === '2') {
@@ -124,15 +124,15 @@
                   }
                 }, function (retData) {
                   console.debug('retData', retData);
-                  $cordovaToast.showShortBottom('内部错误!请联系管理员!');
+                  toastService.show('内部错误!请联系管理员!');
               });
             } else if(data.resultCode === '-1'){
               console.debug('data', data);
-              $cordovaToast.showShortBottom(data.resultMsg);
+              toastService.show(data.resultMsg);
             }
           }).error(function (data) {
             console.debug('data', data);
-            $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
+            toastService.show('请求服务端数据错误!请联系管理员!');
           });
 
           //微信支付
@@ -202,14 +202,14 @@
                   // 支付异常
                 }, function (retData) {
                   console.debug('retData:', retData);
-                  $cordovaToast.showShortBottom('内部错误!请联系管理员!');
+                  toastService.show('内部错误!请联系管理员!');
               }).error(function (data) {
                 console.debug('data', data);
-                $cordovaToast.showShortBottom('请求服务端数据错误!请联系管理员!');
+                toastService.show('请求服务端数据错误!请联系管理员!');
               });
             } else if (data.resultCode === '-1') {
               console.debug('data', data);
-              $cordovaToast.showShortBottom(data.resultMsg);
+              toastService.show(data.resultMsg);
             }
           });
         }

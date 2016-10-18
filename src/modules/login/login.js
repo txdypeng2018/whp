@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, $cordovaToast, userService, $properProperpush, $sce) {
+  var loginCtrl = function($scope, $http, $state, $stateParams, $window, $ionicHistory, toastService, userService, $properProperpush, $sce) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.input = {
         phone: '',
@@ -13,7 +13,7 @@
     $http.get('/permission/loginPrompt').success(function(data) {
       $scope.loginPrompt = $sce.trustAsHtml(data);
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //返回
@@ -49,7 +49,7 @@
           $state.go($stateParams.skipId);
         }
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
   };

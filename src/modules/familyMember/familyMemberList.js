@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberListCtrl = function($scope, $http, $state, $cordovaToast) {
+  var familyMemberListCtrl = function($scope, $http, $state, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.canAdd = false;
       $scope.members = null;
@@ -9,7 +9,7 @@
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
         $scope.memberTypes = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
       //取得家庭成员列表
       $http.get('/user/familyMembers').success(function(data) {
@@ -26,7 +26,7 @@
         }
       }).error(function(data){
         $scope.members = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
 

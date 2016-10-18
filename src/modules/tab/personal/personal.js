@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabPersonalCtrl = function($scope, $http, $state,$cordovaToast, userService,$ionicHistory) {
+  var tabPersonalCtrl = function($scope, $http, $state, toastService, userService, $ionicHistory) {
     $scope.$on('$ionicView.beforeEnter', function(){
       //取得用户信息
       $scope.isLogin = userService.hasToken();
@@ -14,7 +14,7 @@
       }).error(function(data, status){
         $scope.user = {};
         if (status !== 401) {
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         }
         else {
           userService.clearToken();
@@ -28,7 +28,7 @@
       }).error(function(data){
         $scope.memberCount = '';
         if (status !== 401) {
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         }
       });
 
@@ -38,7 +38,7 @@
       }).error(function(data){
         $scope.doctorCount = '';
         if (status !== 401) {
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         }
       });
 
@@ -55,7 +55,7 @@
             $state.go(routerId);
           }).error(function(data, status){
             if (status !== 401) {
-              $cordovaToast.showShortBottom(data);
+              toastService.show(data);
             }
             else {
               userService.clearToken();

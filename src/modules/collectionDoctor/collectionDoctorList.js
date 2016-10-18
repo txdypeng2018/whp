@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $cordovaToast, doctorPhotoService) {
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, doctorPhotoService, toastService) {
     $scope.title = '收藏的医生';
     $scope.vm = {
       moreData: false,
@@ -35,7 +35,7 @@
       }).error(function(data){
         $scope.spinnerShow = false;
         $scope.introductions = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

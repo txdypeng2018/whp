@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var onlinePaymentListCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
+  var onlinePaymentListCtrl = function($scope, $http, $state, $stateParams, toastService) {
     //取得缴费列表
     var getPayments = function(param) {
       $scope.recipes = null;
@@ -25,7 +25,7 @@
         }
       }).error(function(data){
         $scope.recipes = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -50,7 +50,7 @@
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
 
       $scope.isSubmit = false;
@@ -147,7 +147,7 @@
           $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
         }).error(function(data){
           $scope.isSubmit = false;
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
     };

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, $cordovaToast, $ionicPopup) {
+  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, toastService, $ionicPopup) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
 
@@ -16,7 +16,7 @@
             $scope.showAgreement();
           }
         }).error(function(data){
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
     });
@@ -42,7 +42,7 @@
           $scope.subjectRights = data[0].subjects;
         }
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -56,7 +56,7 @@
       $scope.districtId = data[0].id;
       getSubjects();
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //查询框显示隐藏事件

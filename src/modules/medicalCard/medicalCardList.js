@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var medicalCardListCtrl = function($scope, $http, $state, $cordovaToast) {
+  var medicalCardListCtrl = function($scope, $http, $state, toastService) {
     //家庭关系类别
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -19,7 +19,7 @@
         }
       }).error(function(data){
         $scope.members = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
 
