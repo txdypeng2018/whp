@@ -66,7 +66,7 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
     scrollMonth();
   };
   var scrollMonth = function() {
-    $scope.month = $scope.dateSelectParam.selectDays[parseInt((delegate.getScrollPosition().left)/tdWidth)].month;
+    $scope.month = $scope.dateSelectParam.selectDays[parseInt((delegate.getScrollPosition().left+7)/tdWidth)].month;
   };
 
   //日期选择事件
