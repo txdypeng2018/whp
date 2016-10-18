@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var forgetPasswordCtrl = function($scope, $state, $ionicHistory, $http, $cordovaToast) {
+  var forgetPasswordCtrl = function($scope, $state, $ionicHistory, $http, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.input = {
@@ -19,7 +19,7 @@
         $state.go('forgetPasswordSetting', {phone: param.phone});
       }).error(function(data){
         $scope.isSubmit = false;
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
   };

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, doctorPhotoService) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService) {
     $scope.hideSearch = true;
 
     //取得医生照片
@@ -75,7 +75,7 @@
       }).error(function(data){
         $scope.spinnerShow = false;
         $scope.doctors = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabMainCtrl = function($scope, $ionicHistory, $state, $http, $window, userService, $cordovaToast) {
+  var tabMainCtrl = function($scope, $ionicHistory, $state, $http, $window, userService, toastService) {
     //取得软件名称
     $scope.appName = $window.localStorage.appName;
     $http.get('/service/appName').success(function(data) {
@@ -117,7 +117,7 @@
             itemRouterGo(routerId, type);
           }).error(function(data, status){
             if (status !== 401) {
-              $cordovaToast.showShortBottom(data);
+              toastService.show(data);
             }
             else {
               userService.clearToken();

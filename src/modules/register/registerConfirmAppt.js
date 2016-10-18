@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, $cordovaToast) {
+  var registerConfirmApptCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, toastService) {
     var doctorId = $stateParams.doctorId;
     var date = $stateParams.date;
     $scope.dateDisplay = date.substring(0,4)+'年'+date.substring(5,7)+'月'+date.substring(8,10)+'日'+date.substring(10,16);
@@ -10,14 +10,14 @@
     $http.get('/register/agreement').success(function(data) {
       $scope.agreement = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得患者信息
     var getPatient = function() {
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
     getPatient();
@@ -29,19 +29,22 @@
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得医生信息
     $http.get('/register/doctor', {params: {id: doctorId, date: date}}).success(function(data) {
       $scope.doctor = data;
+      if ($scope.doctor.district.length > 2) {
+        $scope.doctor.district = $scope.doctor.district.substring(0, 2);
+      }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得温馨提示信息
     $http.get('/register/apptPrompt').success(function(data) {
       $scope.prompt = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //返回上页
@@ -98,7 +101,7 @@
       $http.post('/register/registrations/registration', registration).success(function(data) {
         $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

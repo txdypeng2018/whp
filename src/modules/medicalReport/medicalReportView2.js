@@ -1,11 +1,11 @@
 (function(app) {
   'use strict';
 
-  var medicalReportView2Ctrl = function($scope, $http, $stateParams, $cordovaToast) {
+  var medicalReportView2Ctrl = function($scope, $http, $stateParams, toastService) {
     $http.get('/medicalReports/'+$stateParams.category+'/'+$stateParams.id).success(function(data) {
       $scope.image = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
   };
 

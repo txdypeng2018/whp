@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, $cordovaToast, userService, doctorPhotoService) {
+  var doctorIntroductionViewCtrl = function($scope, $http, $state, $stateParams, userService, doctorPhotoService, toastService) {
     $scope.type = ($stateParams.type==='1');
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
@@ -10,7 +10,7 @@
         $scope.isCollection = !(angular.isUndefined(data.doctorId) || data.doctorId === '');
       }).error(function(data, status){
         if (status !== 401) {
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         }
         else {
           userService.clearToken();
@@ -35,7 +35,7 @@
         });
       }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //收藏医生事件
@@ -44,17 +44,17 @@
         if ($scope.isCollection) {
           $http.delete('/user/collectionDoctors/'+$stateParams.doctorId).success(function() {
             $scope.isCollection = false;
-            $cordovaToast.showShortBottom('取消收藏成功');
+            toastService.show('取消收藏成功', 'short');
           }).error(function(data){
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         }
         else {
           $http.post('/user/collectionDoctors', {doctorId: $stateParams.doctorId}).success(function() {
             $scope.isCollection = true;
-            $cordovaToast.showShortBottom('收藏成功');
+            toastService.show('收藏成功', 'short');
           }).error(function(data){
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         }
       }

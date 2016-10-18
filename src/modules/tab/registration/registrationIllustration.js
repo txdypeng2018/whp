@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var registrationIllustrationCtrl = function($scope, $state, $http, $cordovaToast) {
+  var registrationIllustrationCtrl = function($scope, $state, $http, toastService) {
     //取得退号就诊说明
     $http.get('/register/visitAndBacknumDesc').success(function(data) {
       $scope.description = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     $scope.medicalGuideClk = function() {

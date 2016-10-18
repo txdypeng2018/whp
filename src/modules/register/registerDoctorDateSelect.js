@@ -1,7 +1,7 @@
 (function (app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, doctorPhotoService) {
+  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService) {
     //数据初始化
     var color = ['district-icon-positive', 'district-icon-balanced',
       'district-icon-royal', 'district-icon-calm', 'district-icon-assertive'];
@@ -93,7 +93,7 @@
       }).error(function (data) {
         $scope.spinnerShow = false;
         $scope.doctors = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

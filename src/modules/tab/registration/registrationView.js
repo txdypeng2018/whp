@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registrationViewCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, $cordovaToast) {
+  var registrationViewCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.registration = {};
       $scope.patient = {};
@@ -9,14 +9,14 @@
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
       //家庭关系类别
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
         $scope.memberTypes = data;
       }).error(function(data){
         $scope.memberTypes = {};
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
       //取得挂号单
       $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
@@ -27,8 +27,11 @@
         else {
           $scope.visitTime = $scope.registration.apptDate;
         }
+        if ($scope.registration.district.length > 2) {
+          $scope.registration.district = $scope.registration.district.substring(0,2);
+        }
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
     $scope.$on('$ionicView.beforeLeave', function(){
@@ -61,9 +64,9 @@
         if(res) {
           $http.put('/register/registrations/registration/back', {registrationId: $scope.registration.id}).success(function() {
             $ionicHistory.goBack();
-            $cordovaToast.showShortBottom('退号成功');
+            toastService.show('退号成功');
           }).error(function(data){
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         }
       });

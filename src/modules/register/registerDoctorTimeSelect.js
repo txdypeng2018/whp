@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $cordovaToast, userService, doctorPhotoService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, userService, doctorPhotoService) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var isAppointment = '1';
@@ -31,7 +31,7 @@
         }
         $scope.times = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -68,9 +68,12 @@
         };
         getScheduleTimes($scope.dateSelectParam.daySelected);
         $scope.dataInfo = data[0];
+        if ($scope.dataInfo.district.length > 2) {
+          $scope.dataInfo.district = $scope.dataInfo.district.substring(0, 2);
+        }
       }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -104,7 +107,7 @@
             }
           }).error(function(data, status){
             if (status !== 401) {
-              $cordovaToast.showShortBottom(data);
+              toastService.show(data);
             }
             else {
               userService.clearToken();
