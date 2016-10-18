@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var feedbackViewCtrl = function($scope, $http, $stateParams, $cordovaToast) {
+  var feedbackViewCtrl = function($scope, $http, $stateParams, toastService) {
     //取得意见详细
     $http.get('/service/userOpinion/'+$stateParams.opinionId).success(function(data) {
       $scope.feedback = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
   };
 

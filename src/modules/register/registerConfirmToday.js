@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerConfirmTodayCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $filter, $ionicHistory, $cordovaToast) {
+  var registerConfirmTodayCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $filter, $ionicHistory, toastService) {
     var doctorId = $stateParams.doctorId;
     var today = $stateParams.date;
     $scope.todayDisplay = today.substring(0,4)+'年'+today.substring(5,7)+'月'+today.substring(8,10)+'日'+today.substring(10,16);
@@ -12,14 +12,14 @@
     $http.get('/register/agreement').success(function(data) {
       $scope.agreement = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得登录账号就医人
     var getPatient = function() {
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
     getPatient();
@@ -27,19 +27,19 @@
     $http.get('/dataBase/familyMenberTypes').success(function(data) {
       $scope.memberTypes = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得医生信息
     $http.get('/register/doctor', {params: {id: doctorId, date: today}}).success(function(data) {
       $scope.doctor = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     //取得温馨提示信息
     $http.get('/register/todayPrompt').success(function(data) {
       $scope.prompt = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //返回上页
@@ -96,7 +96,7 @@
       $http.post('/register/registrations/registration', registration).success(function(data) {
         $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

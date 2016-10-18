@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $cordovaToast, doctorPhotoService) {
+  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, doctorPhotoService, toastService) {
     $scope.title = '医生介绍';
     $scope.searchNameTmp = '';
 
@@ -45,7 +45,7 @@
       }).error(function(data){
         $scope.spinnerShow = false;
         $scope.introductions = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

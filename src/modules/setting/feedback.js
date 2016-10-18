@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var feedbackCtrl = function($scope, $http, $ionicHistory, $cordovaToast) {
+  var feedbackCtrl = function($scope, $http, $ionicHistory, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.input = {
@@ -11,16 +11,16 @@
 
     $scope.opinionSubmit = function() {
       if ($scope.input.opinion === '') {
-        $cordovaToast.showShortBottom('请填写反馈内容');
+        toastService.show('请填写反馈内容');
       }
       else {
         $scope.isSubmit = true;
         $http.post('/service/userOpinion', {opinion: $scope.input.opinion}).success(function() {
           $ionicHistory.goBack();
-          $cordovaToast.showShortBottom('意见提交成功，谢谢您的支持');
+          toastService.show('意见提交成功，谢谢您的支持');
         }).error(function(data){
           $scope.isSubmit = false;
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
     };

@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var medicalGuideCtrl = function($scope, $http, $cordovaToast) {
+  var medicalGuideCtrl = function($scope, $http, toastService) {
     //取得就医指南信息
     $http.get('/medicalGuide').success(function(data) {
       $scope.medicalGuide = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
   };
 

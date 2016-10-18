@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalCardEditCtrl = function($scope, $http, $stateParams, $ionicHistory, $cordovaToast) {
+  var medicalCardEditCtrl = function($scope, $http, $stateParams, $ionicHistory, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isSubmit = false;
       $scope.input = {
@@ -12,7 +12,7 @@
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.input.medicalNum = data.medicalNum;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
 
@@ -23,7 +23,7 @@
         $ionicHistory.goBack();
       }).error(function(data){
         $scope.isSubmit = false;
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -34,7 +34,7 @@
         $ionicHistory.goBack();
       }).error(function(data){
         $scope.isSubmit = false;
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
   };

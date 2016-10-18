@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalReportListCtrl = function($scope, $rootScope, $http, $window, $state, $stateParams, $ionicPopup, $cordovaToast) {
+  var medicalReportListCtrl = function($scope, $rootScope, $http, $window, $state, $stateParams, $ionicPopup, toastService) {
     $scope.memberId = $stateParams.memberId;
 
     //温馨提示
@@ -11,7 +11,7 @@
         showAgreement();
       }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
     var myPopup = null;
     var showAgreement = function() {
@@ -55,7 +55,7 @@
         $scope.reports = data;
       }).error(function(data){
         $scope.reports = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -89,7 +89,7 @@
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
 
       getMedicalReports($scope.searchStr);
@@ -116,7 +116,7 @@
         }
       }
       else {
-        $cordovaToast.showShortBottom('报告未出，请稍后查看');
+        toastService.show('报告未出，请稍后查看');
       }
     };
   };

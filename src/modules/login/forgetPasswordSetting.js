@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var forgetPasswordSettingCtrl = function($scope, $stateParams, $state, $ionicHistory, $http, $cordovaToast) {
+  var forgetPasswordSettingCtrl = function($scope, $stateParams, $state, $ionicHistory, $http, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isResend = false;
       $scope.isSubmit = false;
@@ -52,31 +52,31 @@
         $scope.secondString = '('+$scope.time.second+')';
         $scope.isResend = false;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
     //页面验证
     var dataValidation = function() {
       if ($scope.input.verificationCode === '') {
-        $cordovaToast.showShortBottom('验证码不能为空');
+        toastService.show('验证码不能为空');
         return false;
       }
       if ($scope.input.newPassword === '') {
-        $cordovaToast.showShortBottom('密码不能为空');
+        toastService.show('密码不能为空');
         return false;
       }
       if ($scope.input.verificationCode.toString().length !== 6) {
-        $cordovaToast.showShortBottom('验证码必须6个数字');
+        toastService.show('验证码必须6个数字');
         return false;
       }
       if ($scope.input.newPassword.length < 6 || $scope.input.newPassword.length > 20) {
-        $cordovaToast.showShortBottom('密码必须6-20个字符');
+        toastService.show('密码必须6-20个字符');
         return false;
       }
       var reg = /^[0-9a-zA-Z_]+$/;
       if(!reg.test($scope.input.newPassword)){
-        $cordovaToast.showShortBottom('密码必须由英文字母、数字、下划线组成');
+        toastService.show('密码必须由英文字母、数字、下划线组成');
         return false;
       }
       return true;
@@ -89,10 +89,10 @@
         $scope.input.category = '2';
         $http.put('/permission/account', $scope.input).success(function() {
           $ionicHistory.goBack(-2);
-          $cordovaToast.showShortBottom('密码修改成功');
+          toastService.show('密码修改成功');
         }).error(function(data){
           $scope.isSubmit = false;
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
       else {

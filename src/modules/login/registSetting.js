@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registSettingCtrl = function($scope, $ionicHistory, $stateParams, $http, $cordovaToast, $state, userService) {
+  var registSettingCtrl = function($scope, $ionicHistory, $stateParams, $http, toastService, $state, userService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isResend = false;
       $scope.isSubmit = false;
@@ -54,7 +54,7 @@
         $scope.secondString = '('+$scope.time.second+')';
         $scope.isResend = false;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -70,36 +70,36 @@
     //页面验证
     var dataValidation = function() {
       if ($scope.input.verificationCode === '') {
-        $cordovaToast.showShortBottom('验证码不能为空');
+        toastService.show('验证码不能为空');
         return false;
       }
       if ($scope.input.password === '') {
-        $cordovaToast.showShortBottom('密码不能为空');
+        toastService.show('密码不能为空');
         return false;
       }
       if ($scope.input.name === '') {
-        $cordovaToast.showShortBottom('姓名不能为空');
+        toastService.show('姓名不能为空');
         return false;
       }
       if ($scope.input.idCard === '') {
-        $cordovaToast.showShortBottom('身份证号不能为空');
+        toastService.show('身份证号不能为空');
         return false;
       }
       if ($scope.input.verificationCode.toString().length !== 6) {
-        $cordovaToast.showShortBottom('验证码必须6个数字');
+        toastService.show('验证码必须6个数字');
         return false;
       }
       if ($scope.input.password.length < 6 || $scope.input.password.length > 20) {
-        $cordovaToast.showShortBottom('密码必须6-20个字符');
+        toastService.show('密码必须6-20个字符');
         return false;
       }
       var reg = /^[0-9a-zA-Z_]+$/;
       if(!reg.test($scope.input.password)){
-        $cordovaToast.showShortBottom('密码必须由英文字母、数字、下划线组成');
+        toastService.show('密码必须由英文字母、数字、下划线组成');
         return false;
       }
       if(!identityCodeValid($scope.input.idCard)){
-        $cordovaToast.showShortBottom('身份证号输入错误');
+        toastService.show('身份证号输入错误');
         return false;
       }
       return true;
@@ -111,10 +111,10 @@
         $http.post('/permission/account', $scope.input).success(function(data) {
           userService.setToken(data);
           $state.go('tab.personal');
-          $cordovaToast.showShortBottom('注册成功');
+          toastService.show('注册成功');
         }).error(function(data){
           $scope.isSubmit = false;
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
       else {

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, $cordovaToast) {
+  var familyMemberSelectCtrl = function($scope, $http, $state, $stateParams, toastService) {
     $scope.memberId = $stateParams.memberId;
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -11,7 +11,7 @@
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
         $scope.memberTypes = data;
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
       //取得登录患者家庭成员
       $http.get('/user/familyMembers').success(function(data) {
@@ -24,7 +24,7 @@
         }
       }).error(function(data){
         $scope.members = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
 

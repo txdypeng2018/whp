@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var medicalReportView1Ctrl = function($scope, $http, $stateParams, $cordovaToast) {
+  var medicalReportView1Ctrl = function($scope, $http, $stateParams, toastService) {
     //取得报告详细
     $http.get('/medicalReports/'+$stateParams.category+'/'+$stateParams.id).success(function(data) {
       $scope.report = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
   };
 

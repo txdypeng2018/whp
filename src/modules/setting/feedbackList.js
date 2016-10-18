@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var feedbackListCtrl = function($scope, $http, $state, $cordovaToast) {
+  var feedbackListCtrl = function($scope, $http, $state, toastService) {
     //初始化反馈状态查询下拉菜单
     $scope.searchStr = {
       feedbackStatus: ''
@@ -17,7 +17,7 @@
         $scope.feedbackStatusTypes.push(data[i]);
       }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //取得意见列表
@@ -27,7 +27,7 @@
         $scope.feedbacks = data;
       }).error(function(data){
         $scope.feedbacks = [];
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 

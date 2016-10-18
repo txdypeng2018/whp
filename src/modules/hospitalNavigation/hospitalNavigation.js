@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var hospitalNavigationCtrl = function($scope, $http, $timeout , $state, $cordovaToast) {
+  var hospitalNavigationCtrl = function($scope, $http, $timeout , $state, toastService) {
     //取得院区及建筑
     $http.get('/hospitalNavigation/builds').success(function(data) {
       $scope.districtBuilds = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //楼选中事件

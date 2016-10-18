@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var hospitalNavigationDloorListCtrl = function($scope, $http, $stateParams, $cordovaToast) {
+  var hospitalNavigationDloorListCtrl = function($scope, $http, $stateParams, toastService) {
     //取得各楼层信息
     $http.get('/hospitalNavigation/builds/floors', {params: {buildId: $stateParams.id}}).success(function(data) {
       $scope.floorList = data;
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
   };
 

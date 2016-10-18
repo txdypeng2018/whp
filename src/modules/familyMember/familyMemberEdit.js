@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberEditCtrl = function($scope, $http, $stateParams, $ionicPopup, $cordovaToast, $ionicHistory) {
+  var familyMemberEditCtrl = function($scope, $http, $stateParams, $ionicPopup, $ionicHistory, toastService) {
     //性别类别
     $http.get('/dataBase/sexTypes').success(function(data) {
       $scope.sexTypes = data;
@@ -11,7 +11,7 @@
         $scope.sexs.push($scope.sexTypes[i]);
       }
     }).error(function(data){
-      $cordovaToast.showShortBottom(data);
+      toastService.show(data);
     });
 
     //取得家庭成员信息
@@ -40,7 +40,7 @@
           patientVisitsInit: (data.patientVisits === '1')
         };
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     };
 
@@ -68,7 +68,7 @@
             $scope.hasSex = true;
           }
         }).error(function(data){
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
       else {
@@ -79,7 +79,7 @@
           $scope.memberTypes = data;
           getFamilyMember();
         }).error(function(data){
-          $cordovaToast.showShortBottom(data);
+          toastService.show(data);
         });
       }
     });
@@ -113,32 +113,32 @@
     //数据验证
     var dataValidation = function() {
       if ($scope.member.name === '') {
-        $cordovaToast.showShortBottom('姓名不能为空');
+        toastService.show('姓名不能为空');
         return false;
       }
       if ($scope.member.sexCode === '') {
-        $cordovaToast.showShortBottom('性别不能为空');
+        toastService.show('性别不能为空');
         return false;
       }
       if ($scope.member.idCard === '') {
-        $cordovaToast.showShortBottom('身份证号不能为空');
+        toastService.show('身份证号不能为空');
         return false;
       }
       if ($scope.member.phone === '') {
-        $cordovaToast.showShortBottom('手机号不能为空');
+        toastService.show('手机号不能为空');
         return false;
       }
       var reg = /^[0-9]+$/;
       if(!reg.test($scope.member.phone)){
-        $cordovaToast.showShortBottom('手机号输入错误');
+        toastService.show('手机号输入错误');
         return false;
       }
       if ($scope.member.phone.length !== 11) {
-        $cordovaToast.showShortBottom('手机号输入错误');
+        toastService.show('手机号输入错误');
         return false;
       }
       if(!identityCodeValid($scope.member.idCard)){
-        $cordovaToast.showShortBottom('身份证号输入错误');
+        toastService.show('身份证号输入错误');
         return false;
       }
       return true;
@@ -161,10 +161,10 @@
           };
           $http.post('/user/familyMembers/familyMember', param1).success(function() {
             goBack();
-            $cordovaToast.showShortBottom('保存成功');
+            toastService.show('保存成功');
           }).error(function(data){
             $scope.isSubmit = false;
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         } else {
           var param2 = {
@@ -175,10 +175,10 @@
           };
           $http.put('/user/familyMembers/familyMember', param2).success(function() {
             goBack();
-            $cordovaToast.showShortBottom('保存成功');
+            toastService.show('保存成功');
           }).error(function(data){
             $scope.isSubmit = false;
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         }
       }
@@ -201,10 +201,10 @@
           $scope.isSubmit = true;
           $http.delete('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function() {
             goBack();
-            $cordovaToast.showShortBottom('删除成功');
+            toastService.show('删除成功');
           }).error(function(data){
             $scope.isSubmit = false;
-            $cordovaToast.showShortBottom(data);
+            toastService.show(data);
           });
         }
       });

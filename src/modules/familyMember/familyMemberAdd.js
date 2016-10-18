@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberAddCtrl = function($scope, $state, $stateParams, $http, $cordovaToast) {
+  var familyMemberAddCtrl = function($scope, $state, $stateParams, $http, toastService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       //家庭关系类别
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
@@ -12,7 +12,7 @@
         }
         $scope.memberTypes.sort(function(a,b){return a.code - b.code;});
       }).error(function(data){
-        $cordovaToast.showShortBottom(data);
+        toastService.show(data);
       });
     });
 
