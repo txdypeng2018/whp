@@ -32,6 +32,9 @@
     //取得医生信息
     $http.get('/register/doctor', {params: {id: doctorId, date: today}}).success(function(data) {
       $scope.doctor = data;
+      if ($scope.doctor.district.length > 2) {
+        $scope.doctor.district = $scope.doctor.district.substring(0, 2);
+      }
     }).error(function(data){
       toastService.show(data);
     });

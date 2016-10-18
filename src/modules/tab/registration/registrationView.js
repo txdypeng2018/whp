@@ -27,6 +27,9 @@
         else {
           $scope.visitTime = $scope.registration.apptDate;
         }
+        if ($scope.registration.district.length > 2) {
+          $scope.registration.district = $scope.registration.district.substring(0,2);
+        }
       }).error(function(data){
         toastService.show(data);
       });

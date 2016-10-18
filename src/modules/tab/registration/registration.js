@@ -6,6 +6,11 @@
     var registrationList = function() {
       $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.registrations = data;
+        for (var i = 0 ; i < $scope.registrations.length ; i++) {
+          if ($scope.registrations[i].district.length > 2) {
+            $scope.registrations[i].district = $scope.registrations[i].district.substring(0,2);
+          }
+        }
       }).error(function(data){
         $scope.registrations = [];
         toastService.show(data);

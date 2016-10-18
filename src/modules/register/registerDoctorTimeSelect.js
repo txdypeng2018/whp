@@ -68,6 +68,9 @@
         };
         getScheduleTimes($scope.dateSelectParam.daySelected);
         $scope.dataInfo = data[0];
+        if ($scope.dataInfo.district.length > 2) {
+          $scope.dataInfo.district = $scope.dataInfo.district.substring(0, 2);
+        }
       }
     }).error(function(data){
       toastService.show(data);
