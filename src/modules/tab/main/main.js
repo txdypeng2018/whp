@@ -4,33 +4,57 @@
   var tabMainCtrl = function($scope, $ionicHistory, $state, $http, $window, userService, toastService) {
     //取得软件名称
     $scope.appName = $window.localStorage.appName;
+    if (angular.isUndefined($scope.appName) || $scope.appName === '') {
+      $scope.appName = '掌上盛京';
+    }
     $http.get('/service/appName').success(function(data) {
       $scope.appName = data;
       $window.localStorage.appName = data;
-    }).error(function(){
-      if (angular.isUndefined($scope.appName) || $scope.appName === '') {
-        $scope.appName = '掌上盛京';
-      }
     });
 
     //取得轮播图片
+    var hasCarouselData = function(data) {
+      return !(angular.isUndefined(data) || data === '');
+    };
+    var setDefaultCarouselImages = function() {
+      $scope.carouselImages = [
+        {
+          name: '预约挂号',
+          img: './assets/images/ad1.png'
+        },
+        {
+          name: '在线缴费',
+          img: './assets/images/ad2.png'
+        },
+        {
+          name: '查看报告',
+          img: './assets/images/ad3.png'
+        }
+      ];
+    };
     var getWindowCarouselImages = function() {
       $scope.carouselImages = [];
       var index = 0;
+      var flg = true;
       while(true) {
         index++;
         var imageName = $window.localStorage['carousel_'+index+'_name'];
-        if (angular.isUndefined(imageName) || imageName === '') {
+        var image = $window.localStorage['carousel_'+index+'_img'];
+        if ((hasCarouselData(imageName) && !hasCarouselData(image)) || (!hasCarouselData(imageName) && hasCarouselData(image))) {
+          flg = false;
+          break;
+        }
+        if (!hasCarouselData(imageName)) {
           break;
         }
         else {
           $scope.carouselImages.push({
             name: imageName,
-            img: $window.localStorage['carousel_'+index+'_img']
+            img: image
           });
         }
       }
-      if ($scope.carouselImages.length === 0) {
+      if ($scope.carouselImages.length === 0 || !flg) {
         return false;
       }
       else {
@@ -68,27 +92,13 @@
       });
     };
     var flg = getWindowCarouselImages();
+    if (!flg) {
+      setDefaultCarouselImages();
+    }
     var carouselVersion = $window.localStorage.carouselVersion;
     $http.get('/service/carouselPhoto/version').success(function(data) {
       if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data || !flg) {
         getHttpCarouselImages(data);
-      }
-    }).error(function(){
-      if (angular.isUndefined($scope.carouselImages) || $scope.carouselImages.length === 0) {
-        $scope.carouselImages = [
-          {
-            name: '预约挂号',
-            img: './assets/images/ad1.png'
-          },
-          {
-            name: '在线缴费',
-            img: './assets/images/ad2.png'
-          },
-          {
-            name: '查看报告',
-            img: './assets/images/ad3.png'
-          }
-        ];
       }
     });
 

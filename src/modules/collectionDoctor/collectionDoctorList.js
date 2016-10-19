@@ -26,16 +26,22 @@
 
     //取得收藏医生介绍列表
     var getDoctorIntroductions = function(param) {
-      $http.get('/user/collectionDoctors', {params: param}).success(function(data) {
-        $scope.spinnerShow = false;
-        $scope.introductions = data;
-        for (var i = 0 ; i < data.length ; i++) {
-          getDoctorPhoto(data[i].id,i);
+      $scope.introductions = null;
+      param.index = $scope.httpIndex.index;
+      $http.get('/user/collectionDoctors', {params: param}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          $scope.introductions = data;
+          for (var i = 0 ; i < data.length ; i++) {
+            getDoctorPhoto(data[i].id,i);
+          }
         }
-      }).error(function(data){
-        $scope.spinnerShow = false;
-        $scope.introductions = [];
-        toastService.show(data);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          $scope.introductions = [];
+          toastService.show(data);
+        }
       });
     };
 
@@ -47,23 +53,32 @@
     };
     //搜索医生事件
     $scope.doSearch = function() {
-      $scope.introductions = null;
       $scope.spinnerShow = true;
       $scope.searchNameTmp = $scope.searchName;
+      $scope.httpIndex.index++;
       getDoctorIntroductions({searchName: $scope.searchName});
     };
     //初始化取得医师介绍列表
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.introductions = null;
       $scope.spinnerShow = true;
-      $scope.searchName = '';
-      $scope.searchNameTmp = '';
+      $scope.searchName = $scope.searchNameTmp;
+      $scope.httpIndex = {index:1};
       getDoctorIntroductions({searchName: $scope.searchName});
     });
 
     //查看医生介绍详细
     $scope.viewIntroduction = function(id) {
       $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+    };
+    //返回事件
+    $scope.alreadyBack = function() {
+      $scope.searchName = '';
+      $scope.searchNameTmp = '';
     };
   };
 

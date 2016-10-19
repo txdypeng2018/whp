@@ -9,12 +9,14 @@ angular.module('isj').directive('isjSpinner', function() {
     restrict: 'E',
     replace: false,
     scope:{
-      isShow: '=isShow'
+      isShow: '=isShow',
+      callback: '&'
     },
     template: template,
     controller: function($scope) {
       $scope.hideSpinner = function() {
         $scope.isShow = false;
+        $scope.callback();
       };
     }
   };

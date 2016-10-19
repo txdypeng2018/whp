@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="spinnerShow"></isj-spinner>
+  <isj-spinner is-show="spinnerShow" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light registerDoctorDateSelect-title">
     <isj-back-button></isj-back-button>
     <div class="title"></div>
@@ -44,7 +44,7 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-          <div class="positive-border district-icon" ng-class="districtColor[doctor.districtId]"></div>
+        <div ng-if="doctor.districtId != null && doctor.districtId != ''" class="positive-border district-icon" ng-class="districtColor[doctor.districtId]"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>

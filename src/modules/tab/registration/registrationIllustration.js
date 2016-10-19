@@ -3,10 +3,18 @@
 
   var registrationIllustrationCtrl = function($scope, $state, $http, toastService) {
     //取得退号就诊说明
-    $http.get('/register/visitAndBacknumDesc').success(function(data) {
-      $scope.description = data;
-    }).error(function(data){
-      toastService.show(data);
+    var getVisitAndBacknumDesc = function() {
+      $http.get('/register/visitAndBacknumDesc').success(function(data) {
+        $scope.description = data;
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if (angular.isUndefined($scope.description) || $scope.description === null) {
+        getVisitAndBacknumDesc();
+      }
     });
 
     $scope.medicalGuideClk = function() {

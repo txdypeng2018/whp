@@ -1,7 +1,7 @@
 <ion-view>
-  <isj-spinner is-show="spinnerShow"></isj-spinner>
+  <isj-spinner is-show="spinnerShow" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light">
-    <isj-back-button></isj-back-button>
+    <isj-back-button callback="alreadyBack()"></isj-back-button>
     <div class="title">{{title}}</div>
   </ion-header-bar>
   <ion-header-bar class="bar-subheader bar-light doctorIntroductionList-subheader">

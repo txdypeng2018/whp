@@ -67,33 +67,38 @@
         major: $scope.major,
         startDate: startDate,
         endDate: endDate,
-        isAppointment: '1'
+        isAppointment: '1',
+        index: $scope.httpIndex.index
       };
-      $http.get('/schedule/doctors', {params: params}).success(function (data) {
-        $scope.spinnerShow = false;
-        if (data.length === 0) {
-          $scope.vm.moreData = false;
-        }
-        var index = 0;
-        if (isInit) {
-          $scope.doctors = data;
-        }
-        else {
-          index = $scope.doctors.length;
-          for (var k = 0; k < data.length; k++) {
-            $scope.doctors.push(data[k]);
+      $http.get('/schedule/doctors', {params: params}).success(function (data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          if (data.length === 0) {
+            $scope.vm.moreData = false;
           }
+          var index = 0;
+          if (isInit) {
+            $scope.doctors = data;
+          }
+          else {
+            index = $scope.doctors.length;
+            for (var k = 0; k < data.length; k++) {
+              $scope.doctors.push(data[k]);
+            }
+          }
+          for (var i = index; i < $scope.doctors.length; i++) {
+            $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
+            setDistrictColor($scope.doctors[i].districtId);
+            getDoctorPhoto($scope.doctors[i].id, i);
+          }
+          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        for (var i = index; i < $scope.doctors.length; i++) {
-          $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-          setDistrictColor($scope.doctors[i].districtId);
-          getDoctorPhoto($scope.doctors[i].id, i);
+      }).error(function (data, status, fun, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          $scope.doctors = [];
+          toastService.show(data);
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
-      }).error(function (data) {
-        $scope.spinnerShow = false;
-        $scope.doctors = [];
-        toastService.show(data);
       });
     };
 
@@ -145,17 +150,20 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function () {
+      $scope.httpIndex = {index:1};
       $scope.vm.init();
     });
 
     //日期选中事件
     $scope.dateSelectFun = function() {
+      $scope.httpIndex.index++;
       $scope.vm.init();
     };
 
     //预约选择方式切换事件
     $scope.appointmentModeClk = function (id) {
       $scope.appointmentMode = id;
+      $scope.httpIndex.index++;
       $scope.vm.init();
     };
 
@@ -172,6 +180,7 @@
     $scope.doSearch = function () {
       $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
       $scope.majorTmp = $scope.major;
+      $scope.httpIndex.index++;
       $scope.vm.init();
     };
 
@@ -191,6 +200,11 @@
         }
         $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, districtId: $stateParams.districtId, type: '2'});
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
     };
 
     $scope.contentMarginTop = function() {

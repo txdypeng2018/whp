@@ -8,6 +8,7 @@
     $scope.subjectId = '';
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       if($scope.type === '1' || $scope.type === '2'){
         //取得挂号须知
         $http.get('/register/agreement').success(function(data) {
@@ -18,6 +19,9 @@
         }).error(function(data){
           toastService.show(data);
         });
+      }
+      if (angular.isUndefined($scope.districts) || $scope.districts.length === 0) {
+        getDistricts();
       }
     });
     $scope.$on('$ionicView.beforeLeave', function(){
@@ -30,34 +34,40 @@
     var getSubjects = function() {
       $scope.subjects = [];
       $scope.subjectRights = '';
-      $http.get('/subjects', {params: {districtId: $scope.districtId, type: $scope.type}}).success(function(data) {
-        $scope.subjects = data;
+      $http.get('/subjects', {params: {districtId: $scope.districtId, type: $scope.type, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.subjects = data;
 
-        //默认选中第一个一级学科
-        $scope.subjectId = data[0].id;
-        if (angular.isUndefined(data[0].subjects) || data[0].subjects.length === 0) {
-          $scope.subjectRights = [data[0]];
+          //默认选中第一个一级学科
+          $scope.subjectId = data[0].id;
+          if (angular.isUndefined(data[0].subjects) || data[0].subjects.length === 0) {
+            $scope.subjectRights = [data[0]];
+          }
+          else {
+            $scope.subjectRights = data[0].subjects;
+          }
         }
-        else {
-          $scope.subjectRights = data[0].subjects;
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          toastService.show(data);
         }
-      }).error(function(data){
-        toastService.show(data);
       });
     };
 
     //取得院区信息
-    $http.get('/organization/districts').success(function(data) {
-      $scope.districts = [];
-      for (var i = 0 ; i < data.length ; i++) {
-        $scope.districts.push(data[i]);
-      }
-      //默认选中南湖院区
-      $scope.districtId = data[0].id;
-      getSubjects();
-    }).error(function(data){
-      toastService.show(data);
-    });
+    var getDistricts = function() {
+      $http.get('/organization/districts').success(function(data) {
+        $scope.districts = [];
+        for (var i = 0 ; i < data.length ; i++) {
+          $scope.districts.push(data[i]);
+        }
+        //默认选中南湖院区
+        $scope.districtId = data[0].id;
+        getSubjects();
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
 
     //查询框显示隐藏事件
     $scope.searchClk = function() {
@@ -87,6 +97,7 @@
     $scope.districtClk = function(id) {
       if ($scope.districtId !== id) {
         $scope.districtId = id;
+        $scope.httpIndex.index++;
         getSubjects();
       }
     };
@@ -139,6 +150,11 @@
         $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, subjectId: id});
           $scope.type = '0';
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
     };
   };
 

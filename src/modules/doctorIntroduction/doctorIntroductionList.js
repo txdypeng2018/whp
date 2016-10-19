@@ -23,29 +23,35 @@
 
     //取得医生介绍列表
     var getDoctorIntroductions = function(param, isInit) {
-      $http.get('/doctors', {params: param}).success(function(data) {
-        $scope.spinnerShow = false;
-        if (data.length === 0) {
-          $scope.vm.moreData = false;
-        }
-        var index = 0;
-        if (isInit) {
-          $scope.introductions = data;
-        }
-        else {
-          index = $scope.introductions.length;
-          for (var i = 0 ; i < data.length ; i++) {
-            $scope.introductions.push(data[i]);
+      param.index = $scope.httpIndex.index;
+      $http.get('/doctors', {params: param}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.refreshFlg = false;
+          $scope.spinnerShow = false;
+          if (data.length === 0) {
+            $scope.vm.moreData = false;
           }
+          var index = 0;
+          if (isInit) {
+            $scope.introductions = data;
+          }
+          else {
+            index = $scope.introductions.length;
+            for (var i = 0 ; i < data.length ; i++) {
+              $scope.introductions.push(data[i]);
+            }
+          }
+          for (var j = index ; j < $scope.introductions.length ; j++) {
+            getDoctorPhoto($scope.introductions[j].id, j);
+          }
+          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        for (var j = index ; j < $scope.introductions.length ; j++) {
-          getDoctorPhoto($scope.introductions[j].id, j);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          $scope.introductions = [];
+          toastService.show(data);
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
-      }).error(function(data){
-        $scope.spinnerShow = false;
-        $scope.introductions = [];
-        toastService.show(data);
       });
     };
 
@@ -57,6 +63,7 @@
     };
     //搜索医生事件
     $scope.doSearch = function() {
+      $scope.httpIndex.index++;
       $scope.searchNameTmp = $scope.searchName;
       $scope.vm.init();
     };
@@ -81,7 +88,28 @@
         getDoctorIntroductions({searchName: $scope.searchName, pageNo: $scope.vm.pageNo}, false);
       }
     };
-    $scope.vm.init();
+
+    $scope.refreshFlg = true;
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if ($scope.refreshFlg) {
+        $scope.httpIndex = {index:1};
+        $scope.searchName = $scope.searchNameTmp;
+        $scope.vm.init();
+      }
+    });
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+    };
+    //返回事件
+    $scope.alreadyBack = function() {
+      if (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '') {
+        $scope.refreshFlg = true;
+      }
+      $scope.searchName = '';
+      $scope.searchNameTmp = '';
+    };
   };
 
   var mainRouter = function($stateProvider) {
