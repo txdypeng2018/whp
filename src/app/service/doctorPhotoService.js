@@ -1,17 +1,19 @@
 'use strict';
 
 (function(app) {
-  app.factory('doctorPhotoService', function($window) {
+  //暂时去掉照片缓存
+  app.factory('doctorPhotoService', function() {
     var factory = {};
 
-    factory.setPhoto = function(doctorId, image) {
-      if (!angular.isUndefined(image) && image !== '') {
-        $window.localStorage['doctorPhoto_'+doctorId] = image;
-      }
+    factory.setPhoto = function() {
+      //if (!angular.isUndefined(image) && image !== '') {
+      //  $window.localStorage['doctorPhoto_'+doctorId] = image;
+      //}
     };
 
-    factory.getPhoto = function(doctorId) {
-      return $window.localStorage['doctorPhoto_'+doctorId];
+    factory.getPhoto = function() {
+      //return $window.localStorage['doctorPhoto_'+doctorId];
+      return '';
     };
 
     return factory;
