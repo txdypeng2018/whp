@@ -14,23 +14,48 @@
     });
 
     //取得轮播图片
+    var hasCarouselData = function(data) {
+      return !(angular.isUndefined(data) || data === '');
+    };
+    var setDefaultCarouselImages = function() {
+      $scope.carouselImages = [
+        {
+          name: '预约挂号',
+          img: './assets/images/ad1.png'
+        },
+        {
+          name: '在线缴费',
+          img: './assets/images/ad2.png'
+        },
+        {
+          name: '查看报告',
+          img: './assets/images/ad3.png'
+        }
+      ];
+    };
     var getWindowCarouselImages = function() {
       $scope.carouselImages = [];
       var index = 0;
+      var flg = true;
       while(true) {
         index++;
         var imageName = $window.localStorage['carousel_'+index+'_name'];
-        if (angular.isUndefined(imageName) || imageName === '') {
+        var image = $window.localStorage['carousel_'+index+'_img'];
+        if ((hasCarouselData(imageName) && !hasCarouselData(image)) || (!hasCarouselData(imageName) && hasCarouselData(image))) {
+          flg = false;
+          break;
+        }
+        if (!hasCarouselData(imageName)) {
           break;
         }
         else {
           $scope.carouselImages.push({
             name: imageName,
-            img: $window.localStorage['carousel_'+index+'_img']
+            img: image
           });
         }
       }
-      if ($scope.carouselImages.length === 0) {
+      if ($scope.carouselImages.length === 0 || !flg) {
         return false;
       }
       else {
@@ -65,6 +90,8 @@
           $window.localStorage['carousel_'+index+'_img'] = data[i].img;
         }
         $window.localStorage.carouselVersion = newVersion;
+      }).error(function(){
+        setDefaultCarouselImages();
       });
     };
     var flg = getWindowCarouselImages();
@@ -74,22 +101,7 @@
         getHttpCarouselImages(data);
       }
     }).error(function(){
-      if (angular.isUndefined($scope.carouselImages) || $scope.carouselImages.length === 0) {
-        $scope.carouselImages = [
-          {
-            name: '预约挂号',
-            img: './assets/images/ad1.png'
-          },
-          {
-            name: '在线缴费',
-            img: './assets/images/ad2.png'
-          },
-          {
-            name: '查看报告',
-            img: './assets/images/ad3.png'
-          }
-        ];
-      }
+      setDefaultCarouselImages();
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
