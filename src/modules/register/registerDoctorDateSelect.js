@@ -99,6 +99,8 @@
           $scope.doctors = [];
           toastService.show(data);
         }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
@@ -205,6 +207,13 @@
     //遮蔽罩取消
     $scope.spinnerCancel = function() {
       $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      $scope.vm.init();
     };
 
     $scope.contentMarginTop = function() {

@@ -42,6 +42,8 @@
           $scope.introductions = [];
           toastService.show(data);
         }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
@@ -74,11 +76,20 @@
     //遮蔽罩取消
     $scope.spinnerCancel = function() {
       $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
     };
+
     //返回事件
     $scope.alreadyBack = function() {
       $scope.searchName = '';
       $scope.searchNameTmp = '';
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.spinnerShow = true;
+      $scope.httpIndex.index++;
+      getDoctorIntroductions({searchName: $scope.searchName});
     };
   };
 
