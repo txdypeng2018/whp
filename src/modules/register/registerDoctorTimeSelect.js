@@ -22,16 +22,22 @@
     //取得排班时间
     var getScheduleTimes = function(date) {
       $scope.times = [];
-      $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date, districtId: $stateParams.districtId, isAppointment: isAppointment}}).success(function(data) {
-        if (data.length%3 !== 0) {
-          var count = 3 - data.length%3;
-          for (var i = 0 ; i < count ; i++) {
-            data.push({time:''});
+      $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date, districtId: $stateParams.districtId, isAppointment: isAppointment, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          if (data.length%3 !== 0) {
+            var count = 3 - data.length%3;
+            for (var i = 0 ; i < count ; i++) {
+              data.push({time:''});
+            }
           }
+          $scope.times = data;
         }
-        $scope.times = data;
-      }).error(function(data){
-        toastService.show(data);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          toastService.show(data);
+        }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
@@ -77,6 +83,7 @@
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       if ($scope.dateSelectParam.selectDays.length > 0) {
         getScheduleTimes($scope.dateSelectParam.daySelected);
       }
@@ -89,8 +96,12 @@
 
     //日期选择事件
     $scope.dateSelectFun = function() {
+      $scope.httpIndex.index++;
       getScheduleTimes($scope.dateSelectParam.daySelected);
       $scope.dataInfo = $scope.dataInfos[$scope.dateSelectParam.daySelected];
+      if ($scope.dataInfo.district.length > 2) {
+        $scope.dataInfo.district = $scope.dataInfo.district.substring(0, 2);
+      }
     };
 
     //时间选中事件
@@ -119,6 +130,18 @@
           $state.go('login');
         }
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      getScheduleTimes($scope.dateSelectParam.daySelected);
     };
   };
 

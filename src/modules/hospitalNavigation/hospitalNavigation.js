@@ -3,10 +3,18 @@
 
   var hospitalNavigationCtrl = function($scope, $http, $timeout , $state, toastService) {
     //取得院区及建筑
-    $http.get('/hospitalNavigation/builds').success(function(data) {
-      $scope.districtBuilds = data;
-    }).error(function(data){
-      toastService.show(data);
+    var getBuilds = function() {
+      $http.get('/hospitalNavigation/builds').success(function(data) {
+        $scope.districtBuilds = data;
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if (angular.isUndefined($scope.districtBuilds) || $scope.districtBuilds.length === 0) {
+        getBuilds();
+      }
     });
 
     //楼选中事件

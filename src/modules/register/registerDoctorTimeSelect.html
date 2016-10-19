@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <isj-spinner is-show="$root.inProcess" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
     <div class="title">{{dataInfo.name}}</div>
@@ -31,6 +31,7 @@
   </div>
 
   <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
       <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
         <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>

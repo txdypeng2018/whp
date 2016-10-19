@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="spinnerShow"></isj-spinner>
+  <isj-spinner is-show="spinnerShow" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light registerTodayDoctorList-title">
     <isj-back-button></isj-back-button>
     <div class="title"></div>
@@ -14,6 +14,7 @@
     </div>
   </ion-header-bar>
   <ion-content class="has-header content-fill registerTodayDoctorList-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="doctors.length == 0" class="no-content-center">
       <span ng-if="majorTmp == null || majorTmp == ''">暂无医生排班信息</span>
       <span ng-if="majorTmp != null && majorTmp != ''">暂无结果，请重新输入关键字</span>

@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <isj-spinner is-show="$root.inProcess" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light medicalReportList_head">
     <isj-back-button go-back="goBack()"></isj-back-button>
     <div class="title" ng-click="selectMember()">
@@ -35,6 +35,7 @@
     </div>
   </div>
   <ion-content class="has-header medicalReportList-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul ng-if="reports.length > 0" class="list">
       <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.status)">
         <h2>{{report.name}}</h2>

@@ -3,10 +3,18 @@
 
   var feedbackViewCtrl = function($scope, $http, $stateParams, toastService) {
     //取得意见详细
-    $http.get('/service/userOpinion/'+$stateParams.opinionId).success(function(data) {
-      $scope.feedback = data;
-    }).error(function(data){
-      toastService.show(data);
+    var getUserOpinion = function() {
+      $http.get('/service/userOpinion/'+$stateParams.opinionId).success(function(data) {
+        $scope.feedback = data;
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if (angular.isUndefined($scope.feedback) || $scope.feedback === null) {
+        getUserOpinion();
+      }
     });
   };
 

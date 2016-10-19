@@ -6,26 +6,33 @@
     var getPayments = function(param) {
       $scope.recipes = null;
       param.memberId = $stateParams.memberId;
-      $http.get('/recipes', {params: param}).success(function(data) {
-        $scope.recipes = data;
-        $scope.amount = '0.00';
-        $scope.recipeNums = [];
-        for (var i = 0 ; i < $scope.recipes.length ; i++) {
-          var outpatient = $scope.recipes[i];
-          outpatient.canCheck = false;
-          for (var j = 0 ; j < outpatient.recipes.length ; j++) {
-            if (outpatient.recipes[j].statusCode === '0') {
-              outpatient.canCheck = true;
+      param.index = $scope.httpIndex.index;
+      $http.get('/recipes', {params: param}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.recipes = data;
+          $scope.amount = '0.00';
+          $scope.recipeNums = [];
+          for (var i = 0 ; i < $scope.recipes.length ; i++) {
+            var outpatient = $scope.recipes[i];
+            outpatient.canCheck = false;
+            for (var j = 0 ; j < outpatient.recipes.length ; j++) {
+              if (outpatient.recipes[j].statusCode === '0') {
+                outpatient.canCheck = true;
+                outpatient.isCheck = false;
+              }
+            }
+            if (outpatient.canCheck) {
               outpatient.isCheck = false;
             }
           }
-          if (outpatient.canCheck) {
-            outpatient.isCheck = false;
-          }
         }
-      }).error(function(data){
-        $scope.recipes = [];
-        toastService.show(data);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.recipes = [];
+          toastService.show(data);
+        }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
@@ -41,10 +48,12 @@
 
     //查询缴费列表事件
     $scope.searchPay = function() {
+      $scope.httpIndex.index++;
       getPayments($scope.searchStr);
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       $scope.patient = {};
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -150,6 +159,18 @@
           toastService.show(data);
         });
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      getPayments($scope.searchStr);
     };
   };
 

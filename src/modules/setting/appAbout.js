@@ -10,6 +10,13 @@
       $scope.versionCode = versionCode;
     });
 
+    //取得客服电话
+    var getPhone = function() {
+      $http.get('/service/phone').success(function(data) {
+        $scope.servicePhone = data;
+      });
+    };
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isLogin = userService.hasToken();
       if ($scope.isLogin) {
@@ -20,11 +27,10 @@
           }
         });
       }
-    });
 
-    //取得客服电话
-    $http.get('/service/phone').success(function(data) {
-      $scope.servicePhone = data;
+      if (angular.isUndefined($scope.servicePhone) || $scope.servicePhone === '') {
+        getPhone();
+      }
     });
 
     //路由跳转

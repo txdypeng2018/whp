@@ -1,12 +1,20 @@
 (function(app) {
   'use strict';
 
-  var hospitalNavigationDloorListCtrl = function($scope, $http, $stateParams, toastService) {
+  var hospitalNavigationFloorListCtrl = function($scope, $http, $stateParams, toastService) {
     //取得各楼层信息
-    $http.get('/hospitalNavigation/builds/floors', {params: {buildId: $stateParams.id}}).success(function(data) {
-      $scope.floorList = data;
-    }).error(function(data){
-      toastService.show(data);
+    var getFloors = function() {
+      $http.get('/hospitalNavigation/builds/floors', {params: {buildId: $stateParams.id}}).success(function(data) {
+        $scope.floorList = data;
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
+
+    $scope.$on('$ionicView.beforeEnter', function(){
+      if (angular.isUndefined($scope.floorList) || $scope.floorList.length === 0) {
+        getFloors();
+      }
     });
   };
 
@@ -14,7 +22,7 @@
     $stateProvider.state('hospitalNavigationFloorList', {
       url: '/hospitalNavigation/floorList/:id',
       templateUrl: 'modules/hospitalNavigation/floorList.html',
-      controller: hospitalNavigationDloorListCtrl
+      controller: hospitalNavigationFloorListCtrl
     });
   };
 

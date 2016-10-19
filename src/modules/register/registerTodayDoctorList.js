@@ -39,47 +39,55 @@
         major: $scope.major,
         startDate: today,
         endDate: today,
-        isAppointment: '0'
+        isAppointment: '0',
+        index: $scope.httpIndex.index
       };
-      $http.get('/schedule/doctors', {params: params}).success(function(data) {
-        $scope.spinnerShow = false;
-        if (data.length === 0) {
-          $scope.vm.moreData = false;
-        }
-        var index = 0;
-        if (isInit) {
-          $scope.doctors = data;
-        }
-        else {
-          index = $scope.doctors.length;
-          for (var k = 0 ; k < data.length ; k++) {
-            $scope.doctors.push(data[k]);
+      $http.get('/schedule/doctors', {params: params}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          if (data.length === 0) {
+            $scope.vm.moreData = false;
           }
-        }
-        var id;
-        for (var i = index ; i < $scope.doctors.length ; i++) {
-          $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-          id = $scope.doctors[i].districtId;
-          if (i > index) {
-            if ($scope.doctors[i].districtId !== $scope.doctors[i - 1].districtId) {
-              districtCount++;
+          var index = 0;
+          if (isInit) {
+            $scope.doctors = data;
+          }
+          else {
+            index = $scope.doctors.length;
+            for (var k = 0 ; k < data.length ; k++) {
+              $scope.doctors.push(data[k]);
+            }
+          }
+          var id;
+          for (var i = index ; i < $scope.doctors.length ; i++) {
+            $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
+            id = $scope.doctors[i].districtId;
+            if (i > index) {
+              if ($scope.doctors[i].districtId !== $scope.doctors[i - 1].districtId) {
+                districtCount++;
+                $scope.districtColor.set(id, color[districtCount - 1]);
+              }
+            } else {
+              districtCount = 1;
               $scope.districtColor.set(id, color[districtCount - 1]);
             }
-          } else {
-            districtCount = 1;
-            $scope.districtColor.set(id, color[districtCount - 1]);
+            getDoctorPhoto($scope.doctors[i].id, i);
           }
-          getDoctorPhoto($scope.doctors[i].id, i);
+          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
-      }).error(function(data){
-        $scope.spinnerShow = false;
-        $scope.doctors = [];
-        toastService.show(data);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.spinnerShow = false;
+          $scope.doctors = [];
+          toastService.show(data);
+        }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       //上拉加载医生
       $scope.vm = {
         moreData: true,
@@ -111,6 +119,7 @@
     //查询事件
     $scope.doSearch = function() {
       $scope.majorTmp = $scope.major;
+      $scope.httpIndex.index++;
       $scope.vm.init();
     };
 
@@ -125,6 +134,18 @@
       if (overCount > 0) {
         $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, districtId: $stateParams.districtId,  type: '1'});
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      $scope.vm.init();
     };
   };
 

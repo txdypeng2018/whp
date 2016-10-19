@@ -4,22 +4,28 @@
   var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, toastService, $ionicHistory) {
     //取得挂号单
     var registrationList = function() {
-      $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
-        $scope.registrations = data;
-        for (var i = 0 ; i < $scope.registrations.length ; i++) {
-          if ($scope.registrations[i].district.length > 2) {
-            $scope.registrations[i].district = $scope.registrations[i].district.substring(0,2);
+      $scope.registrations = null;
+      $http.get('/register/registrations', {params: {memberId: $stateParams.memberId, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.registrations = data;
+          for (var i = 0 ; i < $scope.registrations.length ; i++) {
+            if ($scope.registrations[i].district.length > 2) {
+              $scope.registrations[i].district = $scope.registrations[i].district.substring(0,2);
+            }
           }
         }
-      }).error(function(data){
-        $scope.registrations = [];
-        toastService.show(data);
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.registrations = [];
+          toastService.show(data);
+        }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.patient = {};
-      $scope.registrations = null;
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;
@@ -34,6 +40,7 @@
         toastService.show(data);
       });
 
+      $scope.httpIndex = {index:1};
       registrationList();
       $ionicHistory.clearHistory();
     });
@@ -46,6 +53,18 @@
     //挂号单选择
     $scope.registrationClk = function(id) {
       $state.go('registrationView', {registrationId: id, memberId: $scope.patient.id});
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      registrationList();
     };
   };
 

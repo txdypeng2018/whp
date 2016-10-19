@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="spinnerShow"></isj-spinner>
+  <isj-spinner is-show="spinnerShow" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light registerDoctorDateSelect-title">
     <isj-back-button></isj-back-button>
     <div class="title"></div>
@@ -29,6 +29,7 @@
   <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header-district has-header registerDoctorDateSelect-date" ng-show="appointmentMode == '1' && !hasSearchStr"></isj-date-select>
 
   <ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="contentMarginTop()">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul ng-if="doctors.length > 0" class="list">
       <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.overCount)">
         <div class="photo">
@@ -44,7 +45,7 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-          <div class="positive-border district-icon" ng-class="districtColor[doctor.districtId]"></div>
+        <div ng-if="doctor.districtId != null && doctor.districtId != ''" class="positive-border district-icon" ng-class="districtColor[doctor.districtId]"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>
