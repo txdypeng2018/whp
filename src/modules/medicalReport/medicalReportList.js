@@ -62,6 +62,8 @@
           $scope.reports = [];
           toastService.show(data);
         }
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
     };
 
@@ -91,7 +93,6 @@
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.httpIndex = {index:1};
       $scope.patient = {};
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -100,6 +101,7 @@
         toastService.show(data);
       });
 
+      $scope.httpIndex = {index:1};
       getMedicalReports($scope.searchStr);
     });
 
@@ -131,6 +133,13 @@
     //遮蔽罩取消
     $scope.spinnerCancel = function() {
       $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      $scope.httpIndex.index++;
+      getMedicalReports($scope.searchStr);
     };
   };
 

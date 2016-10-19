@@ -13,6 +13,7 @@
     </label>
   </ion-header-bar>
   <ion-content class="has-header has-subheader content-gray feedbackList-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul class="list">
       <li ng-repeat="feedback in feedbacks" class="item" ng-click="opinionView(feedback.id)">
         <p class="opinion-time">

@@ -35,6 +35,7 @@
     </div>
   </div>
   <ion-content class="has-header medicalReportList-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul ng-if="reports.length > 0" class="list">
       <li class="item item-icon-right" ng-repeat="report in reports" ng-click="viewReport(report.id, report.status)">
         <h2>{{report.name}}</h2>

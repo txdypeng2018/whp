@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <isj-spinner is-show="$root.inProcess" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light">
     <div class="title" ng-click="selectMember()">
       <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
@@ -10,6 +10,7 @@
     </div>
   </ion-header-bar>
   <ion-content class="has-header content-gray content-fill registration-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
       <div class="time-line-left">
         {{registration.apptDate.substring(5,11)}}<br>{{registration.apptDate.substring(12)}}

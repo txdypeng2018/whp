@@ -15,6 +15,7 @@
     </label>
   </ion-header-bar>
   <ion-content class="has-header has-subheader has-footer content-fill onlinePaymentList-content">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="recipes.length > 0" class="recipes">
       <div ng-repeat="recipe in recipes">
         <div class="recipes-flex-row recipes-border-bottom recipe-title">
