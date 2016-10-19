@@ -1,5 +1,5 @@
 <ion-view>
-  <isj-spinner is-show="$root.inProcess"></isj-spinner>
+  <isj-spinner is-show="$root.inProcess" callback="spinnerCancel()"></isj-spinner>
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
     <div class="title">{{dataInfo.name}}</div>

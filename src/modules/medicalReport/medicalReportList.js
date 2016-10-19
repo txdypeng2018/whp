@@ -43,6 +43,7 @@
     //报告类别切换
     $scope.categoryClk = function(category) {
       $scope.category = category;
+      $scope.httpIndex.index++;
       getMedicalReports($scope.searchStr);
     };
 
@@ -51,11 +52,16 @@
       $scope.reports = null;
       param.memberId = $stateParams.memberId;
       param.category = $scope.category;
-      $http.get('/medicalReports', {params: param}).success(function(data) {
-        $scope.reports = data;
-      }).error(function(data){
-        $scope.reports = [];
-        toastService.show(data);
+      param.index = $scope.httpIndex.index;
+      $http.get('/medicalReports', {params: param}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.reports = data;
+        }
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.reports = [];
+          toastService.show(data);
+        }
       });
     };
 
@@ -80,10 +86,12 @@
 
     //查询检验报告列表事件
     $scope.searchReport = function() {
+      $scope.httpIndex.index++;
       getMedicalReports($scope.searchStr);
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       $scope.patient = {};
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -118,6 +126,11 @@
       else {
         toastService.show('报告未出，请稍后查看');
       }
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
     };
   };
 

@@ -4,6 +4,7 @@
   var tabRegistrationCtrl = function($scope, $state, $stateParams, $http, toastService, $ionicHistory) {
     //取得挂号单
     var registrationList = function() {
+      $scope.registrations = null;
       $http.get('/register/registrations', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.registrations = data;
         for (var i = 0 ; i < $scope.registrations.length ; i++) {
@@ -19,7 +20,6 @@
 
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.patient = {};
-      $scope.registrations = null;
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
         $scope.patient = data;

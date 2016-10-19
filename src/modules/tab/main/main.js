@@ -4,13 +4,12 @@
   var tabMainCtrl = function($scope, $ionicHistory, $state, $http, $window, userService, toastService) {
     //取得软件名称
     $scope.appName = $window.localStorage.appName;
+    if (angular.isUndefined($scope.appName) || $scope.appName === '') {
+      $scope.appName = '掌上盛京';
+    }
     $http.get('/service/appName').success(function(data) {
       $scope.appName = data;
       $window.localStorage.appName = data;
-    }).error(function(){
-      if (angular.isUndefined($scope.appName) || $scope.appName === '') {
-        $scope.appName = '掌上盛京';
-      }
     });
 
     //取得轮播图片
@@ -90,18 +89,17 @@
           $window.localStorage['carousel_'+index+'_img'] = data[i].img;
         }
         $window.localStorage.carouselVersion = newVersion;
-      }).error(function(){
-        setDefaultCarouselImages();
       });
     };
     var flg = getWindowCarouselImages();
+    if (!flg) {
+      setDefaultCarouselImages();
+    }
     var carouselVersion = $window.localStorage.carouselVersion;
     $http.get('/service/carouselPhoto/version').success(function(data) {
       if (angular.isUndefined(carouselVersion) || carouselVersion === '' || carouselVersion !== data || !flg) {
         getHttpCarouselImages(data);
       }
-    }).error(function(){
-      setDefaultCarouselImages();
     });
 
     $scope.$on('$ionicView.beforeEnter', function(){

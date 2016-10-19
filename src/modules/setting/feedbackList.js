@@ -23,20 +23,27 @@
     //取得意见列表
     var getFeedbackList = function(param) {
       $scope.feedbacks = null;
-      $http.get('/service/userOpinion', {params: param}).success(function(data) {
-        $scope.feedbacks = data;
-      }).error(function(data){
-        $scope.feedbacks = [];
-        toastService.show(data);
+      param.index = $scope.httpIndex.index;
+      $http.get('/service/userOpinion', {params: param}).success(function(data, status, headers, config) {
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.feedbacks = data;
+        }
+      }).error(function(data, status, fun, config){
+        if (angular.isUndefined($scope.httpIndex[config.params.index])) {
+          $scope.feedbacks = [];
+          toastService.show(data);
+        }
       });
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       getFeedbackList($scope.searchStr);
     });
 
     //查询意见列表事件
     $scope.searchFeedback = function() {
+      $scope.httpIndex.index++;
       getFeedbackList($scope.searchStr);
     };
 
@@ -48,6 +55,11 @@
     //查看意见
     $scope.opinionView = function(id) {
       $state.go('settingFeedbackView', {opinionId: id});
+    };
+
+    //遮蔽罩取消
+    $scope.spinnerCancel = function() {
+      $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
     };
   };
 
