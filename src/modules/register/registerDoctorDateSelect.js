@@ -200,7 +200,7 @@
         if ($scope.appointmentMode === '2' || $scope.hasSearchStr) {
           date = '';
         }
-        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, districtId: $stateParams.districtId, type: '2'});
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, districtId: $stateParams.districtId, subjectId: $stateParams.subjectId, type: '2'});
       }
     };
 

@@ -132,7 +132,7 @@
     //医生选择事件
     $scope.doctorClk = function(doctorId, overCount) {
       if (overCount > 0) {
-        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, districtId: $stateParams.districtId,  type: '1'});
+        $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: today, districtId: $stateParams.districtId, subjectId: $stateParams.subjectId,  type: '1'});
       }
     };
 

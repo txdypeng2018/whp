@@ -108,6 +108,11 @@
         myPopup.close();
       }
     });
+
+    //返回首页
+    $scope.goMainPage = function() {
+      $state.go('tab.main');
+    };
   };
 
   var mainRouter = function($stateProvider) {

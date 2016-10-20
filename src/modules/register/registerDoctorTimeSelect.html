@@ -3,6 +3,7 @@
   <ion-header-bar class="bar-light">
     <isj-back-button></isj-back-button>
     <div class="title">{{dataInfo.name}}</div>
+    <a class="button button-clear icon ion-ios-home-outline positive return-home-icon" ng-click="goMainPage()"></a>
   </ion-header-bar>
 
   <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header registerDoctorTimeSelect-date" ng-if="dateSelectParam.selectDays.length > 0"></isj-date-select>

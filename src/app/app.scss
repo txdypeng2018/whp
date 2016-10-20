@@ -153,6 +153,15 @@ a {
   }
 }
 
+.return-home-icon {
+  &.button.button-clear.icon:before {
+    font-size: 28px !important;
+  }
+  &.button {
+    margin-top: -1px !important;
+  }
+}
+
 .district-icon {
   position: absolute;
   top: 0;
