@@ -96,8 +96,8 @@
       var forwardViewId = $ionicHistory.currentView().forwardViewId;
       $scope.searchName = $scope.searchNameTmp;
       if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
-        if ((angular.isUndefined($scope.introductions) || $scope.introductions.length === 0)
-            || (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '')) {
+        if ((angular.isUndefined($scope.introductions) || $scope.introductions.length === 0) ||
+            (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '')) {
           $scope.httpIndex = {index:1};
           $scope.searchNameTmp = '';
           $scope.searchName = '';
