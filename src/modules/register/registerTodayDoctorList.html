@@ -35,7 +35,7 @@
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
-        <div class="positive-border district-icon" ng-class="districtColor.get(doctor.districtId)"></div>
+        <div ng-if="doctor.districtId != null && doctor.districtId != ''" class="positive-border district-icon" ng-class="districtColor.get(doctor.districtId)"></div>
         <div class="district-icon-font balanced">{{doctor.district}}</div>
       </li>
     </ul>
