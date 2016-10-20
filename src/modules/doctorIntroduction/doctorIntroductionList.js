@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, doctorPhotoService, toastService) {
+  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService) {
     $scope.title = '医生介绍';
     $scope.searchNameTmp = '';
 
@@ -92,12 +92,17 @@
       }
     };
 
-    $scope.refreshFlg = true;
     $scope.$on('$ionicView.beforeEnter', function(){
-      if ($scope.refreshFlg) {
-        $scope.httpIndex = {index:1};
-        $scope.searchName = $scope.searchNameTmp;
-        $scope.vm.init();
+      var forwardViewId = $ionicHistory.currentView().forwardViewId;
+      $scope.searchName = $scope.searchNameTmp;
+      if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
+        if ((angular.isUndefined($scope.introductions) || $scope.introductions.length === 0)
+            || (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '')) {
+          $scope.httpIndex = {index:1};
+          $scope.searchNameTmp = '';
+          $scope.searchName = '';
+          $scope.vm.init();
+        }
       }
     });
 
@@ -105,15 +110,6 @@
     $scope.spinnerCancel = function() {
       $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
       $scope.$broadcast('scroll.refreshComplete');
-    };
-
-    //返回事件
-    $scope.alreadyBack = function() {
-      if (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '') {
-        $scope.refreshFlg = true;
-      }
-      $scope.searchName = '';
-      $scope.searchNameTmp = '';
     };
 
     //下拉刷新
