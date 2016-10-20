@@ -5,7 +5,7 @@
     //取得软件名称
     $scope.appName = $window.localStorage.appName;
     if (angular.isUndefined($scope.appName) || $scope.appName === '') {
-      $scope.appName = '掌上盛京';
+      $scope.appName = '掌上盛京医院';
     }
     $http.get('/service/appName').success(function(data) {
       $scope.appName = data;

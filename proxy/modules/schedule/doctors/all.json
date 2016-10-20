@@ -23,7 +23,8 @@
     "dept": "第二内分泌科门诊",
     "skill": "",
     "total": "10",
-    "overCount": "5"
+    "overCount": "5",
+    "unallowed": "停诊"
   },
   {
     "id": "3",
@@ -36,6 +37,7 @@
     "dept": "第二内分泌科门诊",
     "skill": "",
     "total": "10",
-    "overCount": "0"
+    "overCount": "0",
+    "unallowed": ""
   }
 ]

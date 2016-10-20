@@ -20,7 +20,7 @@
       <span ng-if="majorTmp != null && majorTmp != ''">暂无结果，请重新输入关键字</span>
     </div>
     <ul ng-if="doctors.length > 0" class="list">
-      <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id, doctor.overCount)">
+      <li class="item item-avatar-left" collection-repeat="doctor in doctors" ng-click="doctorClk(doctor.id, doctor.overCount, doctor.unallowed)">
         <div class="photo">
           <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '1'" src="./assets/images/doctor_man.png" ng-click="photoClk(doctor.id, $event)">
           <img ng-if="(doctor.photo == null || doctor.photo == '') && doctor.sexCode == '0'" src="./assets/images/doctor_woman.png" ng-click="photoClk(doctor.id, $event)">
@@ -29,8 +29,9 @@
         <div class="name">
           <h2>{{doctor.name}}</h2>
           <p>{{doctor.title}}</p>
-          <div ng-if="doctor.overCount > 0" class="positive-bg can-register">有号</div>
-          <div ng-if="doctor.overCount == 0" class="dark-bg can-register">无号</div>
+          <div ng-if="doctor.unallowed != null && doctor.unallowed != ''" class="dark-bg can-register">{{doctor.unallowed}}</div>
+          <div ng-if="(doctor.unallowed == null || doctor.unallowed == '') && doctor.overCount > 0" class="positive-bg can-register">有号</div>
+          <div ng-if="(doctor.unallowed == null || doctor.unallowed == '') && doctor.overCount == 0" class="dark-bg can-register">无号</div>
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>

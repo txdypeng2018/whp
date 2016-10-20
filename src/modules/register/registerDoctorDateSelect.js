@@ -194,8 +194,8 @@
     };
 
     //医生选中事件
-    $scope.doctorClk = function (doctorId, overCount) {
-      if (overCount > 0) {
+    $scope.doctorClk = function (doctorId, overCount, unallowed) {
+      if ((angular.isUndefined(unallowed) || unallowed === null || unallowed === '') && overCount > 0) {
         //判断如果是选择医生状态，则置选择日期为空
         var date = $scope.dateSelectParam.daySelected;
         if ($scope.appointmentMode === '2' || $scope.hasSearchStr) {
