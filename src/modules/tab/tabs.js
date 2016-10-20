@@ -15,7 +15,7 @@
     $ionicConfigProvider.form.checkbox('circle');
   });
 
-  var tabCtrl = function($scope, $http, $state, toastService, userService) {
+  var tabCtrl = function($scope, $http, $state, userService) {
     //路由跳转
     $scope.tabRouter = function(routerId) {
       var isLogin = true;
@@ -26,7 +26,7 @@
             $state.go(routerId);
           }).error(function(data, status){
             if (status !== 401) {
-              toastService.show(data);
+              $state.go(routerId);
             }
             else {
               userService.clearToken();

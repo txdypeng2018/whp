@@ -69,6 +69,9 @@
         return response || $q.when(response);
       },
       responseError: function(rejection) {
+        if (rejection.status === -1) {
+          rejection.data = '网络异常，请稍后再试';
+        }
         if (rejection.status === 401) {
           rejection.data = null;
         }

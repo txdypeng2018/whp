@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, toastService, $ionicPopup) {
+  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, toastService, $ionicPopup, $ionicHistory) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
 
@@ -22,6 +22,12 @@
       }
       if (angular.isUndefined($scope.districts) || $scope.districts.length === 0) {
         getDistricts();
+      }
+
+      var forwardViewId = $ionicHistory.currentView().forwardViewId;
+      if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
+        $scope.hideSearch = true;
+        $scope.major = '';
       }
     });
     $scope.$on('$ionicView.beforeLeave', function(){

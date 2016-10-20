@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, doctorPhotoService, toastService) {
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService) {
     $scope.title = '收藏的医生';
     $scope.vm = {
       moreData: false,
@@ -62,6 +62,12 @@
     };
     //初始化取得医师介绍列表
     $scope.$on('$ionicView.beforeEnter', function(){
+      var forwardViewId = $ionicHistory.currentView().forwardViewId;
+      if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
+        $scope.searchName = '';
+        $scope.searchNameTmp = '';
+      }
+
       $scope.spinnerShow = true;
       $scope.searchName = $scope.searchNameTmp;
       $scope.httpIndex = {index:1};
@@ -77,12 +83,6 @@
     $scope.spinnerCancel = function() {
       $scope.httpIndex[$scope.httpIndex.index] = 'CANCEL';
       $scope.$broadcast('scroll.refreshComplete');
-    };
-
-    //返回事件
-    $scope.alreadyBack = function() {
-      $scope.searchName = '';
-      $scope.searchNameTmp = '';
     };
 
     //下拉刷新
