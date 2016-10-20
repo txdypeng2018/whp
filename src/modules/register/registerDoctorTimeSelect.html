@@ -33,6 +33,9 @@
 
   <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
     <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
+    <div ng-if="dataInfo.overCount == 0" class="no-count">
+      <span>无号</span>
+    </div>
     <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
       <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
         <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
