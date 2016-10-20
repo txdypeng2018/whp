@@ -61,7 +61,7 @@
       daySelected: $stateParams.date
     };
     $scope.dataInfos = {};
-    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected, districtId: $stateParams.districtId, isAppointment: isAppointment}}).success(function(data) {
+    $http.get('/schedule/dates', {params: {doctorId: $stateParams.doctorId, date: $scope.dateSelectParam.daySelected, districtId: $stateParams.districtId, subjectId: $stateParams.subjectId, isAppointment: isAppointment}}).success(function(data) {
       if (data.length > 0) {
         var selectDays = [];
         for (var i = 0 ; i < data.length ; i++) {
@@ -147,7 +147,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('registerDoctorTimeSelect', {
-      url: '/register/registerDoctorTimeSelect/:doctorId/:date/:districtId/:type',
+      url: '/register/registerDoctorTimeSelect/:doctorId/:date/:districtId/:subjectId/:type',
       templateUrl: 'modules/register/registerDoctorTimeSelect.html',
       controller: registerDoctorTimeSelectCtrl
     });
