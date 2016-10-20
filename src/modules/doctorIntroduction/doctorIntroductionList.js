@@ -83,6 +83,7 @@
         $scope.spinnerShow = true;
         $scope.introductions = null;
         $scope.vm.pageNo = 1;
+        $scope.vm.moreData = true;
         getDoctorIntroductions({searchName: $scope.searchName, pageNo: $scope.vm.pageNo}, true);
       },
       loadMore: function () {

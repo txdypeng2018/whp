@@ -138,6 +138,7 @@
         $scope.spinnerShow = true;
         $scope.doctors = null;
         $scope.vm.pageNo = 1;
+        $scope.vm.moreData = true;
         getDoctors($scope.vm.pageNo, true);
       },
       loadMore: function () {
