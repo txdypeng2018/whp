@@ -12,11 +12,11 @@
           $scope.user.phone = $scope.user.phone.substring(0,3)+'****'+$scope.user.phone.substring(7,11);
         }
       }).error(function(data, status){
-        $scope.user = {};
         if (status !== 401) {
           toastService.show(data);
         }
         else {
+          $scope.user = {};
           userService.clearToken();
           $scope.isLogin = false;
         }
@@ -26,9 +26,11 @@
       $http.get('/user/familyMembers/count').success(function(data) {
         $scope.memberCount = data;
       }).error(function(data){
-        $scope.memberCount = '';
         if (status !== 401) {
           toastService.show(data);
+        }
+        else {
+          $scope.memberCount = '';
         }
       });
 
@@ -36,9 +38,11 @@
       $http.get('/user/collectionDoctors/count').success(function(data) {
         $scope.doctorCount = data;
       }).error(function(data){
-        $scope.doctorCount = '';
         if (status !== 401) {
           toastService.show(data);
+        }
+        else {
+          $scope.doctorCount = '';
         }
       });
 
@@ -55,7 +59,7 @@
             $state.go(routerId);
           }).error(function(data, status){
             if (status !== 401) {
-              toastService.show(data);
+              $state.go(routerId);
             }
             else {
               userService.clearToken();
