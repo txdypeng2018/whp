@@ -26,9 +26,11 @@
 
     //设置院区颜色
     var setDistrictColor = function(districtId) {
-      if (angular.isUndefined($scope.districtColor[districtId])) {
-        $scope.districtColor[districtId] = color[districtCount];
-        districtCount++;
+      if (!angular.isUndefined(districtId) && districtId !== null && districtId !== '') {
+        if (angular.isUndefined($scope.districtColor[districtId])) {
+          $scope.districtColor[districtId] = color[districtCount];
+          districtCount++;
+        }
       }
     };
 
