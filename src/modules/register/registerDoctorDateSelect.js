@@ -181,10 +181,16 @@
     };
     //查询事件
     $scope.doSearch = function () {
-      $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
-      $scope.majorTmp = $scope.major;
-      $scope.httpIndex.index++;
-      $scope.vm.init();
+      if ((angular.isUndefined($stateParams.subjectId) || $stateParams.subjectId === '') && (angular.isUndefined($scope.major) || $scope.major === '')) {
+        $scope.major = $scope.majorTmp;
+        toastService.show('必须输入查询条件');
+      }
+      else {
+        $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
+        $scope.majorTmp = $scope.major;
+        $scope.httpIndex.index++;
+        $scope.vm.init();
+      }
     };
 
     //选择照片事件
