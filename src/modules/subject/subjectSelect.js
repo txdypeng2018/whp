@@ -43,7 +43,7 @@
     var getSubjects = function() {
       $scope.subjects = [];
       $scope.subjectRights = '';
-      $http.get('/subjects', {params: {districtId: $scope.districtId, type: $scope.type, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
+      $http.get('/subjects', {params: {districtId: $scope.districtId, type: $stateParams.type, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.subjects = data;
 
@@ -93,11 +93,9 @@
       if (!angular.isUndefined($scope.major) && $scope.major !== '') {
         if ($stateParams.type === '1') {
           $state.go('registerTodayDoctorList', {districtId: $scope.districtId, major: $scope.major});
-          $scope.type = '0';
         }
         else if ($stateParams.type === '2') {
           $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, major: $scope.major});
-          $scope.type = '0';
         }
       }
     };
@@ -153,11 +151,9 @@
     $scope.subjectRightClk = function(id) {
       if ($stateParams.type === '1') {
         $state.go('registerTodayDoctorList', {districtId: $scope.districtId, subjectId: id});
-          $scope.type = '0';
       }
       else if ($stateParams.type === '2') {
         $state.go('registerDoctorDateSelect', {districtId: $scope.districtId, subjectId: id});
-          $scope.type = '0';
       }
     };
 
