@@ -28,6 +28,9 @@
       if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
         $scope.hideSearch = true;
         $scope.major = '';
+        if (!angular.isUndefined($scope.districts) && $scope.districts.length !== 0) {
+          getSubjects();
+        }
       }
     });
     $scope.$on('$ionicView.beforeLeave', function(){
