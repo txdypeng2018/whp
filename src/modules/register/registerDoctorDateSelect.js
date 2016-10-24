@@ -1,14 +1,10 @@
 (function (app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService) {
+  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService, utilsService) {
     //数据初始化
-    var color = ['district-icon-positive', 'district-icon-balanced',
-      'district-icon-royal', 'district-icon-calm', 'district-icon-assertive'];
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var displayDays = 30;
-    $scope.districtColor = {};
-    var districtCount = 0;
     $scope.major = $stateParams.major;
     $scope.majorTmp = $stateParams.major;
     $scope.hasSearchStr = (!angular.isUndefined($scope.major) && $scope.major !== '');
@@ -25,14 +21,9 @@
     };
 
     //设置院区颜色
-    var setDistrictColor = function(districtId) {
-      if (!angular.isUndefined(districtId) && districtId !== null && districtId !== '') {
-        if (angular.isUndefined($scope.districtColor[districtId])) {
-          $scope.districtColor[districtId] = color[districtCount];
-          districtCount++;
-        }
-      }
-    };
+    $http.get('/organization/districts').success(function(data) {
+      $scope.districtColor = utilsService.getDistrictColor(data);
+    });
 
     //取得医生照片
     var getDoctorPhoto = function (doctorId, index) {
@@ -90,11 +81,13 @@
           }
           for (var i = index; i < $scope.doctors.length; i++) {
             $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-            setDistrictColor($scope.doctors[i].districtId);
             getDoctorPhoto($scope.doctors[i].id, i);
           }
-          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
+        else {
+          $scope.vm.moreData = false;
+        }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function (data, status, fun, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.spinnerShow = false;
@@ -198,6 +191,7 @@
     //选择照片事件
     $scope.photoClk = function (id, event) {
       event.stopPropagation();
+      $scope.vm.moreData = false;
       $state.go('doctorIntroductionView', {doctorId: id, type: '0'});
     };
 
@@ -209,6 +203,7 @@
         if ($scope.appointmentMode === '2' || $scope.hasSearchStr) {
           date = '';
         }
+        $scope.vm.moreData = false;
         $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, districtId: $stateParams.districtId, subjectId: $stateParams.subjectId, type: '2'});
       }
     };

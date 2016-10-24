@@ -1,13 +1,18 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, userService, doctorPhotoService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, userService, doctorPhotoService, utilsService) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var isAppointment = '1';
     if ($stateParams.type === '1') {
       isAppointment = '0';
     }
+
+    //设置院区颜色
+    $http.get('/organization/districts').success(function(data) {
+      $scope.districtColor = utilsService.getDistrictColor(data);
+    });
 
     //设置可选择的日期
     var setSelectDay = function(date) {

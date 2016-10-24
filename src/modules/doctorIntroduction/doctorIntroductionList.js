@@ -44,8 +44,11 @@
           for (var j = index ; j < $scope.introductions.length ; j++) {
             getDoctorPhoto($scope.introductions[j].id, j);
           }
-          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
+        else {
+          $scope.vm.moreData = false;
+        }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function(data, status, fun, config){
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.spinnerShow = false;
@@ -72,6 +75,7 @@
 
     //查看医生介绍详细
     $scope.viewIntroduction = function(id) {
+      $scope.vm.moreData = false;
       $state.go('doctorIntroductionView', {doctorId: id, type: '1'});
     };
 
@@ -95,6 +99,7 @@
     $scope.$on('$ionicView.beforeEnter', function(){
       var forwardViewId = $ionicHistory.currentView().forwardViewId;
       $scope.searchName = $scope.searchNameTmp;
+      $scope.vm.moreData = true;
       if (angular.isUndefined(forwardViewId) || forwardViewId === null || forwardViewId === '') {
         if ((angular.isUndefined($scope.introductions) || $scope.introductions.length === 0) ||
             (!angular.isUndefined($scope.searchNameTmp) && $scope.searchNameTmp !== '')) {
