@@ -22,7 +22,7 @@
         </div>
         <p>出诊地点：{{dataInfo.dept}}</p>
         <p>挂号费：<span class="positive" style="font-weight: 600;font-size: 15px">￥{{dataInfo.amount}}</span></p>
-        <div class="positive-border district-icon district-icon-positive"></div>
+        <div class="positive-border district-icon" ng-class="districtColor[dataInfo.districtId]"></div>
         <div class="district-icon-font">{{dataInfo.district}}</div>
       </li>
       <li class="item item-divider">

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService, utilsService) {
     $scope.hideSearch = true;
 
     //取得医生照片
@@ -21,21 +21,10 @@
     };
 
     //设置院区颜色
-    var setDistrictColor = function(districtId) {
-      if (!angular.isUndefined(districtId) && districtId !== null && districtId !== '') {
-        if (angular.isUndefined($scope.districtColor[districtId])) {
-          $scope.districtColor[districtId] = color[districtCount];
-          districtCount++;
-        }
-      }
-    };
+    $http.get('/organization/districts').success(function(data) {
+      $scope.districtColor = utilsService.getDistrictColor(data);
+    });
 
-    //不同的院区的颜色
-    $scope.districtColor = {};
-    var districtCount = 0;
-    //颜色数组
-    var color = ['district-icon-positive', 'district-icon-balanced',
-      'district-icon-royal', 'district-icon-calm', 'district-icon-assertive'];
     //取得排班医生列表
     var today = $filter('date')(new Date(),'yyyy-MM-dd');
     $scope.major = $stateParams.major;
@@ -69,7 +58,6 @@
           }
           for (var i = index ; i < $scope.doctors.length ; i++) {
             $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
-            setDistrictColor($scope.doctors[i].districtId);
             getDoctorPhoto($scope.doctors[i].id, i);
           }
           $scope.$broadcast('scroll.infiniteScrollComplete');
