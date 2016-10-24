@@ -49,9 +49,11 @@
         return config;
       },
       requestError: function(rejection) {
-        requestIndex--;
-        if (requestIndex <= 0) {
-          $rootScope.inProcess = false;
+        if (rejection.config.url.indexOf('modules') < 0 && rejection.config.url.indexOf('/photo') < 0) {
+          requestIndex--;
+          if (requestIndex <= 0) {
+            $rootScope.inProcess = false;
+          }
         }
         console.debug('requestError %o', rejection);
         return $q.reject(rejection);
@@ -81,9 +83,11 @@
         if (rejection.status === 503) {
           rejection.data = '连接数过多，请稍后...';
         }
-        requestIndex--;
-        if (requestIndex <= 0) {
-          $rootScope.inProcess = false;
+        if (rejection.config.url.indexOf('modules') < 0 && rejection.config.url.indexOf('/photo') < 0) {
+          requestIndex--;
+          if (requestIndex <= 0) {
+            $rootScope.inProcess = false;
+          }
         }
         console.debug('responseError %o', rejection);
         return $q.reject(rejection);
