@@ -83,8 +83,11 @@
             $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
             getDoctorPhoto($scope.doctors[i].id, i);
           }
-          $scope.$broadcast('scroll.infiniteScrollComplete');
         }
+        else {
+          $scope.vm.moreData = false;
+        }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function (data, status, fun, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.spinnerShow = false;
@@ -188,6 +191,7 @@
     //选择照片事件
     $scope.photoClk = function (id, event) {
       event.stopPropagation();
+      $scope.vm.moreData = false;
       $state.go('doctorIntroductionView', {doctorId: id, type: '0'});
     };
 
@@ -199,6 +203,7 @@
         if ($scope.appointmentMode === '2' || $scope.hasSearchStr) {
           date = '';
         }
+        $scope.vm.moreData = false;
         $state.go('registerDoctorTimeSelect', {doctorId: doctorId, date: date, districtId: $stateParams.districtId, subjectId: $stateParams.subjectId, type: '2'});
       }
     };

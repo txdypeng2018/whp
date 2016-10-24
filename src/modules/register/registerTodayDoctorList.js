@@ -60,8 +60,10 @@
             $scope.doctors[i].district = $scope.doctors[i].district.substring(0,2);
             getDoctorPhoto($scope.doctors[i].id, i);
           }
-          $scope.$broadcast('scroll.infiniteScrollComplete');
+        }else {
+          $scope.vm.moreData = false;
         }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }).error(function(data, status, fun, config){
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.spinnerShow = false;
@@ -73,24 +75,25 @@
       });
     };
 
+    //上拉加载医生
+    $scope.vm = {
+      moreData: true,
+      pageNo: 1,
+      init: function () {
+        $scope.spinnerShow = true;
+        $scope.doctors = null;
+        $scope.vm.pageNo = 1;
+        $scope.vm.moreData = true;
+        getDoctors($scope.vm.pageNo, true);
+      },
+      loadMore: function () {
+        $scope.vm.pageNo++;
+        getDoctors($scope.vm.pageNo, false);
+      }
+    };
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.httpIndex = {index:1};
-      //上拉加载医生
-      $scope.vm = {
-        moreData: true,
-        pageNo: 1,
-        init: function () {
-          $scope.spinnerShow = true;
-          $scope.doctors = null;
-          $scope.vm.pageNo = 1;
-          $scope.vm.moreData = true;
-          getDoctors($scope.vm.pageNo, true);
-        },
-        loadMore: function () {
-          $scope.vm.pageNo++;
-          getDoctors($scope.vm.pageNo, false);
-        }
-      };
       $scope.vm.init();
     });
 
