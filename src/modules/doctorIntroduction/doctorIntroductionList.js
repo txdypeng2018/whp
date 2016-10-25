@@ -60,12 +60,6 @@
       });
     };
 
-    //点击搜索提示事件设置焦点
-    $scope.placeholderClk = function() {
-      $timeout(function() {
-        document.getElementById('doctorIntroduction_search').focus();
-      });
-    };
     //搜索医生事件
     $scope.doSearch = function() {
       $scope.httpIndex.index++;
