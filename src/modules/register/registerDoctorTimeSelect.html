@@ -31,7 +31,7 @@
     </ul>
   </div>
 
-  <ion-content ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
+  <ion-content delegate-handle="registerTimeScroll" ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
     <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="dataInfo.overCount == 0" class="no-count">
       <span>号满</span>

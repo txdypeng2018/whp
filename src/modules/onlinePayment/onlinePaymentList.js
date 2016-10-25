@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var onlinePaymentListCtrl = function($scope, $http, $state, $stateParams, toastService) {
+  var onlinePaymentListCtrl = function($scope, $http, $state, $stateParams, toastService, $ionicScrollDelegate) {
     //取得缴费列表
     var getPayments = function(param) {
       $scope.recipes = null;
@@ -49,6 +49,7 @@
     //查询缴费列表事件
     $scope.searchPay = function() {
       $scope.httpIndex.index++;
+      $ionicScrollDelegate.scrollTop();
       getPayments($scope.searchStr);
     };
 

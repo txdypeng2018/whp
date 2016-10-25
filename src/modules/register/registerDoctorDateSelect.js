@@ -1,7 +1,7 @@
 (function (app) {
   'use strict';
 
-  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService, utilsService) {
+  var registerDoctorDateSelectCtrl = function ($scope, $http, $state, $stateParams, $filter, $timeout, $ionicScrollDelegate, toastService, doctorPhotoService, utilsService) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var displayDays = 30;
@@ -134,6 +134,7 @@
         $scope.doctors = null;
         $scope.vm.pageNo = 1;
         $scope.vm.moreData = true;
+        $ionicScrollDelegate.$getByHandle('registerDateScroll').scrollTop();
         getDoctors($scope.vm.pageNo, true);
       },
       loadMore: function () {

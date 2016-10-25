@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var medicalReportListCtrl = function($scope, $rootScope, $http, $window, $state, $stateParams, $ionicPopup, toastService) {
+  var medicalReportListCtrl = function($scope, $rootScope, $http, $window, $state, $stateParams, $ionicPopup, toastService, $ionicScrollDelegate) {
     $scope.memberId = $stateParams.memberId;
 
     //温馨提示
@@ -89,6 +89,7 @@
     //查询检验报告列表事件
     $scope.searchReport = function() {
       $scope.httpIndex.index++;
+      $ionicScrollDelegate.scrollTop();
       getMedicalReports($scope.searchStr);
     };
 

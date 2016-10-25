@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService) {
+  var doctorIntroductionListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService, $ionicScrollDelegate) {
     $scope.title = '医生介绍';
     $scope.searchNameTmp = '';
 
@@ -64,6 +64,7 @@
     $scope.doSearch = function() {
       $scope.httpIndex.index++;
       $scope.searchNameTmp = $scope.searchName;
+      $ionicScrollDelegate.scrollTop();
       $scope.vm.init();
     };
 

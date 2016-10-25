@@ -28,7 +28,7 @@
 
   <isj-date-select date-select-param="dateSelectParam" callback="dateSelectFun()" class="has-header-district has-header registerDoctorDateSelect-date" ng-show="appointmentMode == '1' && !hasSearchStr"></isj-date-select>
 
-  <ion-content class="has-header content-fill registerDoctorDateSelect-content" ng-class="contentMarginTop()">
+  <ion-content delegate-handle="registerDateScroll" class="has-header content-fill registerDoctorDateSelect-content" ng-class="contentMarginTop()">
     <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul ng-if="doctors.length > 0" class="list">
       <li ng-repeat="doctor in doctors" class="item item-avatar-left" ng-click="doctorClk(doctor.id, doctor.overCount, doctor.unallowed)">
