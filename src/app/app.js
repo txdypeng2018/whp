@@ -4,6 +4,7 @@
 
   var deps = [
     'ionic',
+    'iosDblclick',
     'angular-carousel',
     'ngCordova',
     'properNgCordova'
