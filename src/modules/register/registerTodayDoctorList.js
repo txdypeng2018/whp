@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, doctorPhotoService, utilsService) {
+  var registerTodayDoctorListCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicScrollDelegate, toastService, doctorPhotoService, utilsService) {
     $scope.hideSearch = true;
 
     //取得医生照片
@@ -84,6 +84,7 @@
         $scope.doctors = null;
         $scope.vm.pageNo = 1;
         $scope.vm.moreData = true;
+        $ionicScrollDelegate.scrollTop();
         getDoctors($scope.vm.pageNo, true);
       },
       loadMore: function () {

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, toastService, userService, doctorPhotoService, utilsService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicScrollDelegate, toastService, userService, doctorPhotoService, utilsService) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var isAppointment = '1';
@@ -27,6 +27,7 @@
     //取得排班时间
     var getScheduleTimes = function(date) {
       $scope.times = [];
+      $ionicScrollDelegate.$getByHandle('registerTimeScroll').scrollTop();
       $http.get('/schedule/times', {params: {doctorId: $stateParams.doctorId, date: date, districtId: $stateParams.districtId, isAppointment: isAppointment, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           if (data.length%3 !== 0) {

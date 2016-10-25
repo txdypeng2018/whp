@@ -29,12 +29,23 @@
 
   // Config JWT in http header and prefix of url
   var CONTEXT = 'https://sjh.sj-hospital.org/isj';
-  var requestIndex = 0;
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
+    $rootScope.requestIndex = 0;
+    var requestIndexMinus = function() {
+      if ($rootScope.requestIndex >= 1) {
+        $rootScope.requestIndex--;
+      }
+      if ($rootScope.requestIndex === 0) {
+        $rootScope.inProcess = false;
+      }
+    };
+    var excludeUrl = function(url) {
+      return (url.indexOf('modules') < 0 && url.indexOf('/photo') < 0);
+    };
     return {
       request: function(config) {
-        if (config.url.indexOf('modules') < 0 && config.url.indexOf('/photo') < 0) {
-          requestIndex++;
+        if (excludeUrl(config.url)) {
+          $rootScope.requestIndex++;
           $rootScope.inProcess = true;
         }
         // Add JWT token in header
@@ -49,21 +60,15 @@
         return config;
       },
       requestError: function(rejection) {
-        if (rejection.config.url.indexOf('modules') < 0 && rejection.config.url.indexOf('/photo') < 0) {
-          requestIndex--;
-          if (requestIndex <= 0) {
-            $rootScope.inProcess = false;
-          }
+        if (excludeUrl(rejection.config.url)) {
+          requestIndexMinus();
         }
         console.debug('requestError %o', rejection);
         return $q.reject(rejection);
       },
       response: function(response) {
-        if (response.config.url.indexOf('modules') < 0 && response.config.url.indexOf('/photo') < 0) {
-          requestIndex--;
-          if (requestIndex <= 0) {
-            $rootScope.inProcess = false;
-          }
+        if (excludeUrl(response.config.url)) {
+          requestIndexMinus();
         }
         if (response.status === 401) {
           console.debug('handle the case where the user is not authenticated');
@@ -83,11 +88,8 @@
         if (rejection.status === 503) {
           rejection.data = '连接数过多，请稍后...';
         }
-        if (rejection.config.url.indexOf('modules') < 0 && rejection.config.url.indexOf('/photo') < 0) {
-          requestIndex--;
-          if (requestIndex <= 0) {
-            $rootScope.inProcess = false;
-          }
+        if (excludeUrl(rejection.config.url)) {
+          requestIndexMinus();
         }
         console.debug('responseError %o', rejection);
         return $q.reject(rejection);
