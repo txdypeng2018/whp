@@ -1,6 +1,6 @@
 'use strict';
 
-var template = '<div class="isj-spinner" ng-show="isShow" ng-click="hideSpinner()">';
+var template = '<div class="isj-spinner" ng-show="isShow" ios-dblclick="hideSpinner()">';
 template += '<div class="loading-div"><ion-spinner icon="ios" class="spinner-dark"></ion-spinner><span>请稍后...</span></div>';
 template += '</div>';
 

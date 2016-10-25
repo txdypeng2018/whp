@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService) {
+  var collectionDoctorListCtrl = function($scope, $http, $state, $timeout, $ionicHistory, doctorPhotoService, toastService, $ionicScrollDelegate) {
     $scope.title = '收藏的医生';
     $scope.vm = {
       moreData: false,
@@ -47,17 +47,12 @@
       });
     };
 
-    //点击搜索提示事件设置焦点
-    $scope.placeholderClk = function() {
-      $timeout(function() {
-        document.getElementById('doctorIntroduction_search').focus();
-      });
-    };
     //搜索医生事件
     $scope.doSearch = function() {
       $scope.spinnerShow = true;
       $scope.searchNameTmp = $scope.searchName;
       $scope.httpIndex.index++;
+      $ionicScrollDelegate.scrollTop();
       getDoctorIntroductions({searchName: $scope.searchName});
     };
     //初始化取得医师介绍列表

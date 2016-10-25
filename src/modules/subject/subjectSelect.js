@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, toastService, $ionicPopup, $ionicHistory) {
+  var subjectSelectCtrl = function($scope, $rootScope, $http, $state, $stateParams, $timeout, toastService, $ionicPopup, $ionicHistory, $ionicScrollDelegate) {
     $scope.hideSearch = true;
     $scope.type = $stateParams.type;
 
@@ -41,6 +41,7 @@
 
     //取得学科列表
     var getSubjects = function() {
+      $ionicScrollDelegate.scrollTop();
       $scope.subjects = [];
       $scope.subjectRights = '';
       $http.get('/subjects', {params: {districtId: $scope.districtId, type: $stateParams.type, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {

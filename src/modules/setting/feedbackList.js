@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var feedbackListCtrl = function($scope, $http, $state, toastService) {
+  var feedbackListCtrl = function($scope, $http, $state, toastService, $ionicScrollDelegate) {
     //初始化反馈状态查询下拉菜单
     $scope.searchStr = {
       feedbackStatus: ''
@@ -46,6 +46,7 @@
     //查询意见列表事件
     $scope.searchFeedback = function() {
       $scope.httpIndex.index++;
+      $ionicScrollDelegate.scrollTop();
       getFeedbackList($scope.searchStr);
     };
 

@@ -12,10 +12,12 @@
 .registerDoctorDateSelect-date {
   position: absolute;
   width: 100%;
+  z-index: 21;
+  background-color: #ffffff;
 }
 
 .registerDoctorDateSelect-top1 {
-  margin-top: 130px;
+  margin-top: 128px;
 }
 .registerDoctorDateSelect-top2 {
   margin-top: 50px;
