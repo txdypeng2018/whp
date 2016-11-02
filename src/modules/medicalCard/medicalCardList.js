@@ -22,13 +22,6 @@
       });
     };
 
-    //家庭关系类别
-    $http.get('/dataBase/familyMenberTypes').success(function(data) {
-      $scope.memberTypes = data;
-    }).error(function(data){
-      toastService.show(data);
-    });
-
     $scope.$on('$ionicView.beforeEnter', function(){
       //家庭关系类别
       $http.get('/dataBase/familyMenberTypes').success(function(data) {
