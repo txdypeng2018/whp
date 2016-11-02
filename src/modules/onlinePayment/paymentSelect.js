@@ -60,11 +60,16 @@
     //支付方式选择事件
     $scope.paySelectValue = '';
     $scope.paymentSelect = function(value) {
-      $scope.paySelectValue = value;
-      angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
-      angular.element(document.querySelectorAll('.select-no')).removeClass('select-none');
-      angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
-      angular.element(document.getElementById('select_no_'+value)).addClass('select-none');
+      if (value === '1') {
+        toastService.show('一网通暂时不可用');
+      }
+      else {
+        $scope.paySelectValue = value;
+        angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
+        angular.element(document.querySelectorAll('.select-no')).removeClass('select-none');
+        angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
+        angular.element(document.getElementById('select_no_'+value)).addClass('select-none');
+      }
     };
 
     $scope.pay = function() {
