@@ -31,7 +31,7 @@
     //创建病历号
     $scope.createNum = function() {
       $scope.isSubmit = true;
-      $http.post('/user/medicalNum').success(function() {
+      $http.post('/user/medicalNum', {memberId: $scope.input.memberId}).success(function() {
         $ionicHistory.goBack();
         toastService.show('建档成功');
       }).error(function(data){
