@@ -35,7 +35,7 @@
       $http.post('/permission/login', phoneAndPwd).success(function(data) {
         //PUSH START
         //推送相关的参数
-        var kvs={userid:$scope.input.phone.toString(),otherInfo:''};
+        var kvs={userid:$scope.input.phone.toString(),otherInfo:'',unbindOtherDevice:true};
         //初始化推送
         $properProperpush.bindUserid(kvs).then(function(){
           console.log('用户绑定成功');

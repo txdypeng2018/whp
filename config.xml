@@ -78,4 +78,5 @@
         <variable name="ALIPAY_SCHEMA" value="properijsalipay" />
     </plugin>
     <plugin name="cordova-plugin-proper-update-version" spec="~1.0.1" />
+    <plugin name="cordova-plugin-proper-properpush" spec="~1.0.1" />
 </widget>
