@@ -21,6 +21,7 @@
       $scope.isSubmit = true;
       $http.put('/user/medicalNum', $scope.input).success(function() {
         $ionicHistory.goBack();
+        toastService.show('更新成功');
       }).error(function(data){
         $scope.isSubmit = false;
         toastService.show(data);
@@ -30,8 +31,9 @@
     //创建病历号
     $scope.createNum = function() {
       $scope.isSubmit = true;
-      $http.post('/user/medicalNum', $scope.input).success(function() {
+      $http.post('/user/medicalNum', {memberId: $scope.input.memberId}).success(function() {
         $ionicHistory.goBack();
+        toastService.show('建档成功');
       }).error(function(data){
         $scope.isSubmit = false;
         toastService.show(data);
