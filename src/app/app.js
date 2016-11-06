@@ -62,11 +62,41 @@
             ]
           });
         }
+        //接收意见反馈推送消息
+        else if('feedback' === event.properCustoms.pageUrl) {
+          var feedbackPopup = $ionicPopup.show({
+            template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'您有新的意见反馈消息'+'</div>',
+            title: '掌上盛京医院',
+            buttons: [
+              {
+                text: '我知道了',
+                type: 'positive',
+                onTap: function(e) {
+                  e.preventDefault();
+                  myPopup.close();
+                }
+              },
+              {
+                text: '前往查看',
+                type: 'positive',
+                onTap: function(e) {
+                  e.preventDefault();
+                  feedbackPopup.close();
+                  $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
+                }
+              }
+            ]
+          });
+        }
   		}else{
   			//点击状态栏的通知，进入程序
   			//alert('打开notification通知'+JSON.stringify(event.properCustoms));
         if('messages' === event.properCustoms.pageUrl) {
           $state.go('tab.message');
+        }
+        //接收意见反馈推送消息
+        else if('feedback' === event.properCustoms.pageUrl) {
+          $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
         }
   		}
   		//event.properCustoms ，推送时自定义的键值对
