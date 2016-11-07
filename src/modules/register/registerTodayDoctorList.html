@@ -31,7 +31,7 @@
           <p>{{doctor.title}}</p>
           <div ng-if="doctor.unallowed != null && doctor.unallowed != ''" class="dark-bg can-register">{{doctor.unallowed}}</div>
           <div ng-if="(doctor.unallowed == null || doctor.unallowed == '') && doctor.overCount > 0" class="positive-bg can-register">有号</div>
-          <div ng-if="(doctor.unallowed == null || doctor.unallowed == '') && doctor.overCount == 0" class="dark-bg can-register">号满</div>
+          <div ng-if="(doctor.unallowed == null || doctor.unallowed == '') && doctor.overCount == 0" class="assertive-bg can-register">号满</div>
         </div>
         <p>出诊地点：{{doctor.dept}}</p>
         <p>擅长：{{doctor.skill===''?'暂无':doctor.skill}}</p>
