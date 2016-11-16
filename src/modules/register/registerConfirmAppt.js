@@ -85,6 +85,8 @@
       $state.go('familyMemberSelect', {skipId: 'registerConfirmAppt', doctorId: doctorId, date: date, memberId: $scope.patient.id});
     };
 
+    //未支付提示框
+    var confirmPopup = null;
     //挂号确认事件
     $scope.registerConfirm = function() {
       //生成挂号单
@@ -98,12 +100,34 @@
         amount: $scope.doctor.amount,
         payStatus: '0'
       };
+
       $http.post('/register/registrations/registration', registration).success(function(data) {
         $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
-      }).error(function(data){
-        toastService.show(data);
+      }).error(function(data,status){
+        if(status!=409){
+          toastService.show(data);
+        }else{
+          confirmPopup = $ionicPopup.confirm({
+            title: '提示',
+            template: data,
+            cssClass: 'confirm-popup',
+            cancelText: '我知道了',
+            okText: '查看'
+          });
+          confirmPopup.then(function(res) {
+            if(res) {
+              $state.go('tab.registration');
+            }
+          });
+        }
       });
     };
+
+    $scope.$on('$ionicView.beforeLeave', function(){
+      if (confirmPopup !== null) {
+        confirmPopup.close();
+      }
+    });
 
     $scope.$on('$ionicView.beforeLeave', function(){
       if (myPopup !== null) {
