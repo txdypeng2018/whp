@@ -104,7 +104,7 @@
       $http.post('/register/registrations/registration', registration).success(function(data) {
         $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});
       }).error(function(data,status){
-        if(status!=409){
+        if(status!==409){
           toastService.show(data);
         }else{
           confirmPopup = $ionicPopup.confirm({
