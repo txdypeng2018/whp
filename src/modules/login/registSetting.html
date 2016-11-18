@@ -11,7 +11,7 @@
       <div class="list">
         <div class="item item-input">
           验证码
-          <input id="registSetting-code" class="code-input" type="number" placeholder="6位数字" ng-model="input.verificationCode">
+          <input id="registSetting-code" class="code-input" type="text" placeholder="6位数字" ng-model="input.verificationCode">
           <button class="button button-resend button-positive" ng-disabled="!isResend" ng-click="resendCode()">重新发送{{secondString}}</button>
         </div>
       </div>
