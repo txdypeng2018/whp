@@ -110,13 +110,12 @@
           confirmPopup = $ionicPopup.confirm({
             title: '提示',
             template: data,
-            cssClass: 'confirm-popup',
             cancelText: '我知道了',
             okText: '查看'
           });
           confirmPopup.then(function(res) {
             if(res) {
-              $state.go('tab.registration');
+              $state.go('tab.registration', {memberId: $stateParams.memberId});
             }
           });
         }
@@ -124,14 +123,11 @@
     };
 
     $scope.$on('$ionicView.beforeLeave', function(){
-      if (confirmPopup !== null) {
-        confirmPopup.close();
-      }
-    });
-
-    $scope.$on('$ionicView.beforeLeave', function(){
       if (myPopup !== null) {
         myPopup.close();
+      }
+      if (confirmPopup !== null) {
+        confirmPopup.close();
       }
     });
 
