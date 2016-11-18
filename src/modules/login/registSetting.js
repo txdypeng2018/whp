@@ -43,6 +43,8 @@
       $ionicHistory.goBack(-2);
     };
 
+
+
     //重发验证码
     $scope.resendCode = function() {
       var param = {
@@ -85,8 +87,13 @@
         toastService.show('身份证号不能为空');
         return false;
       }
-      if ($scope.input.verificationCode.toString().length !== 6) {
+      if ($scope.input.verificationCode.length !== 6) {
         toastService.show('验证码必须6个数字');
+        return false;
+      }
+      var regVerification=/^[0-9]+$/;
+      if (!regVerification.test($scope.input.verificationCode)) {
+        toastService.show('验证码必须为数字');
         return false;
       }
       if ($scope.input.password.length < 6 || $scope.input.password.length > 20) {
