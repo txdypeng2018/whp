@@ -1,0 +1,18 @@
+<div class="settings-content">
+  <h4>皮肤</h4>
+  <ul class="settings-skins">
+    <li class="settings-li-first" ng-repeat="skin in skins">
+      <a href="javascript:void(0);" ng-click="setSkin(skin)">
+        <div>
+          <span class="settings-skins-logo" ng-class="getSkinId(skin)"></span>
+          <span class="settings-skins-head" ng-class="skin.primary + '-light'"></span>
+        </div>
+        <div>
+          <span class="settings-skins-sidenav" ng-class="'sidenav-' + (skin.light ? 'light' : 'dark') + '-color'"></span>
+          <span class="settings-skins-content content-color"></span>
+        </div>
+      </a>
+      <p>{{ skin.text }}</p>
+    </li>
+  </ul>
+</div>

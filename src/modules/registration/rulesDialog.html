@@ -1,0 +1,32 @@
+<md-dialog ng-cloak style="width:800px;">
+  <form name="rulesForm">
+    <md-dialog-content class="md-dialog-content">
+      <h2 class="md-title">挂号规则信息</h2>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>挂号规则分类</label>
+          <input required name="catalogue" ng-model="rules.catalogue" required>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>挂号规则名称</label>
+          <input name="name" ng-model="rules.name" required>
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>挂号规则内容</label>
+          <textarea name="rule" ng-model="rules.rule" required></textarea>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button ng-disabled="isSubmit" ng-click="cancel()">
+        关闭
+      </md-button>
+      <md-button type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+        提交
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

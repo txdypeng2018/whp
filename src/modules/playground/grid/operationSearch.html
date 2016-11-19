@@ -1,0 +1,25 @@
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>姓名</label>
+    <input ng-model="gridParam.searchData.name">
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>科室</label>
+    <input ng-model="gridParam.searchData.dept">
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>学历</label>
+    <md-select ng-model="gridParam.searchData.education">
+      <md-option ng-repeat="education in gridParam.searchInitData.educations" value="{{education.id}}">
+        {{education.name}}
+      </md-option>
+    </md-select>
+    <div class="md-errors-spacer"></div>
+  </md-input-container>
+</div>
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm="100">
+    <label>职务</label>
+    <input ng-model="gridParam.searchData.job">
+  </md-input-container>
+</div>

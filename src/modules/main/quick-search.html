@@ -1,0 +1,12 @@
+<md-dialog aria-label="quickSearch" layout class="quick-search" style="height: 320px;">
+  <md-content layout="column" layout-padding flex>
+    <md-input-container md-no-float>
+      <input ng-model="qsText" placeholder="快速导航" auto-focus>
+    </md-input-container>
+    <md-list flex>
+      <md-list-item ng-repeat="res in resources | filter: qsText | limitTo: 5"  ng-click="clickMenu(res)">
+        {{ res.name }}
+      </md-list-item>
+    </md-list>
+  </md-content>
+</md-dialog>

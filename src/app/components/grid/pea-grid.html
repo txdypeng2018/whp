@@ -1,0 +1,185 @@
+<md-card class="pea-card pea-grid">
+  <form class="grid-form" name="gridForm">
+    <div class="grid-content">
+      <div class="search-sheet">
+        <div class="search-sheet-content" ng-include="gridParam.searchTemplate"></div>
+        <div class="search-sheet-actions">
+          <md-button class="md-primary btn-advanced-search" aria-label="查询" ng-click="innerParam.querySearchAdvanced()">
+            查询
+          </md-button>
+          <md-button aria-label="重置" ng-click="innerParam.resetSearchAdvanced()">
+            重置
+          </md-button>
+          <md-button aria-label="关闭" ng-click="innerParam.closeSearchAdvanced()">
+            关闭
+          </md-button>
+        </div>
+      </div>
+      <div class="search-backdrop" ng-click="innerParam.closeSearchAdvanced()"></div>
+      <md-toolbar class="md-table-toolbar md-default"
+                  ng-show="gridParam.toolbar && !innerParam.searchBar && !innerParam.showRowEdit && gridParam.selected.length == 0">
+        <div class="md-toolbar-tools">
+          <span class="md-table-title">{{gridParam.title}}</span>
+          <div flex></div>
+          <md-button class="md-icon-button" ng-repeat="btn in gridParam.btns.unSelected"
+                     ng-click="btn.click(gridParam.selected, $event)"
+                     aria-label="{{btn.text}}">
+            <md-tooltip md-direction="bottom">{{btn.text}}</md-tooltip>
+            <md-icon>{{btn.iconClass}}</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" aria-label="刷新"
+                     ng-click="gridParam.loadData()">
+            <md-tooltip md-direction="bottom">刷新</md-tooltip>
+            <md-icon>refresh_black</md-icon>
+          </md-button>
+          <md-menu ng-if="gridParam.columnCustom" md-position-mode="target-right target" md-offset="0 16">
+            <md-button aria-label="自定义列" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+              <md-tooltip md-direction="bottom">自定义列</md-tooltip>
+              <md-icon>settings</md-icon>
+            </md-button>
+            <md-menu-content class="column-custom-content">
+              <md-menu-item ng-repeat="column in gridParam.columns">
+                <md-checkbox aria-label="{{column.title}}"
+                             ng-checked="innerParam.columnCustomChecked(column.field)"
+                             my-click="innerParam.columnCustomClick(gridParam.columnCustom, column.field)">
+                  {{column.title}}
+                </md-checkbox>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </div>
+      </md-toolbar>
+      <md-toolbar class="md-table-toolbar alternate"
+                  ng-show="gridParam.toolbar && !innerParam.showRowEdit && gridParam.selected.length == 1">
+        <div class="md-toolbar-tools">
+          <span class="md-table-title">{{gridParam.title}}</span>
+          <div flex></div>
+          <md-button class="md-icon-button" ng-repeat="btn in gridParam.btns.singleSelected"
+                     ng-click="btn.click(gridParam.selected, $event)"
+                     aria-label="{{btn.text}}">
+            <md-tooltip md-direction="bottom">{{btn.text}}</md-tooltip>
+            <md-icon>{{btn.iconClass}}</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-toolbar class="md-table-toolbar alternate"
+                  ng-show="gridParam.toolbar && !innerParam.showRowEdit && gridParam.selected.length > 1">
+        <div class="md-toolbar-tools">
+          <span class="md-table-title">{{gridParam.title}}</span>
+          <div flex></div>
+          <md-button class="md-icon-button" ng-repeat="btn in gridParam.btns.multipleSelected"
+                     ng-click="btn.click(gridParam.selected, $event)"
+                     aria-label="{{btn.text}}">
+            <md-tooltip md-direction="bottom">{{btn.text}}</md-tooltip>
+            <md-icon>{{btn.iconClass}}</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-toolbar class="md-table-toolbar md-default"
+                  ng-show="gridParam.toolbar && innerParam.searchBar && gridParam.selected.length == 0">
+        <div class="md-toolbar-tools">
+          <form flex>
+            <input type="text" class="filter-input" ng-model="gridParam.filter" ng-model-options="innerParam.filter.options" placeholder="查询条件...">
+          </form>
+          <md-button ng-if="gridParam.searchTemplate" class="md-icon-button" aria-label="高级查询"
+                     ng-click="innerParam.showSearchAdvanced()">
+            <md-tooltip md-direction="bottom">高级查询</md-tooltip>
+            <md-icon>searched</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" aria-label="关闭"
+                     ng-click="gridParam.closeSearchBar()">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-toolbar class="md-table-toolbar alternate"
+                  ng-show="gridParam.toolbar && innerParam.showRowEdit">
+        <div class="md-toolbar-tools">
+          <span class="md-table-title">{{gridParam.title}}</span>
+          <div flex></div>
+          <md-button type="submit" class="md-icon-button" aria-label="提交"
+                     ng-click="gridParam.rowEditSubmit()"
+                     ng-disabled="innerParam.isRowEditSubmit">
+            <md-tooltip md-direction="bottom">提交</md-tooltip>
+            <md-icon>check</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" aria-label="关闭"
+                     ng-click="gridParam.closeRowEdit()">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-table-container class="table-container">
+        <table md-table ng-model="gridParam.selected"
+               md-row-select="gridParam.rowSelection"
+               multiple="{{gridParam.multiSelect}}">
+          <thead fix-head md-head md-order="gridParam.order" md-on-reorder="gridParam.onReorder">
+          <tr md-row ng-if="gridParam.typeColumns" ng-repeat="typeColumnTr in gridParam.typeColumns" class="type-head-row">
+            <th md-column ng-repeat="typeColumn in typeColumnTr"
+                ng-class="{'fixed-column': typeColumn.isFixed, 'type-column': typeColumn.title}"
+                colspan="{{typeColumn.colspan}}">
+              <span>{{typeColumn.title}}</span>
+            </th>
+            <th md-column ng-class="{'type-column-last': typeColumnTr[typeColumnTr.length-1].title}" style="width: 100%;"></th>
+          </tr>
+          <tr md-row>
+            <th md-column ng-repeat="column in gridParam.columns" ng-if="!column.isHide"
+                ng-class="{'fixed-column': column.isFixed}"
+                md-order-by="{{column.enableSort==null?'':column.enableSort}}"
+                md-desc="{{column.descFirst?true:false}}"
+                style="width: {{column.width+'px'}};min-width: {{column.width+'px'}};max-width: {{column.width+'px'}}"
+                md-numeric="column.isNumeric">
+              <span>{{column.title}}</span>
+            </th>
+            <th md-column style="width: 100%"></th>
+          </tr>
+          </thead>
+          <tbody md-body>
+          <tr md-row ng-if="innerParam.showRowEdit" class="edit-row" ng-include="gridParam.rowEditTemplate"></tr>
+          <tr md-row ng-repeat="dessert in innerParam.gridFiltered = (gridParam.desserts.data | filter: innerParam.getFilter(gridParam)) | orderBy: innerParam.orderBy(gridParam) | limitTo: innerParam.limitTo(gridParam) : innerParam.limitToBegin(gridParam)"
+              md-select="dessert"
+              md-on-select="gridParam.onSelect"
+              md-on-deselect="gridParam.onDeselect"
+              ng-disabled="gridParam.ngDisabled(dessert)"
+              md-select-id="{{gridParam.idField}}"
+              md-auto-select="gridParam.autoSelect"
+              style="background-color: {{gridParam.rowStyler==null?'':gridParam.rowStyler(dessert)}}">
+            <td md-cell ng-repeat="column in gridParam.columns" ng-if="!column.isHide"
+                ng-class="{'fixed-column': column.isFixed, 'no-line-wrap': !column.isLineWrap, 'md-placeholder': !dessert[column.field], 'no-click': !column.edit}"
+                ng-click="column.edit(dessert, column.field, $event)"
+                style="width: {{column.width+'px'}};min-width: {{column.width+'px'}};max-width: {{column.width+'px'}};color: {{column.styler==null?'':column.styler(dessert[column.field], dessert)}};">
+              {{dessert[column.field] ? (column.formatter==null?dessert[column.field]:column.formatter(dessert[column.field], dessert)) : column.editComment}}
+            </td>
+            <td style="width:100%" md-cell></td>
+          </tr>
+          </tbody>
+        </table>
+      </md-table-container>
+      <div class="pea-table-total" ng-if="gridParam.desserts.total">
+        <table md-table>
+          <tbody md-body class="pea-tbody-total">
+          <tr md-row>
+            <td md-cell class="md-checkbox-cell" ng-if="gridParam.rowSelection" style="width: 44px; min-width: 44px; max-width: 44px; padding: 0;"></td>
+            <td md-cell ng-repeat="column in gridParam.columns" ng-if="!column.isHide"
+                ng-class="{'fixed-column': column.isFixed, 'td-right': column.isNumeric, 'td-first': $first && gridParam.rowSelection}"
+                style="width: {{column.width+'px'}}; min-width: {{column.width+'px'}}; max-width: {{column.width+'px'}};">
+              {{gridParam.desserts.total[column.field]}}
+            </td>
+            <td style="width:100%" md-cell></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <md-table-pagination ng-show="gridParam.pagination"
+                           md-label="{page: '页码:', rowsPerPage: '行数:', of: '/'}"
+                           md-limit="gridParam.limit"
+                           md-limit-options="gridParam.limitOptions"
+                           md-page="gridParam.page"
+                           md-total="{{innerParam.getTotal()}}"
+                           md-page-select="gridParam.pageSelect"
+                           md-boundary-links="gridParam.boundaryLinks"
+                           md-on-paginate="gridParam.onPaginate">
+      </md-table-pagination>
+    </div>
+  </form>
+</md-card>

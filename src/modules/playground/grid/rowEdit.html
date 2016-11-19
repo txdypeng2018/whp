@@ -1,0 +1,39 @@
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input md-autofocus required ng-model="gridParam.rowEditData.name" placeholder="姓名">
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input type="number" ng-model="gridParam.rowEditData.age" placeholder="年龄">
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input ng-model="gridParam.rowEditData.dept" placeholder="科室">
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input ng-model="gridParam.rowEditData.job" placeholder="职务">
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input ng-model="gridParam.rowEditData.title" placeholder="职称">
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <md-select ng-model="gridParam.rowEditData.education" placeholder="学历">
+      <md-option ng-repeat="education in gridParam.rowEditInitData.educations" value="{{education.id}}">
+        {{education.name}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+</td>
+<td md-cell>
+  <md-input-container md-no-float class="md-block">
+    <input ng-model="gridParam.rowEditData.remark" placeholder="备注">
+  </md-input-container>
+</td>

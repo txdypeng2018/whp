@@ -1,0 +1,51 @@
+<div class="resource-nav-in" layout="row" layout-xs="column" layout-sm="column">
+  <div class="resource-nav-left" flex-md="25" flex-gt-md="20">
+    <md-card class="card-title">
+      功能导航
+    </md-card>
+    <md-card class="card-nav">
+      <ul>
+        <li>
+          <div class="nav-search">
+            <input type="text" id="nav_search" name="nav_search" class="nav-text" placeholder="功能名称..." ng-model="resnav.searchStr" ng-model-options="searchStrOptions"/>
+                <span class="nav-btn">
+                  <md-icon class="nav-btn-icon">search</md-icon>
+                </span>
+          </div>
+        </li>
+        <li ng-repeat="resource in resnav.resourceall">
+          <md-checkbox aria-label="{{resource.name}}" ng-checked="isCheckedResModule(resource)" md-indeterminate="isIndeterminateResModule(resource)" ng-click="toggleResModuleAll(resource)"></md-checkbox>
+          <md-button ng-click="resourceNavScroll(resource.code)">
+            <span>{{resource.name}}</span>
+            <md-icon class="card-nav-icon pull-right">chevron_right</md-icon>
+          </md-button>
+        </li>
+      </ul>
+    </md-card>
+  </div>
+  <div class="resource-nav-right" flex-md="75" flex-gt-md="80">
+    <md-card ng-if="resource.isSearch != '0'" ng-repeat="resource in resnav.resourceall" class="nav-type pea-card" id="{{'resnavCard_' + resource.code}}">
+      <div class="nav-type-title">
+        {{resource.name}}
+        <md-button class="md-icon-button nav-show-btn" ng-click="toggleNavTypeContent(resource.code)">
+          <md-icon ng-show="!navTypeContentShow(resource.code)">add</md-icon>
+          <md-icon ng-show="navTypeContentShow(resource.code)">remove</md-icon>
+        </md-button>
+      </div>
+      <div class="nav-type-content" id="{{'navTypeContent_' + resource.code}}">
+        <fieldset ng-if="resType.isSearch != '0'" ng-repeat="resType in resource.treeMenu" class="content-fieldset">
+          <legend class="fieldset-title">
+            <md-checkbox aria-label="{{resType.name}}" ng-checked="isCheckedResModule(resType)" md-indeterminate="isIndeterminateResModule(resType)" ng-click="toggleResModuleAll(resType)">{{resType.name}}</md-checkbox>
+          </legend>
+          <md-grid-list class="fieldset-content" md-cols-xs="1" md-cols-sm="2" md-cols-md="3" md-cols-lg="4" md-cols-gt-lg="6"
+                        md-row-height="25px" md-gutter="5px">
+            <md-grid-tile ng-if="resModule.isSearch != '0'" ng-repeat="resModule in resType.treeMenu">
+              <md-checkbox aria-label="{{resModule.name}}" ng-checked="existsResModule(resModule, resType)" ng-click="toggleResModule(resModule, resType)"></md-checkbox>
+              <a href="javascript:void(0)" ng-click="resourceNavRouter(resModule.url)">{{resModule.name}}</a>
+            </md-grid-tile>
+          </md-grid-list>
+        </fieldset>
+      </div>
+    </md-card>
+  </div>
+</div>

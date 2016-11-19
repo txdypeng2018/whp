@@ -1,0 +1,15 @@
+<div ng-show="procInst">
+  <md-card-header>
+    <md-card-header-text flex>
+      <span class="md-title">{{ procInst.procDef.name }}(版本: {{ procInst.procDef.version }})</span>
+      <span class="md-subhead">
+        部署时间: {{ deployment.deploymentTime | date: 'yyyy-MM-dd HH:mm:ss' }}
+      </span>
+    </md-card-header-text>
+  </md-card-header>
+  <md-card-content>
+    <div ng-style="diagramStyle">
+      <iframe ng-src="{{ diagramURL }}" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+  </md-card-content>
+</div>

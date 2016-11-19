@@ -1,0 +1,129 @@
+.settings-content {
+  color: #111111;
+  padding: 0 12px 0 12px;
+
+  .settings-skins {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+
+    &:before {
+      display: table;
+      content: " ";
+    }
+
+    &:after {
+      clear: both;
+    }
+
+    &:after {
+      display: table;
+      content: " ";
+    }
+
+    li {
+      float:left;
+      width: 33.3%;
+      padding: 10px 7px 7px 7px;
+    }
+
+    .settings-li-first {
+      padding: 0 7px 7px 7px;
+    }
+
+    a {
+      opacity: 0.65;
+      display: block;
+      box-shadow: 0 0 3px rgba(0,0,0,0.4);
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &:before {
+        display: table;
+        content: " ";
+      }
+
+      &:after {
+        clear: both;
+      }
+
+      &:after {
+        display: table;
+        content: " ";
+      }
+
+      .settings-skins-logo {
+        display: block;
+        width: 20%;
+        float: left;
+        height: 7px;
+      }
+
+      .settings-skins-head {
+        display: block;
+        width: 80%;
+        float: left;
+        height: 7px;
+      }
+
+      .settings-skins-sidenav {
+        display: block;
+        width: 20%;
+        float: left;
+        height: 28px;
+      }
+
+      .settings-skins-content {
+        display: block;
+        width: 80%;
+        float: left;
+        height: 28px;
+      }
+
+      .blue-light {
+        background: #3c8dbc;
+      }
+
+      .blue-dark {
+        background: #367fa9;
+      }
+
+      .green-light {
+        background: #00a65a;
+      }
+
+      .green-dark {
+        background: #008d4c;
+      }
+
+      .yellow-light {
+        background: #f39c12;
+      }
+
+      .yellow-dark {
+        background: #e08e0b;
+      }
+
+      .sidenav-light-color {
+        background: #f9fafc;
+      }
+
+      .sidenav-dark-color {
+        background: #222d32;
+      }
+
+      .content-color {
+        background: #ffffff;
+      }
+    }
+
+    p {
+      text-align: center;
+      margin: 0;
+      line-height: 200%;
+    }
+  }
+}

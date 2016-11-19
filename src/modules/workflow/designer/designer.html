@@ -1,0 +1,54 @@
+<div ng-show="m">
+  <md-card-header>
+    <md-card-header-text flex>
+      <span class="md-title">{{ m.name }}(版本: {{ m.procDef.version }})</span>
+      <span class="md-subhead">
+        部署时间: {{ m.deploymentTime | date: 'yyyy-MM-dd HH:mm:ss' }}
+        /
+        最后更新: {{ m.lastUpdateTime | date: 'yyyy-MM-dd HH:mm:ss' }}
+        /
+        创建时间: {{ m.createTime | date: 'yyyy-MM-dd HH:mm:ss' }}
+      </span>
+    </md-card-header-text>
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="Options" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-tooltip>操作</md-tooltip>
+        <md-icon>more_vert</md-icon>
+      </md-button>
+      <md-menu-content>
+        <md-menu-item>
+          <md-button aria-label="Edit" ng-click="editItem()">
+            <md-icon>edit</md-icon>编辑
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="Copy">
+            <md-icon>content_copy</md-icon>复制
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-hide="m.deploymentId">
+          <md-button aria-label="Delete" ng-click="delItem($event)">
+            <md-icon>delete</md-icon>删除
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="DeployOrStart" ng-click="deployOrStart()">
+            <md-icon>{{ dosIcon }}</md-icon>{{ dosTitle }}
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="Export" ng-click="export()">
+            <md-icon>file_download</md-icon>导出
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </md-card-header>
+  <md-card-content>
+    <p>描述</p>
+    <p>{{ m.description }}</p>
+    <md-divider></md-divider>
+    <p>流程图</p>
+    <img ng-show="m.sourceExtraUrl" ng-src="{{ m.sourceExtraUrl }}" style="width: auto;" />
+  </md-card-content>
+</div>

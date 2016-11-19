@@ -1,0 +1,79 @@
+<div layout="row" flex tree-grid>
+  <md-card flex="15">
+    <md-content layout="row" flex layout-padding>
+      <pea-tree></pea-tree>
+    </md-content>
+  </md-card>
+  <md-card flex>
+    <md-toolbar class="md-table-toolbar md-default" ng-show="!gridOptions.showFilter && !gridOptions.selected.length">
+      <div class="md-toolbar-tools">
+        <h2 class="md-title">{{ gridOptions.title }}</h2>
+        <div flex></div>
+        <md-button ng-show="gridOptions.createable" class="md-icon-button" ng-click="gridOptions.addItem($event)" aria-label="New" title="新建">
+          <md-icon md-font-icon="md-material">add</md-icon>
+        </md-button>
+        <md-button ng-show="gridOptions.filterable"  class="md-icon-button" ng-click="gridOptions.showFilter = true" aria-label="Search" title="搜索">
+          <md-icon md-font-icon="md-material">search</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-toolbar class="md-table-toolbar md-default" ng-show="gridOptions.showFilter && !gridOptions.selected.length">
+      <div class="md-toolbar-tools">
+        <md-input-container flex md-no-float>
+          <md-icon md-font-icon="md-material" style="top: 30px;">search</md-icon>
+          <input type="text" ng-model="gridOptions.query.filter" placeholder="search" style="margin-top: 25px;">
+        </md-input-container>
+        <md-button class="md-icon-button" ng-click="gridOptions.showFilter = false;gridOptions.query.filter = ''" aria-label="Close" title="关闭">
+          <md-icon md-font-icon="md-material">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-toolbar class="md-table-toolbar md-default" ng-show="gridOptions.selected.length" style="color: #1e88e5; background-color: #e3f2fd;">
+      <div class="md-toolbar-tools">
+        <h2 class="md-title">选中 {{gridOptions.selected.length}} 项</h2>
+        <div flex></div>
+        <md-button ng-show="gridOptions.editable" class="md-icon-button" ng-show="gridOptions.selected.length == 1" aria-label="Edit" ng-click="gridOptions.editItem($event)" title="编辑">
+          <md-icon md-font-icon="md-material">mode_edit</md-icon>
+        </md-button>
+        <md-button ng-show="gridOptions.deleteable" class="md-icon-button" aria-label="Delete" title="删除" ng-click="gridOptions.delItem()">
+          <md-icon md-font-icon="md-material">delete</md-icon>
+        </md-button>
+        <md-button class="md-icon-button" ng-click="gridOptions.selected = []" aria-label="Close" title="清除所选">
+          <md-icon md-font-icon="md-material">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-table-container>
+      <table md-table md-row-select ng-model="gridOptions.selected" md-progress="deferred">
+        <thead md-head md-order="gridOptions.query.order" md-on-reorder="gridOptions.onReorder">
+        <tr md-row>
+          <th md-column ng-repeat="h in gridOptions.head" md-order-by="{{h.orderBy}}">{{h.label}}</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row md-auto-select md-select="item"
+            ng-repeat="item in gridOptions.items.data | filter: gridOptions.query.filter | orderBy: gridOptions.query.order | limitTo: gridOptions.query.limit: (gridOptions.query.page - 1) * gridOptions.query.limit">
+          <td md-cell ng-repeat="b in gridOptions.body" ng-bind="{{b}}"></td>
+          <td md-cell ng-show="gridOptions.editable || gridOptions.deleteable">
+            <md-button ng-show="gridOptions.editable" class="md-icon-button" aria-label="Edit" ng-click="gridOptions.editItem($event)" title="编辑">
+              <md-icon md-font-icon="md-material">mode_edit</md-icon>
+            </md-button>
+            <md-button ng-show="gridOptions.deleteable" class="md-icon-button" aria-label="Delete" title="删除" ng-click="gridOptions.delItem()">
+              <md-icon md-font-icon="md-material">delete</md-icon>
+            </md-button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+
+    <md-table-pagination md-label="{page: '页',rowsPerPage: '每页行数',of: '/'}"
+                         md-options="[10,15,20,50,100]"
+                         md-limit="gridOptions.query.limit" md-page="gridOptions.query.page"
+                         md-total="{{gridOptions.query.filter ? (gridOptions.items.data | filter:gridOptions.query.filter).length : gridOptions.items.total}}"
+                         md-page-select md-boundary-links
+                         md-on-paginate="gridOptions.onPaginate">
+    </md-table-pagination>
+  </md-card>
+</div>

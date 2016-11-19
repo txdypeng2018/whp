@@ -1,0 +1,28 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>导入模型</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <form name="fm" layout-padding ng-submit="import()" enctype="multipart/form-data">
+    <md-content layout="column" flex>
+      <md-input-container>
+        <input aria-label="file" name="file" type="file" required
+               ng-model="bpmnFile" ngf-select accept="application/xml">
+      </md-input-container>
+    </md-content>
+  </form>
+  <md-dialog-actions>
+    <md-button aria-label="Close" ng-click="cancel()" class="md-primary">
+      <md-icon>clear</md-icon>取消
+    </md-button>
+    <md-button aria-label="Submit" ng-disabled="fm.$invalid || $root.inProcess"
+               ng-click="import(bpmnFile)" class="md-raised md-primary">
+      <md-icon>check</md-icon>导入
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,122 @@
+<!-- 首页 -->
+<div class="main-wrapper" id="main_wrapper" ng-class="[{'sidebar-mini': isSidebarDisplayMini, 'sidebar-open': isSidebarDisplayOpen}, mainSkin]">
+  <!-- 请求进度条 -->
+  <md-progress-linear md-mode="indeterminate" class="md-accent main-progress-linear" ng-show="$root.inProcess"></md-progress-linear>
+
+  <!-- 页头 -->
+  <div class="main-header main-shadow">
+    <!-- logo -->
+    <div class="logo">
+      <img src="./assets/images/proper_log.png"/>
+      <b class="logo-text">协同管理平台</b>
+    </div>
+    <div class="navbar">
+      <!-- 功能树切换按钮 -->
+      <md-button aria-label="功能树样式" class="md-icon-button" ng-click="sidebarToggleClk()">
+        <md-icon class="navbar-icon">menu</md-icon>
+      </md-button>
+      <!-- 首页设置和提醒栏 -->
+      <div class="navbar-custom-menu">
+        <ul>
+          <li>
+            <md-button aria-label="全功能导航" class="md-icon-button" ng-click="toggleResourceNav()">
+              <md-icon class="navbar-icon">apps</md-icon>
+            </md-button>
+          </li>
+          <li>
+            <md-button aria-label="通知" class="md-icon-button" ng-click="toggleRightNotifications()">
+              <md-icon class="navbar-icon">notifications</md-icon>
+              <span class="up-label">···</span>
+            </md-button>
+          </li>
+          <li>
+            <md-button aria-label="设置" class="md-icon-button" ng-click="toggleRightSettings()">
+              <md-icon class="navbar-icon">settings</md-icon>
+            </md-button>
+          </li>
+          <li>
+            <md-menu md-position-mode="target-right target" md-offset="0 52">
+              <md-button aria-label="用户菜单" class="md-icon-button" ng-click="$mdOpenCloseMenu($event)">
+                <img src="./assets/images/default_user_image.png" class="user-image">
+                <span class="user-name">某某某</span>
+              </md-button>
+              <md-menu-content class="user-menu-content">
+                <md-menu-item>
+                  <md-button>
+                    <md-icon>person</md-icon>
+                    <span>用户信息</span>
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button>
+                    <md-icon>lock</md-icon>
+                    <span>修改密码</span>
+                  </md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                  <md-button ng-click="logout()">
+                    <md-icon>power_settings_new</md-icon>
+                    <span>退出登录</span>
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 功能树 -->
+  <div class="main-sidebar main-shadow" id="menu_sidebar">
+    <div class="sidebar-content">
+      <!-- 功能菜单搜索 -->
+      <div class="sidebar-form" id="sidebar_position">
+        <div class="sidebar-search-group">
+          <div class="sidebar-search">
+            <input type="text" id="sidebar_search" name="sidebar_search" class="sidebar-text" placeholder="功能名称..." ng-model="menuSearchStr" ng-model-options="searchStrOptions"/>
+            <span class="sidebar-text-btn">
+              <md-icon class="sidebar-search-icon">search</md-icon>
+            </span>
+          </div>
+        </div>
+        <div class="sidebar-search-mini">
+          <md-icon class="sidebar-search-icon">search</md-icon>
+        </div>
+      </div>
+      <!-- 功能菜单 -->
+      <ul as-sortable ng-model="resources" class="sidebar-menu" id="menu_ul" ng-include="'modules/mainnew/sidenav.html'">
+      </ul>
+    </div>
+  </div>
+
+  <!-- 内容区 -->
+  <div class="content-wrapper" id="content_wrapper" ng-click="sidebarHiddenClk()" tabindex="-1">
+    <div class="main-content" ui-view>
+    </div>
+  </div>
+
+  <!-- 全功能导航页面 -->
+  <div class="resource-nav" ng-show="resourceNavShow" ng-include="'modules/mainnew/resnav.html'">
+  </div>
+
+  <!-- 页脚 -->
+  <div class="main-footer">
+    <div class="footer-content">
+      <div class="footer-content-in">
+        <strong>版权所有&nbsp;©&nbsp;沈阳<span>工大普日</span>软件技术有限公司</strong>
+        <div class="footer-version"><strong>Version</strong> 5.0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 通知栏 -->
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="rightNotifications">
+  通知
+</md-sidenav>
+
+<!-- 设置栏 -->
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp sidenav-settings" md-component-id="rightSettings" ng-include="'modules/mainnew/settings.html'">
+</md-sidenav>

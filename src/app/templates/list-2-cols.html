@@ -1,0 +1,45 @@
+<div layout="row" flex default-hotkeys list2cols>
+  <md-card flex="15">
+    <md-content>
+      <div class="quick-search" layout-padding>
+        <md-input-container md-no-float>
+          <input id="qs" ng-model="qsText" placeholder="模糊搜索" ng-change="resetList()" auto-focus>
+        </md-input-container>
+      </div>
+      <md-list>
+        <md-list-item ng-repeat="item in items" aria-label="list-item" ng-click="clickListItem(item)">
+          <span ng-bind-template="{{ listItemTemplate(item) }}"></span>
+        </md-list-item>
+      </md-list>
+      <div align="center">
+        <md-button class="md-icon-button" ng-show="showMoreListItems" ng-click="getMoreListItems()">
+          <md-tooltip>加载更多</md-tooltip>
+          <md-icon>keyboard_control</md-icon>
+        </md-button>
+      </div>
+    </md-content>
+  </md-card>
+  <md-card flex>
+    <ng-include src="contentPageUrl"></ng-include>
+  </md-card>
+</div>
+<md-fab-speed-dial md-direction="left" class="md-fling md-fab-bottom-right"
+                   md-open="isMenusOpen" ng-mouseenter="isMenusOpen=true" ng-mouseleave="isMenusOpen=false"
+                   style="position: fixed;" ng-cloak ng-show="fabBtns">
+  <md-fab-trigger>
+    <md-button aria-label="menu" class="md-fab md-warn">
+      <md-tooltip md-direction="top">菜单</md-tooltip>
+      <md-icon md-font-icon="material-icons">menu</md-icon>
+    </md-button>
+  </md-fab-trigger>
+  <md-fab-actions>
+    <div ng-repeat="btn in fabBtns">
+      <md-button class="md-fab md-warn md-mini"
+                 aria-label="{{ btn.ariaLabel }}"
+                 ng-click="btn.click()">
+        <md-tooltip md-direction="top">{{ btn.tooltip }}</md-tooltip>
+        <md-icon md-font-icon="material-icons">{{ btn.icon }}</md-icon>
+      </md-button>
+    </div>
+  </md-fab-actions>
+</md-fab-speed-dial>

@@ -1,0 +1,13 @@
+<li as-sortable-item ng-if="resource.isSearch !== '0'" ng-repeat="resource in resources" ng-class="{'01': 'treeview'}[''+resource.isLeaf+resource.level]">
+  <md-button as-sortable-item-handle ng-if="resource.level === 1" class="btn-menu" ng-click="sidebarMenuOpenClk(resource, $event)">
+    <md-icon class="sidebar-menu-icon">{{resource.icon}}</md-icon>
+    <span>{{resource.name}}</span>
+    <md-icon class="sidebar-menu-icon pull-right" ng-if="resource.isLeaf == '0'">chevron_left</md-icon>
+  </md-button>
+  <a ng-if="resource.level !== 1" href="javascript:void(0)" ng-click="sidebarMenuOpenClk(resource, $event)">
+    <md-icon class="sidebar-menu-icon">{{resource.icon}}</md-icon>
+    <span>{{resource.name}}</span>
+    <md-icon class="sidebar-menu-icon pull-right" ng-if="resource.isLeaf == '0'">chevron_left</md-icon>
+  </a>
+  <ul class="treeview-menu" ng-if="resource.isLeaf == '0'" ng-include="'modules/mainnew/sidenav.html'" ng-init="resources=resource.treeMenu"></ul>
+</li>

@@ -1,0 +1,33 @@
+<md-dialog ng-cloak style="width:800px;">
+  <form name="buildForm">
+    <md-dialog-content class="md-dialog-content">
+      <h2 class="md-title">楼宇信息</h2>
+      <div ng-show="showDis" layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>院区</label>
+          <md-select name="districtCode" ng-model="build.districtCode" required>
+            <md-option ng-repeat="district in districts" value="{{district.id}}">
+              {{district.name}}
+            </md-option>
+          </md-select>
+          <div class="md-errors-spacer"></div>
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>楼宇名称</label>
+          <textarea name="buildingName" ng-model="build.buildingName" required></textarea>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button ng-disabled="isSubmit" ng-click="cancel()">
+        关闭
+      </md-button>
+      <md-button type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+        提交
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

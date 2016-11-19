@@ -1,0 +1,29 @@
+<md-dialog ng-cloak style="width:800px;">
+  <form name="floorForm">
+    <md-dialog-content class="md-dialog-content">
+      <h2 class="md-title">楼层科室信息</h2>
+      <input type="hidden" ng-model="floor.floorParentId">
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>楼层名称</label>
+          <input name="floorName" ng-model="floor.floorName" required>
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>科室名称( 注意:科室之间需要用半角符号 ^ 作为区分 例如: 磁共振CT室^DR室)</label>
+          <textarea name="deptName" ng-model="floor.deptName" required></textarea>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button ng-disabled="isSubmit" ng-click="cancel()">
+        关闭
+      </md-button>
+      <md-button type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+        提交
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

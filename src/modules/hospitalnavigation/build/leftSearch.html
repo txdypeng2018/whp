@@ -1,0 +1,17 @@
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>院区</label>
+    <md-select ng-model="gridParam.searchData.districtCode">
+      <md-option ng-repeat="distric in gridParam.searchInitData.districtCode" value="{{distric.id}}">
+        {{distric.name}}
+      </md-option>
+    </md-select>
+    <div class="md-errors-spacer"></div>
+  </md-input-container>
+</div>
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>楼宇名称</label>
+    <textarea ng-model="gridParam.searchData.buildingName"></textarea>
+  </md-input-container>
+</div>

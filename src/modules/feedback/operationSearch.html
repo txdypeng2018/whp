@@ -1,0 +1,29 @@
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>姓名</label>
+    <input ng-model="gridParam.searchData.userName">
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>手机号</label>
+    <input ng-model="gridParam.searchData.userTel">
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>反馈状态</label>
+    <md-select ng-model="gridParam.searchData.statusCode">
+      <md-option ng-repeat="opStatus in gridParam.searchInitData.statusCode" value="{{opStatus.code}}">
+        {{opStatus.name}}
+      </md-option>
+    </md-select>
+    <div class="md-errors-spacer"></div>
+  </md-input-container>
+</div>
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>用户意见</label>
+    <textarea ng-model="gridParam.searchData.opinion"></textarea>
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+    <label>反馈意见</label>
+    <textarea ng-model="gridParam.searchData.feedback"></textarea>
+  </md-input-container>
+</div>

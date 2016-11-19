@@ -1,0 +1,52 @@
+<md-dialog ng-cloak style="width:800px;">
+  <form name="opinionForm">
+    <md-dialog-content class="md-dialog-content">
+      <h2 class="md-title">意见反馈信息</h2>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>姓名</label>
+          <input required name="userName" ng-model="opinion.userName" readonly="true">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>电话</label>
+          <input name="userTel" ng-model="opinion.userTel" readonly="true">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>反馈状态</label>
+          <input name="status" ng-model="opinion.status" readonly="true">
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>意见提出时间</label>
+          <input name="opinionTime" ng-model="opinion.opinionTime" readonly="true">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>意见反馈时间</label>
+          <input name="feedbackTime" ng-model="opinion.feedbackTime" readonly="true">
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>用户意见</label>
+          <textarea name="opinion" ng-model="opinion.opinion" readonly="true"></textarea>
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>反馈意见</label>
+          <textarea name="feedback" ng-model="opinion.feedback" required></textarea>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button ng-disabled="isSubmit" ng-click="cancel()">
+        关闭
+      </md-button>
+      <md-button type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+        提交
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

@@ -1,0 +1,57 @@
+<md-dialog ng-cloak>
+  <form name="userForm">
+    <md-dialog-content class="md-dialog-content">
+      <h2 class="md-title">用户信息</h2>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>姓名</label>
+          <input required name="name" ng-model="user.name">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>年龄</label>
+          <input type="number" name="age" ng-model="user.age">
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>科室</label>
+          <input name="dept" ng-model="user.dept">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>职称</label>
+          <input name="title" ng-model="user.title">
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>学历</label>
+          <md-select name="education" ng-model="user.education">
+            <md-option ng-repeat="education in educations" value="{{education.id}}">
+              {{education.name}}
+            </md-option>
+          </md-select>
+          <div class="md-errors-spacer"></div>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>职务</label>
+          <input name="job" ng-model="user.job">
+        </md-input-container>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm="100">
+          <label>备注</label>
+          <input name="remark" ng-model="user.remark" md-maxlength="30">
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button ng-disabled="isSubmit" ng-click="cancel()">
+        关闭
+      </md-button>
+      <md-button type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+        提交
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

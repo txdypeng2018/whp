@@ -1,0 +1,23 @@
+<div layout layout-align="center center" flex>
+  <md-card>
+    <form name="loginForm" layout-padding ng-submit="login()">
+      <md-content layout="column">
+        <md-input-container>
+          <label>用户名</label>
+          <input id="uname" ng-model="user.username" auto-focus required>
+        </md-input-container>
+        <md-input-container>
+          <label>密码</label>
+          <input ng-model="user.pwd" type="password" required>
+        </md-input-container>
+        <md-button type="submit"
+          class="md-raised md-primary"
+          ng-disabled="loginForm.$invalid || logging">
+          登录
+        </md-button>
+        <div ng-show="loginErr && loginForm.$invalid">登录失败</div>
+      </md-content>
+    </form>
+    <md-progress-linear md-mode="query" ng-show="logging"></md-progress-linear>
+  </md-card>
+</div>
