@@ -1,0 +1,2122 @@
+#%RAML 0.8
+title: 掌上盛京医院接口
+version: 0.1
+baseUri: http://localhost:9090/api
+mediaType: application/json
+traits:
+  - secured:
+      description: 用户无权限返回错误
+      responses:
+        401:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "用户未登录"
+              }
+  - dataError:
+      description: 数据验证错误
+      responses:
+        400:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "验证错误信息"
+              }
+  - serverError:
+      description: 服务器错误
+      responses:
+        500:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "服务器错误信息"
+              }
+/dataBase:
+  /familyMenberTypes:
+    get:
+      description: 取得家庭成员类别列表
+      is: [secured, serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "{code}": { "type": "object", "description": "类别编码", "properties": {
+                    "name": { "type": "string", "description": "类别名称" },
+                    "sexCode": { "type": "string", "description": "性别编码" },
+                    "img": { "type": "string", "description": "图片路径" }
+                  }}
+                }
+              }
+  /sexTypes:
+    get:
+      description: 性别列表
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "{code}": { "type": "object", "description": "类别编码", "properties": {
+                    "name": { "type": "string", "description": "类别名称" }
+                  }}
+                }
+              }
+  /feedbackTypes:
+    get:
+      description: 意见反馈状态列表
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "code": { "type": "string", "description": "类别编码" },
+                    "name": { "type": "string", "description": "类别名称"}
+                  }
+                ]
+              }
+  /districTypes:
+    get:
+      description: 院区列表
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "code": { "type": "string", "description": "院区编码" },
+                    "name": { "type": "string", "description": "院区名称"}
+                  }
+                ]
+              }
+/medicalGuide:
+  get:
+    description: 取得就医指南信息
+    is: [serverError]
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "string", "example": "<p>a<br/>b</p><p>c</p>"
+            }
+/hospitalIntroduce:
+  get:
+    description: 取得医院简介信息
+    is: [serverError]
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "string", "example": "<p>a<br/>b</p><p>c</p>"
+            }
+/messages:
+  get:
+    description: 取得登录用户的消息列表
+    is: [secured, serverError]
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "array",
+              "properties": [
+                {
+                  "id": { "type": "string", "description": "消息ID" },
+                  "date": { "type": "string", "description": "消息时间", "example": "2016年08月05日 10:00" },
+                  "content": { "type": "string", "description": "消息内容" }
+                }
+              ]
+            }
+/hospitalNavigation:
+  /builds:
+    get:
+      description: App端取得各院区楼列表
+      is: [serverError]
+      queryParameters:
+        districtId:
+          description: 院区ID（没有时返回所有院区的楼）
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "院区ID" },
+                    "name": { "type": "string", "description": "院区名称" },
+                    "builds": { "type": "array", "description": "楼列表", "properties": [
+                      {
+                        "id": { "type": "string", "description": "楼ID" },
+                        "name": { "type": "string", "description": "楼名称" },
+                        "function": { "type": "string", "description": "楼功能" }
+                      }
+                    ]}
+                  }
+                ]
+              }
+    /floors:
+      get:
+        description: App端取得各楼层介绍列表
+        is: [serverError]
+        queryParameters:
+          buildId:
+            description: 楼ID
+            type: string
+            required: true
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "array",
+                  "properties": [
+                    {
+                      "id": { "type": "string", "description": "层ID" },
+                      "name": { "type": "string", "description": "层名称" },
+                      "depts": { "type": "array", "description": "层内科室" }
+                    }
+                  ]
+                }
+  /build:
+    get:
+      description: Web端取得各院区楼列表
+      is: [serverError]
+      queryParameters:
+        districtCode:
+          description: 院区ID（没有时返回所有院区的楼）
+          type: string
+          required: false
+        buildingName:
+          description: 楼宇名称
+          type: string
+          required: false
+        pageNo:
+          description: 当前页码
+          type: string
+          required: true
+        pageSize:
+          description: 每页数量
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "Object",
+                "properties":
+                  {
+                    "count": { "type": "int", "description": "楼宇列表总数" },
+                    "data" :
+                    [
+                      {
+                      "id": { "type": "string", "description": "ID" },
+                      "districtCode": { "type": "string", "description": "院区ID" },
+                      "buildingCode": { "type": "string", "description": "楼宇ID" },
+                      "buildingName": { "type": "string", "description": "楼宇名称" }
+                      }
+                    ]
+                 }
+              }
+    post:
+        description: Web端新增楼宇信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "districtCode": { "type": "string", "description": "院区编码" },
+                "buildingName": { "type": "string", "description": "楼宇名称" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    put:
+        description: Web端更新楼宇信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "districtCode": { "type": "string", "description": "院区ID" },
+                "buildingCode": { "type": "string", "description": "楼宇ID" },
+                "buildingName": { "type": "string", "description": "楼宇名称" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    delete:
+          description: Web端删除楼宇信息
+          is: [secured, dataError, serverError]
+          queryParameters:
+            ids:
+              description: ID列表(使用","分割)
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "string", "description": "空字符串"
+                  }
+    /{buildingId}:
+        uriParameters:
+          buildingId:
+            description: 楼宇ID
+            example: 1
+        get:
+          description: 取得楼宇详细
+          is: [secured, serverError]
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "object",
+                    "properties": {
+                      "districtCode": { "type": "string", "description": "院区ID" },
+                      "buildingCode": { "type": "string", "description": "楼宇ID" },
+                      "buildingName": { "type": "string", "description": "楼宇名称" }
+                    }
+                  }
+  /floor:
+    get:
+      description: Web端取得各楼层科室列表
+      is: [serverError]
+      queryParameters:
+        floorParentId:
+          description: 楼层所在楼宇ID
+          type: string
+          required: false
+        deptName:
+          description: 科室名称
+          type: string
+          required: false
+        pageNo:
+          description: 当前页码
+          type: string
+          required: true
+        pageSize:
+          description: 每页数量
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "Object",
+                "properties":
+                  {
+                    "count": { "type": "int", "description": "楼宇列表总数" },
+                    "data" :
+                    [
+                      {
+                      "floorParentId": { "type": "string", "description": "楼层所在楼宇ID" },
+                      "fid": { "type": "string", "description": "楼层记录ID" },
+                      "floorId": { "type": "string", "description": "楼层ID" },
+                      "floorName": { "type": "string", "description": "楼层名称" },
+                      "did": { "type": "string", "description": "科室记录ID" },
+                      "deptId": { "type": "string", "description": "楼层科室信息ID" },
+                      "deptName": { "type": "string", "description": "楼层科室信息" }
+                      }
+                    ]
+                 }
+              }
+    post:
+        description: Web端新增楼层科室信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "floorParentId": { "type": "string", "description": "楼层所属楼宇ID" },
+                "floorName": { "type": "string", "description": "楼层名称" },
+                "deptName": { "type": "string", "description": "科室名称" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    put:
+        description: Web端更新楼层科室信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "floorId": { "type": "string", "description": "楼层ID" },
+                "floorName": { "type": "string", "description": "楼层名称" },
+                "deptId": { "type": "string", "description": "科室ID" },
+                "deptName": { "type": "string", "description": "科室名称" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    delete:
+          description: Web端删除楼层科室信息
+          is: [secured, dataError, serverError]
+          queryParameters:
+            ids:
+              description: 楼层科室ID列表(使用","分割)
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "string", "description": "空字符串"
+                  }
+    /{floorId}:
+        uriParameters:
+          floorId:
+            description: 楼层ID
+            example: 1
+        get:
+          description: 取得楼宇详细d
+          is: [secured, serverError]
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "object",
+                    "properties": {
+                      "floorParentId": { "type": "string", "description": "楼层所在楼宇ID" },
+                      "fid": { "type": "string", "description": "楼层记录ID" },
+                      "floorId": { "type": "string", "description": "楼层ID" },
+                      "floorName": { "type": "string", "description": "楼层名称" },
+                      "did": { "type": "string", "description": "科室记录ID" },
+                      "deptId": { "type": "string", "description": "楼层科室信息ID" },
+                      "deptName": { "type": "string", "description": "楼层科室信息" }
+                    }
+                  }
+/organization:
+  /districts:
+    get:
+      description: 取得院区列表
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "院区ID" },
+                    "name": { "type": "string", "description": "院区名称" }
+                  }
+                ]
+              }
+/subjects:
+  get:
+    description: 取得学科列表
+    is: [serverError]
+    queryParameters:
+      districtId:
+        description: 院区ID（没有时学科合并显示）
+        type: string
+        required: false
+      type:
+        description: 挂号类型，区分当日挂号（1）或预约挂号（2）
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "array",
+              "properties": [
+                {
+                  "id": { "type": "string", "description": "学科ID" },
+                  "name": { "type": "string", "description": "学科名称" },
+                  "subjects": { "type": "array", "description": "学科列表", "properties": [
+                    {
+                      "id": { "type": "string", "description": "学科ID" },
+                      "name": { "type": "string", "description": "学科名称" }
+                    }
+                  ]}
+                }
+              ]
+            }
+/doctors:
+  get:
+    description: 查询全院医生列表
+    is: [serverError]
+    queryParameters:
+      pageNo:
+        description: 页码，从1开始，每页多少条后台控制
+        type: integer
+        required: false
+      searchName:
+        description: 全文检索条件
+        type: string
+        required: false
+      subjectId:
+        description: 学科ID
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "array",
+              "properties": [
+                {
+                  "id": { "type": "string", "description": "医生ID" },
+                  "name": { "type": "string", "description": "医生姓名" },
+                  "sexCode": { "type": "string", "description": "性别编码" },
+                  "title": { "type": "string", "description": "职称名称" },
+                  "districtId": { "type": "string", "description": "院区Id" },
+                  "district": { "type": "string", "description": "院区名称" },
+                  "deptId": { "type": "string", "description": "科室Id" },
+                  "dept": { "type": "string", "description": "科室名称" },
+                  "skill": { "type": "string", "description": "擅长" }
+                }
+              ]
+            }
+  /photo:
+    get:
+      description: 取得指定医生照片
+      is: [serverError]
+      queryParameters:
+        doctorId:
+          description: 医生Id
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            image/png:
+  /{doctorId}:
+    uriParameters:
+      doctorId:
+        description: 医生Id
+        example: 1
+    get:
+      description: 取得指定医生个人信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "医生ID" },
+                  "name": { "type": "string", "description": "医生姓名" },
+                  "sexCode": { "type": "string", "description": "性别编码" },
+                  "title": { "type": "string", "description": "职称名称" },
+                  "hospital": { "type": "string", "description": "医院名称" },
+                  "districtId": { "type": "string", "description": "院区Id" },
+                  "district": { "type": "string", "description": "院区名称" },
+                  "deptId": { "type": "string", "description": "科室Id" },
+                  "dept": { "type": "string", "description": "科室名称" },
+                  "skill": { "type": "string", "description": "擅长" },
+                  "summary": { "type": "string", "description": "简介" }
+                }
+              }
+/schedule:
+  /dates:
+    get:
+      description: 指定医生排班时间列表（只返回有号日期）
+      is: [serverError]
+      queryParameters:
+        doctorId:
+          description: 医生ID
+          type: string
+          required: true
+        date:
+          description: 日期
+          type: string
+          required: false
+        districtId:
+          description: 院区ID
+          type: string
+          required: false
+        subjectId:
+          description: 学科ID
+          type: string
+          required: false
+        isAppointment:
+          description: 是否为预约挂号（1:预约;0:当日）
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "date": { "type": "string", "description": "排班时间", "example": "2016-08-10" },
+                    "total": { "type": "integer", "description": "可挂号总数" },
+                    "overCount": { "type": "integer", "description": "剩余挂号数" },
+                    "doctorId": { "type": "integer", "description": "医生ID" },
+                    "name": { "type": "integer", "description": "医生姓名" },
+                    "sexCode": { "type": "integer", "description": "性别编码" },
+                    "title": { "type": "integer", "description": "职称名称" },
+                    "districtId": { "type": "string", "description": "院区Id" },
+                    "district": { "type": "string", "description": "院区名称" },
+                    "deptId": { "type": "string", "description": "科室Id" },
+                    "dept": { "type": "string", "description": "科室名称" },
+                    "categoryCode": { "type": "string", "description": "类别编码" },
+                    "category": { "type": "string", "description": "类别名称" },
+                    "amount": { "type": "string", "description": "挂号金额", "example": "7.00" }
+                  }
+                ]
+              }
+  /doctors:
+    get:
+      description: 取得排班医生列表
+      is: [serverError]
+      queryParameters:
+        pageNo:
+          description: 页码，从1开始，每页多少条后台控制
+          type: integer
+          required: false
+        districtId:
+          description: 院区Id
+          type: string
+          required: false
+        subjectId:
+          description: 学科Id
+          type: string
+          required: false
+        major:
+          description: 专业/专长
+          type: string
+          required: false
+        startDate:
+          description: 排班开始时间
+          type: string
+          required: true
+        endDate:
+          description: 排班结束时间
+          type: string
+          required: false
+        isAppointment:
+          description: 是否为预约挂号（1:预约;0:当日）
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "医生ID" },
+                    "name": { "type": "string", "description": "医生姓名" },
+                    "sexCode": { "type": "string", "description": "性别编码" },
+                    "title": { "type": "string", "description": "职称名称" },
+                    "districtId": { "type": "string", "description": "院区Id" },
+                    "district": { "type": "string", "description": "院区名称" },
+                    "deptId": { "type": "string", "description": "科室Id" },
+                    "dept": { "type": "string", "description": "科室名称" },
+                    "skill": { "type": "string", "description": "擅长" },
+                    "total": { "type": "integer", "description": "可挂号总数" },
+                    "overCount": { "type": "integer", "description": "剩余挂号数" },
+                    "unallowed": { "type": "string", "description": "医生不能挂号异常情况说明" }
+                  }
+                ]
+              }
+  /times:
+    get:
+      description: 指定日期医生一天出诊时间列表（只返回有号时间）
+      is: [serverError]
+      queryParameters:
+        date:
+          description: 日期
+          type: string
+          required: true
+        doctorId:
+          description: 医生ID
+          type: string
+          required: true
+        districtId:
+          description: 院区ID
+          type: string
+          required: false
+        isAppointment:
+          description: 是否为预约挂号（1:预约;0:当日）
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "time": { "type": "string", "description": "时间", "example": "09:10" },
+                    "total": { "type": "integer", "description": "可挂号总数" },
+                    "overCount": { "type": "integer", "description": "剩余挂号数" }
+                  }
+                ]
+              }
+/register:
+  /visitAndBacknumDesc:
+    get:
+      description: 就诊退号说明
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "visit1": { "type": "string", "description": "就诊说明1" },
+                  "visit2": { "type": "string", "description": "就诊说明2" },
+                  "backnum": { "type": "string", "description": "退号说明" }
+                }
+              }
+  /agreement:
+    get:
+      description: 取得挂号须知信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              { "$schema": "http://json-schema.org/schema", "type": "string" }
+  /apptPrompt:
+    get:
+      description: 取得预约挂号提示信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              { "$schema": "http://json-schema.org/schema", "type": "string" }
+  /todayPrompt:
+    get:
+      description: 取得当日挂号提示信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              { "$schema": "http://json-schema.org/schema", "type": "string" }
+  /doctor:
+    get:
+      description: 取得医生挂号信息
+      is: [serverError]
+      queryParameters:
+        doctorId:
+          description: 医生ID
+          type: string
+          required: true
+        date:
+          description: 挂号时间
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "医生ID" },
+                  "name": { "type": "string", "description": "医生姓名" },
+                  "sexCode": { "type": "string", "description": "性别编码" },
+                  "districtId": { "type": "string", "description": "院区Id" },
+                  "district": { "type": "string", "description": "院区名称" },
+                  "deptId": { "type": "string", "description": "科室Id" },
+                  "dept": { "type": "string", "description": "科室名称" },
+                  "clinicCategoryCode": { "type": "string", "description": "挂号类别编码" },
+                  "amount": { "type": "string", "description": "挂号金额", "example": "7.00" }
+                }
+              }
+  /registrations:
+    get:
+      description: 取得登录人挂号单列表
+      is: [secured, serverError]
+      queryParameters:
+        memberId:
+          description: 家庭成员Id
+          type: string
+          required: false
+      responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "array",
+                  "properties": [
+                    {
+                      "id": { "type": "string", "description": "挂号单ID" },
+                      "apptDate": { "type": "string", "description": "就诊时间", "example": "2016年07月20日 10:00" },
+                      "clinicNum": { "type": "string", "description": "单号" },
+                      "hospital": { "type": "string", "description": "医院名称" },
+                      "districtId": { "type": "string", "description": "院区Id" },
+                      "district": { "type": "string", "description": "院区名称" },
+                      "deptId": { "type": "string", "description": "科室Id" },
+                      "dept": { "type": "string", "description": "科室名称" },
+                      "doctorId": { "type": "string", "description": "医生Id" },
+                      "doctor": { "type": "string", "description": "医生名称" },
+                      "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                      "registerDate": { "type": "string", "description": "挂号时间" },
+                      "statusCode": { "type": "string", "description": "挂号单状态" },
+                      "status": { "type": "string", "description": "状态名称" }
+                    }
+                  ]
+                }
+    /registration:
+      get:
+        description: 取得指定挂号单详细
+        is: [secured, serverError]
+        queryParameters:
+          id:
+            description: 挂号单ID
+            type: string
+            required: true
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "description": "挂号单ID" },
+                    "num": { "type": "string", "description": "挂号单号" },
+                    "memberId": { "type": "string", "description": "成员Id" },
+                    "patientName": { "type": "string", "description": "患者姓名" },
+                    "apptDate": { "type": "string", "description": "就诊时间", "example": "2016年07月20日 10:00" },
+                    "clinicNum": { "type": "string", "description": "门诊号" },
+                    "hospital": { "type": "string", "description": "医院名称" },
+                    "districtId": { "type": "string", "description": "院区Id" },
+                    "district": { "type": "string", "description": "院区名称" },
+                    "deptId": { "type": "string", "description": "科室Id" },
+                    "dept": { "type": "string", "description": "科室名称" },
+                    "doctorId": { "type": "string", "description": "医生Id" },
+                    "doctor": { "type": "string", "description": "医生名称" },
+                    "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                    "registerDate": { "type": "string", "description": "挂号时间" },
+                    "statusCode": { "type": "string", "description": "挂号单状态" },
+                    "status": { "type": "string", "description": "状态名称" },
+                    "canBack": { "type": "string", "description": "是否可以退号" },
+                    "orderNum": { "type": "string", "description": "订单号" }
+                  }
+                }
+      post:
+        description: 添加挂号单
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "patientId": { "type": "string", "description": "挂号患者ID" },
+                "isAppointment": { "type": "string", "description": "是否预约（1:预约;0:当日）" },
+                "registerDate": { "type": "string", "description": "挂号时间", "example": "{2016-08-10 09:10|2016-08-10}" },
+                "doctorId": { "type": "string", "description": "医生ID" },
+                "categoryCode": { "type": "string", "description": "挂号类别编码" },
+                "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                "payStatus": { "type": "string", "description": "支付状态" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "properties": {
+                    "orderNum": { "type": "string", "description": "订单号" }
+                  }
+                }
+      /back:
+        put:
+          description: 退号
+          is: [secured, dataError, serverError]
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "registrationId": { "type": "string", "description": "挂号单ID" }
+                }
+              }
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "string", "description": "空字符串"
+                  }
+/orders:
+  post:
+    description: 添加订单
+    is: [secured, dataError, serverError]
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/schema",
+          "type": "object",
+          "properties": {
+            "memberId": { "type": "string", "description": "家庭成员Id" },
+            "outpatients": { "type": "array", "properties": [
+              {
+                "outpatientNum": { "type": "string", "description": "门诊单号" },
+                "recipeNums": { "type": "array", "description": "处方号" }
+              }
+            ] }
+          }
+        }
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "orderNum": { "type": "string", "description": "订单号" }
+              }
+            }
+  /{orderNum}:
+    uriParameters:
+      orderNum:
+        description: 订单号
+        example: 1
+    get:
+      description: 取得订单详细
+      is: [secured, serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "orderNum": { "type": "string", "description": "订单号" },
+                  "name": { "type": "string", "description": "订单名称" },
+                  "description": { "type": "string", "description": "订单内容" },
+                  "amount": { "type": "string", "description": "金额", "example": "7.00" },
+                  "isAppointment": { "type": "string", "description": "挂号是否为预约（1:预约;0:当日）" },
+                  "closeTime": { "type": "array", "description": "交易关闭时间", "example": "[30,0]" }
+                }
+              }
+/medicalReports:
+  get:
+    description: 取得指定患者检查报告列表
+    is: [secured, serverError]
+    queryParameters:
+      category:
+        description: 报告类别
+        type: string
+        required: true
+      memberId:
+        description: 家庭成员Id（没有时返回登录账号就诊人信息）
+        type: string
+        required: false
+      searchTime:
+        description: 时间范围 week:一周内;month:一月内;halfYear:半年内;year:一年内
+        type: string
+        required: false
+      searchStatus:
+        description: 状态 1:已出;0:未出
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "array",
+              "properties": [
+                {
+                  "id": { "type": "string", "description": "报告ID" },
+                  "name": { "type": "string", "description": "报告名称" },
+                  "examinationDate": { "type": "string", "description": "检查时间", "example": "2016年07月20日 10:00" },
+                  "reportCategory": { "type": "string", "description": "报告类别" },
+                  "status": { "type": "string", "description": "报告状态" }
+                }
+              ]
+            }
+  /prompt:
+    get:
+      description: 报告列表温馨提示
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              { "$schema": "http://json-schema.org/schema", "type": "string" }
+  /{category}/{reportId}:
+    uriParameters:
+      category:
+        description: 报告类别
+        example: 1
+      reportId:
+        description: 报告Id
+        example: 1
+    get:
+      description:  取得指定检查报告类别1详细，类别2是图片(没有返回空字符串即可)
+      is: [secured, serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "报告ID" },
+                  "name": { "type": "string", "description": "报告名称" },
+                  "patient": { "type": "string", "description": "患者姓名" },
+                  "examinationDate": { "type": "string", "description": "检查时间", "example": "2016年07月20日 10:00" },
+                  "inspectionDoctor": { "type": "string", "description": "检查医生" },
+                  "examineDoctor": { "type": "string", "description": "审核医生" },
+                  "reportCategory": { "type": "string", "description": "报告类别" },
+                  "status": { "type": "string", "description": "报告状态" },
+                  "items": { "type": "array", "properties": [
+                    {
+                      "id": { "type": "string", "description": "明细ID" },
+                      "name": { "type": "string", "description": "明细项目名称" },
+                      "result": { "type": "string", "description": "结果" },
+                      "reference": { "type": "string", "description": "参考" }
+                    }
+                  ] }
+                }
+              }
+/permission:
+  /loginPrompt:
+    get:
+      description: 取得登录页面提示信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              { "$schema": "http://json-schema.org/schema", "type": "string" }
+  /login:
+    post:
+      description: 用户登录
+      is: [dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "phone": { "type": "string", "description": "电话号码" },
+              "password": { "type": "string", "description": "密码" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "token"
+              }
+  /verificationCode:
+    get:
+      description: 取得验证码
+      is: [dataError, serverError]
+      queryParameters:
+        category:
+          description: 类别（1:注册;2:找回密码;3:重发）
+          type: string
+          required: true
+        phone:
+          description: 电话号码
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+  /account:
+    post:
+      description: 注册帐号
+      is: [dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "phone": { "type": "string", "description": "电话号码" },
+              "verificationCode": { "type": "string", "description": "验证码" },
+              "password": { "type": "string", "description": "密码" },
+              "name": { "type": "string", "description": "姓名" },
+              "idCard": { "type": "string", "description": "身份证" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "token"
+              }
+    put:
+      description: 找回/修改密码
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "phone": { "type": "string", "description": "电话号码" },
+              "verificationCode": { "type": "string", "description": "验证码" },
+              "nowPassword": { "type": "string", "description": "当前密码" },
+              "newPassword": { "type": "string", "description": "新密码" },
+              "confirmPassword": { "type": "string", "description": "确认密码" },
+              "category": { "type": "string", "description": "1:修改密码;2:找回密码" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+/user:
+  /tokenVal:
+    get:
+      description: 验证token是否有效
+      is: [secured]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+  /userInfo:
+    get:
+      description: 取得登录用户基本信息
+      is: [secured, serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "用户ID" },
+                  "name": { "type": "string", "description": "用户姓名" },
+                  "sexCode": { "type": "string", "description": "性别编码" },
+                  "sex": { "type": "string", "description": "性别名称" },
+                  "idCard": { "type": "string", "description": "身份证号" },
+                  "phone": { "type": "string", "description": "电话号码" }
+                }
+              }
+  /medicalNum:
+    post:
+      description: 成员病历号在线建档
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "memberId": { "type": "string", "description": "成员ID" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+    put:
+      description: 修改成员病历号
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "memberId": { "type": "string", "description": "成员ID" },
+              "medicalNum": { "type": "string", "description": "病历号" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+  /familyMembers:
+    get:
+      description: 取得登录用户家庭成员
+      is: [secured, serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "成员ID" },
+                    "name": { "type": "string", "description": "姓名" },
+                    "sexCode": { "type": "string", "description": "性别编码" },
+                    "sex": { "type": "string", "description": "性别名称" },
+                    "age": { "type": "string", "description": "年龄" },
+                    "idCard": { "type": "string", "description": "身份证号" },
+                    "phone": { "type": "string", "description": "电话号码" },
+                    "medicalNum": { "type": "string", "description": "病历号" },
+                    "memberCode": { "type": "string", "description": "关系编码" },
+                    "member": { "type": "string", "description": "关系名称" },
+                    "patientVisits": { "type": "string", "description": "是否为就诊人" }
+                  }
+                ]
+              }
+    /familyMember:
+      get:
+        description: 取得成员信息
+        is: [secured, serverError]
+        queryParameters:
+          memberId:
+            description: 成员Id，空时返回就诊人
+            type: string
+            required: false
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "description": "成员ID" },
+                    "name": { "type": "string", "description": "姓名" },
+                    "sexCode": { "type": "string", "description": "性别编码" },
+                    "sex": { "type": "string", "description": "性别名称" },
+                    "age": { "type": "string", "description": "年龄" },
+                    "idCard": { "type": "string", "description": "身份证号" },
+                    "phone": { "type": "string", "description": "电话号码" },
+                    "medicalNum": { "type": "string", "description": "病历号" },
+                    "memberCode": { "type": "string", "description": "关系编码" },
+                    "member": { "type": "string", "description": "关系名称" },
+                    "patientVisits": { "type": "string", "description": "是否为就诊人" }
+                  }
+                }
+      post:
+        description: 添加成员信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "description": "姓名" },
+                "sexCode": { "type": "string", "description": "性别编码" },
+                "sex": { "type": "string", "description": "性别名称" },
+                "idCard": { "type": "string", "description": "身份证号" },
+                "phone": { "type": "string", "description": "电话号码" },
+                "memberCode": { "type": "string", "description": "关系编码" },
+                "member": { "type": "string", "description": "关系名称" },
+                "patientVisits": { "type": "string", "description": "是否为就诊人" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+      put:
+        description: 修改成员信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "id": { "type": "string", "description": "成员ID" },
+                "name": { "type": "string", "description": "姓名" },
+                "phone": { "type": "string", "description": "电话号码" },
+                "patientVisits": { "type": "string", "description": "是否为就诊人" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+      delete:
+        description: 删除成员信息
+        is: [secured, dataError, serverError]
+        queryParameters:
+          memberId:
+            description: 成员Id
+            type: string
+            required: true
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    /count:
+      get:
+        description: 取得用户家庭成员数量
+        is: [secured, serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "integer"
+                }
+  /collectionDoctors:
+    get:
+      description: 取得用户收藏医生列表
+      is: [secured, serverError]
+      queryParameters:
+        searchName:
+          description: 全文检索条件
+          type: string
+          required: false
+        subjectId:
+          description: 学科ID
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "医生ID" },
+                    "name": { "type": "string", "description": "医生姓名" },
+                    "sexCode": { "type": "string", "description": "性别编码" },
+                    "title": { "type": "string", "description": "职称名称" },
+                    "districtId": { "type": "string", "description": "院区Id" },
+                    "district": { "type": "string", "description": "院区名称" },
+                    "deptId": { "type": "string", "description": "科室Id" },
+                    "dept": { "type": "string", "description": "科室名称" },
+                    "skill": { "type": "string", "description": "擅长" }
+                  }
+                ]
+              }
+    post:
+      description: 添加用户收藏医生
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "doctorId": { "type": "string", "description": "医生Id" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+    /count:
+      get:
+        description: 取得用户收藏医生数量
+        is: [secured, serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "integer"
+                }
+    /{doctorId}:
+      uriParameters:
+        doctorId:
+          description: 医生Id
+          example: 1
+      get:
+        description: 取得用户收藏医生
+        is: [secured, serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "properties": {
+                    "doctorId": { "type": "string", "description": "医生Id" }
+                  }
+                }
+      delete:
+        description: 删除用户收藏医生
+        is: [secured, dataError, serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+/service:
+  /appName:
+    get:
+      description: 取得app名称
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string"
+              }
+  /carouselPhoto:
+    get:
+      description: 取得照片轮播图片
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "name": { "type": "string", "description": "图片名称" },
+                    "img": { "type": "string", "description": "图片字符串" }
+                  }
+                ]
+              }
+    /version:
+      get:
+        description: 取得照片轮播版本号
+        is: [serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string"
+                }
+  /phone:
+    get:
+      description: 取得服务电话号码
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string"
+              }
+  /userOpinion:
+    get:
+      description: 取得登录用户意见列表
+      is: [secured, serverError]
+      queryParameters:
+        feedbackStatus:
+          description: 反馈状态
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "array",
+                "properties": [
+                  {
+                    "id": { "type": "string", "description": "意见ID" },
+                    "opinionTime": { "type": "string", "description": "意见时间" },
+                    "opinion": { "type": "string", "description": "意见内容" },
+                    "feedbackTime": { "type": "string", "description": "反馈时间" },
+                    "feedback": { "type": "string", "description": "反馈内容" },
+                    "statusCode": { "type": "string", "description": "反馈状态编码" },
+                    "status": { "type": "string", "description": "反馈状态名称" }
+                  }
+                ]
+              }
+    post:
+      description: 保存当前登录用户意见
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "opinion": { "type": "string", "description": "意见" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+    /{opinionId}:
+      uriParameters:
+        opinionId:
+          description: 意见Id
+          example: 1
+      get:
+        description: 取得用户意见详细
+        is: [secured, serverError]
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "description": "意见ID" },
+                    "opinionTime": { "type": "string", "description": "意见时间" },
+                    "opinion": { "type": "string", "description": "意见内容" },
+                    "feedbackTime": { "type": "string", "description": "反馈时间" },
+                    "feedback": { "type": "string", "description": "反馈内容" },
+                    "statusCode": { "type": "string", "description": "反馈状态编码" },
+                    "status": { "type": "string", "description": "反馈状态名称" }
+                  }
+                }
+  /feedbackOpinion:
+    get:
+      description: 取得意见列表
+      is: [secured, serverError]
+      queryParameters:
+        userName:
+          description: 用户姓名
+          type: string
+          required: false
+        userTel:
+            description: 用户手机号
+            type: string
+            required: false
+        statusCode:
+          description: 反馈状态
+          type: string
+          required: false
+        opinion:
+          description: 用户意见
+          type: string
+          required: false
+        feedback:
+          description: 反馈意见
+          type: string
+          required: false
+        pageNo:
+          description: 当前页码
+          type: string
+          required: true
+        pageSize:
+          description: 每页数量
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "Object",
+                "properties":
+                  {
+                    "count": { "type": "int", "description": "反馈意见总数" },
+                    "data" :
+                    [
+                      {
+                        "id": { "type": "string", "description": "意见ID" },
+                        "opinionTime": { "type": "string", "description": "意见时间" },
+                        "opinion": { "type": "string", "description": "意见内容" },
+                        "feedbackTime": { "type": "string", "description": "反馈时间" },
+                        "feedback": { "type": "string", "description": "反馈内容" },
+                        "statusCode": { "type": "string", "description": "反馈状态编码" },
+                        "status": { "type": "string", "description": "反馈状态名称" }
+                      }
+                    ]
+                 }
+              }
+    put:
+      description: 保存反馈意见
+      is: [secured, dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "description": "用户意见id" },
+              "feedback": { "type": "string", "description": "反馈意见" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "string", "description": "空字符串"
+              }
+/recipes:
+  get:
+    description: 取得患者处方列表
+    is: [secured, serverError]
+    queryParameters:
+      memberId:
+        description: 家庭成员ID，不存在返回默认就诊人处方列表
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "array",
+              "properties": [
+                {
+                  "outpatientNum": { "type": "string", "description": "门诊流水号" },
+                  "outpatientDate": { "type": "string", "description": "门诊时间", "example": "2016年09月01日" },
+                  "recipes": { "type": "array", "description": "门诊处方列表", "properties": [
+                    {
+                      "recipeNum": { "type": "string", "description": "处方号" },
+                      "dept": { "type": "string", "description": "科室" },
+                      "location": { "type": "string", "description": "地点" },
+                      "total": { "type": "string", "description": "金额合计" },
+                      "statusCode": { "type": "string", "description": "支付状态编码" },
+                      "status": { "type": "string", "description": "支付状态" },
+                      "items": { "type": "array", "description": "处方项目列表", "properties": [
+                        {
+                          "name": { "type": "string", "description": "项目名称" },
+                          "amount": { "type": "string", "description": "金额" },
+                          "number": { "type": "integer", "description": "数量" }
+                        }
+                      ]}
+                    }
+                  ]}
+                }
+              ]
+            }
+/app:
+  /latest:
+    get:
+      description: 取得患者处方列表
+      is: [serverError]
+      queryParameters:
+        current:
+          description: 当前版本号
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "ver": { "type": "string", "description": "版本号" },
+                  "url": { "type": "string", "description": "下载地址" },
+                  "note": { "type": "string", "description": "版本说明" }
+                }
+              }
+    post:
+      description: 保存版本更新信息
+      is: [dataError, serverError]
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/schema",
+            "type": "object",
+            "properties": {
+              "ver": { "type": "string", "description": "版本号" },
+              "url": { "type": "string", "description": "下载地址" },
+              "note": { "type": "string", "description": "版本说明" }
+            }
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "ver": { "type": "string", "description": "版本号" },
+                  "url": { "type": "string", "description": "下载地址" },
+                  "note": { "type": "string", "description": "版本说明" }
+                }
+              }
+  /versions/{version}:
+    uriParameters:
+      version:
+        description: 当前版本号
+        example: 1
+    get:
+      description: 取得当前版本信息
+      is: [serverError]
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "object",
+                "properties": {
+                  "ver": { "type": "string", "description": "版本号" },
+                  "url": { "type": "string", "description": "下载地址" },
+                  "note": { "type": "string", "description": "版本说明" }
+                }
+              }
+/pay/ali/prepayInfo:
+  post:
+    description: 获取支付宝预支付信息
+    is: [secured, dataError, serverError]
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/schema",
+          "type": "object",
+          "properties": {
+            "outTradeNo": { "type": "string", "description": "商户网站唯一订单号" },
+            "subject": { "type": "string", "description": "商品名称" },
+            "body": { "type": "string", "description": "商品详情" },
+            "totalFee": { "type": "string", "description": "商品总金额（以元为单位）" }
+          }
+        }
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "payInfo": { "type": "string", "description": "支付信息" },
+                "privateKey": { "type": "string", "description": "秘钥" }
+              }
+            }
+/pay/weixin/prepayInfo:
+  post:
+    description: 获取微信预支付信息
+    is: [secured, dataError, serverError]
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/schema",
+          "type": "object",
+          "properties": {
+            "outTradeNo": { "type": "string", "description": "商户网站唯一订单号" },
+            "body": { "type": "string", "description": "商品描述" },
+            "detail": { "type": "string", "description": "商品详情" },
+            "totalFee": { "type": "string", "description": "商品总金额（以分为单位）" }
+          }
+        }
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "appid": { "type": "string", "description": "应用ID" },
+                "noncestr": { "type": "string", "description": "随机字符串" },
+                "package": { "type": "string", "description": "扩展字段" },
+                "partnerid": { "type": "string", "description": "商户号" },
+                "prepayid": { "type": "string", "description": "预支付交易会话ID" },
+                "timestamp": { "type": "string", "description": "时间戳" },
+                "sign": { "type": "string", "description": "签名" }
+              }
+            }
+/prompt:
+  /tips:
+    get:
+      description: 取得意见列表
+      is: [secured, serverError]
+      queryParameters:
+        infoType:
+          description: 温馨提示类型编码
+          type: string
+          required: false
+        typeName:
+            description: 温馨提示类型名称
+            type: string
+            required: false
+        info:
+          description: 温馨提示内容
+          type: string
+          required: false
+        pageNo:
+          description: 当前页码
+          type: string
+          required: true
+        pageSize:
+          description: 每页数量
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "Object",
+                "properties":
+                  {
+                    "count": { "type": "int", "description": "温馨提示总数" },
+                    "data" :
+                    [
+                      {
+                      "id": { "type": "string", "description": "温馨提示ID" },
+                      "infoType": { "type": "string", "description": "温馨提示类型编码" },
+                      "typeName": { "type": "string", "description": "温馨提示类型名称" },
+                      "info": { "type": "string", "description": "温馨提示内容" }
+                      }
+                    ]
+                 }
+              }
+    post:
+        description: 新增温馨提示信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "infoType": { "type": "string", "description": "温馨提示类型编码" },
+                "typeName": { "type": "string", "description": "温馨提示类型名称" },
+                "info": { "type": "string", "description": "温馨提示内容" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    put:
+        description: 更新温馨提示信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "id": { "type": "string", "description": "温馨提示ID" },
+                "infoType": { "type": "string", "description": "温馨提示类型编码" },
+                "typeName": { "type": "string", "description": "温馨提示类型名称" },
+                "info": { "type": "string", "description": "温馨提示内容" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    delete:
+          description: 删除温馨提示信息
+          is: [secured, dataError, serverError]
+          queryParameters:
+            ids:
+              description: 温馨提示Id列表(使用","分割)
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "string", "description": "空字符串"
+                  }
+    /{id}:
+        uriParameters:
+          id:
+            description: 温馨提示ID
+            example: 1
+        get:
+          description: 取得温馨提示详细
+          is: [secured, serverError]
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "description": "温馨提示ID" },
+                      "infoType": { "type": "string", "description": "温馨提示类型编码" },
+                      "typeName": { "type": "string", "description": "温馨提示类型名称" },
+                      "info": { "type": "string", "description": "温馨提示内容" }
+                    }
+                  }
+/registration:
+  /rules:
+    get:
+      description: 取得挂号规则列表
+      is: [secured, serverError]
+      queryParameters:
+        catalogue:
+          description: 挂号规则分类
+          type: string
+          required: false
+        name:
+            description: 挂号规则名称
+            type: string
+            required: false
+        rule:
+          description: 挂号规则内容
+          type: string
+          required: false
+        pageNo:
+          description: 当前页码
+          type: string
+          required: true
+        pageSize:
+          description: 每页数量
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema",
+                "type": "Object",
+                "properties":
+                  {
+                    "count": { "type": "int", "description": "挂号规则列表总数" },
+                    "data" :
+                    [
+                      {
+                      "id": { "type": "string", "description": "挂号规则ID" },
+                      "catalogue": { "type": "string", "description": "挂号规则分类" },
+                      "name": { "type": "string", "description": "挂号规则名称" },
+                      "rule": { "type": "string", "description": "挂号规则内容" }
+                      }
+                    ]
+                 }
+              }
+    post:
+        description: 新增挂号规则信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "catalogue": { "type": "string", "description": "挂号规则目录" },
+                "name": { "type": "string", "description": "挂号规则名称" },
+                "rule": { "type": "string", "description": "挂号规则内容" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    put:
+        description: 更新挂号规则信息
+        is: [secured, dataError, serverError]
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "id": { "type": "string", "description": "挂号规则ID" },
+                "catalogue": { "type": "string", "description": "挂号规则分类" },
+                "name": { "type": "string", "description": "挂号规则名称" },
+                "rule": { "type": "string", "description": "挂号规则内容" }
+              }
+            }
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "string", "description": "空字符串"
+                }
+    delete:
+          description: 删除挂号规则信息
+          is: [secured, dataError, serverError]
+          queryParameters:
+            ids:
+              description: 挂号规则Id列表(使用","分割)
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "string", "description": "空字符串"
+                  }
+    /{id}:
+        uriParameters:
+          id:
+            description: 挂号规则ID
+            example: 1
+        get:
+          description: 取得挂号规则详细
+          is: [secured, serverError]
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "description": "挂号规则ID" },
+                      "catalogue": { "type": "string", "description": "挂号规则分类" },
+                      "name": { "type": "string", "description": "挂号规则名称" },
+                      "rule": { "type": "string", "description": "挂号规则内容" }
+                    }
+                  }
