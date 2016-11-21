@@ -1,0 +1,124 @@
+allprojects {
+    repositories {
+        maven {
+            url "${nexusUrl}/repository/maven-public"
+            credentials(PasswordCredentials) {
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'utf-8'
+        options.compilerArgs = ['-Xlint:-options']
+    }
+
+    tasks.withType(GroovyCompile) {
+        options.encoding = 'utf-8'
+        options.compilerArgs = ['-Xlint:-options']
+        groovyOptions.encoding = 'utf-8'
+    }
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "${nexusUrl}/repository/maven-public"
+            credentials(PasswordCredentials) {
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:1.2.4'
+    }
+}
+
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'maven'
+
+apply from: "$rootDir/configs/dependencies.gradle"
+apply from: "$rootDir/configs/dependencies-project.gradle"
+apply from: "$rootDir/configs/quality/codeQuality.gradle"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+group = 'com.proper'
+version = '0.1.0-isj-SNAPSHOT'
+
+gretty {
+    contextPath = 'pep'
+    debugSuspend = false
+    fileLogEnabled = false
+    jvmArgs = ['-XX:PermSize=256M', '-XX:MaxPermSize=1024m', '-Xms256m', '-Xmx1024m']
+    managedClassReload = true
+    serverConfigFile = "$project.projectDir/configs/tomcat/server.xml"
+    servletContainer = 'tomcat7'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusUrl}/repository/maven-releases") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+        }
+    }
+}
+
+test {
+    jvmArgs '-XX:MaxPermSize=256m'
+}
+
+dependencies {
+    compile libraries.jsoup,
+            libraries.slf4j_api,
+            libraries.spring_data_jpa,
+            libraries.spring_webmvc,
+            libraries.thumbnailator
+
+    compile libraries.pep_auth_jwt,
+            libraries.pep_core,
+            libraries.pep_core_mongo,
+            libraries.properpush_client
+
+    runtime libraries.commons_fileupload,
+            libraries.h2,
+            libraries.hibernate_hikaricp,
+            libraries.mysql_driver,
+            libraries.jackson_databind,
+            libraries.jaxws_rt,
+            libraries.logback_classic,
+            libraries.spring_orm,
+            libraries.spring_webmvc
+
+    runtime libraries.pep_auth_jwt,
+            libraries.pep_configs,
+            libraries.pep_cache_ehcache
+
+    testCompile libraries.groovy,
+                libraries.groovy_xml,
+                libraries.junit,
+                libraries.spock,
+                libraries.spring_test
+
+    testCompile libraries.pep_test
+
+    testRuntime libraries.aspectjweaver,
+                libraries.h2,
+                libraries.hibernate_entitymanager,
+                libraries.servlet_api,
+                libraries.spring_context_support
+
+    testRuntime libraries.pep_cache_ehcache
+}

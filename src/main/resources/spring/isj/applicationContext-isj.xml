@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:oxm="http://www.springframework.org/schema/oxm"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/oxm
+                           http://www.springframework.org/schema/oxm/spring-oxm.xsd" default-lazy-init="true">
+
+    <context:property-placeholder location="classpath:conf/isj/isj.properties" ignore-unresolvable="true"/>
+
+
+    <!-- Initialization for data source -->
+    <bean id="oa2HisDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${oa2His.ds.driverClassName}"/>
+        <property name="url" value="${oa2His.ds.url}"/>
+        <property name="username" value="${oa2His.ds.username}"/>
+        <property name="password" value="${oa2His.ds.password}"/>
+    </bean>
+
+
+    <bean id="regSJWebService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean" lazy-init="true">
+        <property name="serviceInterface" value="com.proper.enterprise.isj.webservices.service.RegSJService"/>
+        <property name="wsdlDocumentUrl" value="${isj.his.wsdlUrl}"/>
+        <property name="namespaceUri" value="${isj.his.namespaceUri}"/>
+        <property name="serviceName" value="${isj.his.serviceName}"/>
+        <property name="portName" value="${isj.his.portName}"/>
+    </bean>
+
+    <oxm:jaxb2-marshaller id="unmarshallNetTestResult">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.NetTestResult"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallRegInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.RegInfo"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallHosInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.HosInfo"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallDeptInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.DeptInfo"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallOrderReg">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.OrderReg"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallDoctorInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.DoctorInfo"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallPayList">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PayList"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallPayDetailList">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PayDetailList"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallPayOrder">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PayOrder"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallPayReg">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PayReg"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallUnifiedOrder">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.UnifiedOrderRes"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallUnifiedNotice">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.UnifiedNoticeRes"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallAliRefundPre">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.ali.model.AliRefundPreRes"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallTimeRegInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.TimeRegInfo"/>
+    </oxm:jaxb2-marshaller>
+    <oxm:jaxb2-marshaller id="unmarshallWeixinRefund">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.WeixinRefundRes"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallWeixinPayQueryRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallRefund">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.Refund"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallStopRegInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.StopRegInfo"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallRefundByHisInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.RefundByHisInfo"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallReportInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.ReportInfo"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallReportDetailInfo">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.ReportDetailInfo"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallPatRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PatRes"/>
+    </oxm:jaxb2-marshaller>
+
+    <!-- 推送工具类 -->
+    <bean id="properPushApp" class="com.proper.mobile.pushtools.PusherApp">
+        <property name="pushUrl" value="${properpushPushUrl}"/>
+        <property name="appkey" value="${properpushAppkey}"/>
+        <property name="secureKey" value="${properpushSecert}"/>
+        <property name="async" value="true"/>
+    </bean>
+
+    <oxm:jaxb2-marshaller id="unmarshallCreatePat">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PatRes"/>
+    </oxm:jaxb2-marshaller>
+
+
+    <bean id="hisAES" class="com.proper.enterprise.platform.core.utils.cipher.AES">
+        <constructor-arg name="mode" value="${isj.his.aes.mode}"/>
+        <constructor-arg name="padding" value="${isj.his.aes.padding}"/>
+        <constructor-arg name="key" value="${isj.his.aes.key}"/>
+    </bean>
+
+    <bean id="aliRSA" class="com.proper.enterprise.platform.core.utils.cipher.RSA">
+        <constructor-arg name="signAlgorithm" value="${isj.pay.ali.signAlgo}"/>
+    </bean>
+
+</beans>

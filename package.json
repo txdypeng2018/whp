@@ -1,0 +1,16 @@
+{
+  "name": "isj-webservices-proxy",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-shell": "^0.7.0",
+    "jit-grunt": "^0.9.1",
+    "md5": "2.2.1",
+    "soap": "0.16.0",
+    "xml2js": "0.4.17"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

@@ -1,0 +1,56 @@
+apply plugin: 'checkstyle'
+apply plugin: 'codenarc'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+
+def configDir = new File(projectDir, 'configs/quality')
+
+ext.checkstyleConfigDir = "$configDir/checkstyle"
+
+checkstyle {
+    configFile = new File(checkstyleConfigDir, "checkstyle.xml")
+    configProperties.checkstyleConfigDir = checkstyleConfigDir
+    toolVersion = '6.19'
+}
+
+codenarc {
+    configFile = new File(configDir, "codenarc.xml")
+    toolVersion = '0.25.2'
+}
+
+findbugs {
+	toolVersion = '3.0.1'
+    excludeFilter = file("$configDir/findbugs/excludeFilter.xml")
+}
+
+jacoco {
+    toolVersion = "0.7.7.201606060606"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+configurations.codenarc.resolutionStrategy.force(libraries.groovy_all)
+
+def excludePattern = 'org/activiti'
+def excludePatternAnt = "**/$excludePattern/**"
+
+tasks.withType(Checkstyle) {
+    exclude excludePatternAnt
+}
+
+tasks.withType(FindBugs) {
+    classes = classes.filter {
+        !it.path.contains(new File(excludePattern).path)
+    }
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
+build.dependsOn jacocoTestReport

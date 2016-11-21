@@ -1,0 +1,1960 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="NetTest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NetTestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NetTestResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreatePat">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreatePatResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreatePatResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHosInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHosInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetHosInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptInfoByParentID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptInfoByParentIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptInfoByParentIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDoctorInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDoctorInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDoctorInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRegInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRegInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRegInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTimeRegInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTimeRegInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTimeRegInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrderReg">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrderRegResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PayOrderRegResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderReg">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderRegResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OrderRegResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayReg">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayRegResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PayRegResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelReg">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelRegResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CancelRegResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Refund">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RefundResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundByHisToAPP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundByHisToAPPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RefundByHisToAPPResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryRegRecord">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryRegRecordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryRegRecordResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StopReg">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StopRegResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StopRegResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPayListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayDetail">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayDetailResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPayDetailResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayDetailAPP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPayDetailAPPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPayDetailAPPResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PayOrderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrderAPP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayOrderAPPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PayOrderAPPResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCheckOutReportList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCheckOutReportListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCheckOutReportListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNormalReportInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNormalReportInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNormalReportInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HisInterface">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HisInterfaceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HisInterfaceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="NetTestSoapIn">
+    <wsdl:part name="parameters" element="tns:NetTest" />
+  </wsdl:message>
+  <wsdl:message name="NetTestSoapOut">
+    <wsdl:part name="parameters" element="tns:NetTestResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatSoapIn">
+    <wsdl:part name="parameters" element="tns:CreatePat" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatSoapOut">
+    <wsdl:part name="parameters" element="tns:CreatePatResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHosInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHosInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDeptInfoByParentID" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptInfoByParentIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDeptInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDoctorInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDoctorInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRegInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRegInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTimeRegInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTimeRegInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegSoapIn">
+    <wsdl:part name="parameters" element="tns:PayOrderReg" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegSoapOut">
+    <wsdl:part name="parameters" element="tns:PayOrderRegResponse" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegSoapIn">
+    <wsdl:part name="parameters" element="tns:OrderReg" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegSoapOut">
+    <wsdl:part name="parameters" element="tns:OrderRegResponse" />
+  </wsdl:message>
+  <wsdl:message name="PayRegSoapIn">
+    <wsdl:part name="parameters" element="tns:PayReg" />
+  </wsdl:message>
+  <wsdl:message name="PayRegSoapOut">
+    <wsdl:part name="parameters" element="tns:PayRegResponse" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegSoapIn">
+    <wsdl:part name="parameters" element="tns:CancelReg" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegSoapOut">
+    <wsdl:part name="parameters" element="tns:CancelRegResponse" />
+  </wsdl:message>
+  <wsdl:message name="RefundSoapIn">
+    <wsdl:part name="parameters" element="tns:Refund" />
+  </wsdl:message>
+  <wsdl:message name="RefundSoapOut">
+    <wsdl:part name="parameters" element="tns:RefundResponse" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPSoapIn">
+    <wsdl:part name="parameters" element="tns:RefundByHisToAPP" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPSoapOut">
+    <wsdl:part name="parameters" element="tns:RefundByHisToAPPResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryRegRecord" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryRegRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="StopRegSoapIn">
+    <wsdl:part name="parameters" element="tns:StopReg" />
+  </wsdl:message>
+  <wsdl:message name="StopRegSoapOut">
+    <wsdl:part name="parameters" element="tns:StopRegResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPayList" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPayListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPayDetail" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPayDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPayDetailAPP" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPayDetailAPPResponse" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:PayOrder" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:PayOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPSoapIn">
+    <wsdl:part name="parameters" element="tns:PayOrderAPP" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPSoapOut">
+    <wsdl:part name="parameters" element="tns:PayOrderAPPResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCheckOutReportList" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCheckOutReportListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNormalReportInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNormalReportInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceSoapIn">
+    <wsdl:part name="parameters" element="tns:HisInterface" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceSoapOut">
+    <wsdl:part name="parameters" element="tns:HisInterfaceResponse" />
+  </wsdl:message>
+  <wsdl:message name="NetTestHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="NetTestHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayRegHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayRegHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="StopRegHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="StopRegHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceHttpGetIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="NetTestHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="NetTestHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreatePatHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetHosInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoByParentIDHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDoctorInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRegInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTimeRegInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderRegHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderRegHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayRegHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayRegHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CancelRegHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundByHisToAPPHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="QueryRegRecordHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="StopRegHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="StopRegHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPayDetailAPPHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PayOrderAPPHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCheckOutReportListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNormalReportInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceHttpPostIn">
+    <wsdl:part name="xml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="HisInterfaceHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="RegSjWebServiceSoap">
+    <wsdl:operation name="NetTest">
+      <wsdl:input message="tns:NetTestSoapIn" />
+      <wsdl:output message="tns:NetTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <wsdl:input message="tns:CreatePatSoapIn" />
+      <wsdl:output message="tns:CreatePatSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <wsdl:input message="tns:GetHosInfoSoapIn" />
+      <wsdl:output message="tns:GetHosInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <wsdl:input message="tns:GetDeptInfoByParentIDSoapIn" />
+      <wsdl:output message="tns:GetDeptInfoByParentIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <wsdl:input message="tns:GetDeptInfoSoapIn" />
+      <wsdl:output message="tns:GetDeptInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <wsdl:input message="tns:GetDoctorInfoSoapIn" />
+      <wsdl:output message="tns:GetDoctorInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <wsdl:input message="tns:GetRegInfoSoapIn" />
+      <wsdl:output message="tns:GetRegInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <wsdl:input message="tns:GetTimeRegInfoSoapIn" />
+      <wsdl:output message="tns:GetTimeRegInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <wsdl:input message="tns:PayOrderRegSoapIn" />
+      <wsdl:output message="tns:PayOrderRegSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <wsdl:input message="tns:OrderRegSoapIn" />
+      <wsdl:output message="tns:OrderRegSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <wsdl:input message="tns:PayRegSoapIn" />
+      <wsdl:output message="tns:PayRegSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <wsdl:input message="tns:CancelRegSoapIn" />
+      <wsdl:output message="tns:CancelRegSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:input message="tns:RefundSoapIn" />
+      <wsdl:output message="tns:RefundSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <wsdl:input message="tns:RefundByHisToAPPSoapIn" />
+      <wsdl:output message="tns:RefundByHisToAPPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <wsdl:input message="tns:QueryRegRecordSoapIn" />
+      <wsdl:output message="tns:QueryRegRecordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <wsdl:input message="tns:StopRegSoapIn" />
+      <wsdl:output message="tns:StopRegSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <wsdl:input message="tns:GetPayListSoapIn" />
+      <wsdl:output message="tns:GetPayListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <wsdl:input message="tns:GetPayDetailSoapIn" />
+      <wsdl:output message="tns:GetPayDetailSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <wsdl:input message="tns:GetPayDetailAPPSoapIn" />
+      <wsdl:output message="tns:GetPayDetailAPPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <wsdl:input message="tns:PayOrderSoapIn" />
+      <wsdl:output message="tns:PayOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <wsdl:input message="tns:PayOrderAPPSoapIn" />
+      <wsdl:output message="tns:PayOrderAPPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <wsdl:input message="tns:GetCheckOutReportListSoapIn" />
+      <wsdl:output message="tns:GetCheckOutReportListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <wsdl:input message="tns:GetNormalReportInfoSoapIn" />
+      <wsdl:output message="tns:GetNormalReportInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <wsdl:input message="tns:HisInterfaceSoapIn" />
+      <wsdl:output message="tns:HisInterfaceSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="RegSjWebServiceHttpGet">
+    <wsdl:operation name="NetTest">
+      <wsdl:input message="tns:NetTestHttpGetIn" />
+      <wsdl:output message="tns:NetTestHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <wsdl:input message="tns:CreatePatHttpGetIn" />
+      <wsdl:output message="tns:CreatePatHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <wsdl:input message="tns:GetHosInfoHttpGetIn" />
+      <wsdl:output message="tns:GetHosInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <wsdl:input message="tns:GetDeptInfoByParentIDHttpGetIn" />
+      <wsdl:output message="tns:GetDeptInfoByParentIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <wsdl:input message="tns:GetDeptInfoHttpGetIn" />
+      <wsdl:output message="tns:GetDeptInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <wsdl:input message="tns:GetDoctorInfoHttpGetIn" />
+      <wsdl:output message="tns:GetDoctorInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <wsdl:input message="tns:GetRegInfoHttpGetIn" />
+      <wsdl:output message="tns:GetRegInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <wsdl:input message="tns:GetTimeRegInfoHttpGetIn" />
+      <wsdl:output message="tns:GetTimeRegInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <wsdl:input message="tns:PayOrderRegHttpGetIn" />
+      <wsdl:output message="tns:PayOrderRegHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <wsdl:input message="tns:OrderRegHttpGetIn" />
+      <wsdl:output message="tns:OrderRegHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <wsdl:input message="tns:PayRegHttpGetIn" />
+      <wsdl:output message="tns:PayRegHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <wsdl:input message="tns:CancelRegHttpGetIn" />
+      <wsdl:output message="tns:CancelRegHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:input message="tns:RefundHttpGetIn" />
+      <wsdl:output message="tns:RefundHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <wsdl:input message="tns:RefundByHisToAPPHttpGetIn" />
+      <wsdl:output message="tns:RefundByHisToAPPHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <wsdl:input message="tns:QueryRegRecordHttpGetIn" />
+      <wsdl:output message="tns:QueryRegRecordHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <wsdl:input message="tns:StopRegHttpGetIn" />
+      <wsdl:output message="tns:StopRegHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <wsdl:input message="tns:GetPayListHttpGetIn" />
+      <wsdl:output message="tns:GetPayListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <wsdl:input message="tns:GetPayDetailHttpGetIn" />
+      <wsdl:output message="tns:GetPayDetailHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <wsdl:input message="tns:GetPayDetailAPPHttpGetIn" />
+      <wsdl:output message="tns:GetPayDetailAPPHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <wsdl:input message="tns:PayOrderHttpGetIn" />
+      <wsdl:output message="tns:PayOrderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <wsdl:input message="tns:PayOrderAPPHttpGetIn" />
+      <wsdl:output message="tns:PayOrderAPPHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <wsdl:input message="tns:GetCheckOutReportListHttpGetIn" />
+      <wsdl:output message="tns:GetCheckOutReportListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <wsdl:input message="tns:GetNormalReportInfoHttpGetIn" />
+      <wsdl:output message="tns:GetNormalReportInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <wsdl:input message="tns:HisInterfaceHttpGetIn" />
+      <wsdl:output message="tns:HisInterfaceHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="RegSjWebServiceHttpPost">
+    <wsdl:operation name="NetTest">
+      <wsdl:input message="tns:NetTestHttpPostIn" />
+      <wsdl:output message="tns:NetTestHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <wsdl:input message="tns:CreatePatHttpPostIn" />
+      <wsdl:output message="tns:CreatePatHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <wsdl:input message="tns:GetHosInfoHttpPostIn" />
+      <wsdl:output message="tns:GetHosInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <wsdl:input message="tns:GetDeptInfoByParentIDHttpPostIn" />
+      <wsdl:output message="tns:GetDeptInfoByParentIDHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <wsdl:input message="tns:GetDeptInfoHttpPostIn" />
+      <wsdl:output message="tns:GetDeptInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <wsdl:input message="tns:GetDoctorInfoHttpPostIn" />
+      <wsdl:output message="tns:GetDoctorInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <wsdl:input message="tns:GetRegInfoHttpPostIn" />
+      <wsdl:output message="tns:GetRegInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <wsdl:input message="tns:GetTimeRegInfoHttpPostIn" />
+      <wsdl:output message="tns:GetTimeRegInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <wsdl:input message="tns:PayOrderRegHttpPostIn" />
+      <wsdl:output message="tns:PayOrderRegHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <wsdl:input message="tns:OrderRegHttpPostIn" />
+      <wsdl:output message="tns:OrderRegHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <wsdl:input message="tns:PayRegHttpPostIn" />
+      <wsdl:output message="tns:PayRegHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <wsdl:input message="tns:CancelRegHttpPostIn" />
+      <wsdl:output message="tns:CancelRegHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:input message="tns:RefundHttpPostIn" />
+      <wsdl:output message="tns:RefundHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <wsdl:input message="tns:RefundByHisToAPPHttpPostIn" />
+      <wsdl:output message="tns:RefundByHisToAPPHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <wsdl:input message="tns:QueryRegRecordHttpPostIn" />
+      <wsdl:output message="tns:QueryRegRecordHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <wsdl:input message="tns:StopRegHttpPostIn" />
+      <wsdl:output message="tns:StopRegHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <wsdl:input message="tns:GetPayListHttpPostIn" />
+      <wsdl:output message="tns:GetPayListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <wsdl:input message="tns:GetPayDetailHttpPostIn" />
+      <wsdl:output message="tns:GetPayDetailHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <wsdl:input message="tns:GetPayDetailAPPHttpPostIn" />
+      <wsdl:output message="tns:GetPayDetailAPPHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <wsdl:input message="tns:PayOrderHttpPostIn" />
+      <wsdl:output message="tns:PayOrderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <wsdl:input message="tns:PayOrderAPPHttpPostIn" />
+      <wsdl:output message="tns:PayOrderAPPHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <wsdl:input message="tns:GetCheckOutReportListHttpPostIn" />
+      <wsdl:output message="tns:GetCheckOutReportListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <wsdl:input message="tns:GetNormalReportInfoHttpPostIn" />
+      <wsdl:output message="tns:GetNormalReportInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <wsdl:input message="tns:HisInterfaceHttpPostIn" />
+      <wsdl:output message="tns:HisInterfaceHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegSjWebServiceSoap" type="tns:RegSjWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NetTest">
+      <soap:operation soapAction="http://tempuri.org/NetTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <soap:operation soapAction="http://tempuri.org/CreatePat" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <soap:operation soapAction="http://tempuri.org/GetHosInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <soap:operation soapAction="http://tempuri.org/GetDeptInfoByParentID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <soap:operation soapAction="http://tempuri.org/GetDeptInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <soap:operation soapAction="http://tempuri.org/GetDoctorInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <soap:operation soapAction="http://tempuri.org/GetRegInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <soap:operation soapAction="http://tempuri.org/GetTimeRegInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <soap:operation soapAction="http://tempuri.org/PayOrderReg" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <soap:operation soapAction="http://tempuri.org/OrderReg" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <soap:operation soapAction="http://tempuri.org/PayReg" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <soap:operation soapAction="http://tempuri.org/CancelReg" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <soap:operation soapAction="http://tempuri.org/Refund" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <soap:operation soapAction="http://tempuri.org/RefundByHisToAPP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <soap:operation soapAction="http://tempuri.org/QueryRegRecord" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <soap:operation soapAction="http://tempuri.org/StopReg" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <soap:operation soapAction="http://tempuri.org/GetPayList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <soap:operation soapAction="http://tempuri.org/GetPayDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <soap:operation soapAction="http://tempuri.org/GetPayDetailAPP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <soap:operation soapAction="http://tempuri.org/PayOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <soap:operation soapAction="http://tempuri.org/PayOrderAPP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <soap:operation soapAction="http://tempuri.org/GetCheckOutReportList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <soap:operation soapAction="http://tempuri.org/GetNormalReportInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <soap:operation soapAction="http://tempuri.org/HisInterface" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RegSjWebServiceSoap12" type="tns:RegSjWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="NetTest">
+      <soap12:operation soapAction="http://tempuri.org/NetTest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <soap12:operation soapAction="http://tempuri.org/CreatePat" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetHosInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <soap12:operation soapAction="http://tempuri.org/GetDeptInfoByParentID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetDeptInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetDoctorInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetRegInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetTimeRegInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <soap12:operation soapAction="http://tempuri.org/PayOrderReg" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <soap12:operation soapAction="http://tempuri.org/OrderReg" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <soap12:operation soapAction="http://tempuri.org/PayReg" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <soap12:operation soapAction="http://tempuri.org/CancelReg" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <soap12:operation soapAction="http://tempuri.org/Refund" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <soap12:operation soapAction="http://tempuri.org/RefundByHisToAPP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <soap12:operation soapAction="http://tempuri.org/QueryRegRecord" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <soap12:operation soapAction="http://tempuri.org/StopReg" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <soap12:operation soapAction="http://tempuri.org/GetPayList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <soap12:operation soapAction="http://tempuri.org/GetPayDetail" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <soap12:operation soapAction="http://tempuri.org/GetPayDetailAPP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <soap12:operation soapAction="http://tempuri.org/PayOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <soap12:operation soapAction="http://tempuri.org/PayOrderAPP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <soap12:operation soapAction="http://tempuri.org/GetCheckOutReportList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <soap12:operation soapAction="http://tempuri.org/GetNormalReportInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <soap12:operation soapAction="http://tempuri.org/HisInterface" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RegSjWebServiceHttpGet" type="tns:RegSjWebServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="NetTest">
+      <http:operation location="/NetTest" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <http:operation location="/CreatePat" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <http:operation location="/GetHosInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <http:operation location="/GetDeptInfoByParentID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <http:operation location="/GetDeptInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <http:operation location="/GetDoctorInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <http:operation location="/GetRegInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <http:operation location="/GetTimeRegInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <http:operation location="/PayOrderReg" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <http:operation location="/OrderReg" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <http:operation location="/PayReg" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <http:operation location="/CancelReg" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <http:operation location="/Refund" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <http:operation location="/RefundByHisToAPP" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <http:operation location="/QueryRegRecord" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <http:operation location="/StopReg" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <http:operation location="/GetPayList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <http:operation location="/GetPayDetail" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <http:operation location="/GetPayDetailAPP" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <http:operation location="/PayOrder" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <http:operation location="/PayOrderAPP" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <http:operation location="/GetCheckOutReportList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <http:operation location="/GetNormalReportInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <http:operation location="/HisInterface" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RegSjWebServiceHttpPost" type="tns:RegSjWebServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="NetTest">
+      <http:operation location="/NetTest" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePat">
+      <http:operation location="/CreatePat" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHosInfo">
+      <http:operation location="/GetHosInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfoByParentID">
+      <http:operation location="/GetDeptInfoByParentID" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptInfo">
+      <http:operation location="/GetDeptInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDoctorInfo">
+      <http:operation location="/GetDoctorInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRegInfo">
+      <http:operation location="/GetRegInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeRegInfo">
+      <http:operation location="/GetTimeRegInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderReg">
+      <http:operation location="/PayOrderReg" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderReg">
+      <http:operation location="/OrderReg" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayReg">
+      <http:operation location="/PayReg" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReg">
+      <http:operation location="/CancelReg" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <http:operation location="/Refund" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundByHisToAPP">
+      <http:operation location="/RefundByHisToAPP" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryRegRecord">
+      <http:operation location="/QueryRegRecord" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopReg">
+      <http:operation location="/StopReg" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayList">
+      <http:operation location="/GetPayList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetail">
+      <http:operation location="/GetPayDetail" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayDetailAPP">
+      <http:operation location="/GetPayDetailAPP" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrder">
+      <http:operation location="/PayOrder" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayOrderAPP">
+      <http:operation location="/PayOrderAPP" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCheckOutReportList">
+      <http:operation location="/GetCheckOutReportList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNormalReportInfo">
+      <http:operation location="/GetNormalReportInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HisInterface">
+      <http:operation location="/HisInterface" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegSjWebService">
+    <wsdl:port name="RegSjWebServiceSoap" binding="tns:RegSjWebServiceSoap">
+      <soap:address location="http://172.28.30.80:8099/RegSjWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RegSjWebServiceSoap12" binding="tns:RegSjWebServiceSoap12">
+      <soap12:address location="http://172.28.30.80:8099/RegSjWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RegSjWebServiceHttpGet" binding="tns:RegSjWebServiceHttpGet">
+      <http:address location="http://172.28.30.80:8099/RegSjWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RegSjWebServiceHttpPost" binding="tns:RegSjWebServiceHttpPost">
+      <http:address location="http://172.28.30.80:8099/RegSjWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

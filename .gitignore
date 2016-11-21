@@ -2,18 +2,34 @@ platforms/
 plugins/
 www/
 
-# ignore node and bower root
-bower_components
-node_modules
+# ignore node and bower dependencies
+node_modules/
+bower_components/
 
 # ignore build folders
 .tmp
 dist/
 .sass-cache/
+.gradle
+build
+bin
 
-# ignore temp files
+# ignore temp files and folders
 .DS_Store
+.zip
+*.bak
 
-# ignore ide related
+# ignore IntellJ IDEA files and folders
 .idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ignore eclipse config files and folders
+.settings
 .project
+.classpath
+
+# ignore MANIFEST.MF
+MANIFEST.MF

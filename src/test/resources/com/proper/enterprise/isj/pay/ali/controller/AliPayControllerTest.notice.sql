@@ -1,0 +1,1 @@
+insert into isj_orderinfo (order_No, payment_Status, isdel, id, create_User_Id, create_Time, last_Modify_User_Id, last_Modify_Time,REGISTRATION_ID) values('112223345', 0, 0, '01234567890', '01234567890', '2016-08-23 09:00:00', '01234567890', '2016-08-23 10:00:00','1');

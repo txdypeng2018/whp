@@ -1,0 +1,39 @@
+isj-mysql:
+  image: mysql
+  volumes:
+    - ./mysql/data:/var/lib/mysql
+    - ./mysql/conf:/etc/mysql/conf.d
+  environment:
+    - MYSQL_ROOT_PASSWORD=Proper123
+    - MYSQL_DATABASE=isj
+    - MYSQL_USER=isj
+    - MYSQL_PASSWORD=isj
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+isj-mongo:
+  image: mongo
+  entrypoint: /code/devops/current/mongoEp.sh
+  volumes:
+    - ./mongo/data:/data/db
+    - ./mongo/devops/:/code/devops/current/
+isj-redis:
+  image: redis
+  command: redis-server --appendonly yes
+isj-pep:
+  image: propersoft/pep-isj
+  volumes:
+    - ./tomcat/webapps:/usr/local/tomcat/webapps
+    - ./tomcat/logs:/usr/local/tomcat/logs
+  links:
+    - isj-mongo:mongo
+    - isj-mysql:mysql
+    - isj-redis:redis
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=512M -XX:MaxPermSize=2048m -Xms512m -Xmx4096m
+isj-nginx:
+  image: nginx
+  volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+  links:
+    - isj-pep:pep
+  ports:
+    - "9090:80"
