@@ -165,6 +165,7 @@ libraries.mongodb_driver = "org.mongodb:mongodb-driver:${versions.mongo}"
 libraries.mysql_driver = 'org.mariadb.jdbc:mariadb-java-client:1.5.4'
 
 libraries.okhttp = 'com.squareup.okhttp3:okhttp:3.4.1'
+libraries.oracle_driver = 'com.oracle:ojdbc6:1.0'
 
 //libraries.poi = 'org.apache.poi:poi:3.7'
 

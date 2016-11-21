@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="5 seconds">
 
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/logFile.%d{yyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%5p [%d{yy-MM-dd-HH:mm:ss}] %40.40c:%4L - %m%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%5p [%d{yy-MM-dd-HH:mm:ss}] %40.40c:%4L - %m%n</pattern>
@@ -10,6 +20,7 @@
     <logger name="com.proper" level="debug" />
 
     <root level="error">
+        <appender-ref ref="file" />
         <appender-ref ref="console" />
     </root>
 

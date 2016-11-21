@@ -88,23 +88,24 @@ dependencies {
             libraries.thumbnailator
 
     compile libraries.pep_auth_jwt,
+            libraries.pep_cache_redis,
             libraries.pep_core,
             libraries.pep_core_mongo,
             libraries.properpush_client
 
     runtime libraries.commons_fileupload,
-            libraries.h2,
             libraries.hibernate_hikaricp,
             libraries.mysql_driver,
             libraries.jackson_databind,
             libraries.jaxws_rt,
             libraries.logback_classic,
+            libraries.oracle_driver,
+            libraries.spring_data_redis,
             libraries.spring_orm,
             libraries.spring_webmvc
 
     runtime libraries.pep_auth_jwt,
-            libraries.pep_configs,
-            libraries.pep_cache_ehcache
+            libraries.pep_configs
 
     testCompile libraries.groovy,
                 libraries.groovy_xml,
@@ -120,5 +121,5 @@ dependencies {
                 libraries.servlet_api,
                 libraries.spring_context_support
 
-    testRuntime libraries.pep_cache_ehcache
+    testRuntime libraries.pep_cache_redis
 }
