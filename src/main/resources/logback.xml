@@ -11,17 +11,22 @@
         </encoder>
     </appender>
 
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%5p [%d{yy-MM-dd-HH:mm:ss}] %40.40c:%4L - %m%n</pattern>
-        </encoder>
+    <appender name="mongo" class="com.proper.enterprise.platform.core.mongo.logback.MongoDBAppender">
+        <connectionSource class="com.proper.enterprise.platform.core.mongo.logback.MongoDBConnectionSource">
+            <host>172.28.235.115</host>
+            <port>27017</port>
+            <database>isj</database>
+            <username>isj</username>
+            <password>isj</password>
+            <collection>LOGS</collection>
+        </connectionSource>
     </appender>
 
-    <logger name="com.proper" level="debug" />
+    <logger name="com.proper" level="trace" />
 
-    <root level="error">
-        <appender-ref ref="file" />
-        <appender-ref ref="console" />
+    <root>
+        <appender-ref ref="file" level="info" />
+        <appender-ref ref="mongo" level="error" />
     </root>
 
 </configuration>
