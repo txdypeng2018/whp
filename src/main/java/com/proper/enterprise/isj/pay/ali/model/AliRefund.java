@@ -3,45 +3,45 @@ package com.proper.enterprise.isj.pay.ali.model;
 /**
  * 支付宝退款
  */
- public interface AliRefund {
+public interface AliRefund {
 
-     String getSign();
+    String getTradeNo();
 
-     void setSign(String sign);
+    void setTradeNo(String tradeNo);
 
-     String getTradeNo();
+    String getOutTradeNo();
 
-     void setTradeNo(String tradeNo);
+    void setOutTradeNo(String outTradeNo);
 
-     String getTotalFee();
+    String getOpenId();
 
-     void setTotalFee(String totalFee);
+    void setOpenId(String openId);
 
-     String getRefundResult();
+    String getBuyerLogonId();
 
-     void setRefundResult(String refundResult);
+    void setBuyerLogonId(String buyerLogonId);
 
-     String getNotifyTime();
+    String getFundChange();
 
-     void setNotifyTime(String notifyTime);
+    void setFundChange(String fundChange);
 
-     String getSignType();
+    String getRefundFee();
 
-     void setSignType(String signType);
+    void setRefundFee(String refundFee);
 
-     String getNotifyType();
+    String getGmtRefundPay();
 
-     void setNotifyType(String notifyType);
+    void setGmtRefundPay(String gmtRefundPay);
 
-     String getNotifyId();
+    String getStoreName();
 
-     void setNotifyId(String notifyId);
+    void setStoreName(String storeName);
 
-     String getBatchNo();
+    String getBuyerUserId();
 
-     void setBatchNo(String batchNo);
+    void setBuyerUserId(String buyerUserId);
 
-     String getSuccessNum();
+    String getSendBackFee();
 
-     void setSuccessNum(String successNum);
+    void setSendBackFee(String sendBackFee);
 }

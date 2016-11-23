@@ -1,6 +1,5 @@
 package com.proper.enterprise.isj.proxy.document;
 
-import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +10,8 @@ import com.proper.enterprise.isj.webservices.model.enmus.Sex;
 import com.proper.enterprise.isj.webservices.model.enmus.TimeFlag;
 import com.proper.enterprise.platform.core.converter.AESConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
  * Created by think on 2016/8/16 0016. 挂号单
@@ -231,6 +232,9 @@ public class RegistrationDocument extends BaseDocument {
      *
      */
     private String regLevelCode;
+
+
+    private String createTime = DateUtil.getTimestamp(true);
     /*------------医生出诊信息---------*/
 
     @Transient
@@ -705,5 +709,15 @@ public class RegistrationDocument extends BaseDocument {
 
     public void setRefundErrMsg(String refundErrMsg) {
         this.refundErrMsg = refundErrMsg;
+    }
+
+    @Override
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

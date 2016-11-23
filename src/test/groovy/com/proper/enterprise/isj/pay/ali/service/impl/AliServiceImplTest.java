@@ -76,10 +76,10 @@ public class AliServiceImplTest implements AliService {
         return aliRefundRepo.save((AliRefundEntity) aliRefund);
     }
 
-    @Override
-    public AliRefund findByTradeNo(String tradeNo) {
-        return aliRefundRepo.findByTradeNo(tradeNo);
-    }
+//    @Override
+//    public AliRefund findByTradeNo(String tradeNo) {
+//        return aliRefundRepo.findByTradeNo(tradeNo);
+//    }
 
     /**
      * 验证消息是否是支付宝发出的合法消息
@@ -107,37 +107,37 @@ public class AliServiceImplTest implements AliService {
         return null;
     }
 
-    /**
-     * 支付宝即时到账异步通知处理
-     *
-     * @param params
-     * @return
-     */
-    public boolean saveAliRefundProcess(Map<String, String> params) throws Exception {
-        boolean ret = false;
-        // 获取结果集信息
-        String resultDetails[] = params.get("result_details").split("\\^");
-        // 支付宝交易号
-        String tradeNo = resultDetails[0];
-        params.put("trade_no", tradeNo);
-        // 退款金额
-        String totalFee = resultDetails[1];
-        params.put("total_fee", totalFee);
-        // 退款结果
-        String refundResult = resultDetails[2];
-        params.put("refund_result", refundResult);
-        params.remove("result_details");
-        // 获取支付宝即时到账退款无密异步通知对象
-        AliRefundEntity aliRefundInfo = getAliRefundNoticeInfo(params);
-        logAliEntity(aliRefundInfo, AliRefundEntity.class);
-        // 查找记录
-        AliRefund refundInfo = this.findByTradeNo(aliRefundInfo.getTradeNo());
-        if (refundInfo == null) {
-            this.save(aliRefundInfo);
-            ret = true;
-        }
-        return ret;
-    }
+//    /**
+//     * 支付宝即时到账异步通知处理
+//     *
+//     * @param params
+//     * @return
+//     */
+//    public boolean saveAliRefundProcess(Map<String, String> params) throws Exception {
+//        boolean ret = false;
+//        // 获取结果集信息
+//        String resultDetails[] = params.get("result_details").split("\\^");
+//        // 支付宝交易号
+//        String tradeNo = resultDetails[0];
+//        params.put("trade_no", tradeNo);
+//        // 退款金额
+//        String totalFee = resultDetails[1];
+//        params.put("total_fee", totalFee);
+//        // 退款结果
+//        String refundResult = resultDetails[2];
+//        params.put("refund_result", refundResult);
+//        params.remove("result_details");
+//        // 获取支付宝即时到账退款无密异步通知对象
+//        AliRefundEntity aliRefundInfo = getAliRefundNoticeInfo(params);
+//        logAliEntity(aliRefundInfo, AliRefundEntity.class);
+//        // 查找记录
+//        AliRefund refundInfo = this.findByTradeNo(aliRefundInfo.getTradeNo());
+//        if (refundInfo == null) {
+//            this.save(aliRefundInfo);
+//            ret = true;
+//        }
+//        return ret;
+//    }
 
     /**
      * 支付宝异步通知内部逻辑处理

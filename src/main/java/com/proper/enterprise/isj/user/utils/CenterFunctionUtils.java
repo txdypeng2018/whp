@@ -118,6 +118,8 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_SAVE_ERR = "生成订单失败";
 
+    public final static String ORDER_ALREADY_PAID_ERR = "订单已经支付,不能重复支付";
+
     public final static String ORDER_NON_DATA_ERR = "没有要交费的项目";
 
     public final static String ORDER_DIFF_RECIPE_ERR = "缴费金额与当前待支付金额不符,请重新核对缴费单";
@@ -848,23 +850,19 @@ public class CenterFunctionUtils {
         Date dt = DateUtil.toDate(reg.getRegDate());
         Calendar cal = Calendar.getInstance();
         cal.setTime(DateUtil.toDate(DateUtil.toDateString(new Date())));
-        if(reg.getIsAppointment().equals(String.valueOf(1))&&reg.getStatusCode().equals(RegistrationStatusEnum.SUSPEND_MED.getValue())){
-            if (dt.compareTo(cal.getTime()) <= 0) {
-                canBack = false;
-            }else{
+        if (reg.getIsAppointment().equals(String.valueOf(1))
+                && reg.getStatusCode().equals(RegistrationStatusEnum.SUSPEND_MED.getValue())) {
+            if (dt.compareTo(cal.getTime()) > 0) {
                 canBack = true;
             }
-        }else{
-            if(reg.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())
-                    ||reg.getStatusCode().equals(RegistrationStatusEnum.PAID.getValue())){
+        } else {
+            if (reg.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())) {
+                canBack = true;
+            } else if (reg.getStatusCode().equals(RegistrationStatusEnum.PAID.getValue())) {
                 cal.add(Calendar.DAY_OF_MONTH, CANCEL_ORDER_BEFORE_NUM);
-                if (dt.compareTo(cal.getTime()) <= 0) {
-                    canBack = false;
-                }else{
+                if (dt.compareTo(cal.getTime()) > 0) {
                     canBack = true;
                 }
-            }else{
-                canBack = false;
             }
         }
         return canBack;

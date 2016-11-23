@@ -10,9 +10,9 @@ import java.util.*;
 
 import javax.xml.transform.stream.StreamSource;
 
-import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
-import com.proper.enterprise.isj.webservices.model.req.PayOrderReq;
+import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
@@ -86,10 +86,10 @@ public class AliServiceImpl implements AliService {
         return aliRefundRepo.save((AliRefundEntity) aliRefund);
     }
 
-    @Override
-    public AliRefund findByTradeNo(String tradeNo) {
-        return aliRefundRepo.findByTradeNo(tradeNo);
-    }
+//    @Override
+//    public AliRefund findByTradeNo(String tradeNo) {
+//        return aliRefundRepo.findByTradeNo(tradeNo);
+//    }
 
     /**
      * 验证消息是否是支付宝发出的合法消息
@@ -170,6 +170,12 @@ public class AliServiceImpl implements AliService {
         Object result = getAliRequestRes(res, bizContentMap, method, responseKey);
         if (result != null) {
             res = (AliRefundRes) result;
+            AliRefundEntity refund = new AliRefundEntity();
+            BeanUtils.copyProperties(res, refund);
+            AliRefund oldRefund =  aliRefundRepo.findByOutTradeNo(refund.getOutTradeNo());
+            if (oldRefund == null) {
+                aliRefundRepo.save(refund);
+            }
         } else {
             res = null;
         }
@@ -236,37 +242,37 @@ public class AliServiceImpl implements AliService {
         return res;
     }
 
-    /**
-     * 支付宝即时到账异步通知处理
-     *
-     * @param params
-     * @return
-     */
-    public boolean saveAliRefundProcess(Map<String, String> params) throws Exception {
-        boolean ret = false;
-        // 获取结果集信息
-        String resultDetails[] = params.get("result_details").split("\\^");
-        // 支付宝交易号
-        String tradeNo = resultDetails[0];
-        params.put("trade_no", tradeNo);
-        // 退款金额
-        String totalFee = resultDetails[1];
-        params.put("total_fee", totalFee);
-        // 退款结果
-        String refundResult = resultDetails[2];
-        params.put("refund_result", refundResult);
-        params.remove("result_details");
-        // 获取支付宝即时到账退款无密异步通知对象
-        AliRefundEntity aliRefundInfo = getAliRefundNoticeInfo(params);
-        logAliEntity(aliRefundInfo, AliRefundEntity.class);
-        // 查找记录
-        AliRefund refundInfo = this.findByTradeNo(aliRefundInfo.getTradeNo());
-        if (refundInfo == null) {
-            this.save(aliRefundInfo);
-            ret = true;
-        }
-        return ret;
-    }
+//    /**
+//     * 支付宝即时到账异步通知处理
+//     *
+//     * @param params
+//     * @return
+//     */
+//    public boolean saveAliRefundProcess(Map<String, String> params) throws Exception {
+//        boolean ret = false;
+//        // 获取结果集信息
+//        String resultDetails[] = params.get("result_details").split("\\^");
+//        // 支付宝交易号
+//        String tradeNo = resultDetails[0];
+//        params.put("trade_no", tradeNo);
+//        // 退款金额
+//        String totalFee = resultDetails[1];
+//        params.put("total_fee", totalFee);
+//        // 退款结果
+//        String refundResult = resultDetails[2];
+//        params.put("refund_result", refundResult);
+//        params.remove("result_details");
+//        // 获取支付宝即时到账退款无密异步通知对象
+//        AliRefundEntity aliRefundInfo = getAliRefundNoticeInfo(params);
+//        logAliEntity(aliRefundInfo, AliRefundEntity.class);
+//        // 查找记录
+//        AliRefund refundInfo = this.findByTradeNo(aliRefundInfo.getTradeNo());
+//        if (refundInfo == null) {
+//            this.save(aliRefundInfo);
+//            ret = true;
+//        }
+//        return ret;
+//    }
 
     /**
      * 支付宝异步通知内部逻辑处理
@@ -288,12 +294,12 @@ public class AliServiceImpl implements AliService {
         if (orderinfo != null) {
             // 支付异步通知处理
             if ("pay".equals(dealType)) {
+                AliEntity aliInfo = getAliNoticeInfo(params);
+                LOGGER.debug("获取支付宝Entity信息");
                 // 没有处理过订单
                 if (orderinfo.getPaymentStatus() < ConfCenter.getInt("isj.pay.paystatus.unconfirmpay")) {
                     LOGGER.debug("没有处理过的订单");
                     // 保存支付宝异步通知信息
-                    AliEntity aliInfo = getAliNoticeInfo(params);
-                    LOGGER.debug("获取支付宝Entity信息");
                     synchronized (orderinfo.getOrderNo()) {
                         try {
                             if (orderinfo.getFormClassInstance().equals(RegistrationDocument.class.getName())) {
@@ -305,17 +311,12 @@ public class AliServiceImpl implements AliService {
                                     LOGGER.debug("未查到已支付的挂号单信息,订单号:" + orderNo);
                                 }
                             } else {
-                                PayOrderReq payOrderReq = recipeService.convertAppInfo2PayOrder(orderinfo, aliInfo);
-                                if (payOrderReq != null) {
-                                    orderinfo = recipeService.saveUpdateRecipeAndOrder(orderinfo,
-                                            String.valueOf(PayChannel.ALIPAY.getCode()), payOrderReq);
-                                    if(orderinfo==null){
-                                        LOGGER.debug("缴费异常,订单号:" + orderNo);
-                                    }else{
-                                        orderService.save(orderinfo);
-                                    }
-                                }else{
-                                    LOGGER.debug("未查到已支付的缴费单信息,订单号:" + orderNo);
+                                orderinfo = recipeService.saveUpdateRecipeAndOrder(orderinfo.getOrderNo(),
+                                        String.valueOf(PayChannel.ALIPAY.getCode()), aliInfo);
+                                if (orderinfo == null) {
+                                    LOGGER.debug("缴费异常,订单号:" + orderNo);
+                                } else {
+                                    orderService.save(orderinfo);
                                 }
                             }
                         } catch (Exception e) {
@@ -328,21 +329,23 @@ public class AliServiceImpl implements AliService {
                     // orderinfo.setOrderStatus(String.valueOf(2));
                     // orderinfo.setPayWay(String.valueOf(2));
                     // orderService.save(orderinfo);
-                    logAliEntity(aliInfo, AliEntity.class);
-                    // 保存支付宝异步通知信息
-                    save(aliInfo);
                     LOGGER.debug("更新订单状态为支付成功");
-
                     Order orderinfoRet = orderService.findByOrderNo(orderNo);
                     LOGGER.debug("orderinfoRet.getPaymentStatus():" + orderinfoRet.getPaymentStatus());
-
                     ret = true;
                     // 已经成功处理过的订单
                 } else if (orderinfo.getPaymentStatus() == ConfCenter.getInt("isj.pay.paystatus.payed")) {
                     LOGGER.debug("已经成功处理过的支付订单");
                     ret = true;
                 }
-
+                if (aliInfo != null) {
+                    logAliEntity(aliInfo, AliEntity.class);
+                    // 保存支付宝异步通知信息
+                    Ali ali = this.findByOutTradeNo(aliInfo.getOutTradeNo());
+                    if (ali == null) {
+                        save(aliInfo);
+                    }
+                }
                 // 退款异步通知处理
             } else if ("refund".equals(dealType)) {
                 // 没有处理过订单

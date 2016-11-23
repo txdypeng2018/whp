@@ -16,11 +16,7 @@ import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.entity.AliEntity;
-import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
 import com.proper.enterprise.isj.pay.ali.service.AliService;
-import com.proper.enterprise.isj.pay.weixin.entity.WeixinEntity;
-import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeDetailAllDocument;
@@ -37,7 +33,6 @@ import com.proper.enterprise.isj.user.utils.IdcardUtils;
 import com.proper.enterprise.isj.webservices.WebServicesClient;
 import com.proper.enterprise.isj.webservices.model.enmus.*;
 import com.proper.enterprise.isj.webservices.model.req.PayListReq;
-import com.proper.enterprise.isj.webservices.model.req.PayOrderReq;
 import com.proper.enterprise.isj.webservices.model.res.PayList;
 import com.proper.enterprise.isj.webservices.model.res.ResModel;
 import com.proper.enterprise.isj.webservices.model.res.paylist.Pay;
@@ -81,82 +76,8 @@ public class RecipeServiceImpl {
         return recipeOrderRepository.findOne(id);
     }
 
-
-    public PayOrderReq convertAppInfo2PayOrder(Order order, Object infoObj) throws Exception {
-        PayOrderReq payOrderReq = null;
-        int fee = 0;
-        RecipeOrderDocument recipeOrder = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
-        try {
-            String hosId = CenterFunctionUtils.getHosId();
-            RecipePaidDetailDocument nonPaid =  recipeOrder.getRecipeNonPaidDetail();
-            BigDecimal totalFee = new BigDecimal(nonPaid.getAmount());
-            payOrderReq = new PayOrderReq();
-            payOrderReq.setHosId(hosId);
-            payOrderReq.setHospClinicCode(recipeOrder.getClinicCode());
-            payOrderReq.setHospSequence(nonPaid.getHospSequence());
-            fee = totalFee.intValue();
-            if (infoObj instanceof AliEntity) {
-                AliEntity aliEntity = (AliEntity) infoObj;
-                payOrderReq.setOrderId(aliEntity.getOutTradeNo());
-                payOrderReq.setSerialNum(aliEntity.getTradeNo());
-                payOrderReq.setPayDate(aliEntity.getNotifyTime().split(" ")[0]);
-                payOrderReq.setPayTime(aliEntity.getNotifyTime().split(" ")[1]);
-                payOrderReq.setPayChannelId(PayChannel.ALIPAY);
-                payOrderReq.setPayResCode(aliEntity.getTradeStatus());
-                payOrderReq.setMerchantId("");
-                payOrderReq.setTerminalId("");
-                payOrderReq.setPayAccount(aliEntity.getBuyerId());
-            }else if(infoObj instanceof AliPayTradeQueryRes){
-                AliPayTradeQueryRes aliPayQuery = (AliPayTradeQueryRes)infoObj;
-                payOrderReq.setOrderId(aliPayQuery.getOutTradeNo());
-                payOrderReq.setSerialNum(aliPayQuery.getTradeNo());
-                payOrderReq.setPayDate(aliPayQuery.getSendPayDate().split(" ")[0]);
-                payOrderReq.setPayTime(aliPayQuery.getSendPayDate().split(" ")[1]);
-                payOrderReq.setPayChannelId(PayChannel.ALIPAY);
-                payOrderReq.setPayResCode(aliPayQuery.getTradeStatus());
-                payOrderReq.setMerchantId("");
-                payOrderReq.setTerminalId("");
-                payOrderReq.setPayAccount(aliPayQuery.getBuyerLogonId());
-            } else if (infoObj instanceof WeixinEntity) {
-                WeixinEntity weixinEntity = (WeixinEntity) infoObj;
-                payOrderReq.setOrderId(weixinEntity.getOutTradeNo());
-                payOrderReq.setSerialNum(weixinEntity.getTransactionId());
-                Date timeEnd = DateUtil.toDate(weixinEntity.getTimeEnd(), "yyyyMMddHHmmss");
-                payOrderReq.setPayDate(DateUtil.toTimestamp(timeEnd).split(" ")[0]);
-                payOrderReq.setPayTime(DateUtil.toTimestamp(timeEnd).split(" ")[1]);
-                payOrderReq.setPayChannelId(PayChannel.WECHATPAY);
-                payOrderReq.setPayResCode(weixinEntity.getResultCode());
-                payOrderReq.setMerchantId(weixinEntity.getMchId());
-                payOrderReq.setTerminalId(weixinEntity.getDeviceInfo());
-                payOrderReq.setPayAccount(weixinEntity.getAppid());
-            }else if(infoObj instanceof WeixinPayQueryRes){
-                WeixinPayQueryRes weixinPayQuery = (WeixinPayQueryRes)infoObj;
-                payOrderReq.setOrderId(weixinPayQuery.getOutTradeNo());
-                payOrderReq.setSerialNum(weixinPayQuery.getTransactionId());
-                Date timeEnd = DateUtil.toDate(weixinPayQuery.getTimeEnd(), "yyyyMMddHHmmss");
-                payOrderReq.setPayDate(DateUtil.toTimestamp(timeEnd).split(" ")[0]);
-                payOrderReq.setPayTime(DateUtil.toTimestamp(timeEnd).split(" ")[1]);
-                payOrderReq.setPayChannelId(PayChannel.WECHATPAY);
-                payOrderReq.setPayResCode(weixinPayQuery.getResultCode());
-                payOrderReq.setMerchantId(weixinPayQuery.getMchId());
-                payOrderReq.setTerminalId(weixinPayQuery.getDeviceInfo());
-                payOrderReq.setPayAccount(weixinPayQuery.getAppid());
-            }
-            payOrderReq.setBankNo("");
-            payOrderReq.setPayResDesc("");
-            payOrderReq.setPayTotalFee(fee);
-            payOrderReq.setPayBehooveFee(fee);
-            payOrderReq.setPayActualFee(fee);
-            payOrderReq.setPayMiFee(0);
-            payOrderReq.setOperatorId("");
-            payOrderReq.setReceiptId("");
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        return payOrderReq;
+    public RecipeOrderDocument saveRecipeOrderDocument(RecipeOrderDocument recipeOrder) {
+        return recipeOrderRepository.save(recipeOrder);
     }
 
     public void sendRecipePaidFailMsg(RecipeOrderDocument recipeOrder, SendPushMsgEnum msg)
@@ -187,6 +108,7 @@ public class RecipeServiceImpl {
             LOGGER.debug("未找到需要:"+payListRes.getReturnMsg()+",门诊流水号:"+clinicCode);
             throw new RecipeException(CenterFunctionUtils.ORDER_NON_DATA_ERR);
         }
+
         List<RecipeDetailAllDocument> detailList = new ArrayList<>();
         RecipeDetailAllDocument dt = null;
         BigDecimal bigDecimal = new BigDecimal("0");
@@ -281,7 +203,7 @@ public class RecipeServiceImpl {
     }
 
     public RecipeOrderDocument createRecipeOrder(UserInfoDocument userInfo,  BasicInfoDocument info, String clinicCode,
-            RecipePaidDetailDocument paidDetal) {
+            RecipePaidDetailDocument paidDetal) throws RecipeException {
         RecipeOrderDocument recipeOrder = recipeOrderRepository.getByClinicCode(clinicCode);
         if (recipeOrder == null) {
             recipeOrder = new RecipeOrderDocument();
@@ -291,8 +213,14 @@ public class RecipeServiceImpl {
         } else {
             RecipePaidDetailDocument paid = recipeOrder.getRecipeNonPaidDetail();
             if (paid != null) {
-                Order order = orderService.findByOrderNo(paid.getOrderNum());
-                orderService.deleteOrder(order);
+                String payWay = paid.getPayChannelId();
+                boolean paidFlag = orderService.checkOrderIsPay(payWay, paid.getOrderNum());
+                if(!paidFlag){
+                    Order order = orderService.findByOrderNo(paid.getOrderNum());
+                    orderService.deleteOrder(order);
+                }else{
+                  throw new RecipeException(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                }
             }
         }
         recipeOrder.setOperatorPhone(userInfo.getPhone());

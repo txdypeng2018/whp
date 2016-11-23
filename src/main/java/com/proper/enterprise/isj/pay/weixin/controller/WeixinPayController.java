@@ -1,10 +1,28 @@
 package com.proper.enterprise.isj.pay.weixin.controller;
 
+import java.io.*;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
+import org.springframework.web.bind.annotation.*;
+
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
+import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
-import com.proper.enterprise.isj.pay.weixin.constants.WeixinConstants;
 import com.proper.enterprise.isj.pay.weixin.adapter.SignAdapter;
+import com.proper.enterprise.isj.pay.weixin.constants.WeixinConstants;
 import com.proper.enterprise.isj.pay.weixin.model.*;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
@@ -16,22 +34,8 @@ import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.Marshaller;
-import org.springframework.oxm.Unmarshaller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/pay/weixin")
@@ -49,6 +53,9 @@ public class WeixinPayController extends BaseController {
     WeixinService weixinService;
 
     @Autowired
+    AliService aliService;
+
+    @Autowired
     OrderService orderService;
 
     @Autowired
@@ -56,7 +63,6 @@ public class WeixinPayController extends BaseController {
 
     @Autowired
     RegistrationService registrationService;
-
 
     /**
      * 获取微信预支付ID信息
@@ -126,24 +132,37 @@ public class WeixinPayController extends BaseController {
             // 获取预支付ID信息失败
             try {
                 Order order = orderService.findByOrderNo(uoReq.getOutTradeNo());
-                if(order!=null){
-                    if(order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())){
-                        boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(), String.valueOf(uoReq.getTotalFee()), PayChannel.WECHATPAY);
-                        if (!flag) {
+                if (order != null) {
+                    if (order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())) {
+                        boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(),
+                                String.valueOf(uoReq.getTotalFee()), PayChannel.WECHATPAY);
+                        RecipeOrderDocument recipe = recipeService
+                                .getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+                        if (!flag || (recipe != null
+                                && StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                             resObj.setResultCode("-1");
                             resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
                         }
-                    }else{
-                        RegistrationDocument reg= registrationService.getRegistrationDocumentById(order.getFormId());
-                        if(reg!=null){
-                            reg.setPayChannelId(String.valueOf(PayChannel.WECHATPAY.getCode()));
-                            registrationService.saveRegistrationDocument(reg);
-                        }else{
+                    } else {
+                        RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
+                        if (reg != null) {
+                            String payWay = reg.getPayChannelId();
+                            boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                            if (!paidFlag) {
+                                reg.setPayChannelId(String.valueOf(PayChannel.WECHATPAY.getCode()));
+                                registrationService.saveRegistrationDocument(reg);
+                                order.setPayWay(String.valueOf(PayChannel.WECHATPAY.getCode()));
+                                orderService.save(order);
+                            } else {
+                                resObj.setResultCode("-1");
+                                resObj.setResultMsg(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                            }
+                        } else {
                             resObj.setResultCode("-1");
                             resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
                         }
                     }
-                }else{
+                } else {
                     resObj.setResultCode("-1");
                     resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
                 }

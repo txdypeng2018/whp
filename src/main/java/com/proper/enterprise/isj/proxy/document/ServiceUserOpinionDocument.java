@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.document;
 
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -44,6 +45,8 @@ public class ServiceUserOpinionDocument extends BaseDocument {
      * 用户手机号
      */
     private String userTel;
+
+    private String createTime = DateUtil.getTimestamp(true);
 
     public String getUserId() {
         return userId;
@@ -115,5 +118,15 @@ public class ServiceUserOpinionDocument extends BaseDocument {
 
     public void setUserTel(String userTel) {
         this.userTel = userTel;
+    }
+
+    @Override
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

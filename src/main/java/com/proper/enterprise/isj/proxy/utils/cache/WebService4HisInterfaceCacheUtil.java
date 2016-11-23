@@ -153,24 +153,32 @@ public class WebService4HisInterfaceCacheUtil {
 
     @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
     public ResModel<ReportInfo> getCheckOutReportList(ReportListReq reportListReq) throws Exception {
-        return cacheOutReportList(reportListReq);
+        ResModel<ReportInfo> res = cacheOutReportList(reportListReq);
+        if(res.getReturnCode()!= ReturnCode.SUCCESS){
+            this.evictCacheReportList(reportListReq);
+        }
+        return res;
     }
 
     @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
     public void evictCacheReportList(ReportListReq reportListReq) throws Exception {
     }
 
-    @CachePut(key = "'report_detail_reportid_'+#p0.reportId")
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_900, key = "'report_detail_reportid_'+#p0.reportId")
     public ResModel<ReportDetailInfo> cacheOutReportInfo(ReportInfoReq reportInfoReq) throws Exception {
         return webServicesClient.getNormalReportInfo(reportInfoReq);
     }
 
-    @Cacheable(key = "'report_detail_reportid_'+#p0.reportId")
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_900, key = "'report_detail_reportid_'+#p0.reportId")
     public ResModel<ReportDetailInfo> getNormalReportInfo(ReportInfoReq reportInfoReq) throws Exception {
-        return cacheOutReportInfo(reportInfoReq);
+        ResModel<ReportDetailInfo> res = cacheOutReportInfo(reportInfoReq);
+        if (res.getReturnCode() != ReturnCode.SUCCESS) {
+            this.evictCacheReportInfo(reportInfoReq);
+        }
+        return res;
     }
 
-    @CacheEvict(key = "'report_detail_reportid_'+#p0.reportId")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_900, key = "'report_detail_reportid_'+#p0.reportId")
     public void evictCacheReportInfo(ReportInfoReq reportInfoReq) throws Exception {
     }
 

@@ -33,7 +33,7 @@ public interface RecipeService {
     // outpatientNum, String orderNum,
     // BigDecimal totalBig, String recipeNumStr);
 
-    Order saveUpdateRecipeAndOrder(Order order, String channelId, PayOrderReq payOrderReq) throws Exception;
+    Order saveUpdateRecipeAndOrder(String orderNo, String channelId, Object infoObj) throws Exception;
 
     RecipeOrderDocument getRecipeOrderDocumentById(String id);
 
