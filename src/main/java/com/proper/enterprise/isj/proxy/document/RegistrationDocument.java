@@ -224,6 +224,11 @@ public class RegistrationDocument extends BaseDocument {
     private String regId;
 
     /**
+     * 号点序号
+     */
+    private String regNum;
+
+    /**
      * 排班类别
      */
     private String regLevelName;
@@ -719,5 +724,13 @@ public class RegistrationDocument extends BaseDocument {
     @Override
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRegNum() {
+        return regNum;
+    }
+
+    public void setRegNum(String regNum) {
+        this.regNum = regNum;
     }
 }

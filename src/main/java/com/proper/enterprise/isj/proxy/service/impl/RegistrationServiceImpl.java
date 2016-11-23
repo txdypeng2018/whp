@@ -253,6 +253,7 @@ public class RegistrationServiceImpl {
                     saveReg.setTimeFlag(TimeFlag.NIGHT);
                 }
                 saveReg.setRegId(timeReg.getRegId());
+                saveReg.setRegNum(timeReg.getRegNum());
             }
         }
         List<RegTime> regTimeList = tempReg.getRegTimeList();
