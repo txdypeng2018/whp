@@ -22,4 +22,14 @@ public interface OrderService {
 	Order saveCreateOrder(Object formOrder);
 
 	void deleteOrder(Order order);
+
+
+	/**
+     * 查询订单是否已支付
+     * 
+     * @param payChannelId
+     * @param orderNum
+     * @return
+     */
+    boolean checkOrderIsPay(String payChannelId, String orderNum);
 }

@@ -15,10 +15,10 @@ class AliPayControllerTest extends AbstractTest {
 
     @Test
     //@Sql
-    @NoTx
+    //@NoTx
     public void notice() {
         println 1
-       // post('/pay/ali/noticeInfo?sign_type=RSA&sign=GF1Jyd0SwSA2TrrFBV+TObpzylxLYMvLY4diuKjJbhv/EjwCH2yfMDkfv+W7aSrg/V9epuvvPTEkdoFraDWch2HuFhYPqcU2dbetSfIF1ClIUyb8IMrVU0nMty5Y1XL1W1lJzNNpw4lR+Z4ouKA0NB2EWQJMBXaQ1othJ5yoYxw=&body=挂号&buyer_email=markr512@163.com&buyer_id=2088102124299026&discount=0.00&gmt_create=2016-09-12 00:45:38&gmt_payment=2016-09-12 00:45:39&is_total_fee_adjust=N&notify_id=080b83096c49c7351bb9634a140cc4eg5m&notify_time=2016-09-12 00:45:39&notify_type=trade_status_sync&out_trade_no=20160912004515318357019411284993&payment_type=1&price=0.01&quantity=1&seller_email=zfb_sj@sj-hospital.org&seller_id=2088021705112890&subject=费用&total_fee=0.01&trade_no=2016091221001004020265276627&trade_status=TRADE_SUCCESS&use_coupon=N', '', HttpStatus.CREATED)
+        //post('/pay/ali/noticeInfo?sign_type=RSA&sign=ZTdatdofVuuavFVvZv7WIQdjDI5s4vcycR0gBCVu/UstfiZWUbJEC0PF5BymaWRuwycVrmnpQT4KJmj6gdGeSOBPhkmEaKNGF5andDxVbvicotID2WY8ZzD362SlzcBw0tM9ADLK6hjn65Gie8P9gqfNuWN8j5XnbCXA7qPACmQ=&body=诊间缴费&buyer_email=markr512@163.com&buyer_id=2088102124299026&discount=0.00&gmt_create=2016-11-22 14:10:59&gmt_payment=2016-11-22 14:10:59&is_total_fee_adjust=N&notify_id=56a10b335eaea55a1d4e7e8c4928df8g5m&notify_time=2016-11-22 14:11:00&notify_type=trade_status_sync&out_trade_no=2016112214104819158269&payment_type=1&price=1.00&quantity=1&seller_email=zfb_sj@sj-hospital.org&seller_id=2088021705112890&subject=诊间缴费&total_fee=1.00&trade_no=2016112221001004020279287509&trade_status=TRADE_SUCCESS&use_coupon=N', '', HttpStatus.CREATED)
     }
     
 }

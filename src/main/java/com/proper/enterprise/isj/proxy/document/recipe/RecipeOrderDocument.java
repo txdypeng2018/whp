@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.document.recipe;
 
 import com.proper.enterprise.platform.core.converter.AESConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -52,6 +53,8 @@ public class RecipeOrderDocument extends BaseDocument {
      * 操作人手机
      */
     private String operatorPhone;
+
+    private String createTime = DateUtil.getTimestamp(true);
 
     /*-----------------操作人信息-----------*/
 
@@ -190,5 +193,15 @@ public class RecipeOrderDocument extends BaseDocument {
 
     public void setRecipePaidFailDetailList(List<RecipePaidDetailDocument> recipePaidFailDetailList) {
         this.recipePaidFailDetailList = recipePaidFailDetailList;
+    }
+
+    @Override
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

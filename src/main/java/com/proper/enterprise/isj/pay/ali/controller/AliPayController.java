@@ -1,23 +1,12 @@
 package com.proper.enterprise.isj.pay.ali.controller;
 
-import com.proper.enterprise.isj.order.model.Order;
-import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.constants.AliConstants;
-import com.proper.enterprise.isj.pay.ali.model.AliRefundDetailReq;
-import com.proper.enterprise.isj.pay.ali.model.UnifiedOrderReq;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
-import com.proper.enterprise.isj.pay.model.PayResultRes;
-import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
-import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
-import com.proper.enterprise.isj.proxy.service.RecipeService;
-import com.proper.enterprise.isj.proxy.service.RegistrationService;
-import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
-import com.proper.enterprise.platform.core.PEPConstants;
-import com.proper.enterprise.platform.core.controller.BaseController;
-import com.proper.enterprise.platform.core.utils.StringUtil;
-import com.proper.enterprise.platform.core.utils.cipher.RSA;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +19,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.util.*;
+import com.proper.enterprise.isj.order.model.Order;
+import com.proper.enterprise.isj.order.service.OrderService;
+import com.proper.enterprise.isj.pay.ali.constants.AliConstants;
+import com.proper.enterprise.isj.pay.ali.model.AliRefundDetailReq;
+import com.proper.enterprise.isj.pay.ali.model.UnifiedOrderReq;
+import com.proper.enterprise.isj.pay.ali.service.AliService;
+import com.proper.enterprise.isj.pay.model.PayResultRes;
+import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
+import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
+import com.proper.enterprise.isj.proxy.service.RecipeService;
+import com.proper.enterprise.isj.proxy.service.RegistrationService;
+import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
+import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.core.PEPConstants;
+import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.utils.StringUtil;
+import com.proper.enterprise.platform.core.utils.cipher.RSA;
 
 @RestController
 @RequestMapping(value = "/pay/ali")
@@ -43,6 +47,9 @@ public class AliPayController extends BaseController {
 
     @Autowired
     AliService aliService;
+    
+    @Autowired
+    WeixinService weixinService;
 
     @Autowired
     OrderService orderService;
@@ -89,15 +96,26 @@ public class AliPayController extends BaseController {
                 if(order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())){
                     String totalFee = (new BigDecimal(uoReq.getTotalFee()).multiply(new BigDecimal("100"))).toString();
                     boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(), totalFee, PayChannel.ALIPAY);
-                    if (!flag) {
+                    RecipeOrderDocument recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+                    if (!flag
+                            || (recipe != null && StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                         resObj.setResultCode("-1");
                         resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
                     }
                 }else{
-                    RegistrationDocument reg= registrationService.getRegistrationDocumentById(order.getFormId());
-                    if(reg!=null){
-                        reg.setPayChannelId(String.valueOf(PayChannel.ALIPAY.getCode()));
-                        registrationService.saveRegistrationDocument(reg);
+                    RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
+                    if (reg != null) {
+                        String payWay = reg.getPayChannelId();
+                        boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                        if (!paidFlag) {
+                            reg.setPayChannelId(String.valueOf(PayChannel.ALIPAY.getCode()));
+                            registrationService.saveRegistrationDocument(reg);
+                            order.setPayWay(String.valueOf(PayChannel.ALIPAY.getCode()));
+                            orderService.save(order);
+                        } else {
+                            resObj.setResultCode("-1");
+                            resObj.setResultMsg(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                        }
                     }else{
                         resObj.setResultCode("-1");
                         resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
@@ -178,9 +196,6 @@ public class AliPayController extends BaseController {
                     // 请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 }
                 // 退款异步通知结果
-            } else if (StringUtil.isNotNull(request.getParameter("result_details"))) {
-                // 处理退款异步通知结果
-                ret = aliService.saveAliRefundProcess(params);
             }
         }
 

@@ -2,6 +2,12 @@ package com.proper.enterprise.isj.order.service.impl;
 
 import java.util.Date;
 
+import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
+import com.proper.enterprise.isj.pay.ali.service.AliService;
+import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
+import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
+import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
+import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +31,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepository orderRepo;
+
+    @Autowired
+    AliService aliService;
+
+    @Autowired
+    WeixinService weixinService;
 
     @Autowired
     private WebServicesClient webServicesClient;
@@ -89,5 +101,26 @@ public class OrderServiceImpl implements OrderService {
         if(order!=null){
             orderRepo.delete((OrderEntity)order);
         }
+    }
+
+    @Override
+    public boolean checkOrderIsPay(String payChannelId, String orderNum) {
+        boolean paidFlag = false;
+        if (StringUtil.isNotEmpty(payChannelId)) {
+            if (payChannelId.equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
+                AliPayTradeQueryRes query = aliService.getAliPayTradeQueryRes(orderNum);
+                if (query != null && query.getCode().equals("10000")
+                        && query.getTradeStatus().equals("TRADE_SUCCESS")) {
+                    paidFlag = true;
+                }
+            } else if (payChannelId.equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
+                WeixinPayQueryRes wQuery = weixinService.getWeixinPayQueryRes(orderNum);
+                if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")
+                        && wQuery.getTradeState().equals("SUCCESS")) {
+                    paidFlag = true;
+                }
+            }
+        }
+        return paidFlag;
     }
 }

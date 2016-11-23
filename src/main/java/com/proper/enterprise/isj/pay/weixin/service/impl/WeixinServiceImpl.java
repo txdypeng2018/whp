@@ -39,7 +39,6 @@ import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
-import com.proper.enterprise.isj.webservices.model.req.PayOrderReq;
 import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
@@ -108,11 +107,11 @@ public class WeixinServiceImpl implements WeixinService {
         Order orderInfo = orderService.findByOrderNo(orderNo);
         // 存在订单
         if (orderInfo != null) {
+            // 保存微信异步通知信息
+            WeixinEntity weixinInfo = getWeixinNoticeInfo(res);
             // 没有处理过订单
             if (orderInfo.getPaymentStatus() < ConfCenter.getInt("isj.pay.paystatus.unconfirmpay")) {
                 synchronized (orderInfo.getOrderNo()) {
-                    // 保存微信异步通知信息
-                    WeixinEntity weixinInfo = getWeixinNoticeInfo(res);
                     try {
                         if (orderInfo.getFormClassInstance().equals(RegistrationDocument.class.getName())) {
                             PayRegReq payReg = registrationService.convertAppInfo2PayReg(weixinInfo,
@@ -121,28 +120,31 @@ public class WeixinServiceImpl implements WeixinService {
                                 registrationService.saveUpdateRegistrationAndOrder(payReg);
                             }
                         } else {
-                            PayOrderReq payOrderReq = recipeService.convertAppInfo2PayOrder(orderInfo, weixinInfo);
-                            if (payOrderReq != null) {
-                                orderInfo = recipeService.saveUpdateRecipeAndOrder(orderInfo,
-                                        String.valueOf(PayChannel.WECHATPAY.getCode()), payOrderReq);
-                                if (orderInfo == null) {
-                                    LOGGER.debug("缴费异常,订单号:" + orderNo);
-                                } else {
-                                    orderService.save(orderInfo);
-                                }
+                            orderInfo = recipeService.saveUpdateRecipeAndOrder(orderInfo.getOrderNo(),
+                                    String.valueOf(PayChannel.WECHATPAY.getCode()), weixinInfo);
+                            if (orderInfo == null) {
+                                LOGGER.debug("缴费异常,订单号:" + orderNo);
+                            } else {
+                                orderService.save(orderInfo);
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    logAliEntity(weixinInfo);
-                    // 保存微信异步通知信息
-                    save(weixinInfo);
+                    
                 }
                 ret = true;
                 // 已经成功处理过的订单
             } else if (orderInfo.getPaymentStatus() == ConfCenter.getInt("isj.pay.paystatus.payed")) {
                 ret = true;
+            }
+            if(weixinInfo!=null){
+                Weixin weixin = this.findByOutTradeNo(weixinInfo.getOutTradeNo());
+                if (weixin == null) {
+                    logAliEntity(weixinInfo);
+                    // 保存微信异步通知信息
+                    save(weixinInfo);
+                }
             }
         }
         return ret;

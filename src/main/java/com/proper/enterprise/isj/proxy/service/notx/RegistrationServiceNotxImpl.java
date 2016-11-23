@@ -3,8 +3,6 @@ package com.proper.enterprise.isj.proxy.service.notx;
 import java.math.BigDecimal;
 import java.util.*;
 
-import com.proper.enterprise.isj.proxy.document.RegistrationRefundLogDocument;
-import com.proper.enterprise.isj.proxy.repository.RegistrationRefundLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -33,10 +31,12 @@ import com.proper.enterprise.isj.pay.weixin.model.WeixinRefundRes;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
+import com.proper.enterprise.isj.proxy.document.RegistrationRefundLogDocument;
 import com.proper.enterprise.isj.proxy.document.registration.*;
 import com.proper.enterprise.isj.proxy.enums.OrderCancelTypeEnum;
 import com.proper.enterprise.isj.proxy.enums.RegistrationStatusEnum;
 import com.proper.enterprise.isj.proxy.enums.SendPushMsgEnum;
+import com.proper.enterprise.isj.proxy.repository.RegistrationRefundLogRepository;
 import com.proper.enterprise.isj.proxy.repository.RegistrationRepository;
 import com.proper.enterprise.isj.proxy.service.MessagesService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
@@ -141,28 +141,34 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     @Override
     public void saveUpdateRegistrationAndOrder(PayRegReq payRegReq) throws Exception {
         if (payRegReq != null) {
-            synchronized (payRegReq.getOrderId()) {
-                Order order = orderService.findByOrderNo(payRegReq.getOrderId());
-                if (order == null) {
-                    LOGGER.debug("挂号单支付回调,失败原因:未找到订单,订单号:" + payRegReq.getOrderId());
-                    return;
-                }
-                RegistrationDocument regBack = this.getRegistrationDocumentById(order.getFormId());
-                RegistrationOrderReqDocument payOrderRegDocument = regBack.getRegistrationOrderReq();
-                BeanUtils.copyProperties(payRegReq, payOrderRegDocument);
-                if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())) {
-                    LOGGER.debug("挂号单是未支付状态,进行调用,订单号:" + payRegReq.getOrderId());
-                    if (regBack.getIsAppointment().equals(String.valueOf(1))) {
-                        updateGTtodayRegAndOrder(payRegReq, order, regBack, payOrderRegDocument);
-                    } else {
-                        updateEqualtodayRegAndOrder(payRegReq, order, regBack, payOrderRegDocument);
+            try {
+                synchronized (payRegReq.getOrderId()) {
+                    Order order = orderService.findByOrderNo(payRegReq.getOrderId());
+                    if (order == null) {
+                        LOGGER.debug("挂号单支付回调,失败原因:未找到订单,订单号:" + payRegReq.getOrderId());
+                        return;
                     }
-                } else {
-                    LOGGER.debug("挂号单是已支付状态,不进行调用,订单号:" + payRegReq.getOrderId());
-                    webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                            regBack.getRegDate());
+                    RegistrationDocument regBack = this.getRegistrationDocumentById(order.getFormId());
+                    RegistrationOrderReqDocument payOrderRegDocument = regBack.getRegistrationOrderReq();
+                    BeanUtils.copyProperties(payRegReq, payOrderRegDocument);
+                    if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())) {
+                        LOGGER.debug("挂号单是未支付状态,进行调用,订单号:" + payRegReq.getOrderId());
+                        if (regBack.getIsAppointment().equals(String.valueOf(1))) {
+                            updateGTtodayRegAndOrder(payRegReq, order, regBack, payOrderRegDocument);
+                        } else {
+                            updateEqualtodayRegAndOrder(payRegReq, order, regBack, payOrderRegDocument);
+                        }
+                    } else {
+                        LOGGER.debug("挂号单是已支付状态,不进行调用,订单号:" + payRegReq.getOrderId());
+                        webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
+                                regBack.getRegDate());
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.debug("更新挂号订单失败,订单号:" + payRegReq.getOrderId());
             }
+
         }
     }
 
@@ -628,7 +634,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                 } else if (payWay.equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
                     WeixinPayQueryRes wQuery = weixinService.getWeixinPayQueryRes(registrationDocument.getOrderNum());
-                    if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")) {
+                    if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")
+                            && wQuery.getTradeState().equals("SUCCESS")) {
                         payReg = this.convertAppInfo2PayReg(wQuery, registrationDocument.getId());
                     }
                 }

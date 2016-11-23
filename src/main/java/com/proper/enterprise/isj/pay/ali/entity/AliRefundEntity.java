@@ -1,11 +1,11 @@
 package com.proper.enterprise.isj.pay.ali.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.proper.enterprise.isj.pay.ali.model.AliRefund;
 import com.proper.enterprise.platform.core.annotation.CacheEntity;
 import com.proper.enterprise.platform.core.entity.BaseEntity;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * 支付宝退款Entity
@@ -15,148 +15,177 @@ import javax.persistence.Table;
 @CacheEntity
 public class AliRefundEntity extends BaseEntity implements AliRefund {
 
-    public AliRefundEntity() { }
-
-    public AliRefundEntity(String sign, String tradeNo, String totalFee, String refundResult, String notifyTime, String signType, String notifyType, String notifyId, String batchNo, String successNum) {
-        this.sign = sign;
-        this.tradeNo = tradeNo;
-        this.totalFee = totalFee;
-        this.refundResult = refundResult;
-        this.notifyTime = notifyTime;
-        this.signType = signType;
-        this.notifyType = notifyType;
-        this.notifyId = notifyId;
-        this.batchNo = batchNo;
-        this.successNum = successNum;
+    public AliRefundEntity() {
     }
 
-    /**
-     * 签名 必填
-     */
-    private String sign;
+    private String code;
+
+    private String msg;
 
     /**
-     * 支付宝交易订单号
+     * 支付宝交易号 必填
      */
     private String tradeNo;
 
     /**
-     * 退款金额
+     * 商户订单号 必填
      */
-    private String totalFee;
+    private String outTradeNo;
 
     /**
-     * 退款结果
+     * 买家支付宝用户号，该参数已废弃，请不要使用 必填
      */
-    private String refundResult;
+    private String openId;
 
     /**
-     * 异步通知时间
+     * 用户的登录id 必填
      */
-    private String notifyTime;
+    private String buyerLogonId;
 
     /**
-     * 签名方式
+     * 本次退款是否发生了资金变化 必填
      */
-    private String signType;
+    private String fundChange;
 
     /**
-     * 异步通知方式
+     * 退款总金额 必填
      */
-    private String notifyType;
+    private String refundFee;
 
     /**
-     * 异步通知ID
+     * 退款支付时间 必填
      */
-    private String notifyId;
+    private String gmtRefundPay;
 
     /**
-     * 批次号
+     * 交易在支付时候的门店名称
      */
-    private String batchNo;
+    private String storeName;
 
     /**
-     * 退款成功总数
+     * 买家在支付宝的用户id 必填
      */
-    private String successNum;
+    private String buyerUserId;
 
-    public String getSign() {
-        return sign;
+    /**
+     * 本次商户实际退回金额
+     */
+    private String sendBackFee;
+
+    public String getCode() {
+        return code;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setCode(String code) {
+        this.code = code;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    @Override
     public String getTradeNo() {
         return tradeNo;
     }
 
+    @Override
     public void setTradeNo(String tradeNo) {
         this.tradeNo = tradeNo;
     }
 
-    public String getTotalFee() {
-        return totalFee;
+    @Override
+    public String getOutTradeNo() {
+        return outTradeNo;
     }
 
-    public void setTotalFee(String totalFee) {
-        this.totalFee = totalFee;
+    @Override
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
     }
 
-    public String getRefundResult() {
-        return refundResult;
+    @Override
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setRefundResult(String refundResult) {
-        this.refundResult = refundResult;
+    @Override
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
-    public String getNotifyTime() {
-        return notifyTime;
+    @Override
+    public String getBuyerLogonId() {
+        return buyerLogonId;
     }
 
-    public void setNotifyTime(String notifyTime) {
-        this.notifyTime = notifyTime;
+    @Override
+    public void setBuyerLogonId(String buyerLogonId) {
+        this.buyerLogonId = buyerLogonId;
     }
 
-    public String getSignType() {
-        return signType;
+    @Override
+    public String getFundChange() {
+        return fundChange;
     }
 
-    public void setSignType(String signType) {
-        this.signType = signType;
+    @Override
+    public void setFundChange(String fundChange) {
+        this.fundChange = fundChange;
     }
 
-    public String getNotifyType() {
-        return notifyType;
+    @Override
+    public String getRefundFee() {
+        return refundFee;
     }
 
-    public void setNotifyType(String notifyType) {
-        this.notifyType = notifyType;
+    @Override
+    public void setRefundFee(String refundFee) {
+        this.refundFee = refundFee;
     }
 
-    public String getNotifyId() {
-        return notifyId;
+    @Override
+    public String getGmtRefundPay() {
+        return gmtRefundPay;
     }
 
-    public void setNotifyId(String notifyId) {
-        this.notifyId = notifyId;
+    @Override
+    public void setGmtRefundPay(String gmtRefundPay) {
+        this.gmtRefundPay = gmtRefundPay;
     }
 
-    public String getBatchNo() {
-        return batchNo;
+    @Override
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setBatchNo(String batchNo) {
-        this.batchNo = batchNo;
+    @Override
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
-    public String getSuccessNum() {
-        return successNum;
+    @Override
+    public String getBuyerUserId() {
+        return buyerUserId;
     }
 
-    public void setSuccessNum(String successNum) {
-        this.successNum = successNum;
+    @Override
+    public void setBuyerUserId(String buyerUserId) {
+        this.buyerUserId = buyerUserId;
     }
+
+    @Override
+    public String getSendBackFee() {
+        return sendBackFee;
+    }
+
+    @Override
+    public void setSendBackFee(String sendBackFee) {
+        this.sendBackFee = sendBackFee;
+    }
+    
 }

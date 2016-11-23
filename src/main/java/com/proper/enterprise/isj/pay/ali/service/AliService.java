@@ -16,11 +16,11 @@ public interface AliService {
 
     Ali findByOutTradeNo(String outTradeNo);
 
-    AliRefund findByTradeNo(String tradeNo);
+//    AliRefund findByTradeNo(String tradeNo);
 
     boolean saveAliNoticeProcess(String orderNo, Map<String, String> params, String dealType) throws Exception;
 
-    boolean saveAliRefundProcess(Map<String, String> params) throws Exception;
+//    boolean saveAliRefundProcess(Map<String, String> params) throws Exception;
 
     boolean saveRefundProcess(AliRefundDetailReq reDetailReq) throws Exception;
 

@@ -370,16 +370,16 @@ public class RegistrationServiceImpl {
         RegistrationOrderHisDocument his = regDoc.getRegistrationOrderHis();
         his.setClientReturnMsg(payRegRes.getReturnMsg() + "(" + payRegRes.getReturnCode() + ")");
         if (payRegRes.getReturnCode() == ReturnCode.SUCCESS) {
-            String hospMedicalNum = payRegRes.getRes().getHospMedicalNum();
-            if (StringUtil.isNotEmpty(his.getHospMedicalNum())) {
-                hospMedicalNum = his.getHospMedicalNum();
-            }
+//            String hospMedicalNum = payRegRes.getRes().getHospMedicalNum();
+//            if (StringUtil.isNotEmpty(his.getHospMedicalNum())) {
+//                hospMedicalNum = his.getHospMedicalNum();
+//            }
             BeanUtils.copyProperties(payRegRes.getRes(), his);
-            his.setHospMedicalNum(hospMedicalNum);
+//            his.setHospMedicalNum(hospMedicalNum);
             regDoc.setRegistrationOrderHis(his);
             regDoc.setStatusCode(RegistrationStatusEnum.PAID.getValue());
             regDoc.setStatus(CenterFunctionUtils.getRegistrationStatusName(RegistrationStatusEnum.PAID.getValue()));
-            regDoc.setClinicNum(hospMedicalNum);
+//            regDoc.setClinicNum(hospMedicalNum);
             this.saveRegistrationDocument(regDoc);
             order.setOrderStatus(String.valueOf(2));
             // 更新订单状态
@@ -462,13 +462,13 @@ public class RegistrationServiceImpl {
                     refundReq.setHospOrderId(reg.getRegistrationOrderHis().getHospOrderId());
                     refundReq.setRefundId(reg.getRegistrationRefundReq().getRefundId());
                     refundReq.setRefundSerialNum(refund.getTradeNo());
-                    BigDecimal bigDecimal = new BigDecimal(refund.getTotalFee());
+                    BigDecimal bigDecimal = new BigDecimal(refund.getRefundFee());
                     bigDecimal = bigDecimal.multiply(new BigDecimal("100"));
                     refundReq.setTotalFee(bigDecimal.intValue());
                     refundReq.setRefundFee(bigDecimal.intValue());
-                    refundReq.setRefundDate(refund.getNotifyTime().split(" ")[0]);
-                    refundReq.setRefundTime(refund.getNotifyTime().split(" ")[1]);
-                    refundReq.setRefundResCode(refund.getRefundResult());
+                    refundReq.setRefundDate(refund.getGmtRefundPay().split(" ")[0]);
+                    refundReq.setRefundTime(refund.getGmtRefundPay().split(" ")[1]);
+                    refundReq.setRefundResCode(refund.getMsg());
                     refundReq.setRefundResDesc("");
                     refundReq.setRefundRemark("");
                 } else if (infoObj instanceof WeixinRefundReq) {
