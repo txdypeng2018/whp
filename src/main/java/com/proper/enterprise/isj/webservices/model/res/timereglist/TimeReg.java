@@ -50,6 +50,12 @@ public class TimeReg implements Serializable {
     @XmlElement(name = "REG_ID")
     private String regId;
 
+    /**
+     * 号点序号
+     */
+    @XmlElement(name = "REG_NUM")
+    private String regNum;
+
     public String getTimeFlag() {
         return timeFlag;
     }
@@ -96,5 +102,13 @@ public class TimeReg implements Serializable {
 
     public void setRegId(String regId) {
         this.regId = regId;
+    }
+
+    public String getRegNum() {
+        return regNum;
+    }
+
+    public void setRegNum(String regNum) {
+        this.regNum = regNum;
     }
 }

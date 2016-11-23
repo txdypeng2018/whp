@@ -411,7 +411,11 @@ public class CenterFunctionUtils {
                 content.append("\n");
                 content.append("看诊序号：");
                 RegistrationOrderHisDocument payHis = reg.getRegistrationOrderHis();
-                content.append(payHis.getHospSerialNum());
+                if(StringUtil.isNotEmpty(reg.getRegNum())){
+                    content.append(reg.getRegNum());
+                }else{
+                    content.append(payHis.getHospSerialNum());
+                }
 //                content.append("\n");
 //                content.append("科室地址：").append(reg.getRoomName());
                 content.append("\n");
