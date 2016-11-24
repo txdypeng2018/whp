@@ -35,7 +35,7 @@ public class RegistrationOrderHisDocument extends BaseDocument {
     /**
      * 医院病历号或门诊号
      */
-    private String hospMedicalNum;
+//    private String hospMedicalNum;
 
     /**
      * 医院取号时间段，格式：HH24MI-HH24MI
@@ -90,13 +90,13 @@ public class RegistrationOrderHisDocument extends BaseDocument {
         this.hospSerialNum = hospSerialNum;
     }
 
-    public String getHospMedicalNum() {
-        return hospMedicalNum;
-    }
-
-    public void setHospMedicalNum(String hospMedicalNum) {
-        this.hospMedicalNum = hospMedicalNum;
-    }
+//    public String getHospMedicalNum() {
+//        return hospMedicalNum;
+//    }
+//
+//    public void setHospMedicalNum(String hospMedicalNum) {
+//        this.hospMedicalNum = hospMedicalNum;
+//    }
 
     public String getHospGetregDate() {
         return hospGetregDate;
