@@ -24,9 +24,9 @@
 
     <logger name="com.proper" level="trace" />
 
-    <root>
-        <appender-ref ref="file" level="info" />
-        <appender-ref ref="mongo" level="error" />
+    <root level="error">
+        <appender-ref ref="file" />
+        <appender-ref ref="mongo" />
     </root>
 
 </configuration>
