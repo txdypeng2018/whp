@@ -384,7 +384,7 @@ public class CenterFunctionUtils {
                 content.append(CenterFunctionUtils.MSG_REGISTRATION_ORDER_SUCCESS);
                 content.append("\n");
                 content.append("单号:").append(reg.getNum()).append("\n");
-                content.append("病历号：").append(reg.getRegistrationOrderHis().getHospMedicalNum());
+                content.append("病历号：").append(reg.getClinicNum());
                 content.append("\n");
                 content.append("患者姓名：").append(reg.getPatientName());
                 content.append("\n");

@@ -38,7 +38,6 @@ import com.proper.enterprise.isj.proxy.utils.cache.WebService4HisInterfaceCacheU
 import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
-import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.model.enums.MemberRelationEnum;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
@@ -395,31 +394,31 @@ public class RegistrationServiceImpl {
         }
     }
 
-    /**
-     * 将病历号更新到人员信息
-     * @param regDoc
-     * @param his
-     */
-    private void saveMedicalNum2UserInfo(RegistrationDocument regDoc, RegistrationOrderHisDocument his) {
-        UserInfoDocument userInfo = userInfoService.getUserInfoByUserId(regDoc.getCreateUserId());
-        if (userInfo.getId().equals(regDoc.getPatientId())) {
-            userInfo.setMedicalNum(his.getHospMedicalNum());
-            Map<String, String> medicalNumMap = userInfo.getMedicalNumMap();
-            medicalNumMap.put(his.getHospMedicalNum(), DateUtil.getTimestamp());
-            userInfo.setMedicalNumMap(medicalNumMap);
-        } else {
-            List<FamilyMemberInfoDocument> fList = userInfo.getFamilyMemberInfo();
-            for (FamilyMemberInfoDocument familyMemberInfoDocument : fList) {
-                if (familyMemberInfoDocument.getId().equals(regDoc.getPatientId())) {
-                    familyMemberInfoDocument.setMedicalNum(his.getHospMedicalNum());
-                    Map<String, String> medicalNumMap = familyMemberInfoDocument.getMedicalNumMap();
-                    medicalNumMap.put(his.getHospMedicalNum(), DateUtil.getTimestamp());
-                    familyMemberInfoDocument.setMedicalNumMap(medicalNumMap);
-                }
-            }
-        }
-        userInfoService.saveOrUpdateUserInfo(userInfo);
-    }
+//    /**
+//     * 将病历号更新到人员信息
+//     * @param regDoc
+//     * @param his
+//     */
+//    private void saveMedicalNum2UserInfo(RegistrationDocument regDoc, RegistrationOrderHisDocument his) {
+//        UserInfoDocument userInfo = userInfoService.getUserInfoByUserId(regDoc.getCreateUserId());
+//        if (userInfo.getId().equals(regDoc.getPatientId())) {
+//            userInfo.setMedicalNum(his.getHospMedicalNum());
+//            Map<String, String> medicalNumMap = userInfo.getMedicalNumMap();
+//            medicalNumMap.put(his.getHospMedicalNum(), DateUtil.getTimestamp());
+//            userInfo.setMedicalNumMap(medicalNumMap);
+//        } else {
+//            List<FamilyMemberInfoDocument> fList = userInfo.getFamilyMemberInfo();
+//            for (FamilyMemberInfoDocument familyMemberInfoDocument : fList) {
+//                if (familyMemberInfoDocument.getId().equals(regDoc.getPatientId())) {
+//                    familyMemberInfoDocument.setMedicalNum(his.getHospMedicalNum());
+//                    Map<String, String> medicalNumMap = familyMemberInfoDocument.getMedicalNumMap();
+//                    medicalNumMap.put(his.getHospMedicalNum(), DateUtil.getTimestamp());
+//                    familyMemberInfoDocument.setMedicalNumMap(medicalNumMap);
+//                }
+//            }
+//        }
+//        userInfoService.saveOrUpdateUserInfo(userInfo);
+//    }
 
 
     public void saveUpdateRegistrationAndOrderRefund(RefundReq refundReq) throws Exception {
@@ -531,8 +530,12 @@ public class RegistrationServiceImpl {
                 if (StringUtil.isEmpty(reg.getOrderNum())) {
                     throw new RegisterException("挂号单未找到订单号信息,不能进行退号");
                 }
+                if (StringUtil.isNotEmpty(reg.getCancelHisReturnMsg())
+                        && reg.getCancelHisReturnMsg().contains(ReturnCode.SUCCESS.toString())) {
+                    return;
+                }
                 ResModel res = webServicesClient.cancelReg(hosId, reg.getOrderNum(), cancelTime, cancelRemark);
-                reg.setCancelHisReturnMsg(res.getReturnMsg());
+                reg.setCancelHisReturnMsg(res.getReturnMsg() + "(" + res.getReturnCode() + ")");
                 this.saveRegistrationDocument(reg);
                 if (res.getReturnCode() != ReturnCode.SUCCESS) {
                     if (reg.getRegistrationOrderHis() == null
