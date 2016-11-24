@@ -2,7 +2,9 @@ package com.proper.enterprise.isj.proxy.service.notx;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Pattern;
 
+import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -736,6 +738,16 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 .lte(DateUtil.toString(cal.getTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode")
                 .is(RegistrationStatusEnum.NOT_PAID.getValue()));
         query.with(new Sort(Sort.Direction.DESC, "apptDate"));
+        return mongoTemplate.find(query, RegistrationDocument.class);
+    }
+
+    @Override
+    public List<RegistrationDocument> findAlreadyCancelRegAndRefundErrRegList() {
+        Query query = new Query();
+        Pattern cancelHisReturnMsgPattern = Pattern.compile("^.*" + ReturnCode.SUCCESS + ".*$",
+                Pattern.CASE_INSENSITIVE);
+        query.addCriteria(Criteria.where("statusCode").is(RegistrationStatusEnum.PAID.getValue())
+                .and("cancelHisReturnMsg").regex(cancelHisReturnMsgPattern));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
 
