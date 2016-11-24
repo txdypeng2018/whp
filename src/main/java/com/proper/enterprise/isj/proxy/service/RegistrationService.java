@@ -89,6 +89,11 @@ public interface RegistrationService {
     List<RegistrationDocument> findOverTimeRegistrationDocumentList();
 
     /**
+     * 查询已支付,进行了退号操作的记录
+     */
+    List<RegistrationDocument> findAlreadyCancelRegAndRefundErrRegList();
+
+    /**
      * 退号
      * 
      * @param registrationId
