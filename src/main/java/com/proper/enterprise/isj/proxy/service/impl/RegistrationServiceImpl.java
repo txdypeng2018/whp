@@ -149,6 +149,7 @@ public class RegistrationServiceImpl {
         BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(),
                 reg.getPatientId());
         RegistrationDocument saveReg = new RegistrationDocument();
+        saveReg.setClinicNum(basicInfo.getMedicalNum());
         saveReg.setPatientId(basicInfo.getId());
         saveReg.setPatientName(basicInfo.getName());
         saveReg.setPatientCardNo(basicInfo.getMedicalNum());
@@ -308,7 +309,6 @@ public class RegistrationServiceImpl {
             LOGGER.debug("调用HIS的orderReg接口返回异常:" + ordrRegModel.getReturnMsg());
             throw new HisReturnException(ordrRegModel.getReturnMsg());
         }
-        saveReg.setClinicNum(ordrRegModel.getRes().getHospMedicalNum());
         RegistrationOrderHisDocument orderHis = new RegistrationOrderHisDocument();
         BeanUtils.copyProperties(ordrRegModel.getRes(), orderHis);
         if (ordrRegModel.getRes().getConcessions() != null) {
