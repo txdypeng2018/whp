@@ -1,9 +1,9 @@
 
-Ionic SJ App
-============
+iHospital App
+=============
 
-<a href="https://server.propersoft.cn/teamcity/viewType.html?buildTypeId=ISJ_Build">
-  <img src="https://server.propersoft.cn/teamcity/app/rest/builds/buildType:(id:ISJ_Build)/statusIcon.svg"/>
+<a href="https://server.propersoft.cn/teamcity/viewType.html?buildTypeId=ISJ_FrontEnd">
+  <img src="https://server.propersoft.cn/teamcity/app/rest/builds/buildType:(id:ISJ_FrontEnd)/statusIcon.svg"/>
 </a>
 
 ```bash
