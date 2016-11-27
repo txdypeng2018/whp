@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.document;
 
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -25,6 +26,8 @@ public class MessagesDocument extends BaseDocument {
      * 消息内容
      */
     private String content;
+
+    private String createTime = DateUtil.getTimestamp(true);
 
     public String getUserId() {
         return userId;
@@ -56,5 +59,15 @@ public class MessagesDocument extends BaseDocument {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
