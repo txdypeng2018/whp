@@ -1,16 +1,14 @@
 package com.proper.enterprise.isj.pay.weixin.model;
 
-import com.proper.enterprise.isj.pay.weixin.constants.WeixinConstants;
-import com.proper.enterprise.isj.pay.weixin.adapter.SignAdapter;
-import com.proper.enterprise.isj.pay.weixin.adapter.TimestampAdapter;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Date;
+
+import com.proper.enterprise.isj.pay.weixin.adapter.SignAdapter;
+import com.proper.enterprise.isj.pay.weixin.constants.WeixinConstants;
+import com.proper.enterprise.platform.core.utils.ConfCenter;
 
 /**
  * 微信移动支付请求预支付ID_XML_Model
@@ -96,15 +94,15 @@ public class UnifiedOrderReq {
      * 交易起始时间
      */
     @XmlElement(name = "time_start")
-    @XmlJavaTypeAdapter(TimestampAdapter.class)
-    private Date timeStart;
+    //@XmlJavaTypeAdapter(TimestampAdapter.class)
+    private String timeStart;
 
     /**
      * 交易结束时间
      */
     @XmlElement(name = "time_expire")
-    @XmlJavaTypeAdapter(TimestampAdapter.class)
-    private Date timeExpire;
+    //@XmlJavaTypeAdapter(TimestampAdapter.class)
+    private String timeExpire;
 
     /**
      * 商品标记
@@ -250,20 +248,20 @@ public class UnifiedOrderReq {
         this.spbillCreateIp = spbillCreateIp;
     }
 
-    public Date getTimeStart() {
-        return timeStart == null ? null : (Date) timeStart.clone();
+    public String getTimeStart() {
+        return timeStart;
     }
 
-    public void setTimeStart(Date timeStart) {
-        this.timeStart = (Date) timeStart.clone();
+    public void setTimeStart(String timeStart) {
+        this.timeStart = timeStart;
     }
 
-    public Date getTimeExpire() {
-        return timeExpire == null ? null : (Date) timeExpire.clone();
+    public String getTimeExpire() {
+        return timeExpire;
     }
 
-    public void setTimeExpire(Date timeExpire) {
-        this.timeExpire = (Date) timeExpire.clone();
+    public void setTimeExpire(String timeExpire) {
+        this.timeExpire = timeExpire;
     }
 
     public UnifiedOrderReq getSign() {

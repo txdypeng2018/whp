@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.proper.enterprise.isj.order.model.Order;
+import com.proper.enterprise.isj.proxy.enums.RegistrationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class RefundFromHospitalTask implements Runnable {
                     Order order = orderService.findByOrderNo(orderNo);
                     RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
                     try {
-                        if (reg != null) {
+                        if (reg != null && !reg.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
                             registrationService.saveRefundAndUpdateRegistrationDocument(reg);
                         }
                     } catch (Exception e) {
