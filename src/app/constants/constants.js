@@ -7,7 +7,7 @@
     'appConstants',
     {
       'piwikServer' : 'https://server.propersoft.cn:8082',
-      'piwikTrackTarget' : 'server.propersoft.cn/isj',
+      'piwikTrackTarget' : 'server.propersoft.cn/ihos',
       'properpush':{
 	  		'appId':'isj',
 	  		'pushUrl':'https://sjh.sj-hospital.org/properpush',
