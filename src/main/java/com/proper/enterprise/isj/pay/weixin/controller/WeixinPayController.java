@@ -1,6 +1,8 @@
 package com.proper.enterprise.isj.pay.weixin.controller;
 
 import java.io.*;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,7 @@ import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
 
@@ -75,6 +78,11 @@ public class WeixinPayController extends BaseController {
     @PostMapping(value = "/prepayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PayResultRes> getWXPrepayInfo(@RequestBody UnifiedOrderReq uoReq, HttpServletRequest request)
             throws Exception {
+        ResponseEntity<PayResultRes> resObj1 = getOrderCanPayTime(uoReq);
+        if (resObj1 != null) {
+            return resObj1;
+        }
+        
         uoReq.setNonceStr(RandomStringUtils.randomAlphabetic(WeixinConstants.RANDOM_LEN));
         uoReq.setSpbillCreateIp(request.getRemoteAddr());
 
@@ -179,6 +187,34 @@ public class WeixinPayController extends BaseController {
             resObj.setResultMsg("Fail");
         }
         return responseOfPost(resObj);
+    }
+
+
+    /**
+     * 设置订单有效时间
+     * @param uoReq
+     * @return
+     */
+    private ResponseEntity<PayResultRes> getOrderCanPayTime(@RequestBody UnifiedOrderReq uoReq) {
+        PayResultRes resObj = new PayResultRes();
+        Order order = orderService.findByOrderNo(uoReq.getOutTradeNo());
+        if (order == null) {
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_DATA_ERR);
+            return responseOfPost(resObj);
+        }
+        Date cTime = DateUtil.toDate(order.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(cTime);
+        cal.add(Calendar.MINUTE, CenterFunctionUtils.ORDER_COUNTDOWN);
+        uoReq.setTimeStart(DateUtil.toString(cTime, "yyyyMMddHHmmss"));
+        uoReq.setTimeExpire(DateUtil.toString(cal.getTime(), "yyyyMMddHHmmss"));
+        if (cal.getTime().compareTo(new Date()) < 0) {
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_OVERTIME_INVALID);
+            return responseOfPost(resObj);
+        }
+        return null;
     }
 
     /**

@@ -120,11 +120,13 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_ALREADY_PAID_ERR = "订单已经支付,不能重复支付";
 
-    public final static String ORDER_NON_DATA_ERR = "没有要交费的项目";
+    public final static String ORDER_NON_DATA_ERR = "没有要交费的订单";
 
     public final static String ORDER_DIFF_RECIPE_ERR = "缴费金额与当前待支付金额不符,请重新核对缴费单";
 
     public final static String ORDER_PAGE_OVERTIME_ERR = "挂号界面超时,请重新选择科室进行挂号";
+
+    public final static String ORDER_OVERTIME_INVALID = "订单已失效";
 
     public final static String ORDER_CANCEL_OVERTIME_MSG = "超时未支付，订单自动取消";
 

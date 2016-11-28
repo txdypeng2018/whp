@@ -677,11 +677,23 @@ public class RecipeServiceNotxImpl implements RecipeService {
         if (recipe != null) {
             boolean canRefundFlag = true;
             Map<String, RecipeRefundDetailDocument> refundMap = recipe.getRecipeRefundDetailDocumentMap();
+            RecipeRefundDetailDocument detail = null;
             for (Map.Entry<String, RecipeRefundDetailDocument> stringRecipeRefundDetailDocumentEntry : refundMap
                     .entrySet()) {
                 if (stringRecipeRefundDetailDocumentEntry.getKey().split("_")[0].equals(refund.getId())) {
+                    LOGGER.debug("线下退费已经将此记录退回,不再重复退费,退费Id:"+refund.getId());
                     canRefundFlag = false;
                     break;
+                }
+                detail =  stringRecipeRefundDetailDocumentEntry.getValue();
+                if (detail != null) {
+                    if (detail.getRecipeNo().equals(refund.getRecipeNo())
+                            && detail.getSequenceNo().equals(refund.getSequenceNo())) {
+                        LOGGER.debug("线下退费已经将此处方号下的序号进行了退费,不再重复退费,退费Id:" + refund.getId() + ",处方号:"
+                                + refund.getRecipeNo() + ",序号:" + refund.getSequenceNo());
+                        canRefundFlag = false;
+                        break;
+                    }
                 }
             }
             if (canRefundFlag) {

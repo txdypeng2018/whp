@@ -2,11 +2,14 @@ package com.proper.enterprise.isj.pay.ali.controller;
 
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +73,13 @@ public class AliPayController extends BaseController {
     @PostMapping(value = "/prepayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PayResultRes> getPrepayinfo(@RequestBody UnifiedOrderReq uoReq) throws Exception {
 
+
+        ResponseEntity<PayResultRes> resObj1 = getOrderCanPayTime(uoReq);
+        if (resObj1 != null) {
+            return resObj1;
+        }
+
+
         // 取得订单信息
         String orderInfo = aliService.getOrderInfo(uoReq, UnifiedOrderReq.class);
         // 获取秘钥
@@ -131,6 +141,34 @@ public class AliPayController extends BaseController {
             resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
         }
         return responseOfPost(resObj);
+    }
+
+    /**
+     * 设置订单有效时间
+     * @param uoReq
+     * @return
+     */
+    private ResponseEntity<PayResultRes> getOrderCanPayTime(@RequestBody UnifiedOrderReq uoReq) {
+        PayResultRes resObj = new PayResultRes();
+        Order order = orderService.findByOrderNo(uoReq.getOutTradeNo());
+        if(order==null){
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_DATA_ERR);
+            return responseOfPost(resObj);
+        }
+        Date cTime = DateUtil.toDate(order.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(cTime);
+        cal.add(Calendar.MINUTE, CenterFunctionUtils.ORDER_COUNTDOWN);
+        Date nowDate = new Date();
+        long min = (cal.getTimeInMillis() - nowDate.getTime()) / (60 * 1000);
+        if (min < 0) {
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_OVERTIME_INVALID);
+            return responseOfPost(resObj);
+        }
+        uoReq.setItBPay((min + 1) + "m");
+        return null;
     }
 
     @JWTIgnore
