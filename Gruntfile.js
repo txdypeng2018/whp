@@ -163,7 +163,7 @@ module.exports = function(grunt) {
     clean: {
       dist: {
         options:{
-          force:true	
+          force:true
         },
         files: [{
           dot: true,
@@ -447,7 +447,7 @@ module.exports = function(grunt) {
             },
             {
               match: /\.\/api/g,
-              replacement: 'https://server.propersoft.cn/isj/api'
+              replacement: 'https://server.propersoft.cn/ihos/api'
             }
           ]
         },
@@ -528,7 +528,7 @@ module.exports = function(grunt) {
     'usemin',
     'htmlmin'
   ]);
-  
+
   grunt.registerTask('srcDist', 'copy html and js source files to www directory for debug', function() {
     grunt.task.run('clean:dist');
     grunt.task.run('compass:dist');
