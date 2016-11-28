@@ -22,11 +22,13 @@
         </connectionSource>
     </appender>
 
-    <logger name="com.proper" level="trace" />
-
-    <root level="error">
+    <logger name="com.proper" level="trace">
         <appender-ref ref="file" />
         <appender-ref ref="mongo" />
-    </root>
+    </logger>
+
+    <logger name="ROOT" level="debug">
+        <appender-ref ref="file" />
+    </logger>
 
 </configuration>
