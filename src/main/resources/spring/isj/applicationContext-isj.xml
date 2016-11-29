@@ -104,6 +104,18 @@
         <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PatRes"/>
     </oxm:jaxb2-marshaller>
 
+    <oxm:jaxb2-marshaller id="unmarshallBusinessRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.BusinessRes"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallQuerySingleOrderRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes"/>
+    </oxm:jaxb2-marshaller>
+
+    <oxm:jaxb2-marshaller id="unmarshallRefundNoDupRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes"/>
+    </oxm:jaxb2-marshaller>
+
     <!-- 推送工具类 -->
     <bean id="properPushApp" class="com.proper.mobile.pushtools.PusherApp">
         <property name="pushUrl" value="${properpushPushUrl}"/>
