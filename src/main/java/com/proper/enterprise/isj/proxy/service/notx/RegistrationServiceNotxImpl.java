@@ -469,10 +469,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             RegistrationRefundReqDocument refund = new RegistrationRefundReqDocument();
             BeanUtils.copyProperties(refundReq, refund);
             regBack.setRegistrationRefundReq(refund);
-            this.saveRegistrationDocument(regBack);
+            regBack = this.saveRegistrationDocument(regBack);
             try {
                 registrationServiceImpl.saveUpdateRegistrationAndOrderRefund(refundReq);
-                this.sendRegistrationMsg(SendPushMsgEnum.REG_REFUND_SUCCESS, regBack);
             } catch (Exception e) {
                 RegistrationRefundHisDocument refundHis = new RegistrationRefundHisDocument();
                 refundHis.setClientReturnMsg(e.getMessage());
@@ -480,6 +479,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 registrationRepository.save(regBack);
                 LOGGER.info(e.getMessage());
                 throw e;
+            }
+            try {
+                this.sendRegistrationMsg(SendPushMsgEnum.REG_REFUND_SUCCESS, regBack);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.debug("退费成功后,发送推送抛出异常,异常信息:" + e.getMessage() + ",订单号:" + regBack.getOrderNum());
             }
         }
 
