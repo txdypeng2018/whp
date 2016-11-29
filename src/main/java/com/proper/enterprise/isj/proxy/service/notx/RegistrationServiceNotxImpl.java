@@ -822,7 +822,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     if(StringUtil.isEmpty(regBack.getOrderNum())){
                         throw  new Exception("挂号单中订单号字段信息为空,退费失败,挂号单号:"+regBack.getNum());
                     }
-                    refundReq = this.saveRegRefund(registrationId);
+                    if (regBack.getRegistrationRefundReq() == null
+                            || StringUtil.isEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
+                        refundReq = this.saveRegRefund(registrationId);
+                    } else {
+                        refundReq = new RefundReq();
+                        BeanUtils.copyProperties(regBack.getRegistrationRefundReq(), refundReq);
+                        LOGGER.debug("调用HIS退费接口异常,再次调用退费,不执行支付平台的退费,订单号:" + regBack.getOrderNum());
+                    }
                     LOGGER.debug("挂号完成退费到支付平台,订单号:" + regBack.getOrderNum());
                     try {
                         saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
@@ -849,7 +856,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     LOGGER.debug(e.getMessage());
                     throw e;
                 }
-                if (refundReq != null) {
+                if (refundReq != null&&StringUtil.isNotEmpty(refundReq.getRefundId())) {
                     this.saveUpdateRegistrationAndOrderRefund(refundReq);
                     LOGGER.debug("完成退费通知HIS,订单号:" + regBack.getOrderNum());
                     try {
