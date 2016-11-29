@@ -5,6 +5,8 @@ versions.pep = '0.1.0-SNAPSHOT'
 libraries.groovy_xml = "org.codehaus.groovy:groovy-xml:${versions.groovy}"
 libraries.jsoup = 'org.jsoup:jsoup:1.9.2'
 libraries.thumbnailator = 'net.coobird:thumbnailator:0.4.8'
+libraries.cmb_pay = 'com.cmb.pay:cmb-pay:1.0.0'
+libraries.cmb_b2b = 'com.cmb.b2b:cmb-b2b:1.0.0'
 
 libraries.pep_auth_jwt = "com.proper.enterprise.platform:pep-auth-jwt:${versions.pep}"
 libraries.pep_cache_ehcache = "com.proper.enterprise.platform:pep-cache-ehcache:${versions.pep}"

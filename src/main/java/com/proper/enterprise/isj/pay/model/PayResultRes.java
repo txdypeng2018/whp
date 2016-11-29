@@ -64,6 +64,21 @@ public class PayResultRes {
      */
     private String sign;
 
+    /**
+     * 一网通订单号
+     */
+    private String cmbBillNo;
+
+    /**
+     * 一网通订单日期
+     */
+    private String cmbDate;
+
+    /**
+     * 一网通订单金额
+     */
+    private String amout;
+
     public String getResultCode() {
         return resultCode;
     }
@@ -150,5 +165,29 @@ public class PayResultRes {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    public String getCmbBillNo() {
+        return cmbBillNo;
+    }
+
+    public void setCmbBillNo(String cmbBillNo) {
+        this.cmbBillNo = cmbBillNo;
+    }
+
+    public String getCmbDate() {
+        return cmbDate;
+    }
+
+    public void setCmbDate(String cmbDate) {
+        this.cmbDate = cmbDate;
+    }
+
+    public String getAmout() {
+        return amout;
+    }
+
+    public void setAmout(String amout) {
+        this.amout = amout;
     }
 }

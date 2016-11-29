@@ -91,7 +91,9 @@ dependencies {
             libraries.pep_cache_redis,
             libraries.pep_core,
             libraries.pep_core_mongo,
-            libraries.properpush_client
+            libraries.properpush_client,
+            libraries.cmb_pay,
+            libraries.cmb_b2b
 
     runtime libraries.commons_fileupload,
             libraries.hibernate_hikaricp,
