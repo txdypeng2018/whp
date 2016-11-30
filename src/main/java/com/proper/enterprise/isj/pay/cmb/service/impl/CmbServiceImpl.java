@@ -202,7 +202,7 @@ public class CmbServiceImpl implements CmbService {
             retSb.append(ConfCenter.get("isj.pay.cmb.payMentUrl"));
             retSb.append(orderInfo);
 
-            resObj.setPayInfo(retSb.toString());
+            resObj.setPayInfo(retSb.toString().replace("|", "%7C"));
             resObj.setResultCode("0");
             resObj.setCmbBillNo(uoReq.getBillNo());
             resObj.setCmbDate(uoReq.getDate());

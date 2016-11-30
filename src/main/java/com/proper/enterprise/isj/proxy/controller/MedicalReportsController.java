@@ -72,59 +72,48 @@ public class MedicalReportsController extends BaseController {
         List<MedicalReportsDocument> result = new ArrayList<>();
         try {
             User user = userService.getCurrentUser();
-            LOGGER.debug("getCurrentUser");
             if (user != null) {
                 BasicInfoDocument basicInfo = null;
-                LOGGER.debug("user != null");
                 if (StringUtil.isEmpty(memberId)) {
-                    LOGGER.debug("memberId is not empty");
                     basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
                 } else {
-                    LOGGER.debug("memberId is empty");
                     basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
                 }
                 if(basicInfo != null) {
                     if(StringUtil.isEmpty(basicInfo.getMedicalNum())){
                         userInfoService.saveOrUpdatePatientMedicalNum(user.getId(), memberId, null);
                         if (StringUtil.isEmpty(memberId)) {
-                            LOGGER.debug("memberId is not empty");
                             basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
                         } else {
-                            LOGGER.debug("memberId is empty");
                             basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
                         }
                     }
-                    LOGGER.debug("basicInfo != null && 病历号不为空!");
                     // 检验报告
                     if("1".equals(category)) {
-                        LOGGER.debug("category == 1");
                         // 取得请求对象
                         ReportListReq reportReq = reportsService.getReportListReq(basicInfo);
-                            LOGGER.debug("getReportListReq success!");
-                            // 获取返回报告列表
-                            result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
-                            LOGGER.debug("ReportListresult:" + result.toString());
+                        // 获取返回报告列表
+                        result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
                         // 检查报告
                     } else if ("2".equals(category)) {
-                        LOGGER.debug("category == 2");
                         // 获取返回报告列表
                         result = reportsService.getPacsReportsList(null, searchStatus, basicInfo, searchTime);
-                        LOGGER.debug("ReportListresult:" + result.toString());
                     }
                 }
             }
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportsList[UnmarshallingFailureException]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportsList[HisReturnException]:", e);
             return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IOException ie) {
+            LOGGER.debug("MedicalReportsController.getReportsList[IOException]:", ie);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_PACS_REPORT_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportsList[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -164,14 +153,14 @@ public class MedicalReportsController extends BaseController {
                 }
             }
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportDetailInfo[UnmarshallingFailureException]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportDetailInfo[HisReturnException]:", e);
             return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("MedicalReportsController.getReportDetailInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
