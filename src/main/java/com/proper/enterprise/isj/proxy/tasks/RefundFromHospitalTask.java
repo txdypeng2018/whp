@@ -56,7 +56,7 @@ public class RefundFromHospitalTask implements Runnable {
         try {
             res = webServicesClient.refundByHisToAPP(hosId, sDate, eDate);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("获得线下退费结果异常", e);
         }
         if (res != null) {
             List<RefundByHis> list = res.getRes().getRefundlist();
@@ -74,8 +74,7 @@ public class RefundFromHospitalTask implements Runnable {
                             registrationService.saveRefundAndUpdateRegistrationDocument(reg);
                         }
                     } catch (Exception e) {
-                        LOGGER.debug("挂号缴费退款异常,挂号单号:" + reg.getNum() + ",订单号:" + orderNo + ",异常信息:" + e.getMessage());
-                        e.printStackTrace();
+                        LOGGER.debug("挂号缴费退款异常,挂号单号:" + reg.getNum() + ",订单号:" + orderNo, e);
                     }
                 } else {
                     RecipeOrderDocument recipe = recipeService
@@ -84,8 +83,7 @@ public class RefundFromHospitalTask implements Runnable {
                         try {
                             recipeService.saveRefundAndUpdateRecipeOrderDocument(recipe, refundByHis);
                         } catch (Exception e) {
-                            LOGGER.debug("诊间缴费退款异常,门诊流水号:" + refundByHis.getClinicCode() + ",异常信息:" + e.getMessage());
-                            e.printStackTrace();
+                            LOGGER.debug("诊间缴费退款异常,门诊流水号:" + refundByHis.getClinicCode(), e);
                         }
                     }
                 }

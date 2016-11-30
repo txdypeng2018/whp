@@ -47,8 +47,7 @@ public class StopRegTask implements Runnable {
         try {
             res = webServicesClient.stopReg();
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug("调用HIS获取停诊信息失败,报错信息:"+e.getMessage());
+            LOGGER.debug("调用HIS获取停诊信息失败", e);
         }
         try {
             if (res != null) {
@@ -117,8 +116,7 @@ public class StopRegTask implements Runnable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug("停诊信息报错,报错信息:"+e.getMessage());
+            LOGGER.debug("停诊信息报错", e);
         }
     }
 

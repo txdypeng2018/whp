@@ -5,6 +5,8 @@ import com.proper.enterprise.isj.proxy.service.SubjectService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.UnmarshallingFailureException;
@@ -21,6 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/subjects")
 public class SubjectController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectController.class);
 
     @Autowired
     SubjectService subjectService;
@@ -41,8 +45,10 @@ public class SubjectController extends BaseController {
         try {
             list = subjectService.findSubjectDocumentListFromHis(districtId, "2".equals(type));
         } catch (UnmarshallingFailureException e) {
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             throw new RuntimeException(CenterFunctionUtils.HIS_DATALINK_ERR);
         } catch (Exception e) {
+            LOGGER.debug("系统错误", e);
             throw new RuntimeException(e.getMessage());
         }
         return responseOfGet(list);

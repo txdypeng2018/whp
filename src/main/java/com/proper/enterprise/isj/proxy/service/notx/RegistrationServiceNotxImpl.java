@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -46,6 +45,7 @@ import com.proper.enterprise.isj.proxy.service.impl.RegistrationServiceImpl;
 import com.proper.enterprise.isj.proxy.utils.cache.WebService4HisInterfaceCacheUtil;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
+import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
 import com.proper.enterprise.isj.webservices.model.req.OrderRegReq;
 import com.proper.enterprise.isj.webservices.model.req.PayOrderRegReq;
 import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
@@ -118,8 +118,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         DateUtil.toDate(saveReg.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug(e.getMessage());
+            LOGGER.debug("挂号出现异常", e);
             if (saveReg != null) {
                 if (isAppointment.equals(String.valueOf(1))) {
                     try {
@@ -167,8 +166,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.debug("更新挂号订单失败,订单号:" + payRegReq.getOrderId());
+                LOGGER.debug("更新挂号订单失败,订单号:" + payRegReq.getOrderId(), e);
             }
 
         }
@@ -203,7 +201,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             regBack.setRegistrationOrderHis(his);
             regBack = registrationRepository.save(regBack);
             payBackTodayReg(payRegReq, order, regBack);
-            LOGGER.info(e.getMessage());
+            LOGGER.info("当日挂号更新出现异常", e);
             webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
                     regBack.getRegDate());
             throw e;
@@ -236,8 +234,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             his.setClientReturnMsg(e.getMessage());
             regBack.setRegistrationOrderHis(his);
             registrationRepository.save(regBack);
-            e.printStackTrace();
-            LOGGER.info(e.getMessage());
+            LOGGER.info("预约挂号出现异常", e);
             webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
                     regBack.getRegDate());
             try {
@@ -367,7 +364,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             RegistrationTradeRefundDocument trade = null;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
-                trade.setOutRefundNo(CenterFunctionUtils.createRegOrOrderNo(2));
+                trade.setOutRefundNo(trade.getOutTradeNo()+"001");
                 trade.setRefundFee(String.valueOf(reg.getAmount()));
                 trade.setTotalFee(String.valueOf(reg.getAmount()));
                 trade.setOutTradeNo(reg.getOrderNum());
@@ -393,14 +390,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 this.saveRegistrationDocument(reg);
             } else {
                 LOGGER.debug("退号(微信退费失败),订单号:" + trade.getOutTradeNo());
-                throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
+                //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
             }
         } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             RegistrationTradeRefundDocument trade = null;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
-                trade.setOutRequestNo(CenterFunctionUtils.createRegOrOrderNo(2));
+                trade.setOutRequestNo(trade.getOutTradeNo()+"001");
                 trade.setRefundAmount(reg.getAmount());
                 reg.setRegistrationTradeRefund(trade);
                 this.saveRegistrationDocument(reg);
@@ -419,18 +416,18 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                                 trade.getOutRequestNo());
                         BeanUtils.copyProperties(refundReq, refundHisReq);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.debug("挂号退费转换成HIS需要的参数时异常", e);
                     }
                     reg.setRegistrationRefundReq(refundHisReq);
                     reg.setRefundApplyType(String.valueOf(1));
                     this.saveRegistrationDocument(reg);
                 } else {
                     LOGGER.debug("退号(支付宝退费失败),订单号:" + trade.getOutTradeNo());
-                    throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
+                    //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
                 }
             } else {
-                LOGGER.debug("退号(支付宝退费失败),订单号:" + trade.getOutTradeNo());
-                throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
+                LOGGER.debug("退号(支付宝退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
+                //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
             }
         }
         LOGGER.debug("退费请求参数--------------------->>>");
@@ -477,14 +474,13 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 refundHis.setClientReturnMsg(e.getMessage());
                 regBack.setRegistrationRefundHis(refundHis);
                 registrationRepository.save(regBack);
-                LOGGER.info(e.getMessage());
+                LOGGER.info("挂号退款异常", e);
                 throw e;
             }
             try {
                 this.sendRegistrationMsg(SendPushMsgEnum.REG_REFUND_SUCCESS, regBack);
             } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.debug("退费成功后,发送推送抛出异常,异常信息:" + e.getMessage() + ",订单号:" + regBack.getOrderNum());
+                LOGGER.debug("退费成功后,发送推送抛出异常,订单号:" + regBack.getOrderNum(), e);
             }
         }
 
@@ -557,7 +553,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             payRegReq.setPayFee(fee);
             payRegReq.setOperatorId(CenterFunctionUtils.convertDistrictId2OperatorId(reg.getDistrictId()));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("挂号缴费参数转换成HIS需要的参数时异常", e);
             throw e;
         }
         return payRegReq;
@@ -797,8 +793,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(-1),
                                 String.valueOf(0));
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        LOGGER.debug("医生号点信息缓存释放失败,或者是超时推送出现异常:" + regBack.getNum() + ",异常" + e.getMessage());
+                        LOGGER.debug("医生号点信息缓存释放失败,或者是超时推送出现异常:" + regBack.getNum(), e);
                     }
                 } catch (Exception e) {
                     if(newRefund!=null){
@@ -813,7 +808,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         e2.printStackTrace();
                         LOGGER.debug("保存错误消息时出现异常信息:" + regBack.getNum() + ",异常" + e2.getMessage());
                     }
-                    LOGGER.debug("挂号单号:"+regBack.getNum()+",退号时抛出异常"+e.getMessage());
+                    LOGGER.debug("挂号单号:" + regBack.getNum(), e);
                     throw e;
                 }
             }
@@ -827,25 +822,22 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     if(StringUtil.isEmpty(regBack.getOrderNum())){
                         throw  new Exception("挂号单中订单号字段信息为空,退费失败,挂号单号:"+regBack.getNum());
                     }
-                    if (regBack.getRegistrationRefundReq() == null
-                            || StringUtil.isEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
-                        refundReq = this.saveRegRefund(registrationId);
-                    } else {
+                    this.saveRegRefund(registrationId);
+                    regBack = this.getRegistrationDocumentById(registrationId);
+                    if (regBack.getRegistrationRefundReq() != null
+                            && StringUtil.isNotEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
                         refundReq = new RefundReq();
                         BeanUtils.copyProperties(regBack.getRegistrationRefundReq(), refundReq);
-                        LOGGER.debug("调用HIS退费接口异常,再次调用退费,不执行支付平台的退费,订单号:" + regBack.getOrderNum());
                     }
                     LOGGER.debug("挂号完成退费到支付平台,订单号:" + regBack.getOrderNum());
                     try {
                         saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
                                 String.valueOf(0));
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        LOGGER.debug("退费后,保存日志信息出现异常,订单号:" + regBack.getOrderNum() + ",异常信息:" + e.getMessage());
+                        LOGGER.debug("退费后,保存日志信息出现异常,订单号:" + regBack.getOrderNum(), e);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    LOGGER.debug("挂号退费到支付平台失败,支付平台:" + regBack.getPayChannelId() + ",订单号:" + regBack.getOrderNum());
+                    LOGGER.debug("挂号退费到支付平台失败,支付平台:" + regBack.getPayChannelId() + ",订单号:" + regBack.getOrderNum(), e);
                     if(newRefund!=null){
                         newRefund.setDescription(e.getMessage());
                     }
@@ -862,16 +854,17 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     throw e;
                 }
                 if (refundReq != null&&StringUtil.isNotEmpty(refundReq.getRefundId())) {
-                    this.saveUpdateRegistrationAndOrderRefund(refundReq);
-                    LOGGER.debug("完成退费通知HIS,订单号:" + regBack.getOrderNum());
-                    try {
-                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
-                                String.valueOf(1));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        LOGGER.debug("保存挂号退费日志时出现异常,订单号:" + regBack.getOrderNum() + ",异常信息:" + e.getMessage());
+                    if (regBack.getRegistrationRefundHis() == null
+                            || StringUtil.isEmpty(regBack.getRegistrationRefundHis().getRefundFlag())) {
+                        this.saveUpdateRegistrationAndOrderRefund(refundReq);
+                        LOGGER.debug("完成退费通知HIS,订单号:" + regBack.getOrderNum());
+                        try {
+                            saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
+                                    String.valueOf(1));
+                        } catch (Exception e) {
+                            LOGGER.debug("保存挂号退费日志时出现异常,订单号:" + regBack.getOrderNum(), e);
+                        }
                     }
-
                 }
             }
         }

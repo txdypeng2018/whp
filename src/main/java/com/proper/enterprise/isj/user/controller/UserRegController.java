@@ -20,6 +20,8 @@ import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -39,6 +41,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/permission")
 public class UserRegController extends BaseController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserRegController.class);
 
     @Autowired
     UserInfoService userInfoServiceImpl;
@@ -193,7 +197,7 @@ public class UserRegController extends BaseController {
                         resultMsg = userInfoServiceImpl.userLogin(user);
                         tempCache.evict("verificationcode_" + phone);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.debug("注册用户出现异常", e);
                         resultMsg = CenterFunctionUtils.USER_SAVE_ERROR;
                         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
                     }
@@ -231,7 +235,7 @@ public class UserRegController extends BaseController {
             try {
                 user = userService.getCurrentUser();
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("获得当前人失败", e);
                 resultMsg = e.getMessage();
                 httpStatus = HttpStatus.UNAUTHORIZED;
             }
@@ -256,7 +260,7 @@ public class UserRegController extends BaseController {
                         user.setPassword(pwdService.encrypt(newPassword));
                         userService.save(user);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.debug("修改密码出现异常", e);
                         resultMsg = CenterFunctionUtils.PASSWORD_MODIFY_ERROR;
                         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
                     }
@@ -295,7 +299,7 @@ public class UserRegController extends BaseController {
                         userService.save(user);
                         tempCache.evict("verificationcode_" + phone);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.debug("找回密码出现异常", e);
                         resultMsg = CenterFunctionUtils.PASSWORD_MODIFY_ERROR;
                         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
                     }

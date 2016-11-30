@@ -217,7 +217,7 @@ public class AliServiceImpl implements AliService {
                 res = null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("获得支付宝返回结果出现异常", e);
         }
         return res;
     }
@@ -320,8 +320,7 @@ public class AliServiceImpl implements AliService {
                                 }
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
-                            LOGGER.debug("支付成功后,调用HIS接口中发生了错误,订单号:" + orderNo);
+                            LOGGER.debug("支付成功后,调用HIS接口中发生了错误,订单号:" + orderNo, e);
                         }
                     }
                     // // 更新订单状态

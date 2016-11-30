@@ -1,5 +1,16 @@
 package com.proper.enterprise.isj.proxy.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.proper.enterprise.isj.exception.HisLinkException;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.SubjectDocument;
@@ -9,14 +20,6 @@ import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Created by think on 2016/8/16 0016. 指定科室详细
@@ -24,6 +27,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/organization")
 public class OrganizationController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationController.class);
 
     @Autowired
     SubjectService subjectService;
@@ -45,13 +50,13 @@ public class OrganizationController extends BaseController {
                     .get(String.valueOf(DeptLevel.CHILD.getCode())).get("0");
             // disList = subjectService.findDistrictListFromHis();
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             throw new HisLinkException(CenterFunctionUtils.HIS_DATALINK_ERR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             throw new HisLinkException(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             throw new Exception(CenterFunctionUtils.APP_SYSTEM_ERR);
         }
         return responseOfGet(disList);

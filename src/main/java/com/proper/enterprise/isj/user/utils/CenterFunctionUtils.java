@@ -8,6 +8,8 @@ import java.util.*;
 
 import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +33,8 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
  * Created by think on 2016/8/25 0025.
  */
 public class CenterFunctionUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CenterFunctionUtils.class);
 
     public final static String PHONE_NULL = "请输入电话号码";
 
@@ -121,6 +125,8 @@ public class CenterFunctionUtils {
     public final static String ORDER_ALREADY_PAID_ERR = "订单已经支付,不能重复支付";
 
     public final static String ORDER_NON_DATA_ERR = "没有要交费的订单";
+
+    public final static String ORDER_NON_RECIPE_ERR = "缴费订单生成失败,请重新选择要缴费流水号,进行支付";
 
     public final static String ORDER_DIFF_RECIPE_ERR = "缴费金额与当前待支付金额不符,请重新核对缴费单";
 
@@ -564,7 +570,7 @@ public class CenterFunctionUtils {
                 regLevelNameMap.put(val.getCode(), field.get(cfUtile).toString());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("获得挂号级别code对应的中文名称", e);
         }
         return regLevelNameMap;
     }

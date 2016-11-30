@@ -104,13 +104,20 @@ public class AliPayController extends BaseController {
             Order order = orderService.findByOrderNo(uoReq.getOutTradeNo());
             if(order!=null){
                 if(order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())){
-                    String totalFee = (new BigDecimal(uoReq.getTotalFee()).multiply(new BigDecimal("100"))).toString();
-                    boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(), totalFee, PayChannel.ALIPAY);
-                    RecipeOrderDocument recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
-                    if (!flag
-                            || (recipe != null && StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
+                    RecipeOrderDocument recipe = recipeService
+                            .getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+                    if (recipe == null) {
                         resObj.setResultCode("-1");
-                        resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
+                        resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_RECIPE_ERR);
+                    } else {
+                        String totalFee = (new BigDecimal(uoReq.getTotalFee()).multiply(new BigDecimal("100")))
+                                .toString();
+                        boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(), totalFee,
+                                PayChannel.ALIPAY);
+                        if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
+                            resObj.setResultCode("-1");
+                            resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
+                        }
                     }
                 }else{
                     RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
@@ -136,7 +143,7 @@ public class AliPayController extends BaseController {
                 resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("支付宝预支付异常", e);
             resObj.setResultCode("-1");
             resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
         }
