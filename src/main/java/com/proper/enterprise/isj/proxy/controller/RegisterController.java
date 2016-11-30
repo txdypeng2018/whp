@@ -147,14 +147,14 @@ public class RegisterController extends BaseController {
         try {
             scheList = scheduleService.findDoctorScheduleByTime(id, date);
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -199,7 +199,7 @@ public class RegisterController extends BaseController {
                 resultList.add(registrationDocument);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("挂号单列表初始化异常", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -232,8 +232,7 @@ public class RegisterController extends BaseController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug("挂号单列表初始化校验是否已付款失败,挂号单号:" + registrationDocument.getNum());
+            LOGGER.debug("挂号单列表初始化校验是否已付款失败,挂号单号:" + registrationDocument.getNum(), e);
         }
         return registrationDocument;
     }
@@ -266,7 +265,7 @@ public class RegisterController extends BaseController {
                 reg.setCanBack(String.valueOf(0));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("挂号单初始化异常", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -320,7 +319,7 @@ public class RegisterController extends BaseController {
                 throw new RegisterException(checkRegMsg);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("添加挂号单出现异常", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw e;
         }
@@ -350,19 +349,19 @@ public class RegisterController extends BaseController {
             map.put("orderNum", saveReg.getOrderNum());
             return new ResponseEntity(map, HttpStatus.CREATED);
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw new HisLinkException(CenterFunctionUtils.HIS_DATALINK_ERR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw new HisReturnException(e.getMessage());
         } catch (RegisterException e) {
-            e.printStackTrace();
+            LOGGER.debug("接口内异常", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw new RegisterException(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw new RegisterException(CenterFunctionUtils.APP_SYSTEM_ERR);
         }
@@ -459,19 +458,19 @@ public class RegisterController extends BaseController {
                 httpStatus = HttpStatus.BAD_REQUEST;
             }
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             resultMsg = CenterFunctionUtils.HIS_DATALINK_ERR;
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             resultMsg = e.getMessage();
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         } catch (RegisterException e) {
-            e.printStackTrace();
+            LOGGER.debug("接口内异常", e);
             resultMsg = e.getMessage();
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             resultMsg = CenterFunctionUtils.APP_SYSTEM_ERR;
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }

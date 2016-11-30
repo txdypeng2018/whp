@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,8 @@ import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
 @RequestMapping(path = "/user")
 public class UserInfoController extends BaseController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoController.class);
+
     @Autowired
     UserInfoService userInfoServiceImpl;
 
@@ -68,7 +72,7 @@ public class UserInfoController extends BaseController {
                 return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("获得token异常", e);
             return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
         }
 
@@ -512,7 +516,7 @@ public class UserInfoController extends BaseController {
         try {
             tokenVerify = jwtService.verify(token);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.debug("校验token异常", e);
             throw e;
         }
         return tokenVerify;

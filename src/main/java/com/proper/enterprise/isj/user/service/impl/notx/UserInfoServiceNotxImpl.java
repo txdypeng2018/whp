@@ -79,7 +79,7 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
             userInfo = userInfoRepository.save(userInfo);
             userInfo = userInfoServiceImpl.saveUserAndUserInfo(user, userInfo);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("保存用户信息出现异常", e);
             if (StringUtil.isNotEmpty(userInfo.getUserId())) {
                 User us = userService.get(userInfo.getUserId());
                 if (us == null) {

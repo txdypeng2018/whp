@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.tasks;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.enums.OrderCancelTypeEnum;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
-import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
  * Created by think on 2016/9/29 0029.
@@ -33,31 +33,29 @@ public class RegistrationCancelTask implements Runnable {
                 registrationService.saveCancelRegistration(registrationDocument.getId(),
                         OrderCancelTypeEnum.CANCEL_OVERTIME);
             } catch (Exception e) {
-                LOGGER.debug("超时自动退号失败,挂号单号:" + registrationDocument.getNum() + ",错误消息:" + e.getMessage());
-                e.printStackTrace();
+                LOGGER.debug("超时自动退号失败,挂号单号:" + registrationDocument.getNum(), e);
             }
         }
 
-        List<RegistrationDocument> cancelRegRefundErrList = registrationService
-                .findAlreadyCancelRegAndRefundErrRegList();
-        for (RegistrationDocument registrationDocument : cancelRegRefundErrList) {
-            if (!registrationDocument.getIsAppointment().equals("1")) {
-                continue;
-            }
-            if (DateUtil.toDate(registrationDocument.getRegDate())
-                    .compareTo(DateUtil.toDate(DateUtil.toDateString(new Date()))) <= 0) {
-                continue;
-            }
-            if (StringUtil.isNotEmpty(registrationDocument.getRegistrationRefundReq().getOrderId())) {
-                continue;
-            }
-            try {
-                registrationService.saveCancelRegistration(registrationDocument.getId(),
-                        OrderCancelTypeEnum.CANCEL_HANDLE);
-            } catch (Exception e) {
-                LOGGER.debug(
-                        "对已交挂号费,手动退号,退费失败的记录进行退费,退费失败,单号:" + registrationDocument.getNum() + ",错误消息:" + e.getMessage());
-                e.printStackTrace();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if (cal.get(Calendar.HOUR_OF_DAY) % 2 == 0 && cal.get(Calendar.MINUTE) == 30) {
+            List<RegistrationDocument> cancelRegRefundErrList = registrationService
+                    .findAlreadyCancelRegAndRefundErrRegList();
+            for (RegistrationDocument registrationDocument : cancelRegRefundErrList) {
+                if (!registrationDocument.getIsAppointment().equals("1")) {
+                    continue;
+                }
+                if (DateUtil.toDate(registrationDocument.getRegDate())
+                        .compareTo(DateUtil.toDate(DateUtil.toDateString(new Date()))) <= 0) {
+                    continue;
+                }
+                try {
+                    registrationService.saveCancelRegistration(registrationDocument.getId(),
+                            OrderCancelTypeEnum.CANCEL_HANDLE);
+                } catch (Exception e) {
+                    LOGGER.debug("对已交挂号费,手动退号,退费失败的记录进行退费,退费失败,单号:" + registrationDocument.getNum(), e);
+                }
             }
         }
     }

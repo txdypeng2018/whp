@@ -129,7 +129,7 @@ public class WeixinServiceImpl implements WeixinService {
                             }
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.debug("微信通知接口返回接口异常", e);
                     }
                     
                 }
@@ -221,11 +221,19 @@ public class WeixinServiceImpl implements WeixinService {
             ret.setResultCode("0");
             ret.setResultMsg(res.getReturnMsg());
             ret.setPrepayid(res.getTransactionId());
-            // 获取Entity信息
-            WeixinRefundEntity weixinRefundInfo = new WeixinRefundEntity();
-            BeanUtils.copyProperties(res, weixinRefundInfo);
-            logEntity(weixinRefundInfo, WeixinRefundEntity.class);
-            this.save(weixinRefundInfo);
+            WeixinRefund refund = this.findRefundByOutTradeNo(res.getOutTradeNo());
+            if (refund == null) {
+                WeixinRefundEntity weixinRefundInfo = new WeixinRefundEntity();
+                BeanUtils.copyProperties(res, weixinRefundInfo);
+                logEntity(weixinRefundInfo, WeixinRefundEntity.class);
+                this.save(weixinRefundInfo);
+            }
+//            // 获取Entity信息
+//            WeixinRefundEntity weixinRefundInfo = new WeixinRefundEntity();
+//            BeanUtils.copyProperties(res, weixinRefundInfo);
+//            logEntity(weixinRefundInfo, WeixinRefundEntity.class);
+//
+//            this.save(weixinRefundInfo);
 
         } else if ("SUCCESS".equalsIgnoreCase(res.getReturnCode()) && "FAIL".equalsIgnoreCase(res.getResultCode())) {
             // TODO 失败时不返回订单信息,仅返回支付状态信息
@@ -258,7 +266,7 @@ public class WeixinServiceImpl implements WeixinService {
                 queryRes = null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("微信查询接口返回接口异常", e);
         }
 
         return queryRes;
@@ -276,7 +284,7 @@ public class WeixinServiceImpl implements WeixinService {
                     res = null;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.debug("微信退费接口返回接口异常", e);
             }
         }
         return res;
@@ -301,7 +309,7 @@ public class WeixinServiceImpl implements WeixinService {
                     MediaType.APPLICATION_FORM_URLENCODED, requestXML);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("微信公共接口返回接口异常", e);
         }
         return response;
     }

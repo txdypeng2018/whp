@@ -8,8 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IdcardUtils extends StringUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CenterFunctionUtils.class);
+    
     /** 中国公民身份证号码最小长度。 */
     public static final int CHINA_ID_MIN_LENGTH = 15;
 
@@ -128,7 +133,7 @@ public class IdcardUtils extends StringUtils {
             try {
                 birthDate = new SimpleDateFormat("yyMMdd").parse(birthday);
             } catch (ParseException e) {
-                e.printStackTrace();
+                LOGGER.debug("根据身份证解析生日出现异常", e);
             }
             Calendar cal = Calendar.getInstance();
             if (birthDate != null) {
@@ -229,7 +234,7 @@ public class IdcardUtils extends StringUtils {
             try {
                 birthDate = new SimpleDateFormat("yy").parse(birthCode.substring(0, 2));
             } catch (ParseException e) {
-                e.printStackTrace();
+                LOGGER.debug("验证15位身份编码是否合法异常", e);
             }
             Calendar cal = Calendar.getInstance();
             if (birthDate != null) {
@@ -370,7 +375,7 @@ public class IdcardUtils extends StringUtils {
                 iArr[i] = Integer.parseInt(String.valueOf(ca[i]));
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LOGGER.debug("将字符数组转换成数字数组异常", e);
         }
         return iArr;
     }

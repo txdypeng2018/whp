@@ -1,5 +1,19 @@
 package com.proper.enterprise.isj.proxy.controller;
 
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.DoctorDocument;
 import com.proper.enterprise.isj.proxy.document.SubjectDocument;
@@ -12,17 +26,6 @@ import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.*;
 
 /**
  * Created by think on 2016/8/16 0016. 查询全院医生列表
@@ -31,6 +34,8 @@ import java.util.*;
 @RequestMapping(path = "/doctors")
 @JWTIgnore
 public class DoctorController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
 
     @Autowired
     DoctorService doctorService;
@@ -138,14 +143,14 @@ public class DoctorController extends BaseController {
                 result = new ArrayList<>();
             }
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -165,14 +170,14 @@ public class DoctorController extends BaseController {
         try {
             doc = webServiceCacheUtil.getCacheDoctorDocument().get(id);
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }

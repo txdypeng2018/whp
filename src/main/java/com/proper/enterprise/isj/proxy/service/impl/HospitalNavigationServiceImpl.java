@@ -509,13 +509,13 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
             disList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
                     .get(String.valueOf(DeptLevel.CHILD.getCode())).get("0");
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS接口返回参数错误", e);
             throw new HisLinkException(CenterFunctionUtils.HIS_DATALINK_ERR);
         } catch (HisReturnException e) {
-            e.printStackTrace();
+            LOGGER.debug("HIS接口返回错误", e);
             throw new HisLinkException(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("系统错误", e);
             throw new Exception(CenterFunctionUtils.APP_SYSTEM_ERR);
         }
         return disList;

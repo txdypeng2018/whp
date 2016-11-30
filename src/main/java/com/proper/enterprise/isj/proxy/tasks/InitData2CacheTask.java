@@ -1,5 +1,7 @@
 package com.proper.enterprise.isj.proxy.tasks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil
  */
 @Component
 public class InitData2CacheTask implements Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitData2CacheTask.class);
 
     @Autowired
     WebService4HisInterfaceCacheUtil webService4HisInterfaceCacheUtil;
@@ -35,7 +39,7 @@ public class InitData2CacheTask implements Runnable {
             webServiceCacheUtil.cacheDoctorInfoLike();
             webServiceCacheUtil.cacheDoctorSubjectRelMap();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("定时任务异常", e);
         }
 
     }

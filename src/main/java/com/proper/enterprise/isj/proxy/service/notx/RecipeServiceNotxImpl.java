@@ -204,7 +204,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 }
             }
         } catch (UnmarshallingFailureException e) {
-            e.printStackTrace();
+            LOGGER.debug("解析HIS返回结果异常", e);
             throw new HisLinkException(CenterFunctionUtils.HIS_DATALINK_ERR);
         }
         return recipeList;
@@ -228,7 +228,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
             if (order != null) {
                 recipeOrderRepository.delete(order);
             }
-            e.printStackTrace();
+            LOGGER.debug("保存缴费订单信息出现异常,门诊流水号:" + clinicCode, e);
             throw e;
         }
         return recipeOrder;
@@ -273,15 +273,14 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 regBack = recipeServiceImpl.saveRecipeOrderDocument(regBack);
                 order = this.updateRegistrationAndOrder(order, payOrderReq, regBack, channelId);
             } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.info(e.getMessage());
+                LOGGER.info("诊间缴费出现异常", e);
                 String refundNo = order.getOrderNo() + "001";
                 RecipePaidDetailDocument detail = regBack.getRecipeNonPaidDetail();
                 if (detail == null) {
                     detail = new RecipePaidDetailDocument();
                 }
                 detail.setRefundNum(refundNo);
-                LOGGER.debug(e.getMessage() + ",退款单号:" + refundNo);
+                LOGGER.debug("退款单号:" + refundNo, e);
                 if (StringUtil.isEmpty(detail.getDescription())) {
                     detail.setDescription("");
                 }
@@ -522,9 +521,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug("计算支付平台已缴金额发生异常,门诊流水号:" + regBack.getClinicCode() + ",订单号:" + order.getOrderNo()
-                    + ",异常信息:" + e.getMessage());
+            LOGGER.debug("计算支付平台已缴金额发生异常,门诊流水号:" + regBack.getClinicCode() + ",订单号:" + order.getOrderNo(), e);
             sendRecipePaidFailMsg(regBack, SendPushMsgEnum.RECIPE_PAID_REFUND_FAIL);
             return false;
         }
@@ -652,8 +649,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
             // //throw e1;
             // payOrderReq = null;
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.debug("将订单转换成缴费参数对象异常,订单号:" + order.getOrderNo());
+            LOGGER.debug("将订单转换成缴费参数对象异常,订单号:" + order.getOrderNo(), e);
             // throw e;
             payOrderReq = null;
         }

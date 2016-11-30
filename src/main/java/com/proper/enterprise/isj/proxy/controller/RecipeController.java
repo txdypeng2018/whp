@@ -96,9 +96,7 @@ public class RecipeController extends BaseController {
                     try {
                         recipeService.checkRecipeOrderIsPay(recipeOrderDocument);
                     } catch (Exception e) {
-                        LOGGER.debug(
-                                "缴费单初始化校验失败,门诊流水号:" + recipeOrderDocument.getClinicCode() + ",错误消息:" + e.getMessage());
-                        e.printStackTrace();
+                        LOGGER.debug("缴费单初始化校验失败,门诊流水号:" + recipeOrderDocument.getClinicCode(), e);
                     }
 
                 }

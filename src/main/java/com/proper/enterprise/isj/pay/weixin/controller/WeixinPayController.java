@@ -142,14 +142,18 @@ public class WeixinPayController extends BaseController {
                 Order order = orderService.findByOrderNo(uoReq.getOutTradeNo());
                 if (order != null) {
                     if (order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())) {
-                        boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(),
-                                String.valueOf(uoReq.getTotalFee()), PayChannel.WECHATPAY);
                         RecipeOrderDocument recipe = recipeService
                                 .getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
-                        if (!flag || (recipe != null
-                                && StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
+                        if (recipe == null) {
                             resObj.setResultCode("-1");
-                            resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
+                            resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_RECIPE_ERR);
+                        } else {
+                            boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(),
+                                    String.valueOf(uoReq.getTotalFee()), PayChannel.WECHATPAY);
+                            if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
+                                resObj.setResultCode("-1");
+                                resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
+                            }
                         }
                     } else {
                         RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
@@ -175,7 +179,7 @@ public class WeixinPayController extends BaseController {
                     resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("微信预支付异常", e);
                 resObj.setResultCode("-1");
                 resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
             }
