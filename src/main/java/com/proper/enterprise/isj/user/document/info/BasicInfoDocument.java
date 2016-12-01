@@ -2,7 +2,7 @@ package com.proper.enterprise.isj.user.document.info;
 
 import com.proper.enterprise.isj.user.model.enums.MemberRelationEnum;
 import com.proper.enterprise.platform.core.PEPConstants;
-import com.proper.enterprise.platform.core.converter.AESConverter;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import org.springframework.data.annotation.Transient;
 
@@ -86,7 +86,7 @@ public class BasicInfoDocument extends BaseDocument {
     private Map<String, String> medicalNumMap = new HashMap<>();
 
     @Transient
-    private transient AESConverter converter = new AESConverter();
+    private transient AESStringConverter converter = new AESStringConverter();
 
     public String getName() {
         return converter.convertToEntityAttribute(name);

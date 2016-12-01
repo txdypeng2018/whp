@@ -1,6 +1,6 @@
 package com.proper.enterprise.isj.proxy.document.recipe;
 
-import com.proper.enterprise.platform.core.converter.AESConverter;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.springframework.data.annotation.Transient;
@@ -59,7 +59,7 @@ public class RecipeOrderDocument extends BaseDocument {
     /*-----------------操作人信息-----------*/
 
     @Transient
-    private transient AESConverter converter = new AESConverter();
+    private transient AESStringConverter converter = new AESStringConverter();
 
 
     /**
