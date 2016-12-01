@@ -8,7 +8,7 @@ import com.proper.enterprise.isj.proxy.document.registration.*;
 import com.proper.enterprise.isj.webservices.model.enmus.RegType;
 import com.proper.enterprise.isj.webservices.model.enmus.Sex;
 import com.proper.enterprise.isj.webservices.model.enmus.TimeFlag;
-import com.proper.enterprise.platform.core.converter.AESConverter;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
@@ -243,7 +243,7 @@ public class RegistrationDocument extends BaseDocument {
     /*------------医生出诊信息---------*/
 
     @Transient
-    private transient AESConverter converter = new AESConverter();
+    private transient AESStringConverter converter = new AESStringConverter();
 
     /**
      * 申请退款

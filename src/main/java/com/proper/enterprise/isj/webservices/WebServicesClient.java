@@ -6,6 +6,7 @@ import com.proper.enterprise.isj.webservices.model.req.*;
 import com.proper.enterprise.isj.webservices.model.res.*;
 import com.proper.enterprise.isj.webservices.repository.WSLogRepository;
 import com.proper.enterprise.isj.webservices.service.RegSJService;
+import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.enums.IntEnum;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
@@ -24,10 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
@@ -139,10 +137,10 @@ public class WebServicesClient {
                 .unmarshal(new StreamSource(new StringReader(responseStr)));
         if (signValid(resModel)) {
             if(resModel.getReturnCode()!= ReturnCode.ERROR){
-                String res = aes.decrypt(resModel.getResEncrypted());
-                if (StringUtil.isNotNull(res)) {
+                byte[] res = aes.decrypt(resModel.getResEncrypted().getBytes(PEPConstants.DEFAULT_CHARSET));
+                if (res != null && res.length > 0) {
                     Unmarshaller u = wac.getBean("unmarshall" + clz.getSimpleName(), Unmarshaller.class);
-                    T resObj = (T) u.unmarshal(new StreamSource(new StringReader(res)));
+                    T resObj = (T) u.unmarshal(new StreamSource(new ByteArrayInputStream(res)));
                     resModel.setRes(resObj);
                 }
             }
@@ -151,14 +149,6 @@ public class WebServicesClient {
             LOGGER.error("Sign is INVALID!! Could NOT parse response!!");
             return null;
         }
-    }
-
-    public String  getStr() throws Exception {
-        String a = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><ROOT><RETURN_CODE><![CDATA[0]]></RETURN_CODE><RETURN_MSG><![CDATA[交易成功]]></RETURN_MSG><SIGN_TYPE><![CDATA[MD5]]></SIGN_TYPE><SIGN><![CDATA[55AFE8C4E244F3E5D55016DA44E3CCB0]]></SIGN><RES_ENCRYPTED><![CDATA[LpDw/9MGELILw652voXW5IdTqkb7iT3koePoEAlQiH63UTpMk2ObcxFW/4BXRlkD92OWfyqSST45jD18OVlHY64meJ9gkdUDXKJqawTERk4kUi4fzWJ92EFxfuTAfwgGiITGWYgxmAlh8Dw2V+VEQNaW0uBt6BsUuPBqg2hQ8vok4cS9f/dVaf2/hXsRVm2a7UEr7KO3G74l1Ag1SkJIa22R9r/tLdA0EdjmupqDjylDnk7EznFNKkDPP9JAC78bnNNjFqugOM689cTtLVeqi9tgK/2m2rnkiQ9veVt/xdJXf+ss9P1a4tF+hkwn+Uh8F48ewQBPUfUyT6J5WAEIZtoa776kwg7rE68K2DdMBPRdN1nDtuCxwDh3RTU7lKzyy08lpPpXRk1Ol562mmpt9XAJCwOTRhJajMA2z9oqmR2S3UtFdOajAbg6fjXpzvlL4NESHtr56tP/HzVXl+SJ07fFNN0kDEXUWnvcRnNNo3v2KY+erAZzXokw2d82gGYFlvXc2DNiSeoSzuBS9tAlAyorqpEokufR34e5Uxl4U6lDMfSlWxDAt1P2cz0E5UZ2PivTLuuEj4yqLpdceKyFhNNLstcZTvkcUVe+rr5Z5ep08A2WXmLmWhDE0SNwvXWKfM7MR5ImvZizavKw58Q4u+/QrkWxQHKoWfRmaQ24qUSzqxVtdIZCYr43NThxUKV8dKfQAFdlrAMoiqG6TNLnviWZ3TGmL0n7G6K1E+lBVTu9OEmbAyHxhKk6U24GTnjTfW2avthijrc9RwqtcPao9tJt3WHVbqsOKp9pnOAvnr23NH8AB14lHjw8wDa0gw29sBvJp7O6D/UYrzC+I6KUSrc0fwAHXiUePDzANrSDDb0i4MCQKJE0+daLwxQt3Y+3gh5W/ADyqvR5UppPsgiuOCoU4SH0nmpa8K16ejvJhjC76cnIUQptEBTv5dD23HUe57JqmomYdGyR9ovBB7XSi9W93AkkK+h6zqzuTIRj2VMsOJC0JZowa4MnTp6zfEkaGczFXQkBakhMd3X6BlxqY5VyW6qsW6aV/SVVLtJOyp0xKWcws6bevTz4DxCO/c3O+RhRajbnNESV1CcicLVDvIps12D9K+t/qn5vWpkI3WMH6edG1ab4njNTvZAdBPP81J0QfHTANlRxYFyzM7D9oKQONaKfphlkyqR7ok6FAgg8w2K8ZQOz5lghF+LlhZFXYi9T1brHofNzPRTIl8JOvPnfRhkGGBeQZwrf/eghzLHHfWBKK6wqdg6tYhiavNE+3pAVyvWryzfU5XZ6g2gdVzzDYrxlA7PmWCEX4uWFkVftOjKoXgyyTgqCV1v44U7IeumAzqPCM98HCubi23nwlRBSdQQnnL/8VRxN4VKZK68Gq68mitMG0XlZD2JmGCkGuW9iY7RlHbxqFhk0ebWM4H9mGxQhuZ88qpyYXoJwsVOeO6mDZKf8lFWdj8yt2x814MWFbymO94kUhY+08R/oycMY5tTdM7qU1yP7Mby1IEu3bGT7GC3KOrGEnkQK9HEuXG9t/A2D1z5TgwIMTpiviE/U83ZEAHn0408ik3e8bHfRFenpd/s7/ixdDo957OHpab7m6daw0nv61RkgDrbtdHKYHIfvwugGdym6RsM71b6whGC0DozciKiro/LtnIiwomyl3zTNJVij5EMDbusbwnBDk2JIiHj8Qr7DQHJK+kiOFlU3Yh3TMBuhmQ72rGmhEB5jtng3c5ZZhNJORmV28g1q6Iwtl6xZC13IxEJI5xr9WTSkLoSgnajN4jd5aQRVOOvnRB7qN1XalJe6Vs/Bfg==]]></RES_ENCRYPTED></ROOT>";
-        ResModel<String> resModel = (ResModel<String>) unmarshaller
-                .unmarshal(new StreamSource(new StringReader(a)));
-        String res = aes.decrypt(resModel.getResEncrypted());
-        return res;
     }
 
     private boolean signValid(ResModel resModel) {

@@ -32,7 +32,7 @@ import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.jwt.model.JWTHeader;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
 import com.proper.enterprise.platform.core.controller.BaseController;
-import com.proper.enterprise.platform.core.converter.AESConverter;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
 
@@ -210,7 +210,7 @@ public class UserInfoController extends BaseController {
         familyMemberInfoDocument.setMember(member);
         familyMemberInfoDocument.setIdCard(idCard);
         List<RegistrationDocument> regList = registrationService.findRegistrationDocumentByCreateUserIdAndPatientIdCard(
-                user.getId(), new AESConverter().convertToDatabaseColumn(idCard));
+                user.getId(), new AESStringConverter().convertToDatabaseColumn(idCard));
         if (regList.size() > 0) {
             familyMemberInfoDocument.setId(regList.get(0).getPatientId());
         } else {

@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.utils
 import com.proper.enterprise.isj.webservices.model.req.ReqModel
+import com.proper.enterprise.platform.core.PEPConstants
 import com.proper.enterprise.platform.core.utils.ConfCenter
 import com.proper.enterprise.platform.core.utils.cipher.AES
 import com.proper.enterprise.platform.core.utils.digest.MD5
@@ -42,7 +43,7 @@ class ComposeRequestTest extends AbstractTest {
                 ConfCenter.get("isj.his.aes.mode"),
                 ConfCenter.get("isj.his.aes.padding"),
                 ConfCenter.get("isj.his.aes.key"));
-        reqEnc = aes.encrypt(reqEnc);
+        reqEnc = new String(aes.encrypt(reqEnc.getBytes(PEPConstants.DEFAULT_CHARSET)), PEPConstants.DEFAULT_CHARSET);
         assert xml.REQ_ENCRYPTED.text() == "<![CDATA[" + reqEnc + "]]>"
 
         def sign = "FUN_CODE=$funCode&REQ_ENCRYPTED=$reqEnc&USER_ID=$userId&KEY=${ConfCenter.get('isj.his.aes.key')}"

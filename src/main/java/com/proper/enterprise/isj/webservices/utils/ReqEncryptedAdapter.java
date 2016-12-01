@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.utils;
 
+import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -30,7 +31,7 @@ public class ReqEncryptedAdapter extends XmlAdapter<String, Map<String, Object>>
 
     public String marshal(Map<String, Object> v, boolean needCDATA) throws Exception {
         String str = "<REQ>" + iterateCollection(v) + "</REQ>";
-        String result = AES.encrypt(str);
+        String result = new String(AES.encrypt(str.getBytes(PEPConstants.DEFAULT_CHARSET)), PEPConstants.DEFAULT_CHARSET);
         return needCDATA ? CDATAAdapter.wrapCDATA(result) : result;
     }
 

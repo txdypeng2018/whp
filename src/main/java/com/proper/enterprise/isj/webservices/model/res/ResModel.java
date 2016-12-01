@@ -1,12 +1,11 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
+import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
-
 import java.io.Serializable;
 
 @XmlRootElement(name = "ROOT")

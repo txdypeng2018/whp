@@ -1,7 +1,7 @@
 package com.proper.enterprise.isj.proxy.document.registration;
 
 import com.proper.enterprise.isj.webservices.model.enmus.*;
-import com.proper.enterprise.platform.core.converter.AESConverter;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.springframework.data.annotation.Transient;
@@ -236,7 +236,7 @@ public class RegistrationOrderReqDocument extends BaseDocument {
 
 
 	@Transient
-	private transient AESConverter converter = new AESConverter();
+	private transient AESStringConverter converter = new AESStringConverter();
 
 	public String getLockId() {
 		return lockId;
@@ -633,11 +633,11 @@ public class RegistrationOrderReqDocument extends BaseDocument {
 		this.operatorId = operatorId;
 	}
 
-	public AESConverter getConverter() {
+	public AESStringConverter getConverter() {
 		return converter;
 	}
 
-	public void setConverter(AESConverter converter) {
+	public void setConverter(AESStringConverter converter) {
 		this.converter = converter;
 	}
 }

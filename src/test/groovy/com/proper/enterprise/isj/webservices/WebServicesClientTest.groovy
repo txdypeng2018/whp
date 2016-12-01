@@ -10,21 +10,15 @@ import com.proper.enterprise.isj.webservices.repository.WSLogRepository
 import com.proper.enterprise.platform.core.enums.WhetherType
 import com.proper.enterprise.platform.core.utils.JSONUtil
 import com.proper.enterprise.platform.core.utils.StringUtil
-import com.proper.enterprise.platform.core.utils.cipher.AES
 import com.proper.enterprise.platform.test.AbstractTest
 import org.junit.After
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 
 class WebServicesClientTest extends AbstractTest {
 
     @Autowired
     WebServicesClient client
-
-    @Autowired
-    @Qualifier('hisAES')
-    AES aes;
 
     @Autowired
     WSLogRepository repository
@@ -51,18 +45,12 @@ class WebServicesClientTest extends AbstractTest {
         assert StringUtil.isNotNull(resModel.returnMsg)
         assert resModel.getSignType() == 'MD5'
         assert StringUtil.isNotNull(resModel.getSign())
-        assert StringUtil.isNotNull(resModel.getResEncrypted())
+        assert resModel.getResEncrypted() != null
         assert resModel.getRes() != null
         assert resModel.getRes().sysDate != null
 
         def afterCount = repository.count()
         assert afterCount == beforeCount + 1
-    }
-
-    @Test
-    public void getStr() {
-        String a = client.getStr();
-        println a
     }
 
     @Test
@@ -180,6 +168,13 @@ class WebServicesClientTest extends AbstractTest {
         def nullRes = '<?xml version="1.0" encoding="UTF-8"?><ROOT> <RETURN_CODE><![CDATA[-1]]></RETURN_CODE> <RETURN_MSG><![CDATA[该身份证号已经捆绑病历号]]></RETURN_MSG> <SIGN_TYPE><![CDATA[MD5]]></SIGN_TYPE> <SIGN><![CDATA[E7C97F938AE3282A3C7ACC15AAF218E0]]></SIGN> <RES_ENCRYPTED><![CDATA[kjPZRMs96t6gBs1xfBKrlg==]]></RES_ENCRYPTED> </ROOT>'
         def model = client.parseEnvelop(nullRes, NetTestResult.class)
         assert model.getReturnCode() == ReturnCode.ERROR
+    }
+
+    @Test
+    public void testRefundByHisToAPP() {
+        def resModel = client.refundByHisToAPP('1001', new Date(), new Date())
+        def res = resModel.getRes()
+        assert res.refundlist.size() > 0
     }
 
 }
