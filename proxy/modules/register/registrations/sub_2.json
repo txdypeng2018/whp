@@ -1,0 +1,33 @@
+[
+  {
+    "id": "1",
+    "apptDate": "2016年12月12日 9:10",
+    "clinicNum": "M001234567",
+    "hospital": "中国医科大学附属盛京医院",
+    "districtId": "1",
+    "district": "南湖院区",
+    "deptId": "1",
+    "dept": "第八普通外科门诊",
+    "doctorId": "1",
+    "doctor": "医生1",
+    "amount": "7.00",
+    "registerDate": "2016年08月12日 10:12",
+    "statusCode": "0",
+    "status": "未支付"
+  },{
+    "id": "2",
+    "apptDate": "2016年08月20日 9:10",
+    "clinicNum": "M001234567",
+    "hospital": "中国医科大学附属盛京医院",
+    "districtId": "1",
+    "district": "南湖院区",
+    "deptId": "1",
+    "dept": "第八普通外科门诊",
+    "doctorId": "1",
+    "doctor": "医生1",
+    "amount": "7.00",
+    "registerDate": "2016年08月12日 10:12",
+    "statusCode": "1",
+    "status": "已支付"
+  }
+]
