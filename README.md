@@ -6,6 +6,8 @@ iHospital App
   <img src="https://server.propersoft.cn/teamcity/app/rest/builds/buildType:(id:ISJ_FrontEnd)/statusIcon.svg"/>
 </a>
 
+首先参照平台的[README](https://github.com/propersoft-cn/proper-enterprise-app/blob/master/README.md)
+
 ```bash
 $ npm install -g cordova ionic
 $ npm install
