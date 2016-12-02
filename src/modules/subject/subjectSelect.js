@@ -7,7 +7,9 @@
 
     $scope.subjectId = '';
 
+    var subject = {};
     $scope.$on('$ionicView.beforeEnter', function(){
+      subject = {};
       $scope.httpIndex = {index:1};
       if($scope.type === '1' || $scope.type === '2'){
         //取得挂号须知
@@ -47,6 +49,8 @@
       $http.get('/subjects', {params: {districtId: $scope.districtId, type: $stateParams.type, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.subjects = data;
+
+          subject[$scope.districtId] = data;
 
           //默认选中第一个一级学科
           $scope.subjectId = data[0].id;
@@ -106,7 +110,14 @@
       if ($scope.districtId !== id) {
         $scope.districtId = id;
         $scope.httpIndex.index++;
-        getSubjects();
+
+        if(!angular.isUndefined(subject[id])){
+          $scope.subjects = subject[id];
+          $scope.subjectRights=subject[id][0].subjects;
+        }
+        else{
+          getSubjects();
+        }
       }
     };
 

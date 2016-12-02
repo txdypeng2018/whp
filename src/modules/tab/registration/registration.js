@@ -5,9 +5,10 @@
     //取得挂号单
     var registrationList = function() {
       $scope.registrations = null;
-      $http.get('/register/registrations', {params: {memberId: $stateParams.memberId, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
+      $http.get('/register/registrations', {params: {viewTypeId: $scope.viewTypeId, memberId: $stateParams.memberId, index: $scope.httpIndex.index}}).success(function(data, status, headers, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.registrations = data;
+          diffRegistrations[$scope.viewTypeId] = data;
           for (var i = 0 ; i < $scope.registrations.length ; i++) {
             if ($scope.registrations[i].district.length > 2) {
               $scope.registrations[i].district = $scope.registrations[i].district.substring(0,2);
@@ -24,7 +25,9 @@
       });
     };
 
+    var diffRegistrations = {};
     $scope.$on('$ionicView.beforeEnter', function(){
+      diffRegistrations = {};
       $scope.patient = {};
       //取得就诊人
       $http.get('/user/familyMembers/familyMember', {params: {memberId: $stateParams.memberId}}).success(function(data) {
@@ -40,8 +43,10 @@
         toastService.show(data);
       });
 
+      getViewTypes();
+
       $scope.httpIndex = {index:1};
-      registrationList();
+
       $ionicHistory.clearHistory();
     });
 
@@ -65,6 +70,37 @@
     $scope.doRefresh = function() {
       $scope.httpIndex.index++;
       registrationList();
+    };
+
+    //取得挂号单分类信息
+    var getViewTypes = function() {
+      $http.get('/register/viewTypes').success(function(data) {
+        $scope.viewTypes = data;
+        for (var i = 0 ; i < data.length ; i++) {
+          if(data[i].default === '1'){
+            //默认选中进行中
+            $scope.viewTypeId = data[i].id;
+          }
+        }
+        registrationList();
+      }).error(function(data){
+        toastService.show(data);
+      });
+    };
+
+    //分类跳转
+    $scope.registrationBtnClk=function(id){
+      if ($scope.viewTypeId !== id) {
+        $scope.viewTypeId = id;
+        $scope.httpIndex.index++;
+
+        if(!angular.isUndefined(diffRegistrations[id])){
+          $scope.registrations=diffRegistrations[id];
+        }
+        else{
+          registrationList();
+        }
+      }
     };
   };
 
