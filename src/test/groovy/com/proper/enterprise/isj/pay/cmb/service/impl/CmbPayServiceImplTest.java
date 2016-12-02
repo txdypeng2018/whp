@@ -1,9 +1,6 @@
 package com.proper.enterprise.isj.pay.cmb.service.impl;
 
-import cmb.netpayment.Security;
-import com.cmb.b2b.B2BResult;
 import com.cmb.b2b.Base64;
-import com.cmb.b2b.FirmbankCert;
 import com.proper.enterprise.isj.pay.cmb.constants.CmbConstants;
 import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbBusinessEntity;
@@ -28,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
@@ -51,7 +49,8 @@ import java.util.*;
  * 招商银行支付ServiceImpl
  */
 @Service
-public class CmbServiceImpl implements CmbService {
+@Primary
+public class CmbPayServiceImplTest implements CmbService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmbServiceImpl.class);
 
@@ -230,12 +229,12 @@ public class CmbServiceImpl implements CmbService {
         LOGGER.debug("cmb_reqData:" + reqData);
         JSONObject reqObject = new JSONObject(reqData);
         // 企业网银公钥BASE64字符串 TODO 切换正式环境需要进行替换?
-        String sBase64PubKey = ConfCenter.get("isj.pay.cmb.publickey");
+//        String sBase64PubKey = ConfCenter.get("isj.pay.cmb.publickey");
 
         // 初始化公钥,验证签名
-        B2BResult bRet = FirmbankCert.initPublicKey(sBase64PubKey);
-        if (!bRet.isError()) {
-            LOGGER.debug("验签成功!");
+//        B2BResult bRet = FirmbankCert.initPublicKey(sBase64PubKey);
+//        if (!bRet.isError()) {
+//            LOGGER.debug("验签成功!");
             // 业务数据包：报文数据必须经过base64编码。
             String busdat = reqObject.getString("BUSDAT");
             byte[] bt = Base64.decode(busdat);
@@ -268,7 +267,7 @@ public class CmbServiceImpl implements CmbService {
                     }
                 }
             }
-        }
+//        }
         return ret;
     }
 
@@ -284,12 +283,12 @@ public class CmbServiceImpl implements CmbService {
         // 获取从银行返回的信息
         String queryStr = request.getQueryString();
         LOGGER.debug("queryStr:" + queryStr);
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
+//        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
         // 构造方法
-        Security cmbSecurity = new Security(readStream(inputStream));
+//        Security cmbSecurity = new Security(readStream(inputStream));
         // 检验数字签名
-        if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
-            LOGGER.debug("验签成功");
+//        if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
+//            LOGGER.debug("验签成功");
             // 取得一网通支付结果异步通知对象
             CmbPayEntity payInfo = getCmbPayNoticeInfo(request);
             // 取得支付时传入的参数
@@ -305,7 +304,7 @@ public class CmbServiceImpl implements CmbService {
             }
             // TODO 业务逻辑,更新订单状态等等
             ret = true;
-        }
+//        }
         return ret;
     }
 

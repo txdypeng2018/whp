@@ -31,6 +31,10 @@ public interface CmbService {
 
     PayResultRes getPrepayinfo(BasicInfoDocument basicInfo, UnifiedOrderReq uoReq) throws Exception;
 
+    boolean saveNoticeProtocolInfo(String reqData) throws Exception;
+
+    boolean saveNoticePayInfo(HttpServletRequest request) throws Exception;
+
     PayResultRes querySingleResult(CmbPayEntity payInfo) throws Exception;
 
     CmbRefundEntity saveRefundResult(RefundNoDupBodyReq refundInfo) throws Exception;
