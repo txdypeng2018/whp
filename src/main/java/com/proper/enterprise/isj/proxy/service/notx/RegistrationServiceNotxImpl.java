@@ -364,7 +364,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             RegistrationTradeRefundDocument trade = null;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
-                trade.setOutRefundNo(trade.getOutTradeNo()+"001");
+                trade.setOutRefundNo(reg.getOrderNum()+"001");
                 trade.setRefundFee(String.valueOf(reg.getAmount()));
                 trade.setTotalFee(String.valueOf(reg.getAmount()));
                 trade.setOutTradeNo(reg.getOrderNum());
@@ -397,7 +397,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
-                trade.setOutRequestNo(trade.getOutTradeNo()+"001");
+                trade.setOutRequestNo(reg.getOrderNum()+"001");
                 trade.setRefundAmount(reg.getAmount());
                 reg.setRegistrationTradeRefund(trade);
                 this.saveRegistrationDocument(reg);

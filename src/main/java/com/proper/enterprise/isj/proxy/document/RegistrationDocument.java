@@ -733,4 +733,6 @@ public class RegistrationDocument extends BaseDocument {
     public void setRegNum(String regNum) {
         this.regNum = regNum;
     }
+
+
 }

@@ -1,12 +1,13 @@
 package com.proper.enterprise.isj.proxy.document.registration;
 
+import java.util.Date;
+
+import org.springframework.data.annotation.Transient;
+
 import com.proper.enterprise.isj.webservices.model.enmus.*;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.springframework.data.annotation.Transient;
-
-import java.util.Date;
 
 /**
  * Created by think on 2016/9/11 0011.
@@ -633,11 +634,4 @@ public class RegistrationOrderReqDocument extends BaseDocument {
 		this.operatorId = operatorId;
 	}
 
-	public AESStringConverter getConverter() {
-		return converter;
-	}
-
-	public void setConverter(AESStringConverter converter) {
-		this.converter = converter;
-	}
 }

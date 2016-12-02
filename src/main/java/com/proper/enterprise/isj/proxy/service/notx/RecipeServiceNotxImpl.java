@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.proper.enterprise.platform.core.utils.JSONUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -683,6 +684,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 }
                 detail =  stringRecipeRefundDetailDocumentEntry.getValue();
                 if (detail != null) {
+                    if (StringUtil.isEmpty(detail.getRecipeNo()) || StringUtil.isEmpty(detail.getSequenceNo())) {
+                        continue;
+                    }
                     if (detail.getRecipeNo().equals(refund.getRecipeNo())
                             && detail.getSequenceNo().equals(refund.getSequenceNo())) {
                         LOGGER.debug("线下退费已经将此处方号下的序号进行了退费,不再重复退费,退费Id:" + refund.getId() + ",处方号:"
@@ -694,8 +698,11 @@ public class RecipeServiceNotxImpl implements RecipeService {
             }
             if (canRefundFlag) {
                 String refunReturnMsg = "";
+                LOGGER.debug("根据退款记录准备获得已缴费的对象,退款Id:" + refund.getId());
                 RecipePaidDetailDocument recipePaidOrder = getRecipePaidOrder(recipe, refund);
                 if (recipePaidOrder != null) {
+                    LOGGER.debug("获得已缴费对象成功,订单号:" + recipePaidOrder.getOrderNum() + ",支付平台:"
+                            + recipePaidOrder.getPayChannelId());
                     String refundNo = checkRecipeAndRefundIsEqual(recipe, recipePaidOrder, refund);
                     if (StringUtil.isNotEmpty(refundNo)) {
                         if (recipePaidOrder.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
@@ -740,6 +747,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
         weixinReq.setRefundFee(Math.abs(Integer.parseInt(refund.getCost())));
         weixinReq.setTotalFee(Integer.parseInt(recipePaidOrder.getAmount()));
         weixinReq.setOutTradeNo(recipePaidOrder.getOrderNum());
+        LOGGER.debug("线下退费,请求微信参数:" + JSONUtil.toJSON(weixinReq));
         PayResultRes resultRes = weixinService.saveWeixinRefund(weixinReq);
         String refundReturnMsg = resultRes.getResultMsg();
         if (resultRes.getResultCode().equals("0")) {
@@ -785,6 +793,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
         ResModel<PayList> refundPayRes = this.findPayListModel(basic, recipe.getClinicCode(), String.valueOf(2), null,
                 null, false);
         List<Pay> refundPayList = refundPayRes.getRes().getPayList();
+        LOGGER.debug("HIS查询记录的退费集合数:" + refundPayList.size() + ",退款Id:" + refund.getId() + ",订单号:"
+                + recipePaidOrder.getOrderNum() + ",门诊流水号:" + recipe.getClinicCode());
         BigDecimal hisRefundBig = new BigDecimal("0");
         for (Pay pay : refundPayList) {
             LOGGER.debug("HIS查询记录的退费项目:" + pay.getItemCode() + ",退费金额" + pay.getOwnCost());
@@ -846,6 +856,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 }
             }
         }
+        LOGGER.debug("查询支付平台结束,获得对应的退款钱数:" + finishBig.toString());
         if (finishBig.add(new BigDecimal(refund.getCost()).abs()).compareTo(hisRefundBig) > 0) {
             LOGGER.debug("已退金额:" + finishBig.intValue() + ",待退金额:" + new BigDecimal(refund.getCost()).abs().intValue()
                     + ",退款总额:" + hisRefundBig.intValue());
