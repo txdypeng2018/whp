@@ -7,8 +7,8 @@ INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, las
 
 INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('r4', 'pep', '2016-10-11 09:38:00', 'pep', '2016-10-11 09:38:00', 'REG_RES', '女性挂号约束', '@personRule.isFemale(#idCard) && @commonRule.in(#deptId, "0204") ? "当前科室不能选择女性就诊人" : ""');
 
-INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('sf1', 'pep', '2016-10-11 09:38:00', 'pep', '2016-10-11 09:38:00', 'SUBJECT_FILTER', '学科列表过滤规则', '!#isAppointment && @commonRule.in(#subjectId, ''921'', ''1265'', ''1924'', ''1925'', ''1959'')');
+INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('sf1', 'pep', '2016-10-11 09:38:00', 'pep', '2016-10-11 09:38:00', 'SUBJECT_FILTER', '当日挂号学科列表过滤规则', '!#isAppointment && @commonRule.in(#subjectId, ''921'', ''1265'', ''1924'', ''1925'', ''1959'')');
 
-INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('sdf1', 'pep', '2016-10-13 09:38:00', 'pep', '2016-10-13 09:38:00', 'SAME_DAY_FILTER', '当日挂号学科及挂号级别约束', '!#isAppointment && (@sameDayRule.underDepts(#doctor, ''921'', ''1265'', ''1924'', ''1925'', ''1959'') || @sameDayRule.regLvIn(#doctor, "M", "N"))');
+INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('sdf1', 'pep', '2016-10-13 09:38:00', 'pep', '2016-10-13 09:38:00', 'SAME_DAY_FILTER', '挂当日号学科及挂号级别约束', '!#isAppointment && (@sameDayRule.underDepts(#doctor, ''921'', ''1265'', ''1924'', ''1925'', ''1959'') || @sameDayRule.regLvIn(#doctor, "M", "N"))');
 
 COMMIT;
