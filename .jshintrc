@@ -23,6 +23,7 @@
     "angular": false,
     "cordova": false,
     "Piwik": false,
-    "wxpay": false
+    "wxpay": false,
+    "cmbpay": false
   }
 }
