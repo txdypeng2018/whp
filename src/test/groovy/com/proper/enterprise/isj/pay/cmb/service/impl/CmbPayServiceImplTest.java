@@ -347,9 +347,17 @@ public class CmbPayServiceImplTest implements CmbService {
             String requestXML = writer.toString().replace(strXmlHeader, "");
             LOGGER.debug("requestXML:" + requestXML);
 
-            ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
-            QuerySingleOrderRes res = (QuerySingleOrderRes) unmarshallerMap.get("unmarshallQuerySingleOrderRes")
-                    .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+//            ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
+//            QuerySingleOrderRes res = (QuerySingleOrderRes) unmarshallerMap.get("unmarshallQuerySingleOrderRes")
+//                    .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+            QuerySingleOrderRes res = new QuerySingleOrderRes();
+            CommonHeadRes headRes = new CommonHeadRes();
+            QuerySingleOrderBodyRes bodyRes = new QuerySingleOrderBodyRes();
+            headRes.setCode("");
+            bodyRes.setStatus("0");
+            bodyRes.setAmount("0.01");
+            res.setHead(headRes);
+            res.setBody(bodyRes);
 
             if(StringUtil.isNull(res.getHead().getCode())) {
                 String orderStatus = res.getBody().getStatus();

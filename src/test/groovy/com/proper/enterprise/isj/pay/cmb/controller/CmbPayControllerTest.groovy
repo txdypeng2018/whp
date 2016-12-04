@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.pay.cmb.controller
 
 import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument
+import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq
 import com.proper.enterprise.isj.pay.cmb.repository.CmbProtocolRepository
 import com.proper.enterprise.isj.pay.cmb.service.CmbService
@@ -71,5 +72,16 @@ class CmbPayControllerTest extends AbstractTest {
     @Test
     public void noticePayInfo() {
         get("/pay/cmb/noticePayInfo?Succeed=Y&CoNo=000062&BillNo=7253638968&Amount=0.01&Date=20161201&MerchantPara=pno=20161201161423491022|userid=57ee2736ae65e2531aad70fa&Msg=00240000622016120116320165000000000020&Signature=85|43|105|137|32|31|227|23|199|171|181|183|148|207|191|96|207|12|22|128|229|187|215|238|158|145|70|128|27|64|53|5|180|174|217|159|84|159|103|251|223|64|47|197|103|109|199|71|182|41|67|250|141|170|90|66|113|83|156|168|239|225|186|232|", HttpStatus.OK);
+    }
+
+    @Test
+    public void querySinglePayInfo() {
+        CmbPayEntity payInfo = new CmbPayEntity();
+        payInfo.setBillNo("0123456789");
+        payInfo.setDate("20161202");
+        MvcResult result = post('/pay/cmb/querySinglePayInfo', JSONUtil.toJSON(payInfo), HttpStatus.CREATED);
+        String obj = result.getResponse().getContentAsString();
+        Map<String, Object> doc = JSONUtil.parse(obj, Object.class);
+        assert doc.get("resultCode") == "0"
     }
 }

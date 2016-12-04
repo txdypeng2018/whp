@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.pay.cmb.controller;
 
+import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
@@ -127,5 +128,26 @@ public class CmbPayController extends BaseController {
             LOGGER.debug("-----------一网通支付结果异步通知:处理过的信息------结束-------------------");
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * 查询一网通单笔交易支付结果
+     *
+     * @param payInfo 支付信息
+     * @return 处理结果
+     * @throws Exception
+     */
+    @JWTIgnore
+    @PostMapping(value = "/querySinglePayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PayResultRes> querySinglePayInfo(@RequestBody CmbPayEntity payInfo) throws Exception {
+        PayResultRes resObj = new PayResultRes();
+        try {
+            resObj = cmbService.querySingleResult(payInfo);
+        } catch (Exception e) {
+            LOGGER.debug("CmbPayController.querySinglePayInfo[Exception]:", e);
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.APP_SYSTEM_ERR);
+        }
+        return responseOfPost(resObj);
     }
 }
