@@ -43,7 +43,7 @@
       $http.get('/schedule/doctors', {params: params}).success(function(data, status, headers, config) {
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.spinnerShow = false;
-          if (data.length === 0) {
+          if (data.length < 10) {
             $scope.vm.moreData = false;
           }
           var index = 0;

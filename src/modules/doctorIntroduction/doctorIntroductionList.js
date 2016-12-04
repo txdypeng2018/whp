@@ -28,7 +28,7 @@
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
           $scope.refreshFlg = false;
           $scope.spinnerShow = false;
-          if (data.length === 0) {
+          if(data.length < 10){
             $scope.vm.moreData = false;
           }
           var index = 0;

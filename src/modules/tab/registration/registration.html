@@ -9,7 +9,17 @@
       <i class="icon ion-ios-arrow-down positive operation-down"></i>
     </div>
   </ion-header-bar>
-  <ion-content class="has-header content-gray content-fill registration-content">
+
+  <div class="district-select has-header">
+    <div class="button-bar">
+      <button ng-repeat="viewType in viewTypes" ng-class="{false: 'button-outline'}[viewTypeId == viewType.id]" class="button button-positive district-button"
+              ng-click="registrationBtnClk(viewType.id)">
+        {{viewType.name}}
+      </button>
+    </div>
+  </div>
+
+  <ion-content class="has-header has-header-district content-gray content-fill registration-content">
     <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <div ng-if="registrations.length > 0" ng-repeat="registration in registrations" class="time-line" ng-click="registrationClk(registration.id)">
       <div class="time-line-left">
