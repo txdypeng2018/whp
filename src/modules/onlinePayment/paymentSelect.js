@@ -60,22 +60,81 @@
     //支付方式选择事件
     $scope.paySelectValue = '';
     $scope.paymentSelect = function(value) {
-      if (value === '1') {
-        toastService.show('一网通暂时不可用');
-      }
-      else {
+      //if (value === '1') {
+      //  toastService.show('一网通暂时不可用');
+      //}
+      //else {
         $scope.paySelectValue = value;
         angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
         angular.element(document.querySelectorAll('.select-no')).removeClass('select-none');
         angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
         angular.element(document.getElementById('select_no_'+value)).addClass('select-none');
-      }
+      //}
     };
 
     $scope.pay = function() {
       if(angular.isUndefined($scope.amount)) {
         toastService.show('获取订单信息失败,请稍后重试!');
       } else {
+        //一网通支付
+        if ($scope.paySelectValue === '1') {
+          var cmbprepay = {
+            billNo: orderNum,
+            amount: $scope.amount
+          };
+          $http.post('/pay/cmb/prepayInfo', cmbprepay).success(function (data) {
+            console.debug('data:', data);
+            var cmbquery = {
+              billNo: data.cmbBillNo,
+              date: data.cmbDate
+            };
+            // 如果请求结果正常
+            if (data.resultCode === '0') {
+              // 调用一网通支付
+              cmbpay.payment(
+                data,
+                function (retData) {
+                  console.debug('retData:' + retData);
+                  var converseRet = angular.fromJson(retData);
+                  console.debug('converseRet:' + converseRet);
+                  if(converseRet.resultCode === '0') {
+                    $http.post('/pay/cmb/querySinglePayInfo', cmbquery).success(function (queryData) {
+                      if(queryData.resultCode === '0') {
+                        $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!', memberId: $stateParams.memberId});
+                      } else {
+                        var failPopup = $ionicPopup.show({
+                          template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'未能支付成功'+'</div>',
+                          title: '温馨提示',
+                          buttons: [
+                            {
+                              text: '我知道了',
+                              type: 'positive',
+                              onTap: function(e) {
+                                e.preventDefault();
+                                failPopup.close();
+                              }
+                            }
+                          ]
+                        });
+                      }
+                    }).error(function (data) {
+                      console.debug('data', data);
+                      toastService.show('内部错误!请联系管理员!');
+                    });
+                  }
+                }, function (retData) {
+                  console.debug('retData', retData);
+                  toastService.show('内部错误!请联系管理员!');
+                });
+            } else {
+              console.debug('error:');
+            }
+          }).error(function (data) {
+              console.debug('data', data);
+              toastService.show('请求服务端数据错误!请联系管理员!');
+            }
+          );
+        } else
         //支付宝支付
         if ($scope.paySelectValue === '2') {
           var aliprepay = {
