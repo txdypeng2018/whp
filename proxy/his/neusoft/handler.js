@@ -1,7 +1,8 @@
 'use strict';
 
 var soap = require('soap');
-var parseString = require('xml2js').parseString;
+var xml2js = require('xml2js');
+var parseString = xml2js.parseString;
 var md5 = require('md5');
 var crypto = require('crypto');
 
@@ -55,6 +56,15 @@ var commonStep = function(args) {
   parseString(args.xml, function(err, result) {
     console.log(aesDec(result.ROOT.REQ_ENCRYPTED));
   });
+};
+
+var xmlValues = new xml2js.Builder({
+  rootName: 'RES',
+  headless: true
+});
+
+var obj2xml = function(data) {
+  return xmlValues.buildObject(data);
 };
 
 handler.service = {
@@ -138,19 +148,22 @@ handler.service = {
       },
       GetDeptInfoByParentID: function(args) {
         commonStep(args);
-        var res = '<RES>'
-                +   '<HOS_ID>1001</HOS_ID>'
-                +   '<DEPT_LIST>'
-                +     '<DEPT_ID>1207</DEPT_ID>'
-                +     '<DEPT_NAME>南湖院区</DEPT_NAME>'
-                +     '<PARENT_ID>0</PARENT_ID>'
-                +     '<DESC></DESC>'
-                +     '<LEVEL>0</LEVEL>'
-                +     '<STATUS>1</STATUS>'
-                +   '</DEPT_LIST>'
-                + '</RES>';
+        var data = {
+          HOS_ID: 1001,
+          DEPT_LIST: [
+            { DEPT_ID: 1, DEPT_NAME: "南湖院区", PARENT_ID: 0, DESC:null, LEVEL: 0, STATUS: 1 },
+            { DEPT_ID: 2, DEPT_NAME: "滑翔院区", PARENT_ID: 0, LEVEL: 0, STATUS: 1 },
+            { DEPT_ID: 3, DEPT_NAME: "沈北院区", PARENT_ID: 0, LEVEL: 0, STATUS: 1 },
+            { DEPT_ID: 11, DEPT_NAME: "内科", PARENT_ID: 1, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 12, DEPT_NAME: "外科", PARENT_ID: 1, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 111, DEPT_NAME: "内科1", PARENT_ID: 11, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 112, DEPT_NAME: "内科2", PARENT_ID: 11, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 121, DEPT_NAME: "外科1", PARENT_ID: 12, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 122, DEPT_NAME: "外科2", PARENT_ID: 12, LEVEL: 1, STATUS: 1 }
+          ]
+        };
         return {
-          GetDeptInfoByParentIDResult: resXml(res)
+          GetDeptInfoByParentIDResult: resXml(obj2xml(data))
         }
       },
       OrderReg: function(args) {

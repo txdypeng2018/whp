@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.proper" level="debug" />
+    <logger name="com.proper" level="trace" />
 
     <root level="error">
         <appender-ref ref="console" />
