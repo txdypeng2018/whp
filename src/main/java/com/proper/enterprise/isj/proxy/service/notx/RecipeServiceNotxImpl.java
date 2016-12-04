@@ -1,26 +1,5 @@
 package com.proper.enterprise.isj.proxy.service.notx;
 
-import java.io.ByteArrayInputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.*;
-
-import com.proper.enterprise.platform.core.utils.JSONUtil;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.stereotype.Service;
-
 import com.proper.enterprise.isj.exception.HisLinkException;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
@@ -65,7 +44,26 @@ import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Created by think on 2016/9/18 0018.
@@ -107,9 +105,6 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     @Autowired
     WebService4HisInterfaceCacheUtil webService4HisInterfaceCacheUtil;
-
-    @Autowired
-    CacheManager cacheManager;
 
     @Override
     public List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate,
