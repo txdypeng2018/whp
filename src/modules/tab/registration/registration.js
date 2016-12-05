@@ -27,6 +27,7 @@
 
     var diffRegistrations = {};
     $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.httpIndex = {index:1};
       diffRegistrations = {};
       $scope.patient = {};
       //取得就诊人
@@ -44,8 +45,6 @@
       });
 
       getViewTypes();
-
-      $scope.httpIndex = {index:1};
 
       $ionicHistory.clearHistory();
     });
@@ -74,19 +73,19 @@
 
     //取得挂号单分类信息
     var getViewTypes = function() {
-      $http.get('/register/viewTypes').success(function(data) {
-        $scope.viewTypes = data;
-        for (var i = 0 ; i < data.length ; i++) {
-          if(data[i].default === '1'){
-            //默认选中进行中
-            $scope.viewTypeId = data[i].id;
-          }
+      $scope.viewTypes = [
+        {
+          'id': '1',
+          'name': '未完成'
+        },
+        {
+          'id': '2',
+          'name': '已完成'
         }
-        registrationList();
-      }).error(function(data){
-        toastService.show(data);
-      });
-    };
+      ];
+      $scope.viewTypeId = '1';
+      registrationList();
+  };
 
     //分类跳转
     $scope.registrationBtnClk=function(id){
