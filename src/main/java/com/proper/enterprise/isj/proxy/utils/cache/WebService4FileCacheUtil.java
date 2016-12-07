@@ -142,7 +142,7 @@ public class WebService4FileCacheUtil {
                 }
             }
         } catch(IOException ie) {
-            ie.printStackTrace();
+            LOGGER.debug("WebService4FileCacheUtil.cacheReportPhoto[Exception]:", ie);
             throw ie;
         }
         return photoStr;

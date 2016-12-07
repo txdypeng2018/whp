@@ -71,7 +71,7 @@ public class RegistrationRulesController extends BaseController{
         try {
             rulesService.saveRuleInfo(ruleInfo);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("RegistrationRulesController.saveRuleInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -93,7 +93,7 @@ public class RegistrationRulesController extends BaseController{
             try {
                 rulesService.saveRuleInfo(ruleInfo);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("RegistrationRulesController.updateRuleInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -122,7 +122,7 @@ public class RegistrationRulesController extends BaseController{
                 rulesService.deleteRuleInfo(idList);
                 retValue = true;
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("RegistrationRulesController.deleteRuleInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }

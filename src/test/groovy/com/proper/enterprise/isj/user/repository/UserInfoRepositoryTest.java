@@ -48,13 +48,13 @@ public class UserInfoRepositoryTest extends AbstractTest {
 	}
 
 	@Test
-	public void getUserInfoByUserId() {
+	public void getUserInfoByUserId() throws Exception{
 		UserInfoDocument userInfo = userInfoRepository.getByUserId(String.valueOf(1));
 		if (userInfo != null) {
 			try {
-				System.out.println(JSONUtil.toJSON(userInfo));
+				JSONUtil.toJSON(userInfo);
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw e;
 			}
 		}
 	}

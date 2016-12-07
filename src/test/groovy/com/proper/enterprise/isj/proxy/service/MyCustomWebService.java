@@ -9,6 +9,8 @@ import com.proper.enterprise.isj.webservices.model.res.DeptInfo;
 import com.proper.enterprise.isj.webservices.model.res.ResModel;
 import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by think on 2016/8/31 0031.
@@ -16,6 +18,8 @@ import com.proper.enterprise.platform.core.utils.JSONUtil;
 //@Service
 //@Primary
 public class MyCustomWebService extends WebServicesClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyCustomWebService.class);
 
     public ResModel<DeptInfo> getDeptInfoByParentID(String hosId, String parentId) throws Exception {
         List<Dept> tempDeptList = new ArrayList<>();
@@ -116,9 +120,9 @@ public class MyCustomWebService extends WebServicesClient {
         dept.setParentId("21");
         list.add(dept);
         try {
-            System.out.println(JSONUtil.toJSON(list));
+            LOGGER.debug(JSONUtil.toJSON(list));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.debug("MyCustomWebService.getDeptList[IOException]:", e);
         }
         return list;
     }
