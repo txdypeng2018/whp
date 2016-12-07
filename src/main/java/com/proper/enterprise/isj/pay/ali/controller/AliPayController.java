@@ -124,6 +124,10 @@ public class AliPayController extends BaseController {
                     if (reg != null) {
                         String payWay = reg.getPayChannelId();
                         boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                        if (reg.getRegistrationOrderReq() != null
+                                && StringUtil.isNotEmpty(reg.getRegistrationOrderReq().getPayChannelId())) {
+                            paidFlag = true;
+                        }
                         if (!paidFlag) {
                             reg.setPayChannelId(String.valueOf(PayChannel.ALIPAY.getCode()));
                             registrationService.saveRegistrationDocument(reg);
