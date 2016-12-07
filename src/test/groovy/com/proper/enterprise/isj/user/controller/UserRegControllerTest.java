@@ -5,7 +5,6 @@ import com.proper.enterprise.platform.test.AbstractTest;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +30,8 @@ public class UserRegControllerTest extends AbstractTest {
 		jsonMap.put("verificationCode", "111111");
 		jsonMap.put("name", "13800000001");
 		jsonMap.put("idCard", "21010519870512535X");
-		MvcResult result = post("/permission/account", MediaType.TEXT_PLAIN,
+		post("/permission/account", MediaType.TEXT_PLAIN,
 				JSONUtil.toJSON(jsonMap), HttpStatus.BAD_REQUEST);
-		System.out.println(result.getResponse().getContentAsString());
 	}
 
 

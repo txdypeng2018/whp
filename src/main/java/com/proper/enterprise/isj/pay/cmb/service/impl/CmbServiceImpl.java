@@ -653,7 +653,7 @@ public class CmbServiceImpl implements CmbService {
             md.update(bt);
             strDes = bytes2Hex(md.digest()); // to HexString
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Invalid algorithm.");
+            LOGGER.debug("Invalid algorithm:", e);
             return null;
         }
         return strDes;

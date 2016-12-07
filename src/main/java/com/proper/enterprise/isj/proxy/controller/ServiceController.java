@@ -77,7 +77,7 @@ public class ServiceController extends BaseController {
             opinionDocment.setStatusCode(FeedbackEnum.UNREPLAY.getValue());
             serviceService.saveOpinion(opinionDocment);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("ServiceController.saveUserOpinion[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
