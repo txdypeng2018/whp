@@ -7,6 +7,8 @@ import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/hospitalNavigation")
 public class HospitalNavigationController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HospitalNavigationController.class);
 
     @Autowired
     NavInfoRepository navRepo;
@@ -135,7 +139,7 @@ public class HospitalNavigationController extends BaseController {
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("HospitalNavigationController.saveBuildInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -161,7 +165,7 @@ public class HospitalNavigationController extends BaseController {
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("HospitalNavigationController.saveFloorInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -187,7 +191,7 @@ public class HospitalNavigationController extends BaseController {
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("HospitalNavigationController.updateBuildInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -208,7 +212,7 @@ public class HospitalNavigationController extends BaseController {
         try {
             navService.updateWebFloorInfo(floorInfo);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("HospitalNavigationController.updateFloorInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -236,7 +240,7 @@ public class HospitalNavigationController extends BaseController {
                 navService.deleteWebNavInfo(idList);
                 retValue = true;
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("HospitalNavigationController.deleteBuildInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -265,7 +269,7 @@ public class HospitalNavigationController extends BaseController {
                 navService.deleteWebNavInfo(idList);
                 retValue = true;
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("HospitalNavigationController.deleteFloorInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }

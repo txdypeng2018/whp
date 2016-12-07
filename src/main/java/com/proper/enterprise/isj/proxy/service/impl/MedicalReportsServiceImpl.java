@@ -117,7 +117,7 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
                 }
             }
         }catch (IOException ie) {
-            ie.printStackTrace();
+            LOGGER.debug("MedicalReportsServiceImpl.getPacsReportsList[Exception]:", ie);
             throw ie;
         }
         // 按照时间倒序
@@ -231,7 +231,7 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
         try {
             return webServiceFileCacheUtil.getCacheReportPhoto(reportId);
         } catch (IOException ie) {
-            ie.printStackTrace();
+            LOGGER.debug("MedicalReportsServiceImpl.getRepostsDetailsInfo[Exception]:", ie);
             throw ie;
         }
     }

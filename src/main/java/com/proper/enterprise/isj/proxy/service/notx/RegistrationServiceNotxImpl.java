@@ -126,7 +126,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                             registrationServiceImpl.saveCancelRegistrationImpl(saveReg.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
                         }
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        LOGGER.debug("RegistrationServiceNotxImpl.saveCreateRegistrationAndOrder[Exception]:", e);
                         LOGGER.debug(e2.getCause().getMessage());
                     }
                 }
@@ -247,7 +247,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     try {
                         this.saveRegRefund(regBack.getId());
                     } catch (Exception e3) {
-                        e3.printStackTrace();
+                        LOGGER.debug("RegistrationServiceNotxImpl.updateGTtodayRegAndOrder[Exception]:", e3);
                         LOGGER.debug("预约挂号失败后,退费发生异常,订单号:" + order.getOrderNo());
                         throw e;
                     }
@@ -266,12 +266,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         orderService.save(order);
                         sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_REFUND_SUCCESS);
                     } catch (Exception e3) {
-                        e3.printStackTrace();
+                        LOGGER.debug("RegistrationServiceNotxImpl.updateGTtodayRegAndOrder[Exception]:", e3);
                         LOGGER.debug("预约挂号发生异常情况,订单号:" + order.getOrderNo());
                     }
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
+                LOGGER.debug("RegistrationServiceNotxImpl.updateGTtodayRegAndOrder[Exception]:", e2);
             }
             throw e;
         }
@@ -316,7 +316,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_PAY_HIS_RETURNMSG);
             }
         } catch (Exception refundException) {
-            refundException.printStackTrace();
+            LOGGER.debug("RegistrationServiceNotxImpl.payBackTodayReg[Exception]:", refundException);
             throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
         }
     }
@@ -805,7 +805,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(0), String.valueOf(-1),
                                 String.valueOf(0));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        LOGGER.debug("RegistrationServiceNotxImpl.saveCancelRegistration[Exception]:", e2);
                         LOGGER.debug("保存错误消息时出现异常信息:" + regBack.getNum() + ",异常" + e2.getMessage());
                     }
                     LOGGER.debug("挂号单号:" + regBack.getNum(), e);
@@ -847,7 +847,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(0),
                                 String.valueOf(0));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        LOGGER.debug("RegistrationServiceNotxImpl.saveCancelRegistration[Exception]:", e2);
                         LOGGER.debug("保存挂号退费日志时出现异常,订单号:" + regBack.getOrderNum() + ",异常信息:" + e2.getMessage());
                     }
                     LOGGER.debug(e.getMessage());

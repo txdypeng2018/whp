@@ -110,7 +110,6 @@ public class HospitalNavigationServiceImplTest implements HospitalNavigationServ
             Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "navId"));
             floorList = navRepo.findAll(sort);
         }
-        System.out.println("floorList.size:" + floorList.size());
 
         if(floorList.size() > 0) {
             for (NavInfoEntity detail : floorList) {

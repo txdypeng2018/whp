@@ -42,7 +42,6 @@ public class UserInfoPublicServiceTest {
             userInfoServiceImpl.saveOrUpdateUserInfo(info);
         }
         User user = userServiceTestImpl.getByUsername("13800000000");
-        System.out.println(user.getId());
         return user;
     }
 }

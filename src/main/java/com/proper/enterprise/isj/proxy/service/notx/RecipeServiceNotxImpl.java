@@ -299,7 +299,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     regBack.setRecipeNonPaidDetail(nonPaid);
                     recipeServiceImpl.saveRecipeOrderDocument(regBack);
                 } catch (Exception e2) {
-                    e2.printStackTrace();
+                    LOGGER.debug("RecipeServiceNotxImpl.saveUpdateRecipeAndOrder[Exception]:", e2);
                     LOGGER.debug("诊间缴费HIS抛异常,调用支付平台退费失败,订单号:" + order.getOrderNo() + ",退费单号:" + refundNo);
                     detail.setDescription(detail.getDescription()
                             .concat(",诊间缴费HIS抛异常,调用支付平台退费失败,订单号:" + order.getOrderNo() + ",退费单号:" + refundNo));
@@ -640,7 +640,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
             payOrderReq.setOperatorId("");
             payOrderReq.setReceiptId("");
             // } catch (RuntimeException e1) {
-            // e1.printStackTrace();
+            // LOGGER.debug("RecipeServiceNotxImpl.convertAppInfo2PayOrder[Exception]:", e1);
             // LOGGER.debug("将订单转换成缴费参数对象异常,订单号:"+order.getOrderNo());
             // //throw e1;
             // payOrderReq = null;

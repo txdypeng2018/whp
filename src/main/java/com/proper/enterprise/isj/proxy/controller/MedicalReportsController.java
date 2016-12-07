@@ -145,7 +145,7 @@ public class MedicalReportsController extends BaseController {
                         String retValue = reportsService.getRepostsDetailsInfo(reportId);
                         return CenterFunctionUtils.setTextResponseEntity(retValue, HttpStatus.OK);
                     } catch (IOException ie) {
-                        ie.printStackTrace();
+                        LOGGER.debug("HospitalNavigationController.getReportDetailInfo[Exception]:", ie);
                         return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_PACS_REPORT_ERR,
                                 HttpStatus.INTERNAL_SERVER_ERROR);
                     }

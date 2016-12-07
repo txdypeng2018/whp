@@ -90,7 +90,7 @@ public class PromptTipsController extends BaseController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("PromptTipsController.saveTipInfo[Exception]:", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -112,7 +112,7 @@ public class PromptTipsController extends BaseController {
             try {
                 tipService.saveTipInfo(tipInfo);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("PromptTipsController.updateTipInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -141,7 +141,7 @@ public class PromptTipsController extends BaseController {
                 tipService.deleteTipInfo(idList);
                 retValue = true;
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.debug("PromptTipsController.deleteTipInfo[Exception]:", e);
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,6 +29,8 @@ import com.proper.enterprise.platform.test.AbstractTest;
 
 public class UserInfoControllerTest extends AbstractTest {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoControllerTest.class);
+
     @Autowired
     UserInfoService userInfoService;
 
@@ -46,10 +50,9 @@ public class UserInfoControllerTest extends AbstractTest {
             String token = userInfoService.userLogin(user);
             mockRequest.addHeader("Authorization", token);
             MvcResult result = get("/user/userInfo", HttpStatus.OK);
-            System.out.println(132123);
-            System.out.println(result.getResponse().getContentAsString());
+            LOGGER.debug(result.getResponse().getContentAsString());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.debug("UserInfoControllerTest.testGetUserInfoByToken[Exception]:", e);
         }
     }
 
@@ -66,7 +69,7 @@ public class UserInfoControllerTest extends AbstractTest {
             userInfoServiceNotx.saveOrUpdatePatientMedicalNum(userInfo.getUserId(),
                     userInfo.getFamilyMemberInfo().get(0).getId(), null);
         } catch (Exception e) {
-            System.out.println("------------抛异常正常----------");
+            LOGGER.debug("------------抛异常正常----------");
             errFlag = true;
         }
         if (!errFlag) {
@@ -83,7 +86,7 @@ public class UserInfoControllerTest extends AbstractTest {
             userInfoServiceNotx.saveOrUpdatePatientMedicalNum(userInfo.getUserId(), userInfo.getId(),
                     userInfo.getMedicalNum());
         } catch (Exception e) {
-            System.out.println("------------抛异常正常----------");
+            LOGGER.debug("------------抛异常正常----------");
             errFlag = true;
         }
         if (!errFlag) {
@@ -96,7 +99,7 @@ public class UserInfoControllerTest extends AbstractTest {
             userInfoServiceNotx.saveOrUpdatePatientMedicalNum(userInfo.getUserId(), userInfo.getId(),
                     userInfo.getMedicalNum());
         } catch (Exception e) {
-            System.out.println("------------抛异常正常----------");
+            LOGGER.debug("------------抛异常正常----------");
             errFlag = true;
         }
         if (!errFlag) {
