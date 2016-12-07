@@ -389,7 +389,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 reg.setRefundApplyType(String.valueOf(1));
                 this.saveRegistrationDocument(reg);
             } else {
-                LOGGER.debug("退号(微信退费失败),订单号:" + trade.getOutTradeNo());
+                LOGGER.debug("退号(微信退费失败),微信返回的错误消息:" + resultRes.getResultMsg() + ",订单号:" + trade.getOutTradeNo());
                 //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
             }
         } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
@@ -422,7 +422,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     reg.setRefundApplyType(String.valueOf(1));
                     this.saveRegistrationDocument(reg);
                 } else {
-                    LOGGER.debug("退号(支付宝退费失败),订单号:" + trade.getOutTradeNo());
+                    LOGGER.debug("退号(支付宝退费失败),支付宝返回Code" + refundRes.getCode() + ",支付宝返回消息:" + refundRes.getMsg()
+                            + ",订单号:" + trade.getOutTradeNo());
                     //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
                 }
             } else {

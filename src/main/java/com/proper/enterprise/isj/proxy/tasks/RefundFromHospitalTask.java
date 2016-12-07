@@ -57,38 +57,54 @@ public class RefundFromHospitalTask implements Runnable {
             res = webServicesClient.refundByHisToAPP(hosId, sDate, eDate);
         } catch (Exception e) {
             LOGGER.debug("获得线下退费结果异常", e);
+            return;
         }
         if (res != null) {
             List<RefundByHis> list = res.getRes().getRefundlist();
+            LOGGER.debug("查询线下退费记录数:" + list.size());
             String orderNo = null;
+            RegistrationDocument reg = null;
+            RecipeOrderDocument recipe = null;
             for (RefundByHis refundByHis : list) {
-                if (refundByHis.getType().equals(String.valueOf(1))) {
-                    orderNo = refundByHis.getOrderId();
-                    if (!StringUtil.isNumeric(orderNo)) {
-                        orderNo = orderNo.substring(1);
-                    }
-                    Order order = orderService.findByOrderNo(orderNo);
-                    RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
+                if ("1".equals(refundByHis.getType())) {
                     try {
-                        if (reg != null && !reg.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
-                            registrationService.saveRefundAndUpdateRegistrationDocument(reg);
+                        orderNo = refundByHis.getOrderId();
+                        if (!StringUtil.isNumeric(orderNo)) {
+                            orderNo = orderNo.substring(1);
+                        }
+                        Order order = orderService.findByOrderNo(orderNo);
+                        reg = registrationService.getRegistrationDocumentById(order.getFormId());
+                        if (reg != null) {
+                            if (!reg.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
+                                registrationService.saveRefundAndUpdateRegistrationDocument(reg);
+                            }
+                        } else {
+                            LOGGER.debug("挂号缴费退款异常,未找到挂号单,订单号:" + orderNo);
                         }
                     } catch (Exception e) {
-                        LOGGER.debug("挂号缴费退款异常,挂号单号:" + reg.getNum() + ",订单号:" + orderNo, e);
-                    }
-                } else {
-                    RecipeOrderDocument recipe = recipeService
-                            .getRecipeOrderDocumentByClinicCode(refundByHis.getClinicCode());
-                    if (recipe != null) {
-                        try {
-                            recipeService.saveRefundAndUpdateRecipeOrderDocument(recipe, refundByHis);
-                        } catch (Exception e) {
-                            LOGGER.debug("诊间缴费退款异常,门诊流水号:" + refundByHis.getClinicCode(), e);
+                        if (reg != null) {
+                            LOGGER.debug("挂号缴费退款异常,挂号单号:" + reg.getNum() + ",订单号:" + orderNo, e);
+                        } else {
+                            LOGGER.debug("挂号缴费退款异常,订单号:" + orderNo, e);
                         }
                     }
+                } else if ("2".equals(refundByHis.getType())) {
+                    LOGGER.debug("门诊流水号:" + refundByHis.getClinicCode() + ",退费表id:" + refundByHis.getId());
+                    try {
+                        recipe = recipeService.getRecipeOrderDocumentByClinicCode(refundByHis.getClinicCode());
+                        if (recipe != null) {
+                            recipeService.saveRefundAndUpdateRecipeOrderDocument(recipe, refundByHis);
+                        } else {
+                            LOGGER.debug(
+                                    "没查到缴费记录,门诊流水号:" + refundByHis.getClinicCode() + ",退费表id:" + refundByHis.getId());
+                        }
+                    } catch (Exception e) {
+                        LOGGER.debug("诊间缴费退款异常,门诊流水号:" + refundByHis.getClinicCode(), e);
+                    }
+                } else {
+                    LOGGER.debug("不是线下退费类型,HIS退费ID号:" + refundByHis.getId());
                 }
             }
         }
-
     }
 }

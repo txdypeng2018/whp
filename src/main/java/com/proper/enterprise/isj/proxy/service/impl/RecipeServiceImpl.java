@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
-import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
@@ -215,11 +214,11 @@ public class RecipeServiceImpl {
             if (paid != null) {
                 String payWay = paid.getPayChannelId();
                 boolean paidFlag = orderService.checkOrderIsPay(payWay, paid.getOrderNum());
-                if(!paidFlag){
-                    Order order = orderService.findByOrderNo(paid.getOrderNum());
-                    orderService.deleteOrder(order);
-                }else{
-                  throw new RecipeException(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                if (paidFlag) {
+                    throw new RecipeException(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                    // Order order =
+                    // orderService.findByOrderNo(paid.getOrderNum());
+                    // orderService.deleteOrder(order);
                 }
             }
         }

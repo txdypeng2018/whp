@@ -1,5 +1,24 @@
 package com.proper.enterprise.isj.proxy.service.notx;
 
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.stereotype.Service;
+
 import com.proper.enterprise.isj.exception.HisLinkException;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
@@ -46,24 +65,6 @@ import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayInputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * Created by think on 2016/9/18 0018.
@@ -105,6 +106,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     @Autowired
     WebService4HisInterfaceCacheUtil webService4HisInterfaceCacheUtil;
+
 
     @Override
     public List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate,
@@ -239,19 +241,28 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 return null;
             }
             RecipeOrderDocument regBack = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+            if (regBack == null) {
+                LOGGER.debug("未查到缴费单,调用缴费前校验,订单号:" + orderNo);
+                return null;
+            }
             BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(regBack.getCreateUserId(),
                     regBack.getPatientId());
             if (basicInfo == null) {
                 LOGGER.debug("未查到患者信息,调用缴费前校验,门诊流水号:" + regBack.getClinicCode());
                 return null;
             }
+            if (StringUtil.isEmpty(basicInfo.getMedicalNum())) {
+                LOGGER.debug(
+                        "患者信息的病历号为空,不能进行调用,调用缴费前校验,门诊流水号:" + regBack.getClinicCode() + ",患者Id:" + basicInfo.getId());
+                return null;
+            }
+            // 手动清空患者缴费缓存
+            for (QueryType queryType : QueryType.values()) {
+                webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(),
+                        basicInfo.getMedicalNum());
+            }
             Map<String, String> requestOrderNoMap = getRecipeRequestOrderNoMap(regBack);
             if (requestOrderNoMap.containsKey(order.getOrderNo())) {
-                // 手动清空患者缴费缓存
-                for (QueryType queryType : QueryType.values()) {
-                    webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(),
-                            basicInfo.getMedicalNum());
-                }
                 LOGGER.debug("订单号重复调用缴费接口,直接返回,不对HIS接口进行调用,门诊流水号:" + regBack.getClinicCode());
                 return null;
             }
@@ -889,18 +900,25 @@ public class RecipeServiceNotxImpl implements RecipeService {
         if (order != null) {
             RecipeOrderDocument recipe = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
             if (recipe != null) {
+                LOGGER.debug("预支付前校验,找到订单和缴费单,门诊流水号:" + recipe.getClinicCode());
                 flag = getFlagByRecipeAmount(orderAmount, payWay, user, recipe);
                 if (flag) {
                     recipe.getRecipeNonPaidDetail().setPayChannelId(String.valueOf(payWay.getCode()));
                     recipeServiceImpl.saveRecipeOrderDocument(recipe);
                     order.setPayWay(String.valueOf(payWay.getCode()));
                     orderService.save(order);
+                }else{
+                    LOGGER.debug("预支付前校验金额是否一致,返回否,门诊流水号:" + recipe.getClinicCode());
                 }
                 recipe = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                 if(StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId())){
                     flag = false;
                 }
+            }else{
+                LOGGER.debug("预支付前校验,根据订单未找到对应的缴费单,订单号:" + orderNum);
             }
+        }else{
+            LOGGER.debug("预支付前校验,未查到订单号对应的订单,订单号:" + orderNum);
         }
         return flag;
     }
@@ -935,15 +953,20 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // orderAmount = (new BigDecimal(orderAmount).multiply(new
                 // BigDecimal("100"))).toString();
                 // }
+                
                 if (total.compareTo(new BigDecimal(recipe.getRecipeNonPaidDetail().getAmount())) == 0
                         && total.compareTo(new BigDecimal(orderAmount)) == 0) {
                     flag = true;
                 }
-                if (!flag) {
-                    LOGGER.debug("代缴金额与支付金额不一致,门诊流水号:" + recipe.getClinicCode() + ",支付金额:" + orderAmount + ",HIS端代缴金额:"
-                            + total);
-                }
+                LOGGER.debug("预支付前对金额金额进行校验,门诊流水号:" + recipe.getClinicCode() + ",支付金额:" + orderAmount + ",HIS端待缴金额:"
+                        + total.toString());
+//                if (!flag) {
+//                    LOGGER.debug("待缴金额与支付金额不一致,门诊流水号:" + recipe.getClinicCode() + ",支付金额:" + orderAmount + ",HIS端待缴金额:"
+//                            + total.toString());
+//                }
             }
+        }else{
+            LOGGER.debug("预支付前校验,获得HIS的待缴费接口返回值有问题,返回消息:" + payList.getReturnMsg());
         }
         return flag;
     }
@@ -968,7 +991,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
         if (payWay.equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             AliPayTradeQueryRes queryRes = aliService
                     .getAliPayTradeQueryRes(recipeOrderDocument.getRecipeNonPaidDetail().getOrderNum());
-            if (queryRes != null && queryRes.getCode().equals("10000")) {
+            if (queryRes != null && queryRes.getCode().equals("10000")
+                    && queryRes.getTradeStatus().equals("TRADE_SUCCESS")) {
                 // payOrderReq = this.convertAppInfo2PayOrder(order, queryRes);
                 order = this.saveUpdateRecipeAndOrder(order.getOrderNo(), payWay, queryRes);
             }
