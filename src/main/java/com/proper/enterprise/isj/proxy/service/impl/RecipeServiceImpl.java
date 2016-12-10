@@ -202,7 +202,7 @@ public class RecipeServiceImpl {
     }
 
     public RecipeOrderDocument createRecipeOrder(UserInfoDocument userInfo,  BasicInfoDocument info, String clinicCode,
-            RecipePaidDetailDocument paidDetal) throws RecipeException {
+            RecipePaidDetailDocument paidDetal) throws Exception {
         RecipeOrderDocument recipeOrder = recipeOrderRepository.getByClinicCode(clinicCode);
         if (recipeOrder == null) {
             recipeOrder = new RecipeOrderDocument();

@@ -29,6 +29,10 @@ import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
 import com.proper.enterprise.isj.pay.ali.model.AliRefundRes;
 import com.proper.enterprise.isj.pay.ali.model.AliRefundTradeQueryRes;
 import com.proper.enterprise.isj.pay.ali.service.AliService;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.model.*;
+import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
 import com.proper.enterprise.isj.pay.weixin.entity.WeixinEntity;
 import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
@@ -97,6 +101,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     @Autowired
     AliService aliService;
+
+    @Autowired
+    CmbService cmbService;
 
     @Autowired
     MessagesService messagesService;
@@ -403,6 +410,27 @@ public class RecipeServiceNotxImpl implements RecipeService {
             } else {
                 LOGGER.debug("未查到需要退费的项目,或者退费接口返回异常,微信订单号:" + order.getOrderNo());
             }
+            // 一网通缴费退款操作
+        }  else if (order.getPayWay().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            BigDecimal bigDecimal = new BigDecimal(String.valueOf(order.getOrderAmount()))
+                    .divide(new BigDecimal("100"));
+            // 生成一网通退款请求对象
+            RefundNoDupBodyReq refundInfo = new RefundNoDupBodyReq();
+            CmbPayEntity cmbInfo = cmbService.getQueryInfo(order.getOrderNo());
+            // 原订单号
+            refundInfo.setBillNo(cmbInfo.getBillNo());
+            // 交易日期
+            refundInfo.setDate(cmbInfo.getDate());
+            // 退款流水号
+            refundInfo.setRefundNo(refundNo);
+            // 退款金额
+            refundInfo.setAmount(bigDecimal.toString());
+            RefundNoDupRes refunRes = cmbService.saveRefundResult(refundInfo);
+            if (refunRes != null && StringUtil.isNull(refunRes.getHead().getCode())) {
+                refundFlag = true;
+            } else {
+                LOGGER.debug("未查到需要退费的项目,或者退费接口返回异常,一网通订单号:" + order.getOrderNo());
+            }
         } else {
             LOGGER.debug("未查到订单号对应的支付平台,订单号:" + order.getOrderNo());
         }
@@ -525,6 +553,32 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     if (refund != null&&StringUtil.isNotEmpty(refund.getRefundFee())) {
                         queryBig = queryBig.subtract(new BigDecimal(refund.getRefundFee()));
                     }
+                } else if(stringStringEntry.getValue().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                    // 查询缴费订单信息
+                    QuerySingleOrderRes query = cmbService.getCmbPayQueryRes(stringStringEntry.getKey());
+                    // 查询支付成功
+                    if(query != null && StringUtil.isEmpty(query.getHead().getCode())) {
+                        queryBig = queryBig.add(new BigDecimal(query.getBody().getBillAmount()).multiply(new BigDecimal("100")));
+                    } else {
+                        LOGGER.debug("未查到一网通支付信息,订单号:" + stringStringEntry.getKey());
+                    }
+                    // 退款信息查询
+                    String orderNo = stringStringEntry.getKey();
+                    CmbQueryRefundEntity queryRefundInfo = new CmbQueryRefundEntity();
+                    CmbPayEntity cmbInfo = cmbService.getQueryInfo(orderNo);
+                    // 订单号
+                    queryRefundInfo.setBillNo(cmbInfo.getBillNo());
+                    // 交易日期
+                    queryRefundInfo.setDate(cmbInfo.getDate());
+                    // 退款流水号
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("01");
+                    queryRefundInfo.setRefundNo(sb.toString());
+                    QueryRefundRes refund = cmbService.queryRefundResult(queryRefundInfo);
+                    if (refund != null && StringUtil.isNotEmpty(refund.getBody().getBillRecord().get(0).getAmount())) {
+                        queryBig = queryBig.subtract(new BigDecimal(
+                                refund.getBody().getBillRecord().get(0).getAmount())).multiply(new BigDecimal("100"));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -641,6 +695,37 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 payOrderReq.setMerchantId(weixinPayQuery.getMchId());
                 payOrderReq.setTerminalId(weixinPayQuery.getDeviceInfo());
                 payOrderReq.setPayAccount(weixinPayQuery.getAppid());
+            } else if (infoObj instanceof CmbPayEntity) {
+                CmbPayEntity cmbEntity = (CmbPayEntity) infoObj;
+                payOrderReq.setOrderId(order.getOrderNo());
+                // 支付信息
+                String account = cmbEntity.getMsg();
+                payOrderReq.setSerialNum(account.substring(account.length() - 20, account.length()));
+                // 交易日期
+                String date = DateUtil.toString(DateUtil.toDate(cmbEntity.getDate(), "yyyyMMdd"), "yyyy-MM-dd");
+
+                payOrderReq.setPayDate(date);
+                payOrderReq.setPayTime(cmbEntity.getTime());
+                payOrderReq.setPayChannelId(PayChannel.WEB_UNION);
+                payOrderReq.setPayResCode(cmbEntity.getSucceed());
+                payOrderReq.setMerchantId("");
+                payOrderReq.setTerminalId("");
+                payOrderReq.setPayAccount(cmbEntity.getBillNo());
+            } else if (infoObj instanceof QuerySingleOrderRes) {
+                QuerySingleOrderRes cmbPayQuery = (QuerySingleOrderRes) infoObj;
+                payOrderReq.setOrderId(order.getOrderNo());
+                payOrderReq.setSerialNum(cmbPayQuery.getBody().getBankSeqNo());
+                // 日期
+                String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"), "yyyy-MM-dd");
+                // 时间
+                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "HHmmss"), "HH:mm:ss");
+                payOrderReq.setPayDate(date);
+                payOrderReq.setPayTime(time);
+                payOrderReq.setPayChannelId(PayChannel.WEB_UNION);
+                payOrderReq.setPayResCode(cmbPayQuery.getHead().getCode());
+                payOrderReq.setMerchantId("");
+                payOrderReq.setTerminalId("");
+                payOrderReq.setPayAccount(cmbPayQuery.getBody().getBillNo());
             }
             payOrderReq.setBankNo("");
             payOrderReq.setPayResDesc("");
@@ -792,6 +877,15 @@ public class RecipeServiceNotxImpl implements RecipeService {
         return recipePaidOrder;
     }
 
+    /**
+     * 支付平台某个订单的退款总数小于等于HIS的退款总数
+     *
+     * @param recipe
+     * @param recipePaidOrder
+     * @param refund
+     * @return
+     * @throws Exception
+     */
     private String checkRecipeAndRefundIsEqual(RecipeOrderDocument recipe, RecipePaidDetailDocument recipePaidOrder,
             RefundByHis refund) throws Exception {
         BasicInfoDocument basic = userInfoService.getFamilyMemberByUserIdAndMemberId(recipe.getCreateUserId(),
@@ -807,7 +901,10 @@ public class RecipeServiceNotxImpl implements RecipeService {
             hisRefundBig = hisRefundBig.add(new BigDecimal(pay.getOwnCost()).abs());
         }
         BigDecimal finishBig = new BigDecimal("0");
+        // 支付宝以及微信
         DecimalFormat df = new DecimalFormat("000");
+        // 一网通因为只允许20为退款流水号,所以format为00
+        DecimalFormat dfCmb = new DecimalFormat("00");
         String refundNo = null;
         if (recipePaidOrder.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             int tempIndex = 0;
@@ -858,6 +955,43 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     }
                 } else {
                     LOGGER.debug("微信缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",查询返回值为空");
+                    return null;
+                }
+            }
+        } else if (recipePaidOrder.getPayChannelId().equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
+            int tempIndex = 0;
+            while (tempIndex <= 500) {
+                tempIndex++;
+                refundNo = recipePaidOrder.getOrderNum() + dfCmb.format(tempIndex);
+                // 退款信息查询
+                String orderNo = recipePaidOrder.getOrderNum();
+                CmbQueryRefundEntity queryRefundInfo = new CmbQueryRefundEntity();
+                CmbPayEntity cmbInfo = cmbService.getQueryInfo(orderNo);
+                // 订单号
+                queryRefundInfo.setBillNo(cmbInfo.getBillNo());
+                // 交易日期
+                queryRefundInfo.setDate(cmbInfo.getDate());
+                // 退款流水号
+                StringBuilder sb = new StringBuilder();
+                sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("01");
+                queryRefundInfo.setRefundNo(sb.toString());
+                QueryRefundRes refundQuery = cmbService.queryRefundResult(queryRefundInfo);
+                if (refundQuery != null) {
+                    BillRecordRes billRecord = refundQuery.getBody().getBillRecord().get(0);
+                    if (billRecord.getBillState().equals("210")) {
+                        if (StringUtil.isNotEmpty(billRecord.getAmount())) {
+                            finishBig = finishBig
+                                    .add(new BigDecimal(billRecord.getAmount()).multiply(new BigDecimal("100")));
+                        } else {
+                            break;
+                        }
+                    } else {
+                        LOGGER.debug("支付宝缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",失败消息:"
+                                + refundQuery.getHead().getErrMsg());
+                        return refundNo;
+                    }
+                } else {
+                    LOGGER.debug("支付宝缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",查询返回值为空");
                     return null;
                 }
             }
@@ -982,6 +1116,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
         return mongoTemplate.find(query, RecipeOrderDocument.class);
     }
 
+    /**
+     * 检验是否已经支付
+     *
+     * @param recipeOrderDocument
+     * @throws Exception
+     */
     @Override
     public void checkRecipeOrderIsPay(RecipeOrderDocument recipeOrderDocument) throws Exception {
         // PayOrderReq payOrderReq = null;
@@ -1003,6 +1143,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // weixinPayQueryRes);
                 order = this.saveUpdateRecipeAndOrder(order.getOrderNo(), payWay, weixinPayQueryRes);
 
+            }
+        } else if(payWay.equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            // 一网通
+            QuerySingleOrderRes cmbPayQueryRes = cmbService.getCmbPayQueryRes(orderNum);
+            if(cmbPayQueryRes != null && cmbPayQueryRes.getBody().getStatus().equals("0")) {
+                order = this.saveUpdateRecipeAndOrder(order.getOrderNo(), payWay, cmbPayQueryRes);
             }
         }
         if (order != null) {

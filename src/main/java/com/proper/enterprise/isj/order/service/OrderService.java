@@ -31,5 +31,5 @@ public interface OrderService {
      * @param orderNum
      * @return
      */
-    boolean checkOrderIsPay(String payChannelId, String orderNum);
+    boolean checkOrderIsPay(String payChannelId, String orderNum) throws Exception;
 }

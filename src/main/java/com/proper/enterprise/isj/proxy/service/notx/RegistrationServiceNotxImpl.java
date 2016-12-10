@@ -4,6 +4,13 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes;
+import com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes;
+import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupBodyReq;
+import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes;
+import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -81,6 +88,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     @Autowired
     WeixinService weixinService;
+
+    @Autowired
+    CmbService cmbService;
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -343,6 +353,13 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         tempCache.put(CenterFunctionUtils.CACHE_KEY_REGITRATION_SCHEDULER_TASK, regMap);
     }
 
+    /**
+     * 退款操作
+     *
+     * @param registrationId
+     * @return
+     * @throws Exception
+     */
     @Override
     public RefundReq saveRegRefund(String registrationId) throws Exception {
         RegistrationDocument reg = this.getRegistrationDocumentById(registrationId);
@@ -429,6 +446,51 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 LOGGER.debug("退号(支付宝退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
                 //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
+            }
+        }  else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            RegistrationTradeRefundDocument trade = null;
+            if (reg.getRegistrationTradeRefund() == null) {
+                trade = new RegistrationTradeRefundDocument();
+                trade.setOutTradeNo(reg.getOrderNum());
+                trade.setCmbRefundNo(reg.getOrderNum().substring(0, 18) + "01");
+                trade.setRefundAmount(reg.getAmount());
+                reg.setRegistrationTradeRefund(trade);
+                this.saveRegistrationDocument(reg);
+            } else {
+                trade = reg.getRegistrationTradeRefund();
+            }
+            BigDecimal bigDecimal = new BigDecimal(String.valueOf(reg.getAmount()));
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
+            // 生成一网通退款请求对象
+            RefundNoDupBodyReq refundInfo = new RefundNoDupBodyReq();
+            CmbPayEntity cmbInfo = cmbService.getQueryInfo(trade.getOutTradeNo());
+            // 原订单号
+            refundInfo.setBillNo(cmbInfo.getBillNo());
+            // 交易日期
+            refundInfo.setDate(cmbInfo.getDate());
+            // 退款流水号
+            refundInfo.setRefundNo(trade.getOutRequestNo());
+            // 退款金额
+            refundInfo.setAmount(bigDecimal.toString());
+            RefundNoDupRes cmbRefundRes = cmbService.saveRefundResult(refundInfo);
+            if (cmbRefundRes != null) {
+                if (StringUtil.isNull(cmbRefundRes.getHead().getCode())) {
+                    RegistrationRefundReqDocument refundHisReq = new RegistrationRefundReqDocument();
+                    try {
+                        refundReq = this.convertAppRefundInfo2RefundReq(cmbRefundRes, order.getOrderNo(),
+                                trade.getCmbRefundNo());
+                        BeanUtils.copyProperties(refundReq, refundHisReq);
+                    } catch (Exception e) {
+                        LOGGER.debug("挂号退费转换成HIS需要的参数时异常", e);
+                    }
+                    reg.setRegistrationRefundReq(refundHisReq);
+                    reg.setRefundApplyType(String.valueOf(4));
+                    this.saveRegistrationDocument(reg);
+                } else {
+                    LOGGER.debug("退号(支付宝退费失败),订单号:" + trade.getOutTradeNo());
+                }
+            } else {
+                LOGGER.debug("退号(支付宝退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
             }
         }
         LOGGER.debug("退费请求参数--------------------->>>");
@@ -546,6 +608,37 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 payRegReq.setMerchantId(weixinPayQuery.getMchId());
                 payRegReq.setTerminalId(weixinPayQuery.getDeviceInfo());
                 payRegReq.setPayAccount(weixinPayQuery.getAppid());
+            } else if (infoObj instanceof CmbPayEntity) {
+                CmbPayEntity cmbEntity = (CmbPayEntity) infoObj;
+                payRegReq.setOrderId(reg.getOrderNum());
+                // 支付信息
+                String account = cmbEntity.getMsg();
+                payRegReq.setSerialNum(account.substring(account.length() - 20, account.length()));
+                // 交易日期
+                String date = DateUtil.toString(DateUtil.toDate(cmbEntity.getDate(), "yyyyMMdd"), "yyyy-MM-dd");
+
+                payRegReq.setPayDate(date);
+                payRegReq.setPayTime(cmbEntity.getTime());
+                payRegReq.setPayChannelId(String.valueOf(4));
+                payRegReq.setPayResCode(cmbEntity.getSucceed());
+                payRegReq.setMerchantId("");
+                payRegReq.setTerminalId("");
+                payRegReq.setPayAccount(cmbEntity.getBillNo());
+            } else if (infoObj instanceof QuerySingleOrderRes) {
+                QuerySingleOrderRes cmbPayQuery = (QuerySingleOrderRes) infoObj;
+                payRegReq.setOrderId(reg.getOrderNum());
+                payRegReq.setSerialNum(cmbPayQuery.getBody().getBankSeqNo());
+                // 日期
+                String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"), "yyyy-MM-dd");
+                // 时间
+                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "HHmmss"), "HH:mm:ss");
+                payRegReq.setPayDate(date);
+                payRegReq.setPayTime(time);
+                payRegReq.setPayChannelId(String.valueOf(4));
+                payRegReq.setPayResCode(cmbPayQuery.getHead().getCode());
+                payRegReq.setMerchantId("");
+                payRegReq.setTerminalId("");
+                payRegReq.setPayAccount(cmbPayQuery.getBody().getBillNo());
             }
             payRegReq.setBankNo("");
             payRegReq.setPayResDesc("");
@@ -606,6 +699,27 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                     refundReq.setRefundResDesc("");
                     refundReq.setRefundRemark("");
+                    // 招行退款请求对象
+                } else if(infoObj instanceof RefundNoDupRes) {
+                    RefundNoDupRes refund = (RefundNoDupRes) infoObj;
+                    refundReq.setOrderId(reg.getOrderNum());
+                    refundReq.setHospOrderId(reg.getRegistrationOrderHis().getHospOrderId());
+                    refundReq.setRefundId(refundId);
+                    // 银行流水号
+                    refundReq.setRefundSerialNum(refund.getBody().getBankSeqNo());
+                    BigDecimal bigDecimal = new BigDecimal(refund.getBody().getAmount());
+                    bigDecimal = bigDecimal.multiply(new BigDecimal("100"));
+                    refundReq.setTotalFee(bigDecimal.intValue());
+                    refundReq.setRefundFee(bigDecimal.intValue());
+                    // 日期
+                    String date = DateUtil.toString(DateUtil.toDate(refund.getBody().getDate(), "yyyyMMdd"), "yyyy-MM-dd");
+                    // 时间
+                    String time = DateUtil.toString(DateUtil.toDate(refund.getBody().getTime(), "HHmmss"), "HH:mm:ss");
+                    refundReq.setRefundDate(date);
+                    refundReq.setRefundTime(time);
+                    refundReq.setRefundResCode(refund.getHead().getErrMsg());
+                    refundReq.setRefundResDesc("");
+                    refundReq.setRefundRemark("");
                 }
             }
         }
@@ -641,6 +755,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")
                             && wQuery.getTradeState().equals("SUCCESS")) {
                         payReg = this.convertAppInfo2PayReg(wQuery, registrationDocument.getId());
+                    }
+                } else if (payWay.equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                    QuerySingleOrderRes cmbQuery = cmbService.getCmbPayQueryRes(registrationDocument.getOrderNum());
+                    if (cmbQuery != null && StringUtil.isNull(cmbQuery.getHead().getCode())
+                            && cmbQuery.getBody().getStatus().equals("0")) {
+                        payReg = this.convertAppInfo2PayReg(cmbQuery, registrationDocument.getId());
                     }
                 }
                 if (payReg != null) {
@@ -680,6 +800,13 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         return registrationDocument;
     }
 
+    /**
+     *  查询挂号单退款信息
+     *
+     * @param registrationDocument
+     * @return
+     * @throws Exception
+     */
     @Override
     public RegistrationDocument saveQueryRefundTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
             throws Exception {
@@ -691,9 +818,24 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             if (refundQuery != null && refundQuery.getCode().equals("10000")) {
                 queryFlag = true;
             }
-        } else {
+        } else if (StringUtil.isNotEmpty(refund.getOutRefundNo())){
             WeixinRefundRes weixinRefundQuery = weixinService.getWeixinRefundRes(refund.getOutTradeNo());
             if (weixinRefundQuery != null) {
+                queryFlag = true;
+            }
+            // 查询一网通退款信息
+        } else if (StringUtil.isNotEmpty(refund.getCmbRefundNo())) {
+            // 退款信息查询
+            CmbQueryRefundEntity queryRefundInfo = new CmbQueryRefundEntity();
+            CmbPayEntity cmbInfo = cmbService.getQueryInfo(refund.getOutTradeNo());
+            // 订单号
+            queryRefundInfo.setBillNo(cmbInfo.getBillNo());
+            // 交易日期
+            queryRefundInfo.setDate(cmbInfo.getDate());
+            // 退款流水号
+            queryRefundInfo.setRefundNo(refund.getOutRequestNo());
+            QueryRefundRes cmbRefundQuery = cmbService.queryRefundResult(queryRefundInfo);
+            if(cmbRefundQuery != null) {
                 queryFlag = true;
             }
         }

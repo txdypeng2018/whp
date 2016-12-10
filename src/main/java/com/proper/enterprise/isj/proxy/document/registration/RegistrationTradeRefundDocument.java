@@ -37,6 +37,11 @@ public class RegistrationTradeRefundDocument extends BaseDocument {
      */
     private String refundFee;
 
+    /**
+     * 一网通退款单号
+     */
+    private String cmbRefundNo;
+
     public String getOutTradeNo() {
         return outTradeNo;
     }
@@ -83,5 +88,13 @@ public class RegistrationTradeRefundDocument extends BaseDocument {
 
     public void setRefundFee(String refundFee) {
         this.refundFee = refundFee;
+    }
+
+    public String getCmbRefundNo() {
+        return cmbRefundNo;
+    }
+
+    public void setCmbRefundNo(String cmbRefundNo) {
+        this.cmbRefundNo = cmbRefundNo;
     }
 }

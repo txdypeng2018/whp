@@ -116,6 +116,10 @@
         <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes"/>
     </oxm:jaxb2-marshaller>
 
+    <oxm:jaxb2-marshaller id="unmarshallQueryRefundRes">
+        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes"/>
+    </oxm:jaxb2-marshaller>
+
     <!-- 推送工具类 -->
     <bean id="properPushApp" class="com.proper.mobile.pushtools.PusherApp">
         <property name="pushUrl" value="${properpushPushUrl}"/>

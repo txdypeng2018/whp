@@ -1,6 +1,10 @@
 package com.proper.enterprise.isj.pay.cmb.controller;
 
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes;
+import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupBodyReq;
+import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes;
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
@@ -11,6 +15,7 @@ import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +67,7 @@ public class CmbPayController extends BaseController {
             // 需要先进行查询,查询用户信息绑定的协议号,如果没有签署协议则需要生成新的协议号 TODO
             User currentUser = userService.getCurrentUser();
             BasicInfoDocument basicInfo = userInfoService.getUserInfoByUserId(currentUser.getId());
-            resObj = cmbService.getPrepayinfo(basicInfo, uoReq);
+            resObj = cmbService.savePrepayinfo(basicInfo, uoReq);
         } catch (Exception e) {
             LOGGER.debug("CmbPayController.getPrepayinfo[Exception]:", e);
             resObj.setResultMsg(CenterFunctionUtils.APP_SYSTEM_ERR);
@@ -142,11 +147,55 @@ public class CmbPayController extends BaseController {
     public ResponseEntity<PayResultRes> querySinglePayInfo(@RequestBody CmbPayEntity payInfo) throws Exception {
         PayResultRes resObj = new PayResultRes();
         try {
-            resObj = cmbService.querySingleResult(payInfo);
+            StringBuilder sb = new StringBuilder();
+            sb.append(payInfo.getDate()).append(payInfo.getBillNo());
+            resObj = cmbService.querySingleOrder(sb.toString());
         } catch (Exception e) {
             LOGGER.debug("CmbPayController.querySinglePayInfo[Exception]:", e);
             resObj.setResultCode("-1");
             resObj.setResultMsg(CenterFunctionUtils.APP_SYSTEM_ERR);
+        }
+        return responseOfPost(resObj);
+    }
+
+    /**
+     * 查询一网退款接口_暂时 // TODO 临时测试接口,需要删除
+     *
+     * @param refundInfo 退款
+     * @return 处理结果
+     * @throws Exception
+     */
+    @JWTIgnore
+    @PostMapping(value = "/refundPayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<RefundNoDupRes> refundPayInfo(@RequestBody RefundNoDupBodyReq refundInfo) throws Exception {
+        RefundNoDupRes resObj = new RefundNoDupRes();
+        try {
+            // 设定退款金额
+            refundInfo.setAmount("0.01");
+            // 设定退款流水号
+            refundInfo.setRefundNo(RandomStringUtils.randomNumeric(20));
+            resObj = cmbService.saveRefundResult(refundInfo);
+        } catch (Exception e) {
+            LOGGER.debug("CmbPayController.refundPayInfo[Exception]:", e);
+        }
+        return responseOfPost(resObj);
+    }
+
+    /**
+     * 查询一网退款查询接口_暂时 // TODO 临时测试接口,需要删除
+     *
+     * @param queryRefundInfo 退款查询信息
+     * @return 处理结果
+     * @throws Exception
+     */
+    @JWTIgnore
+    @PostMapping(value = "/queryRefundInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QueryRefundRes> queryRefundInfo(@RequestBody CmbQueryRefundEntity queryRefundInfo) throws Exception {
+        QueryRefundRes resObj = new QueryRefundRes();
+        try {
+            resObj = cmbService.queryRefundResult(queryRefundInfo);
+        } catch (Exception e) {
+            LOGGER.debug("CmbPayController.queryRefundInfo[Exception]:", e);
         }
         return responseOfPost(resObj);
     }

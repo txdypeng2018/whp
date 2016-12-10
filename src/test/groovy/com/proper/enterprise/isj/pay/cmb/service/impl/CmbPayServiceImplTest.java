@@ -1,11 +1,13 @@
 package com.proper.enterprise.isj.pay.cmb.service.impl;
 
 import com.cmb.b2b.Base64;
+import com.proper.enterprise.isj.order.model.Order;
+import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.pay.cmb.constants.CmbConstants;
 import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbBusinessEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
-import com.proper.enterprise.isj.pay.cmb.entity.CmbRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
 import com.proper.enterprise.isj.pay.cmb.model.*;
 import com.proper.enterprise.isj.pay.cmb.repository.CmbPayNoticeRepository;
 import com.proper.enterprise.isj.pay.cmb.repository.CmbProtocolNoticeRepository;
@@ -13,7 +15,13 @@ import com.proper.enterprise.isj.pay.cmb.repository.CmbProtocolRepository;
 import com.proper.enterprise.isj.pay.cmb.repository.CmbRefundRepository;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
+import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
+import com.proper.enterprise.isj.proxy.service.RecipeService;
+import com.proper.enterprise.isj.proxy.service.RegistrationService;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
+import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
@@ -39,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -73,6 +82,15 @@ public class CmbPayServiceImplTest implements CmbService {
 
     @Autowired
     CmbRefundRepository cmbRefundRepo;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    RecipeService recipeService;
+
+    @Autowired
+    RegistrationService registrationService;
 
     /**
      * 获取用户协议信息
@@ -139,7 +157,17 @@ public class CmbPayServiceImplTest implements CmbService {
      * @return 结果
      * @throws Exception
      */
-    public PayResultRes getPrepayinfo(BasicInfoDocument basicInfo, UnifiedOrderReq uoReq) throws Exception {
+    public PayResultRes savePrepayinfo(BasicInfoDocument basicInfo, UnifiedOrderReq uoReq) throws Exception {
+//        // 判断当前时间是否超时_业务
+//        PayResultRes resChkTime =  getOrderCanPayTime(uoReq);
+//        if (resChkTime != null) {
+//            return resChkTime;
+//        }
+//        // 判断当前订单交易状态
+//        PayResultRes resChk = saveCheckCmbOrder(uoReq);
+//        if (!"-1".equals(resChk.getResultCode())) {
+//            return resChk;
+//        }
         PayResultRes resObj = new PayResultRes();
         if(basicInfo != null) {
             // 客户协议号
@@ -211,6 +239,91 @@ public class CmbPayServiceImplTest implements CmbService {
             resObj.setCmbDate(uoReq.getDate());
 
             LOGGER.debug(resObj.getPayInfo());
+        }
+        return resObj;
+    }
+
+    /**
+     * 设置订单有效时间_业务
+     * @param uoReq 请求参数
+     * @return 结果
+     */
+    private PayResultRes getOrderCanPayTime(UnifiedOrderReq uoReq) {
+        PayResultRes resObj = new PayResultRes();
+        Order order = orderService.findByOrderNo(uoReq.getBillNo());
+        if(order==null){
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_DATA_ERR);
+            return resObj;
+        }
+        Date cTime = DateUtil.toDate(order.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(cTime);
+        cal.add(Calendar.MINUTE, CenterFunctionUtils.ORDER_COUNTDOWN);
+        Date nowDate = new Date();
+        long min = (cal.getTimeInMillis() - nowDate.getTime()) / (60 * 1000);
+        if (min < 0) {
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_OVERTIME_INVALID);
+            return resObj;
+        }
+        uoReq.setExpireTimeSpan(String.valueOf(min + 1));
+        return null;
+    }
+
+    /**
+     * 检查订单状态_业务
+     *
+     * @param uoReq 请求对象
+     */
+    private PayResultRes saveCheckCmbOrder(UnifiedOrderReq uoReq) throws Exception {
+        PayResultRes resObj = new PayResultRes();
+        try {
+            Order order = orderService.findByOrderNo(uoReq.getBillNo());
+            if(order!=null){
+                if(order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())){
+                    RecipeOrderDocument recipe = recipeService
+                            .getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+                    if (recipe == null) {
+                        resObj.setResultCode("-1");
+                        resObj.setResultMsg(CenterFunctionUtils.ORDER_NON_RECIPE_ERR);
+                    } else {
+                        String totalFee = (new BigDecimal(uoReq.getAmount()).multiply(new BigDecimal("100")))
+                                .toString();
+                        boolean flag = recipeService.checkRecipeAmount(uoReq.getAmount(), totalFee,
+                                PayChannel.ALIPAY);
+                        if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
+                            resObj.setResultCode("-1");
+                            resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
+                        }
+                    }
+                }else{
+                    RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
+                    if (reg != null) {
+                        String payWay = reg.getPayChannelId();
+                        boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                        if (!paidFlag) {
+                            reg.setPayChannelId(String.valueOf(PayChannel.ALIPAY.getCode()));
+                            registrationService.saveRegistrationDocument(reg);
+                            order.setPayWay(String.valueOf(PayChannel.ALIPAY.getCode()));
+                            orderService.save(order);
+                        } else {
+                            resObj.setResultCode("-1");
+                            resObj.setResultMsg(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                        }
+                    }else{
+                        resObj.setResultCode("-1");
+                        resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
+                    }
+                }
+            }else{
+                resObj.setResultCode("-1");
+                resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
+            }
+        } catch (Exception e) {
+            LOGGER.debug("一网通预支付异常", e);
+            resObj.setResultCode("-1");
+            resObj.setResultMsg(CenterFunctionUtils.ORDER_SAVE_ERR);
         }
         return resObj;
     }
@@ -309,18 +422,64 @@ public class CmbPayServiceImplTest implements CmbService {
     }
 
     /**
+     * 根据订单号获取一网通订单号及日期
+     *
+     * @param orderNo 订单号
+     * @return 一网通对象
+     * @throws Exception
+     */
+    @Override
+    public CmbPayEntity getQueryInfo(String orderNo) throws Exception {
+        CmbPayEntity payInfo = new CmbPayEntity();
+        // 订单日期
+        String date = orderNo.substring(0, 8);
+        payInfo.setDate(date);
+        // 订单号
+        String billNo = orderNo.substring(8, 18);
+        payInfo.setBillNo(billNo);
+        return payInfo;
+    }
+
+    /**
      * 一网通查询单笔交易信息
      *
-     * @param payInfo 支付信息对象
+     * @param orderNo 订单号
      * @return 查询结果
      * @throws Exception
      */
     @Override
-    public PayResultRes querySingleResult(CmbPayEntity payInfo) throws Exception {
+    public PayResultRes querySingleOrder(String orderNo) throws Exception {
         PayResultRes resObj = new PayResultRes();
+        QuerySingleOrderRes res = getCmbPayQueryRes(orderNo);
+        if(StringUtil.isNull(res.getHead().getCode())) {
+            String orderStatus = res.getBody().getStatus();
+            // 订单状态
+            // 0－已结帐，1－已撤销，2－部分结帐，4－未结帐，7-冻结交易-已经冻结金额已经全部结账 8-冻结交易，冻结金额只结帐了一部分
+            // 订单状态
+            resObj.setResultCode(orderStatus);
+            // 订单金额
+            resObj.setAmout(res.getBody().getAmount());
+        } else {
+            resObj.setResultCode(res.getHead().getCode());
+            resObj.setResultMsg(res.getHead().getErrMsg());
+        }
+        return resObj;
+    }
+
+    /**
+     * 一网通查询单笔交易信息
+     *
+     * @param orderNo 订单号
+     * @return 查询结果
+     * @throws Exception
+     */
+    @Override
+    public QuerySingleOrderRes getCmbPayQueryRes(String orderNo) throws Exception {
+        QuerySingleOrderRes res = new QuerySingleOrderRes();
         QuerySingleOrderReq queryReq = new QuerySingleOrderReq();
         QuerySingleOrderHeadReq headReq = new QuerySingleOrderHeadReq();
         QuerySingleOrderBodyReq bodyReq = new QuerySingleOrderBodyReq();
+        CmbPayEntity payInfo = getQueryInfo(orderNo);
         if (StringUtil.isNotNull(payInfo.getBillNo()) && StringUtil.isNotNull(payInfo.getDate())) {
             // 请求时间,精确到毫秒
             headReq.setTimeStamp(getCmbReqTime());
@@ -347,10 +506,10 @@ public class CmbPayServiceImplTest implements CmbService {
             String requestXML = writer.toString().replace(strXmlHeader, "");
             LOGGER.debug("requestXML:" + requestXML);
 
-//            ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
+            //            ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
 //            QuerySingleOrderRes res = (QuerySingleOrderRes) unmarshallerMap.get("unmarshallQuerySingleOrderRes")
 //                    .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
-            QuerySingleOrderRes res = new QuerySingleOrderRes();
+            res = new QuerySingleOrderRes();
             CommonHeadRes headRes = new CommonHeadRes();
             QuerySingleOrderBodyRes bodyRes = new QuerySingleOrderBodyRes();
             headRes.setCode("");
@@ -358,20 +517,58 @@ public class CmbPayServiceImplTest implements CmbService {
             bodyRes.setAmount("0.01");
             res.setHead(headRes);
             res.setBody(bodyRes);
-
-            if(StringUtil.isNull(res.getHead().getCode())) {
-                String orderStatus = res.getBody().getStatus();
-                // 订单状态
-                // 0－已结帐，1－已撤销，2－部分结帐，4－未结帐，7-冻结交易-已经冻结金额已经全部结账 8-冻结交易，冻结金额只结帐了一部分
-                // 订单状态
-                resObj.setResultCode(orderStatus);
-                // 订单金额
-                resObj.setAmout(res.getBody().getAmount());
-            } else {
-                resObj.setResultCode(res.getHead().getCode());
-                resObj.setResultMsg(res.getHead().getErrMsg());
-            }
         }
+        return res;
+    }
+
+    /**
+     * 一网通按照订单号查询退款订单信息
+     *
+     * @param queryRefundInfo 查询退款信息对象
+     * @return 查询结果
+     * @throws Exception
+     */
+    @Override
+    public QueryRefundRes queryRefundResult(CmbQueryRefundEntity queryRefundInfo) throws Exception {
+        QueryRefundRes resObj = null;
+        QueryRefundReq queryReq = new QueryRefundReq();
+        QueryRefundHeadReq headReq = new QueryRefundHeadReq();
+        QueryRefundBodyReq bodyReq = new QueryRefundBodyReq();
+        if (StringUtil.isNotNull(queryRefundInfo.getBillNo())
+                && StringUtil.isNotNull(queryRefundInfo.getDate())
+                && StringUtil.isNotNull(queryRefundInfo.getRefundNo())) {
+            // 请求时间,精确到毫秒
+            headReq.setTimeStamp(getCmbReqTime());
+            // 订单号
+            bodyReq.setBillNo(queryRefundInfo.getBillNo());
+            // 订单日期
+            bodyReq.setDate(queryRefundInfo.getDate());
+            // 退款流水号
+            bodyReq.setRefundNo(queryRefundInfo.getRefundNo());
+            // head
+            queryReq.setHead(headReq);
+            // body
+            queryReq.setBody(bodyReq);
+
+            // hash
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(queryReq, new StreamResult(writer));
+            String preXML = getOriginSign(writer.toString());
+            LOGGER.debug("preXML:" + preXML);
+            String hash = encrypt(preXML, "SHA-1");
+            queryReq.setHash(hash);
+
+            // 生成请求参数
+            writer = new StringWriter();
+            marshaller.marshal(queryReq, new StreamResult(writer));
+            String requestXML = writer.toString().replace(strXmlHeader, "");
+            LOGGER.debug("requestXML:" + requestXML);
+
+            ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
+            resObj = (QueryRefundRes) unmarshallerMap.get("unmarshallQueryRefundRes")
+                    .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+        }
+
         return resObj;
     }
 
@@ -383,13 +580,24 @@ public class CmbPayServiceImplTest implements CmbService {
      * @throws Exception
      */
     @Override
-    public CmbRefundEntity saveRefundResult(RefundNoDupBodyReq refundInfo) throws Exception {
-        CmbRefundEntity refInfo = new CmbRefundEntity();
+    public RefundNoDupRes saveRefundResult(RefundNoDupBodyReq refundInfo) throws Exception {
+        RefundNoDupRes res = null;
         RefundNoDupReq refundReq = new RefundNoDupReq();
         RefundNoDupHeadReq headReq = new RefundNoDupHeadReq();
         RefundNoDupBodyReq bodyReq = new RefundNoDupBodyReq();
         if (StringUtil.isNotNull(refundInfo.getBillNo()) && StringUtil.isNotNull(refundInfo.getDate())
                 && StringUtil.isNotNull(refundInfo.getRefundNo()) && StringUtil.isNotNull(refundInfo.getAmount())) {
+
+            // 调用查询接口以检查退款接口是否有优惠
+            StringBuilder sb = new StringBuilder();
+            sb.append(refundInfo.getDate()).append(refundInfo.getBillNo());
+            QuerySingleOrderRes singleRes = getCmbPayQueryRes(sb.toString());
+
+            if(StringUtil.isNotNull(singleRes.getHead().getCode())) {
+                // 退款金额
+                bodyReq.setAmount(singleRes.getBody().getAmount());
+            }
+
             // 请求时间,精确到毫秒
             headReq.setTimeStamp(getCmbReqTime());
             // 订单号
@@ -399,8 +607,6 @@ public class CmbPayServiceImplTest implements CmbService {
             // 退款流水号
             // 退款流水号长度小于等于20 ,组成是英文字符与数字。
             bodyReq.setRefundNo(refundInfo.getRefundNo());
-            // 退款金额
-            bodyReq.setAmount(refundInfo.getAmount());
             // 备注
             bodyReq.setDesc(refundInfo.getDesc());
             // head
@@ -423,36 +629,11 @@ public class CmbPayServiceImplTest implements CmbService {
             LOGGER.debug("requestXML:" + requestXML);
 
             ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
-            RefundNoDupRes res = (RefundNoDupRes) unmarshallerMap.get("unmarshallRefundNoDupRes")
+            res = (RefundNoDupRes) unmarshallerMap.get("unmarshallRefundNoDupRes")
                     .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
 
-            // 退款成功
-            if(StringUtil.isNull(res.getHead().getCode())) {
-                // 退款状态(0:成功)
-                refInfo.setRefundCode("0");
-                // 响应信息
-                BeanUtils.copyProperties(res.getBody(), refInfo);
-                // 请求信息
-                // 原订单日期YYYYMMDD
-                refInfo.setReqDate(refundInfo.getDate());
-                // 原订单号
-                refInfo.setReqBillNo(refundInfo.getBillNo());
-                // 退款流水号
-                refInfo.setReqRefundNo(refundInfo.getRefundNo());
-                // 退款金额
-                refInfo.setReqAmount(refundInfo.getAmount());
-                // 退款备注
-                refInfo.setReqDesc(refundInfo.getDesc());
-                // 保存退款信息
-                cmbRefundRepo.save(refInfo);
-            } else {
-                // 错误code
-                refInfo.setRefundCode(res.getHead().getCode());
-                // 错误信息
-                refInfo.setRefundCode(res.getHead().getErrMsg());
-            }
         }
-        return refInfo;
+        return res;
     }
 
     /**
@@ -533,6 +714,8 @@ public class CmbPayServiceImplTest implements CmbService {
         payInfo.setDiscountAmt(request.getParameter("DiscountAmt"));
         // 银行用自己的Private Key对通知命令的签名
         payInfo.setSignature(request.getParameter("Signature"));
+        // 设定时间 由异步通知的时间为准
+        payInfo.setTime(DateUtil.toString(new Date(), "HH:mm:ss"));
         return payInfo;
     }
 
@@ -579,8 +762,8 @@ public class CmbPayServiceImplTest implements CmbService {
 
         // 生成订单号
         // 6位或10位长数字
-        // TODO 暂时使用十位随机数字
-        uoReq.setBillNo(RandomStringUtils.randomNumeric(10));
+        CmbPayEntity cmbPayInfo = getQueryInfo(uoReq.getBillNo());
+        uoReq.setBillNo(cmbPayInfo.getBillNo());
         // 日期
         uoReq.setDate(DateUtil.toString(new Date(), "yyyyMMdd"));
         // 超时时间

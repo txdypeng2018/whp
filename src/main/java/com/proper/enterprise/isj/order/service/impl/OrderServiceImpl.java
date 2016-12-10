@@ -4,6 +4,8 @@ import java.util.Date;
 
 import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
 import com.proper.enterprise.isj.pay.ali.service.AliService;
+import com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes;
+import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
@@ -37,6 +39,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     WeixinService weixinService;
+
+    @Autowired
+    CmbService cmbService;
 
     @Autowired
     private WebServicesClient webServicesClient;
@@ -104,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean checkOrderIsPay(String payChannelId, String orderNum) {
+    public boolean checkOrderIsPay(String payChannelId, String orderNum) throws Exception{
         boolean paidFlag = false;
         if (StringUtil.isNotEmpty(payChannelId)) {
             if (payChannelId.equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
@@ -117,6 +122,11 @@ public class OrderServiceImpl implements OrderService {
                 WeixinPayQueryRes wQuery = weixinService.getWeixinPayQueryRes(orderNum);
                 if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")
                         && wQuery.getTradeState().equals("SUCCESS")) {
+                    paidFlag = true;
+                }
+            } else if (payChannelId.equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                QuerySingleOrderRes cmbRes = cmbService.getCmbPayQueryRes(orderNum);
+                if (cmbRes != null && StringUtil.isNull(cmbRes.getHead().getCode())) {
                     paidFlag = true;
                 }
             }

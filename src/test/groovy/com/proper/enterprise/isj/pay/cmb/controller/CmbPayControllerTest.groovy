@@ -49,7 +49,7 @@ class CmbPayControllerTest extends AbstractTest {
         String token = userInfoService.userLogin(user);
         mockRequest.addHeader("Authorization", token);
         UnifiedOrderReq uoReq = new UnifiedOrderReq();
-        uoReq.setBillNo("1234567890");
+        uoReq.setBillNo("2016120800164018299951");
         uoReq.setAmount("0.01");
         MvcResult result = post("/pay/cmb/prepayInfo", JSONUtil.toJSON(uoReq), HttpStatus.CREATED);
         String obj = result.getResponse().getContentAsString();

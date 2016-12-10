@@ -4,6 +4,8 @@ import com.proper.enterprise.isj.order.entity.OrderEntity;
 import com.proper.enterprise.platform.core.annotation.CacheQuery;
 import com.proper.enterprise.platform.core.repository.BaseRepository;
 
+import java.util.List;
+
 public interface OrderRepository extends BaseRepository<OrderEntity, String> {
 
 	@CacheQuery
@@ -11,4 +13,7 @@ public interface OrderRepository extends BaseRepository<OrderEntity, String> {
 
 	@CacheQuery
 	OrderEntity getByFormId(String formId);
+
+	@CacheQuery
+	List<OrderEntity> findByOrderNoLikeAndPayWay(String orderNo, String payWay);
 }

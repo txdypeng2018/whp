@@ -76,6 +76,13 @@ public class CmbPayEntity extends BaseEntity {
      */
     private String signature;
 
+    /**
+     * 交易时间 必填
+     */
+    @Column(nullable = false)
+    private String time;
+
+
     public String getUserId() {
         return userId;
     }
@@ -162,5 +169,13 @@ public class CmbPayEntity extends BaseEntity {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
