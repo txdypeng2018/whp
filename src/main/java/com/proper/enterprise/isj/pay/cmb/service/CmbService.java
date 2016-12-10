@@ -2,11 +2,8 @@ package com.proper.enterprise.isj.pay.cmb.service;
 
 import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
-import com.proper.enterprise.isj.pay.cmb.entity.CmbRefundEntity;
-import com.proper.enterprise.isj.pay.cmb.model.BusinessProReq;
-import com.proper.enterprise.isj.pay.cmb.model.BusinessRes;
-import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupBodyReq;
-import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.model.*;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.wideunique.utils.json.JSONObject;
@@ -29,15 +26,21 @@ public interface CmbService {
 
     void saveCmbPayNoticeInfo(CmbPayEntity payInfo) throws Exception;
 
-    PayResultRes getPrepayinfo(BasicInfoDocument basicInfo, UnifiedOrderReq uoReq) throws Exception;
+    PayResultRes savePrepayinfo(BasicInfoDocument basicInfo, UnifiedOrderReq uoReq) throws Exception;
 
     boolean saveNoticeProtocolInfo(String reqData) throws Exception;
 
     boolean saveNoticePayInfo(HttpServletRequest request) throws Exception;
 
-    PayResultRes querySingleResult(CmbPayEntity payInfo) throws Exception;
+    CmbPayEntity getQueryInfo(String orderNo) throws Exception;
 
-    CmbRefundEntity saveRefundResult(RefundNoDupBodyReq refundInfo) throws Exception;
+    PayResultRes querySingleOrder(String orderNo) throws Exception;
+
+    QuerySingleOrderRes getCmbPayQueryRes(String orderNo) throws Exception;
+
+    QueryRefundRes queryRefundResult(CmbQueryRefundEntity queryRefundInfo) throws Exception;
+
+    RefundNoDupRes saveRefundResult(RefundNoDupBodyReq refundInfo) throws Exception;
 
     CmbPayEntity getCmbPayNoticeInfo(HttpServletRequest request) throws Exception;
 
