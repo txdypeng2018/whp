@@ -14,6 +14,7 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
+import org.springframework.context.annotation.Lazy
 import org.springframework.test.context.jdbc.Sql
 
 class ScheduleServiceImplTest extends AbstractTest {
@@ -31,6 +32,7 @@ class ScheduleServiceImplTest extends AbstractTest {
     CacheManager cacheManager;
 
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Autowired

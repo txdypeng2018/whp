@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.proper.enterprise.isj.proxy.document.MessagesDocument;
@@ -29,6 +30,7 @@ public class StopRegTask implements Runnable {
 
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(StopRegTask.class);
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Autowired

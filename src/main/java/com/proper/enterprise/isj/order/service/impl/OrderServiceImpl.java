@@ -13,6 +13,7 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.order.entity.OrderEntity;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
     CmbService cmbService;
 
     @Autowired
+    @Lazy
     private WebServicesClient webServicesClient;
 
     @Override
