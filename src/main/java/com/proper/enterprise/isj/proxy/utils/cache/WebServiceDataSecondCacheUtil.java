@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.proper.enterprise.isj.proxy.document.SubjectDocument;
@@ -33,6 +34,7 @@ public class WebServiceDataSecondCacheUtil {
     DoctorService doctorService;
 
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Autowired

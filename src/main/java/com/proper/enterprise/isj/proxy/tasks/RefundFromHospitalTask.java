@@ -9,6 +9,7 @@ import com.proper.enterprise.isj.proxy.enums.RegistrationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.proper.enterprise.isj.order.service.OrderService;
@@ -32,6 +33,7 @@ public class RefundFromHospitalTask implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(RefundFromHospitalTask.class);
 
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Autowired

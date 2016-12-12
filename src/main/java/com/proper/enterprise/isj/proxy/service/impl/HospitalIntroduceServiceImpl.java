@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.service.impl;
 
 import com.proper.enterprise.isj.exception.HisReturnException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.proxy.service.HospitalIntroduceService;
@@ -18,6 +19,7 @@ import com.proper.enterprise.isj.webservices.model.res.ResModel;
 public class HospitalIntroduceServiceImpl implements HospitalIntroduceService {
 
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.proper.enterprise.isj.proxy.utils.scheduler.TaskSchedulerUtil;
@@ -45,6 +46,7 @@ public class WebService4HisInterfaceCacheUtil {
     private static final String HIS_HOSPITAL_INFO_KEY = "'his_hospital_info_key'";
 
     @Autowired
+    @Lazy
     WebServicesClient webServicesClient;
 
     @Autowired
