@@ -129,8 +129,9 @@
                   console.debug('retData', retData);
                   toastService.show('内部错误!请联系管理员!');
                 });
-            } else {
-              console.debug('error:');
+            } else if(data.resultCode === '-1') {
+              console.debug('data', data);
+              toastService.show(data.resultMsg);
             }
           }).error(function (data) {
               console.debug('data', data);
