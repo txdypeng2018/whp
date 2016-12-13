@@ -291,6 +291,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
             } catch (Exception e) {
                 LOGGER.info("诊间缴费出现异常", e);
                 String refundNo = order.getOrderNo() + "001";
+                if(order.getPayWay().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                    refundNo = order.getOrderNo().substring(0, 18) + "01";
+                }
                 RecipePaidDetailDocument detail = regBack.getRecipeNonPaidDetail();
                 if (detail == null) {
                     detail = new RecipePaidDetailDocument();

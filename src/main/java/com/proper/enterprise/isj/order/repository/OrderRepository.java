@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface OrderRepository extends BaseRepository<OrderEntity, String> {
 
-	@CacheQuery
-	OrderEntity findByOrderNo(String orderNo);
+    @CacheQuery
+    OrderEntity findByOrderNo(String orderNo);
 
-	@CacheQuery
-	OrderEntity getByFormId(String formId);
+    @CacheQuery
+    OrderEntity getByFormId(String formId);
 
-	@CacheQuery
-	List<OrderEntity> findByOrderNoLikeAndPayWay(String orderNo, String payWay);
+    List<OrderEntity> findByOrderNoLike(String orderNo);
 }
