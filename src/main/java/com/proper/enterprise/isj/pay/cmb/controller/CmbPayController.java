@@ -64,7 +64,7 @@ public class CmbPayController extends BaseController {
     public ResponseEntity<PayResultRes> getPrepayinfo(@RequestBody UnifiedOrderReq uoReq) throws Exception {
         PayResultRes resObj = new PayResultRes();
         try {
-            // 需要先进行查询,查询用户信息绑定的协议号,如果没有签署协议则需要生成新的协议号 TODO
+            // 需要先进行查询,查询用户信息绑定的协议号,如果没有签署协议则需要生成新的协议号
             User currentUser = userService.getCurrentUser();
             BasicInfoDocument basicInfo = userInfoService.getUserInfoByUserId(currentUser.getId());
             resObj = cmbService.savePrepayinfo(basicInfo, uoReq);
@@ -159,7 +159,7 @@ public class CmbPayController extends BaseController {
     }
 
     /**
-     * 查询一网退款接口_暂时 // TODO 临时测试接口,需要删除
+     * 查询一网退款接口
      *
      * @param refundInfo 退款
      * @return 处理结果
@@ -170,8 +170,6 @@ public class CmbPayController extends BaseController {
     public ResponseEntity<RefundNoDupRes> refundPayInfo(@RequestBody RefundNoDupBodyReq refundInfo) throws Exception {
         RefundNoDupRes resObj = new RefundNoDupRes();
         try {
-            // 设定退款金额
-            refundInfo.setAmount("0.01");
             // 设定退款流水号
             refundInfo.setRefundNo(RandomStringUtils.randomNumeric(20));
             resObj = cmbService.saveRefundResult(refundInfo);
@@ -182,7 +180,7 @@ public class CmbPayController extends BaseController {
     }
 
     /**
-     * 查询一网退款查询接口_暂时 // TODO 临时测试接口,需要删除
+     * 查询一网退款查询接口
      *
      * @param queryRefundInfo 退款查询信息
      * @return 处理结果

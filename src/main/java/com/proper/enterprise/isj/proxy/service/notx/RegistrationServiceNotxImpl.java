@@ -469,7 +469,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             // 交易日期
             refundInfo.setDate(cmbInfo.getDate());
             // 退款流水号
-            refundInfo.setRefundNo(trade.getOutRequestNo());
+            refundInfo.setRefundNo(trade.getCmbRefundNo());
             // 退款金额
             refundInfo.setAmount(bigDecimal.toString());
             RefundNoDupRes cmbRefundRes = cmbService.saveRefundResult(refundInfo);
