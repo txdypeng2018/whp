@@ -1007,25 +1007,32 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 queryRefundInfo.setDate(cmbInfo.getDate());
                 // 退款流水号
                 StringBuilder sb = new StringBuilder();
-                sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("01");
+                sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append(dfCmb.format(tempIndex));
                 queryRefundInfo.setRefundNo(sb.toString());
                 QueryRefundRes refundQuery = cmbService.queryRefundResult(queryRefundInfo);
                 if (refundQuery != null) {
-                    BillRecordRes billRecord = refundQuery.getBody().getBillRecord().get(0);
-                    if (billRecord.getBillState().equals("210")) {
-                        if (StringUtil.isNotEmpty(billRecord.getAmount())) {
-                            finishBig = finishBig
-                                    .add(new BigDecimal(billRecord.getAmount()).multiply(new BigDecimal("100")));
+                    // 如果查询有该订单的退款信息
+                    if(StringUtil.isEmpty(refundQuery.getHead().getCode())) {
+                        BillRecordRes billRecord = refundQuery.getBody().getBillRecord().get(0);
+                        // 如果订单已经直接退款成功
+                        if (billRecord.getBillState().equals("210")) {
+                            if (StringUtil.isNotEmpty(billRecord.getAmount())) {
+                                finishBig = finishBig
+                                        .add(new BigDecimal(billRecord.getAmount()).multiply(new BigDecimal("100")));
+                            } else {
+                                break;
+                            }
                         } else {
-                            break;
+                            LOGGER.debug("一网通缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",失败消息:"
+                                    + refundQuery.getHead().getErrMsg());
+                            return refundNo;
                         }
                     } else {
-                        LOGGER.debug("支付宝缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",失败消息:"
-                                + refundQuery.getHead().getErrMsg());
-                        return refundNo;
+                        LOGGER.debug("一网通退款查询失败,无此退款订单号");
+                        break;
                     }
                 } else {
-                    LOGGER.debug("支付宝缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",查询返回值为空");
+                    LOGGER.debug("一网通缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",查询返回值为空");
                     return null;
                 }
             }

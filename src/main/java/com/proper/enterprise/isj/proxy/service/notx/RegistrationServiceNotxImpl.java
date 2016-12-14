@@ -487,10 +487,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     reg.setRefundApplyType(String.valueOf(4));
                     this.saveRegistrationDocument(reg);
                 } else {
-                    LOGGER.debug("退号(支付宝退费失败),订单号:" + trade.getOutTradeNo());
+                    LOGGER.debug("退号(一网通退费失败),订单号:" + trade.getOutTradeNo());
                 }
             } else {
-                LOGGER.debug("退号(支付宝退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
+                LOGGER.debug("退号(一网通退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
             }
         }
         LOGGER.debug("退费请求参数--------------------->>>");
