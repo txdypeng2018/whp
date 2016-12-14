@@ -91,7 +91,7 @@
         if (rejection.status === 502) {
           rejection.data = '网络异常';
         }
-        if((!angular.isUndefined(rejection.data)) && rejection.data.length > 25){
+        if(!angular.isUndefined(rejection.data) && rejection.data !== null && rejection.data.length > 25){
           rejection.data = null;
         }
         if (excludeUrl(rejection.config.url)) {

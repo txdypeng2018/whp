@@ -113,8 +113,11 @@
     //检查程序版本
   	function checkAppVersion(){
        $properProperpush.getDeviceInfo().then(function(success){
-         $http.get('/app/latest', {params: {'version':'v3.1.0','device':'android'}}).success(function(data) {
-           alert(data.version);
+         var versionNum = '';
+         cordova.getAppVersion.getVersionNumber(function (versionNumber) {
+           versionNum = versionNumber;
+         });
+         $http.get('/app/latest', {params: {'version': versionNum,'device': success.type}}).success(function(data) {
            if(success.type==='android'){
              window.plugins.UpdateVersion.isUpdating(function(s) {
                //如果不是处在正在更新中，则检查程序版本
