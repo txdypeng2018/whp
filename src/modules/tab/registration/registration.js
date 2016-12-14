@@ -26,6 +26,17 @@
     };
 
     var diffRegistrations = {};
+    $scope.viewTypeId = '1';
+    $scope.viewTypes = [
+      {
+        'id': '1',
+        'name': '未完成'
+      },
+      {
+        'id': '2',
+        'name': '已完成'
+      }
+    ];
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.httpIndex = {index:1};
       diffRegistrations = {};
@@ -44,7 +55,7 @@
         toastService.show(data);
       });
 
-      getViewTypes();
+      registrationList();
 
       $ionicHistory.clearHistory();
     });
@@ -70,22 +81,6 @@
       $scope.httpIndex.index++;
       registrationList();
     };
-
-    //取得挂号单分类信息
-    var getViewTypes = function() {
-      $scope.viewTypes = [
-        {
-          'id': '1',
-          'name': '未完成'
-        },
-        {
-          'id': '2',
-          'name': '已完成'
-        }
-      ];
-      $scope.viewTypeId = '1';
-      registrationList();
-  };
 
     //分类跳转
     $scope.registrationBtnClk=function(id){
