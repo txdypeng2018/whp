@@ -88,6 +88,9 @@
         if (rejection.status === 503) {
           rejection.data = '连接数过多，请稍后...';
         }
+        if (rejection.status === 502) {
+          rejection.data = '网络异常';
+        }
         if (excludeUrl(rejection.config.url)) {
           requestIndexMinus();
         }

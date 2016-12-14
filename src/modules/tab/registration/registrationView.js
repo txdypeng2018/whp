@@ -2,6 +2,26 @@
   'use strict';
 
   var registrationViewCtrl = function($scope, $http, $state, $stateParams, $ionicPopup, $ionicHistory, toastService) {
+    //取得挂号单
+    var getRegistration = function(){
+      $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
+        $scope.registration = data;
+        if ($scope.registration.apptDate.length <= 11) {
+          $scope.visitTime = '请到分诊台咨询';
+        }
+        else {
+          $scope.visitTime = $scope.registration.apptDate;
+        }
+        if ($scope.registration.district.length > 2) {
+          $scope.registration.district = $scope.registration.district.substring(0,2);
+        }
+      }).error(function(data){
+        toastService.show(data);
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    };
+
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.registration = {};
       $scope.patient = {};
@@ -18,21 +38,8 @@
         $scope.memberTypes = {};
         toastService.show(data);
       });
-      //取得挂号单
-      $http.get('/register/registrations/registration', {params: {id: $stateParams.registrationId}}).success(function(data) {
-        $scope.registration = data;
-        if ($scope.registration.apptDate.length <= 11) {
-          $scope.visitTime = '请到分诊台咨询';
-        }
-        else {
-          $scope.visitTime = $scope.registration.apptDate;
-        }
-        if ($scope.registration.district.length > 2) {
-          $scope.registration.district = $scope.registration.district.substring(0,2);
-        }
-      }).error(function(data){
-        toastService.show(data);
-      });
+
+      getRegistration();
     });
     $scope.$on('$ionicView.beforeLeave', function(){
       if (confirmPopup !== null) {
@@ -70,6 +77,11 @@
           });
         }
       });
+    };
+
+    //下拉刷新
+    $scope.doRefresh = function() {
+      getRegistration();
     };
   };
 
