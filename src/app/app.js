@@ -113,25 +113,25 @@
     //检查程序版本
   	function checkAppVersion(){
        $properProperpush.getDeviceInfo().then(function(success){
+         $http.get('/app/latest', {params: {'version':'v3.1.0','device':'android'}}).success(function(data) {
+           alert(data.version);
            if(success.type==='android'){
-           	 window.plugins.UpdateVersion.isUpdating(function(s){
-           	 	 //如果不是处在正在更新中，则检查程序版本
-                 if(!s.updating){
-		              $http.get('/app/latest', {params: {}}).success(function(data) {
-		                      var versionInfo={};
-		                      versionInfo.ver=data.ver||'0';
-		                      versionInfo.url=data.url||'';
-		                      versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
-		                      window.plugins.UpdateVersion.checkVersion(versionInfo);
-		                    }).error(function(data){
-		                      $cordovaToast.showShortBottom(data);
-		               });
-	              }
-              },function(err){
-                    alert(err);
-               });
-
+             window.plugins.UpdateVersion.isUpdating(function(s) {
+               //如果不是处在正在更新中，则检查程序版本
+               if(!s.updating){
+                 var versionInfo={};
+                 versionInfo.ver=data.ver||'0';
+                 versionInfo.url=data.url||'';
+                 versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
+                 window.plugins.UpdateVersion.checkVersion(versionInfo);
+               }
+             },function(err){
+               alert(err);
+             });
            }
+         }).error(function(data){
+           $cordovaToast.showShortBottom(data);
+         });
         },function(error){alert('error:'+error);});
   	}
     document.addEventListener('resume', function() {
@@ -139,10 +139,7 @@
        checkAppVersion();
     }, false);
     checkAppVersion();
-
 	});
-
-
 });
 
   if (typeof String.prototype.startsWith !== 'function') {
