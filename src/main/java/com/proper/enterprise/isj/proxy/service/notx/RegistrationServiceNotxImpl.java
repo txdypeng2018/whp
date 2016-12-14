@@ -1087,7 +1087,43 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:返回为空");
             }
+        } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            if (trade == null) {
+                trade = new RegistrationTradeRefundDocument();
+                trade.setOutTradeNo(reg.getOrderNum());
+                trade.setCmbRefundNo(reg.getOrderNum().substring(0, 18) + "01");
+                trade.setRefundAmount(reg.getAmount());
+                reg.setRegistrationTradeRefund(trade);
+                this.saveRegistrationDocument(reg);
+            } else {
+                trade = reg.getRegistrationTradeRefund();
+            }
+            BigDecimal bigDecimal = new BigDecimal(String.valueOf(reg.getAmount()));
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
+            // 生成一网通退款请求对象
+            RefundNoDupBodyReq refundInfo = new RefundNoDupBodyReq();
+            CmbPayEntity cmbInfo = cmbService.getQueryInfo(trade.getOutTradeNo());
+            // 原订单号
+            refundInfo.setBillNo(cmbInfo.getBillNo());
+            // 交易日期
+            refundInfo.setDate(cmbInfo.getDate());
+            // 退款流水号
+            refundInfo.setRefundNo(trade.getCmbRefundNo());
+            // 退款金额
+            refundInfo.setAmount(bigDecimal.toString());
+            RefundNoDupRes cmbRefundRes = cmbService.saveRefundResult(refundInfo);
+            if (cmbRefundRes != null) {
+                if (StringUtil.isEmpty(cmbRefundRes.getHead().getCode())) {
+                    refundFlag = true;
+                } else {
+                    LOGGER.debug(
+                            "挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + cmbRefundRes.getHead().getErrMsg());
+                }
+            } else {
+                LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:返回为空");
+            }
         }
+
         if (refundFlag && !reg.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
             reg.setStatusCode(RegistrationStatusEnum.REFUND.getValue());
             reg.setRefundApplyType(String.valueOf(2));
