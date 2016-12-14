@@ -110,7 +110,12 @@
       }
     }
   }
-
+}
+.has-footer-double{
+  bottom: 88px;
+}
+.registrationView-footer{
+  height: 44px;
   .operation {
     padding: 0 15px;
 
@@ -122,4 +127,64 @@
       }
     }
   }
+  .has-two-button{
+    width: 100%;
+  }
+}
+.registrationView-footer-height{
+  height: 88px;
+  .has-two-button-up{
+    width: 100%;
+    height: 37px;
+  }
+  .has-two-button-down{
+    margin-top: 40px;
+    width: 97%;
+  }
+}
+
+.pay-status-line{
+  height: 100%;
+  border-left: 1px solid #dddddd;
+  margin-left: 40px;
+  padding-left: 35px;
+}
+.pay-status-content{
+  width: 75%;
+  font-size: 15px;
+  color: #444444;
+  white-space:normal;
+  margin-bottom: 15px;
+  position: relative;
+}
+.pay-status-content-head{
+  width: 100%;
+  white-space:normal;
+}
+.pay-status-content-content{
+  width: 100%;
+  font-size: 13px;
+  margin-top: 4px;
+  white-space:normal;
+}
+.pay-status-mark{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: absolute;
+  left: -48px;
+  top: -1px;
+  overflow: hidden;
+  img{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .img-style{
+    -webkit-filter: grayscale(1);/* Webkit */
+  }
+}
+.unable-bg{
+  background-color: #999999;
 }

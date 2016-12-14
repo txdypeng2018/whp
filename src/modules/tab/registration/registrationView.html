@@ -5,7 +5,8 @@
     <div class="title">挂号单</div>
     <!-- <a class="button button-clear icon ion-ios-telephone-outline positive"></a> -->
   </ion-header-bar>
-  <ion-content class="has-header content-gray registrationView-content">
+  <ion-content class="has-header content-gray registrationView-content" ng-class="{'has-footer':((registration.statusCode == '0') || (registration.canBack == '1')),'has-footer-double':((registration.statusCode == '0') && (registration.canBack == '1'))}">
+    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
     <ul class="list registration-card">
       <li class="item item-card-head">
         <h2 class="odd-number">单号：<span class="positive">{{registration.num}}</span></h2>
@@ -64,9 +65,27 @@
         <i class="icon ion-ios-arrow-right icon-right"></i>
       </li>
     </ul>
-    <div class="operation">
-      <button ng-if="registration.statusCode == '0'" class="button button-positive" ng-click="registrationPay()">支付</button>
-      <button ng-if="registration.canBack == '1'" class="button button-outline button-positive" ng-click="registrationBack()">退号</button>
-    </div>
+    <ul ng-if="registration.orders != null" class="list registration-other">
+      <li class="item item-other-head">
+        <h2>支付状态</h2>
+      </li>
+      <li class="item item-other-content">
+        <div class="pay-status-parent">
+          <div class="pay-status-line">
+            <div class="pay-status-content" ng-repeat="regisorder in registration.orders">
+              <div class="pay-status-mark">
+                <img ng-src="./assets/images/{{regisorder.img}}" ng-class="{'img-style' : regisorder.status=='0'}">
+              </div>
+              <div class="pay-status-content-head" ng-class="{ 'positive' : regisorder.status=='1'}">{{regisorder.name}}</div>
+              <div class="pay-status-content-content" ng-bind-html="regisorder.detail"></div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
   </ion-content>
+  <ion-footer-bar ng-if="((registration.statusCode == '0') || (registration.canBack == '1'))" align-title="center" class="registrationView-footer operation" ng-class="{'registrationView-footer-height': ((registration.statusCode == '0') && (registration.canBack == '1'))}">
+    <button ng-if="registration.statusCode == '0'" class="button button-positive has-two-button has-two-button-up" ng-click="registrationPay()">支付</button>
+    <button ng-if="registration.canBack == '1'" class="button button-outline button-positive has-two-button has-two-button-down" ng-click="registrationBack()">退号</button>
+  </ion-footer-bar>
 </ion-view>
