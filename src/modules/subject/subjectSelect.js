@@ -112,6 +112,7 @@
         $scope.httpIndex.index++;
 
         if(!angular.isUndefined(subject[id])){
+          $scope.subjectId = subject[id][0].id;
           $scope.subjects = subject[id];
           $scope.subjectRights=subject[id][0].subjects;
         }
