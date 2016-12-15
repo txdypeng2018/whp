@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ public class RegistrationCancelTask implements Runnable {
 
     @Override
     public void run() {
-        List<RegistrationDocument> overTimeList = registrationService.findOverTimeRegistrationDocumentList();
+        int overTimeMinute = CenterFunctionUtils.ORDER_COUNTDOWN + 5;
+        List<RegistrationDocument> overTimeList = registrationService
+                .findOverTimeRegistrationDocumentList(overTimeMinute);
         for (RegistrationDocument registrationDocument : overTimeList) {
             try {
                 registrationService.saveCancelRegistration(registrationDocument.getId(),

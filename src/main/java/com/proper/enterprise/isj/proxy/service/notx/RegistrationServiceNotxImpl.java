@@ -928,10 +928,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     @Override
-    public List<RegistrationDocument> findOverTimeRegistrationDocumentList() {
+    public List<RegistrationDocument> findOverTimeRegistrationDocumentList(int overTimeMinute) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.MINUTE, -CenterFunctionUtils.ORDER_COUNTDOWN - 5);
+        cal.add(Calendar.MINUTE, -overTimeMinute);
         Query query = new Query();
         query.addCriteria(Criteria.where("createTime")
                 .lte(DateUtil.toString(cal.getTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode")
@@ -1267,7 +1267,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         } else if ("0".equals(registration.getIsAppointment())) {
             if (orders.size() > 2) {
                 RegistrationOrderProcessDocument hospConfirmProcess = orders.get(2);
-                if (hospConfirmProcess.getDetail().contains("挂号失败")) {
+                if (hospConfirmProcess.getDetail().contains("挂号失败") || (hospConfirmProcess.getDetail().contains("未确认")
+                        && !registration.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue()))) {
                     getRefund2Patient(registration, orders);
                 }
             }

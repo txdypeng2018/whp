@@ -86,7 +86,7 @@ public interface RegistrationService {
      * 
      * @return
      */
-    List<RegistrationDocument> findOverTimeRegistrationDocumentList();
+    List<RegistrationDocument> findOverTimeRegistrationDocumentList(int overTimeMinute);
 
     /**
      * 查询已支付,进行了退号操作的记录
