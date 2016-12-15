@@ -310,6 +310,7 @@ public class CmbServiceImpl implements CmbService {
                     } else {
                         String totalFee = (new BigDecimal(uoReq.getAmount()).multiply(new BigDecimal("100")))
                                 .toString();
+                        recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                         // 检查缴费金额与支付金额是否相等
                         boolean flag = recipeService.checkRecipeAmount(uoReq.getBillNo(), totalFee,
                                 PayChannel.WEB_UNION);
@@ -325,6 +326,10 @@ public class CmbServiceImpl implements CmbService {
                     if (reg != null) {
                         String payWay = reg.getPayChannelId();
                         boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                        if (reg.getRegistrationOrderReq() != null
+                                && StringUtil.isNotEmpty(reg.getRegistrationOrderReq().getPayChannelId())) {
+                            paidFlag = true;
+                        }
                         // 查看订单支付状态
                         if (!paidFlag) {
                             reg.setPayChannelId(String.valueOf(PayChannel.WEB_UNION.getCode()));
