@@ -167,7 +167,8 @@ public class RegisterController extends BaseController {
      * @return 指定挂号单详细
      */
     @RequestMapping(path = "/registrations", method = RequestMethod.GET)
-    public ResponseEntity<List<RegistrationDocument>> getUserRegistrations(String memberId) throws Exception {
+    public ResponseEntity<List<RegistrationDocument>> getUserRegistrations(String memberId, String viewTypeId)
+            throws Exception {
         List<RegistrationDocument> resultList = new ArrayList<>();
         User user = userService.getCurrentUser();
         if (user == null) {
@@ -182,6 +183,7 @@ public class RegisterController extends BaseController {
         if (basicInfo == null) {
             throw new RegisterException(CenterFunctionUtils.PATIENTINFO_GET_ERR);
         }
+        Date today = DateUtil.toDate(DateUtil.toDateString(new Date()));
         try {
             List<RegistrationDocument> regList = registrationService.findRegistrationDocumentList(basicInfo.getId());
             BigDecimal tempBig = null;
@@ -196,8 +198,31 @@ public class RegisterController extends BaseController {
                     registrationDocument.setAmount(df.format(tempBig));
                     registrationDocument.setClinicNum(registrationDocument.getNum());
                 }
-                resultList.add(registrationDocument);
+                if (StringUtil.isEmpty(viewTypeId)) {
+                    resultList.add(registrationDocument);
+                } else {
+                    if (DateUtil.toDate(registrationDocument.getRegDate()).compareTo(today) >= 0) {
+                        if (registrationDocument.getStatusCode().equals(RegistrationStatusEnum.CANCEL.getValue())
+                                || registrationDocument.getStatusCode()
+                                        .equals(RegistrationStatusEnum.EXCHANGE_CLOSED.getValue())
+                                || registrationDocument.getStatusCode()
+                                        .equals(RegistrationStatusEnum.REFUND.getValue())) {
+                            if ("2".equals(viewTypeId)) {
+                                resultList.add(registrationDocument);
+                            }
+                        } else {
+                            if ("1".equals(viewTypeId)) {
+                                resultList.add(registrationDocument);
+                            }
+                        }
+                    } else {
+                        if ("2".equals(viewTypeId)) {
+                            resultList.add(registrationDocument);
+                        }
+                    }
+                }
             }
+
         } catch (Exception e) {
             LOGGER.debug("挂号单列表初始化异常", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
@@ -264,6 +289,7 @@ public class RegisterController extends BaseController {
             } else {
                 reg.setCanBack(String.valueOf(0));
             }
+            registrationService.setOrderProcess2Registration(reg);
         } catch (Exception e) {
             LOGGER.debug("挂号单初始化异常", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,

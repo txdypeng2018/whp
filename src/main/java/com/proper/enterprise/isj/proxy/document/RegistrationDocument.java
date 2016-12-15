@@ -13,6 +13,9 @@ import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by think on 2016/8/16 0016. 挂号单
  */
@@ -240,6 +243,7 @@ public class RegistrationDocument extends BaseDocument {
 
 
     private String createTime = DateUtil.getTimestamp(true);
+
     /*------------医生出诊信息---------*/
 
     @Transient
@@ -291,6 +295,13 @@ public class RegistrationDocument extends BaseDocument {
      * 退费失败异常信息
      */
     private String refundErrMsg = "";
+
+
+    /**
+     * 订单的流程信息
+     */
+    @Transient
+    private List<RegistrationOrderProcessDocument> orders = new ArrayList<>();
 
     public String getOperatorCardNo() {
         if(StringUtil.isEmpty(operatorCardNo)){
@@ -734,5 +745,11 @@ public class RegistrationDocument extends BaseDocument {
         this.regNum = regNum;
     }
 
+    public List<RegistrationOrderProcessDocument> getOrders() {
+        return orders;
+    }
 
+    public void setOrders(List<RegistrationOrderProcessDocument> orders) {
+        this.orders = orders;
+    }
 }

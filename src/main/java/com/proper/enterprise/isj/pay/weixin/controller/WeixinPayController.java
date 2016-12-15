@@ -150,6 +150,7 @@ public class WeixinPayController extends BaseController {
                         } else {
                             boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(),
                                     String.valueOf(uoReq.getTotalFee()), PayChannel.WECHATPAY);
+                            recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                             if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                                 resObj.setResultCode("-1");
                                 resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
@@ -192,7 +193,7 @@ public class WeixinPayController extends BaseController {
             // 返回给请求客户端处理结果
             resObj.setResultCode("-1");
             // 返回给请求客户端处理结果消息
-            resObj.setResultMsg("Fail");
+            resObj.setResultMsg("微信预支付校验出现异常");
         }
         return responseOfPost(resObj);
     }

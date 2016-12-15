@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -104,15 +105,20 @@ public class OrderInfoController extends BaseController {
         }
         RecipeOrderDocument tempRecipeOrder = recipeService.getRecipeOrderDocumentByClinicCode(clinicCode);
         if (tempRecipeOrder != null) {
-            if (tempRecipeOrder.getRecipeNonPaidDetail() != null
-                    && StringUtil.isNotEmpty(tempRecipeOrder.getRecipeNonPaidDetail().getOrderNum())) {
-                if (tempRecipeOrder.getRecipeOrderReqMap()
-                        .containsKey(tempRecipeOrder.getRecipeNonPaidDetail().getOrderNum())) {
+            RecipePaidDetailDocument nonPaid = tempRecipeOrder.getRecipeNonPaidDetail();
+            if (nonPaid != null && StringUtil.isNotEmpty(nonPaid.getOrderNum())) {
+                if (tempRecipeOrder.getRecipeOrderReqMap().containsKey(nonPaid.getOrderNum())) {
                     throw new RecipeException(
                             "门诊流水号:" + clinicCode + ",缴费订单未得到处理,请在意见反馈中进行反馈," + CenterFunctionUtils.ORDER_SAVE_ERR);
                 }
+                String payWay = nonPaid.getPayChannelId();
+                boolean paidFlag = orderService.checkOrderIsPay(payWay, nonPaid.getOrderNum());
+                if (paidFlag) {
+                    throw new RecipeException(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
+                }
             }
         }
+        
         RecipeOrderDocument recipeOrder = recipeService.saveOrderAndRecipeOrderDocument(memberId, clinicCode);
         if (recipeOrder == null) {
             throw new RecipeException(CenterFunctionUtils.ORDER_SAVE_ERR);

@@ -114,6 +114,7 @@ public class AliPayController extends BaseController {
                                 .toString();
                         boolean flag = recipeService.checkRecipeAmount(uoReq.getOutTradeNo(), totalFee,
                                 PayChannel.ALIPAY);
+                        recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                         if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                             resObj.setResultCode("-1");
                             resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);

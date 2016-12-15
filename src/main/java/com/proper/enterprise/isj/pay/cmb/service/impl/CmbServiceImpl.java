@@ -173,7 +173,7 @@ public class CmbServiceImpl implements CmbService {
         }
         // 判断当前订单交易状态
         PayResultRes resChk = saveCheckCmbOrder(uoReq);
-        if (!"-1".equals(resChk.getResultCode())) {
+        if ("-1".equals(resChk.getResultCode())) {
             return resChk;
         }
         // 生成参数
@@ -290,13 +290,13 @@ public class CmbServiceImpl implements CmbService {
             // 通过拼接的订单号获取订单信息
             StringBuilder partOrderNo = new StringBuilder();
             CmbPayEntity cmbInfo = getQueryInfo(uoReq.getBillNo());
-            partOrderNo.append(cmbInfo.getDate()).append(cmbInfo.getBillNo());
+            partOrderNo.append("%").append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("%");
             LOGGER.debug("orderNoPart:" + partOrderNo.toString());
             // 通过日期和订单号拼接的订单号以及支付类型查询订单信息
-            List<OrderEntity> orderList = orderRepo.findByOrderNoLikeAndPayWay(partOrderNo.toString(),
-                    String.valueOf(PayChannel.WEB_UNION));
+            List<OrderEntity> orderList = orderRepo.findByOrderNoLike(partOrderNo.toString());
             // 获取查询条件并且只有一条
             if(orderList != null && orderList.size() == 1) {
+                LOGGER.debug("订单数据有效");
                 Order order = orderList.get(0);
                 // 缴费
                 if(order.getFormClassInstance().equals(RecipeOrderDocument.class.getName())){
@@ -310,8 +310,9 @@ public class CmbServiceImpl implements CmbService {
                     } else {
                         String totalFee = (new BigDecimal(uoReq.getAmount()).multiply(new BigDecimal("100")))
                                 .toString();
+                        recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                         // 检查缴费金额与支付金额是否相等
-                        boolean flag = recipeService.checkRecipeAmount(uoReq.getAmount(), totalFee,
+                        boolean flag = recipeService.checkRecipeAmount(uoReq.getBillNo(), totalFee,
                                 PayChannel.WEB_UNION);
                         if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                             resObj.setResultCode("-1");
@@ -325,6 +326,10 @@ public class CmbServiceImpl implements CmbService {
                     if (reg != null) {
                         String payWay = reg.getPayChannelId();
                         boolean paidFlag = orderService.checkOrderIsPay(payWay, reg.getOrderNum());
+                        if (reg.getRegistrationOrderReq() != null
+                                && StringUtil.isNotEmpty(reg.getRegistrationOrderReq().getPayChannelId())) {
+                            paidFlag = true;
+                        }
                         // 查看订单支付状态
                         if (!paidFlag) {
                             reg.setPayChannelId(String.valueOf(PayChannel.WEB_UNION.getCode()));
@@ -431,13 +436,13 @@ public class CmbServiceImpl implements CmbService {
 
             // 查询订单号是否已经处理过了
             StringBuilder partOrderNo = new StringBuilder();
-            partOrderNo.append(cmbInfo.getDate()).append(cmbInfo.getBillNo());
+            partOrderNo.append("%").append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("%");
             LOGGER.debug("orderNoPart:" + partOrderNo.toString());
             // 通过日期和订单号拼接的订单号以及支付类型查询订单信息
-            List<OrderEntity> orderList = orderRepo.findByOrderNoLikeAndPayWay(partOrderNo.toString(),
-                    String.valueOf(PayChannel.WEB_UNION));
+            List<OrderEntity> orderList = orderRepo.findByOrderNoLike(partOrderNo.toString());
             // 获取查询条件并且只有一条
             if(orderList != null && orderList.size() == 1) {
+                LOGGER.debug("订单数据有效");
                 // 订单信息
                 Order orderInfo = orderList.get(0);
                 // 订单号
