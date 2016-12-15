@@ -597,6 +597,8 @@ public class CmbServiceImpl implements CmbService {
             ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
             res = (QuerySingleOrderRes) unmarshallerMap.get("unmarshallQuerySingleOrderRes")
                     .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+
+            LOGGER.debug("getCmbPayQueryRes[ErrMsg]:" + res.getHead().getErrMsg());
         }
         return res;
     }
@@ -647,6 +649,8 @@ public class CmbServiceImpl implements CmbService {
             ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
             resObj = (QueryRefundRes) unmarshallerMap.get("unmarshallQueryRefundRes")
                     .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+
+            LOGGER.debug("queryRefundResult[ErrMsg]:" + resObj.getHead().getErrMsg());
         }
 
         return resObj;
@@ -703,6 +707,8 @@ public class CmbServiceImpl implements CmbService {
             ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
             res = (RefundNoDupRes) unmarshallerMap.get("unmarshallRefundNoDupRes")
                     .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+
+            LOGGER.debug("saveRefundResult[ErrMsg]:" + res.getHead().getErrMsg());
 
         }
         return res;

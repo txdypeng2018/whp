@@ -39,7 +39,7 @@ public class QuerySingleOrderBodyRes {
     /**
      * 受理时间
      */
-    @XmlElement(name = "AcceptDate")
+    @XmlElement(name = "AcceptTime")
     private String acceptTime;
 
     /**

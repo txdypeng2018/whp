@@ -386,7 +386,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     /**
      * 调用支付平台的退款接口
-     * 
+     *
      * @param order
      * @param refundNo
      * @param refundFlag
@@ -446,7 +446,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     /**
      * 支付平台返回结果后,更新表中的字段,并推送消息
-     * 
+     *
      * @param order
      * @param channelId
      * @param regBack
@@ -481,7 +481,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     /**
      * 通知HIS缴费成功,HIS返回失败后,校验支付平台与HIS已缴费的金额是否相等,相等的条件在将多余的金额进行退款
-     * 
+     *
      * @param order
      * @param regBack
      * @param requestOrderNoMap
@@ -582,7 +582,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("01");
                     queryRefundInfo.setRefundNo(sb.toString());
                     QueryRefundRes refund = cmbService.queryRefundResult(queryRefundInfo);
-                    if (refund != null && StringUtil.isNotEmpty(refund.getBody().getBillRecord().get(0).getAmount())) {
+                    if (refund != null && refund.getBody().getBillRecord() != null
+                            && StringUtil.isNotEmpty(refund.getBody().getBillRecord().get(0).getAmount())) {
                         queryBig = queryBig.subtract(new BigDecimal(
                                 refund.getBody().getBillRecord().get(0).getAmount())).multiply(new BigDecimal("100"));
                     }
@@ -593,7 +594,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
             sendRecipePaidFailMsg(regBack, SendPushMsgEnum.RECIPE_PAID_REFUND_FAIL);
             return false;
         }
-        
+
         LOGGER.debug("支付平台结余金额:" + queryBig + ",当前缴费金额:" + order.getOrderAmount() + ",HIS已缴费金额:" + hisPaidBig);
         detail.setDescription(detail.getDescription().concat(
                 ",支付平台结余金额:" + queryBig + ",当前缴费金额:" + order.getOrderAmount() + ",HIS已缴费金额:" + hisPaidBig));
@@ -725,7 +726,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // 日期
                 String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"), "yyyy-MM-dd");
                 // 时间
-                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "HHmmss"), "HH:mm:ss");
+                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptTime(), "HHmmss"), "HH:mm:ss");
                 payOrderReq.setPayDate(date);
                 payOrderReq.setPayTime(time);
                 payOrderReq.setPayChannelId(PayChannel.WEB_UNION);
@@ -998,7 +999,6 @@ public class RecipeServiceNotxImpl implements RecipeService {
             int tempIndex = 0;
             while (tempIndex <= 500) {
                 tempIndex++;
-                refundNo = recipePaidOrder.getOrderNum() + dfCmb.format(tempIndex);
                 // 退款信息查询
                 String orderNo = recipePaidOrder.getOrderNum();
                 CmbQueryRefundEntity queryRefundInfo = new CmbQueryRefundEntity();
@@ -1009,7 +1009,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 queryRefundInfo.setDate(cmbInfo.getDate());
                 // 退款流水号
                 StringBuilder sb = new StringBuilder();
-                sb.append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append(dfCmb.format(tempIndex));
+                refundNo = cmbInfo.getBillNo().concat(dfCmb.format(tempIndex));
+                sb.append(cmbInfo.getDate()).append(refundNo);
                 queryRefundInfo.setRefundNo(sb.toString());
                 QueryRefundRes refundQuery = cmbService.queryRefundResult(queryRefundInfo);
                 if (refundQuery != null) {
@@ -1102,7 +1103,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     /**
      * 校验缴费与支付是否相等
-     * 
+     *
      * @param orderAmount
      * @param payWay
      * @param user
@@ -1130,7 +1131,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // orderAmount = (new BigDecimal(orderAmount).multiply(new
                 // BigDecimal("100"))).toString();
                 // }
-                
+
                 if (total.compareTo(new BigDecimal(recipe.getRecipeNonPaidDetail().getAmount())) == 0
                         && total.compareTo(new BigDecimal(orderAmount)) == 0) {
                     flag = true;
