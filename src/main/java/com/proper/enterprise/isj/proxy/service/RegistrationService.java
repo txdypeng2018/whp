@@ -118,4 +118,6 @@ public interface RegistrationService {
 
     void saveOrUpdateRegRefundLog(RegistrationDocument regBack, RegistrationRefundLogDocument refundLogDocument,
             String cancelRegStatus, String refundStatus, String refundHisStatus);
+
+    void setOrderProcess2Registration(RegistrationDocument registration);
 }
