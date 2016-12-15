@@ -585,7 +585,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     if (refund != null && refund.getBody().getBillRecord() != null
                             && StringUtil.isNotEmpty(refund.getBody().getBillRecord().get(0).getAmount())) {
                         queryBig = queryBig.subtract(new BigDecimal(
-                                refund.getBody().getBillRecord().get(0).getAmount())).multiply(new BigDecimal("100"));
+                                refund.getBody().getBillRecord().get(0).getAmount()).multiply(new BigDecimal("100")));
                     }
                 }
             }
