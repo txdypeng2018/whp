@@ -159,7 +159,13 @@ handler.service = {
             { DEPT_ID: 111, DEPT_NAME: "内科1", PARENT_ID: 11, LEVEL: 1, STATUS: 1 },
             { DEPT_ID: 112, DEPT_NAME: "内科2", PARENT_ID: 11, LEVEL: 1, STATUS: 1 },
             { DEPT_ID: 121, DEPT_NAME: "外科1", PARENT_ID: 12, LEVEL: 1, STATUS: 1 },
-            { DEPT_ID: 122, DEPT_NAME: "外科2", PARENT_ID: 12, LEVEL: 1, STATUS: 1 }
+            { DEPT_ID: 122, DEPT_NAME: "外科2", PARENT_ID: 12, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 21, DEPT_NAME: "妇科", PARENT_ID: 2, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 22, DEPT_NAME: "儿科", PARENT_ID: 2, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 211, DEPT_NAME: "妇科1", PARENT_ID: 21, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 212, DEPT_NAME: "妇科2", PARENT_ID: 21, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 221, DEPT_NAME: "儿科1", PARENT_ID: 22, LEVEL: 1, STATUS: 1 },
+            { DEPT_ID: 222, DEPT_NAME: "儿科2", PARENT_ID: 22, LEVEL: 1, STATUS: 1 }
           ]
         };
         return {
