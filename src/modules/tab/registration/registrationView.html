@@ -85,7 +85,9 @@
     </ul>
   </ion-content>
   <ion-footer-bar ng-if="((registration.statusCode == '0') || (registration.canBack == '1'))" align-title="center" class="registrationView-footer operation" ng-class="{'registrationView-footer-height': ((registration.statusCode == '0') && (registration.canBack == '1'))}">
+    <div style="width:100%">
     <button ng-if="registration.statusCode == '0'" class="button button-positive has-two-button has-two-button-up" ng-click="registrationPay()">支付</button>
     <button ng-if="registration.canBack == '1'" class="button button-outline button-positive has-two-button has-two-button-down" ng-click="registrationBack()">退号</button>
+    </div>
   </ion-footer-bar>
 </ion-view>
