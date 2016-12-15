@@ -92,7 +92,7 @@
           rejection.data = '网络异常';
         }
         if(!angular.isUndefined(rejection.data) && rejection.data !== null && rejection.data.length > 25){
-          rejection.data = null;
+          rejection.data = '系统异常';
         }
         if (excludeUrl(rejection.config.url)) {
           requestIndexMinus();
