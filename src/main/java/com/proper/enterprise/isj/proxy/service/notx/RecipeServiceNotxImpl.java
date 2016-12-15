@@ -1027,7 +1027,7 @@ public class RecipeServiceNotxImpl implements RecipeService {
                         } else {
                             LOGGER.debug("一网通缴费查询失败,订单号" + recipePaidOrder.getOrderNum() + ",退费单号:" + refundNo + ",失败消息:"
                                     + refundQuery.getHead().getErrMsg());
-                            return refundNo;
+                            return null;
                         }
                     } else {
                         LOGGER.debug("一网通退款查询失败,无此退款订单号");
