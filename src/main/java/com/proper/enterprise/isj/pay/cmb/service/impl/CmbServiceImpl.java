@@ -310,10 +310,10 @@ public class CmbServiceImpl implements CmbService {
                     } else {
                         String totalFee = (new BigDecimal(uoReq.getAmount()).multiply(new BigDecimal("100")))
                                 .toString();
-                        recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                         // 检查缴费金额与支付金额是否相等
                         boolean flag = recipeService.checkRecipeAmount(uoReq.getBillNo(), totalFee,
                                 PayChannel.WEB_UNION);
+                        recipe = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
                         if (!flag || (StringUtil.isEmpty(recipe.getRecipeNonPaidDetail().getPayChannelId()))) {
                             resObj.setResultCode("-1");
                             resObj.setResultMsg(CenterFunctionUtils.ORDER_DIFF_RECIPE_ERR);
@@ -491,18 +491,16 @@ public class CmbServiceImpl implements CmbService {
             }
             // 保存异步通知信息
             if(ret) {
-                if(cmbInfo != null) {
-                    // 取得支付时传入的参数
-                    JSONObject paramObj = getParamObj(cmbInfo.getMerchantPara());
-                    // 获取用户ID
-                    String userId = paramObj.getString("userid");
-                    cmbInfo.setUserId(userId);
-                    // 获取异步通知信息
-                    CmbPayEntity queryPanInfo = getPayNoticeInfoByMsg(cmbInfo.getMsg());
-                    if (queryPanInfo == null) {
-                        // 保存异步通知信息
-                        saveCmbPayNoticeInfo(cmbInfo);
-                    }
+                // 取得支付时传入的参数
+                JSONObject paramObj = getParamObj(cmbInfo.getMerchantPara());
+                // 获取用户ID
+                String userId = paramObj.getString("userid");
+                cmbInfo.setUserId(userId);
+                // 获取异步通知信息
+                CmbPayEntity queryPanInfo = getPayNoticeInfoByMsg(cmbInfo.getMsg());
+                if (queryPanInfo == null) {
+                    // 保存异步通知信息
+                    saveCmbPayNoticeInfo(cmbInfo);
                 }
             }
         }
@@ -1008,5 +1006,22 @@ public class CmbServiceImpl implements CmbService {
         Date dateTime = new Date();
         long currentMs = Long.valueOf(dateTime.getTime());
         return String.valueOf(currentMs - dateToMs);
+    }
+
+    /**
+     * 通过订单号获取支付结果异步通知信息
+     *
+     * @param orderNo 订单号
+     * @return 支付结果异步通知信息
+     * @throws Exception
+     */
+    @Override
+    public CmbPayEntity getNoticePayInfoByOrderNo(String orderNo) throws Exception {
+        CmbPayEntity retCmbPayInfo = null;
+        if(StringUtil.isNotEmpty(orderNo)) {
+            CmbPayEntity cmbPayInfo = getQueryInfo(orderNo);
+            retCmbPayInfo = cmbPayNoticeRepo.findByBillNoAndDate(cmbPayInfo.getBillNo(), cmbPayInfo.getDate());
+        }
+        return retCmbPayInfo;
     }
 }

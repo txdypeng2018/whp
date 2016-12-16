@@ -638,7 +638,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 // 日期
                 String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"), "yyyy-MM-dd");
                 // 时间
-                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "HHmmss"), "HH:mm:ss");
+                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptTime(), "HHmmss"), "HH:mm:ss");
                 payRegReq.setPayDate(date);
                 payRegReq.setPayTime(time);
                 payRegReq.setPayChannelId(String.valueOf(4));

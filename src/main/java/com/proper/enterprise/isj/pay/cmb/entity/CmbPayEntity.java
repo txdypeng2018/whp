@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * 一网通用户协议异步通知结果Entity
+ * 一网通支付结果异步通知结果Entity
  */
 @Entity
 @Table(name = "ISJ_CMB_PAY_INFO")

@@ -59,4 +59,6 @@ public interface CmbService {
     JSONObject getParamObj(String param) throws Exception;
 
     byte[] readStream(InputStream inStream) throws Exception;
+
+    CmbPayEntity getNoticePayInfoByOrderNo(String orderNo) throws Exception;
 }
