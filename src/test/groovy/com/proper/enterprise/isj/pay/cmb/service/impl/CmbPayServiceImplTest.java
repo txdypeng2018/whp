@@ -931,4 +931,20 @@ public class CmbPayServiceImplTest implements CmbService {
         long currentMs = Long.valueOf(dateTime.getTime());
         return String.valueOf(currentMs - dateToMs);
     }
+
+    /**
+     * 通过订单号获取支付结果异步通知信息
+     *
+     * @param orderNo 订单号
+     * @return 支付结果异步通知信息
+     * @throws Exception
+     */
+    public CmbPayEntity getNoticePayInfoByOrderNo(String orderNo) throws Exception {
+        CmbPayEntity retCmbPayInfo = null;
+        if(StringUtil.isNotEmpty(orderNo)) {
+            CmbPayEntity cmbPayInfo = getQueryInfo(orderNo);
+            retCmbPayInfo = cmbPayNoticeRepo.findByBillNoAndDate(cmbPayInfo.getBillNo(), cmbPayInfo.getDate());
+        }
+        return retCmbPayInfo;
+    }
 }
