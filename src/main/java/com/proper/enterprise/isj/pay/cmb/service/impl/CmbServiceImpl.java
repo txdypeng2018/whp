@@ -13,6 +13,7 @@ import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbBusinessEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
+import com.proper.enterprise.isj.pay.cmb.entity.CmbRefundEntity;
 import com.proper.enterprise.isj.pay.cmb.model.*;
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq;
 import com.proper.enterprise.isj.pay.cmb.repository.CmbPayNoticeRepository;
@@ -705,6 +706,37 @@ public class CmbServiceImpl implements CmbService {
             ResponseEntity<byte[]> response = HttpClient.get(CmbConstants.CMB_PAY_DIRECT_REQUEST_X + "?Request=" + requestXML);
             res = (RefundNoDupRes) unmarshallerMap.get("unmarshallRefundNoDupRes")
                     .unmarshal(new StreamSource(new ByteArrayInputStream(response.getBody())));
+
+            // 保存一网通退款信息
+            if(StringUtil.isNull(res.getHead().getCode())) {
+                CmbRefundEntity refund = new CmbRefundEntity();
+                // 退款状态: 0 : 成功
+                refund.setRefundCode("0");
+                // 退款说明
+                refund.setRefundMsg(res.getHead().getErrMsg());
+                // 原订单号
+                refund.setReqBillNo(bodyReq.getBillNo());
+                // 原订单日期YYYYMMDD
+                refund.setReqDate(bodyReq.getDate());
+                // 退款流水号
+                refund.setRefundCode(bodyReq.getRefundNo());
+                // 退款金额
+                refund.setReqAmount(bodyReq.getAmount());
+                // 退款备注
+                refund.setReqDesc(bodyReq.getDesc());
+                // 银行退款流水号
+                refund.setRefundNo(res.getBody().getRefundNo());
+                // 银行流水号
+                refund.setBankSeqNo(res.getBody().getBankSeqNo());
+                // 退款金额
+                refund.setAmount(res.getBody().getAmount());
+                // 银行交易日期YYYYMMDD
+                refund.setDate(res.getBody().getDate());
+                // 银行交易时间hhmmss
+                refund.setTime(res.getBody().getTime());
+                // 保存退款信息
+                cmbRefundRepo.save(refund);
+            }
 
             LOGGER.debug("saveRefundResult[ErrMsg]:" + res.getHead().getErrMsg());
 
