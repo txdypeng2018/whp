@@ -14,7 +14,8 @@
     'ui.router',
     'ngAnimate',
     'as.sortable',
-    'fixed.table.header'
+    'fixed.table.header',
+    'ngWaterfall'
   ];
   angular.module('pea', deps);
 })();

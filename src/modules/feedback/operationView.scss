@@ -1,0 +1,184 @@
+ul,li{
+  list-style: none;
+  padding: 0;
+}
+/* Space out content a bit */
+.waterfall-list {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.waterfall-list li {
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px;
+  //overflow: hidden;
+
+}
+.waterfall-list li:after {
+  clear: both;
+}
+.waterfall-list li .data-block {
+  border-radius: 5px;
+}
+.waterfall-list li p {
+  font-size: 12px;
+  color: rgba(61, 61, 61, 0.93);
+}
+.clear {
+  clear: both;
+}
+.loadMore {
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #3c8dbc;
+  color:#fff;
+}
+.loadMore:hover{
+  background-color:#3071a9;
+  transition: 0.3s;
+}
+.loadMore:focus{
+  border: none;
+}
+.md-content{
+  background-color: #ecf0f5;
+  height: 100%;
+}
+.operationview-content{
+  font-family: "Microsoft YaHei";
+  margin: 8px;
+  border-top: 3px solid #3c8dbc;
+  border-radius: 3px;
+
+  md-content{
+    background-color: #ecf0f5;
+  }
+  .operationview-bar{
+    background-color: #ffffff;
+    font-size: 13px;
+    font-family: "Microsoft YaHei";
+    margin:0 32px 20px 32px;
+    padding: 0 24px;
+    -webkit-box-shadow:0 0 2px rgba(0, 0, 0, .5);
+    -moz-box-shadow:0 0 2px rgba(0, 0, 0, .5);
+    box-shadow:0 0 2px rgba(0, 0, 0, .5);
+    .operationview-bar-title{
+      font-size: 14px;
+      md-icon{
+        cursor: pointer;
+      }
+    }
+    .md-block{
+      margin: 0;
+      label{
+        color: rgba(0,0,0,1);
+      }
+      select{
+        display: inline;
+        margin-left: 80px;
+      }
+      span{
+        color: rgba(0,0,0,1);
+      }
+    }
+    button{
+      background-color: #0b97c4;
+      width: 20%;
+      border: none;
+      margin-left: 40%;
+      margin-bottom: 15px;
+      color:#fff;
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+}
+.operationview-title{
+  padding: 0 24px;
+  line-height: 48px;
+  h3{
+    font-size: 19px;
+    font-weight: normal;
+    margin: 0;
+    padding-top:10px;
+    position: relative;
+  }
+  .operationview-icon{
+    position: absolute;
+    right: 24px;
+    top:4px;
+    cursor: pointer;
+  }
+}
+
+.operationview-piece-title{
+  font-size: 13px;
+  margin: 15px 0;
+  padding-left: 23px;
+}
+
+/*= common css to all effects =*/
+.single-member{
+  float: left;
+  background-color: #fff;
+  text-align: center;
+  p{
+    margin-left: 10px;
+    text-align: left;
+  }
+}
+h3 {font-size: 14px; font-weight: normal; margin: 10px 0 0; text-transform: uppercase;}
+.member-info{
+  background-color: #fff;
+  padding-bottom: 15px;
+}
+/*= common css to all effects end =*/
+
+/*= effect-1 css =*/
+.effect-1{border-radius: 5px 5px 0 0; padding:0 5px;background-color: #ecf0f5;}
+.effect-1 .social-touch{height: 5px; padding: 5px 0 0; width: 100%; transition: 0.3s; color: rgba(255,255,255,0); height: 30px;background-color: #fff;}
+.effect-1 .member-info h3{margin-top: 0px;height: 30px;color:#fff;line-height: 30px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
+/*= effect-1 css end =*/
+
+.operationview-piece-red{
+  background-color: #e13157;
+  border-color: #e13157;
+}
+.effect-1:hover .operationview-piece-red{
+  background-color: #c9302c;
+  border-color: #c9302c;
+}
+.operationview-piece-blue{
+  background-color: #428bca;
+  border-color: #428bca;
+}
+.effect-1:hover .operationview-piece-blue{
+  background-color: #3071a9;
+  border-color: #3071a9;
+}
+.operationview-piece-green{
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+.effect-1:hover .operationview-piece-green{
+  background-color: #449d44;
+  border-color: #449d44;
+}
+@media (max-width: 1200px){
+  .operationview-piece{
+    width: 45%;
+  }
+}
+@media (max-width: 900px){
+  .operationview-piece{
+    width: 94%;
+  }
+}

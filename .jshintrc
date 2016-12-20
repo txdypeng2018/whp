@@ -19,6 +19,7 @@
   "smarttabs": true,
   "globals": {
     "angular": false,
-    "Piwik": false
+    "Piwik": false,
+    "echarts":false
   }
 }

@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var gridOperationCtrl = function($scope, $http, $mdDialog, $mdToast) {
+  var gridOperationCtrl = function($scope, $http, $mdDialog, $mdToast, $state) {
     //取得反馈状态列表
     $scope.opStatus = [];
     $scope.opStatus.push({
@@ -16,6 +16,10 @@
       $mdToast.show($mdToast.simple().textContent(data));
     });
 
+    var gotoView = function(){
+      $state.go('main.feedbackViewOperation');
+    };
+
     var searchData = function() {
       $scope.gridParam.showSearchBar();
     };
@@ -23,6 +27,19 @@
     var editData = function(rowDatas) {
       $mdDialog.show({
         controller: function($scope) {
+          //取得反馈类型
+          $http.get('/dataBase/feedbackTypes').success(function(data){
+            $scope.thefeedbackTypes=data;
+            for(var i=0;i<data.length;i++){
+              if(data[i].code==='1'){
+                $scope.selectedfeedbackType={
+                  'code': data[i].code,
+                  'name': data[i].name
+                };
+              }
+            }
+          });
+
           $http.get('/service/userOpinion/' + rowDatas[0].id).success(function(data) {
             $scope.opinion = data;
           });
@@ -34,7 +51,8 @@
           };
 
           $scope.submit = function() {
-            if ($scope.opinionForm.$valid) {
+            $scope.opinion.statusCode=$scope.selectedfeedbackType.code;
+            if ($scope.opinionForm.$valid && $scope.selectedfeedbackType.code==='1') {
               $scope.isSubmit = true;
               $http.put('/service/feedbackOpinion', $scope.opinion).success(function(data) {
                 if (angular.isUndefined(data.errMsg)) {
@@ -44,6 +62,13 @@
                   $scope.isSubmit = false;
                   $mdToast.show($mdToast.simple().textContent(data.errMsg));
                 }
+              });
+            }else if($scope.selectedfeedbackType.code ==='0'){
+              $mdToast.show($mdToast.simple().textContent('选择为未反馈，无法提交!'));
+            }else if($scope.selectedfeedbackType.code ==='2'){
+              $scope.isSubmit = true;
+              $http.put('/service/feedbackOpinion', $scope.opinion).success(function() {
+                $mdDialog.hide();
               });
             }
           };
@@ -71,14 +96,15 @@
         }, styler: function(value) {
           if (value === '0') {
             return 'red';
-          } else if (value === '1') {
+          } else if (value === '1' || value === '2') {
             return 'green';
           }
         }}
       ],
       url: '/service/feedbackOpinion',
       operations: [
-        {text: '查询', click: searchData, iconClass: 'search_black', display: ['unSelected']},
+        {text: '切换', click: gotoView, iconClass: 'view_module', display: ['unSelected','singleSelected','multipleSelected']},
+        {text: '查询', click: searchData, iconClass: 'search_black', display: ['unSelected','singleSelected','multipleSelected']},
         {text: '编辑', click: editData, iconClass: 'edit_black', display: ['singleSelected']},
       ],
       title: '意见反馈信息',

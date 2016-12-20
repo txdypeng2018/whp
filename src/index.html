@@ -17,12 +17,14 @@
   <link rel="stylesheet" href="/styles/app/components/grid/grid.css">
   <link rel="stylesheet" href="/styles/app/components/tree/tree.css">
   <link rel="stylesheet" href="/styles/app/font.css">
+  <link rel="stylesheet" href="/styles/modules/feedback/operationView.css">
   <link rel="stylesheet" href="/styles/modules/main/quick-search.css">
   <link rel="stylesheet" href="/styles/modules/mainnew/main.css">
   <link rel="stylesheet" href="/styles/modules/mainnew/resnav.css">
   <link rel="stylesheet" href="/styles/modules/mainnew/settings.css">
   <link rel="stylesheet" href="/styles/modules/mainnew/skins.css">
   <link rel="stylesheet" href="/styles/modules/playground/test/test.css">
+  <link rel="stylesheet" href="/styles/modules/statistics/statisticsView.css">
   <link rel="stylesheet" href="/styles/modules/workflow/designer/designer.css">
   <!-- endinjector -->
   <!-- endbuild -->
@@ -40,6 +42,7 @@
   <!-- build:js(.) scripts/vendor.js -->
   <!-- bower:js -->
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-fixed-table-header/src/fixed-table-header.js"></script>
   <script src="bower_components/angular-hotkeys/build/hotkeys.js"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/angular-aria/angular-aria.js"></script>
@@ -48,16 +51,18 @@
   <script src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/core.js/client/core.js"></script>
+  <script src="bower_components/echarts/dist/echarts.min.js"></script>
   <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
   <script src="bower_components/ng-sortable/dist/ng-sortable.js"></script>
-  <script src="bower_components/angular-fixed-table-header/src/fixed-table-header.js"></script>
-  <script src="bower_components/core.js/client/core.js"></script>
+  <script src="bower_components/proper-piwik-js/proper-piwik.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
   <!-- injector:js -->
   <script src="/app/app.js"></script>
+  <script src="/app/components/angular-waterfall.js"></script>
   <script src="/app/components/components.js"></script>
   <script src="/app/components/grid/grid.js"></script>
   <script src="/app/components/tree/boot.js"></script>
@@ -66,11 +71,13 @@
   <script src="/app/constants/constants.js"></script>
   <script src="/app/directives/auto-focus.js"></script>
   <script src="/app/directives/default-hotkeys.js"></script>
+  <script src="/app/directives/e-chart.js"></script>
   <script src="/app/templates/constants.js"></script>
   <script src="/app/templates/list-2-cols.js"></script>
   <script src="/app/templates/tree-grid.js"></script>
   <script src="/modules/auth/login/login.js"></script>
   <script src="/modules/feedback/operation.js"></script>
+  <script src="/modules/feedback/operationView.js"></script>
   <script src="/modules/hospitalnavigation/build/build.js"></script>
   <script src="/modules/hospitalnavigation/district/district.js"></script>
   <script src="/modules/main/main.js"></script>
@@ -96,12 +103,12 @@
   <script src="/modules/playground/test/test.js"></script>
   <script src="/modules/prompt/tips.js"></script>
   <script src="/modules/registration/rules.js"></script>
+  <script src="/modules/statistics/statisticsView.js"></script>
   <script src="/modules/sys/resources/resources.js"></script>
   <script src="/modules/workflow/designer/designer.js"></script>
   <script src="/modules/workflow/factory.js"></script>
   <script src="/modules/workflow/instances/instances.js"></script>
   <!-- endinjector -->
   <!-- endbuild -->
-  <script src="//cdn.bootcss.com/piwik/2.16.1/piwik.js"></script>
 </body>
 </html>
