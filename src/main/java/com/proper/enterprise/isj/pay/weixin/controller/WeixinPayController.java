@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -235,8 +236,7 @@ public class WeixinPayController extends BaseController {
      */
     @JWTIgnore
     @PostMapping(value = "/noticeInfo")
-    @ResponseBody
-    public ResponseEntity<String> receiveWeixinNoticeInfo(HttpServletRequest request) throws Exception {
+    public void receiveWeixinNoticeInfo(HttpServletRequest request, HttpServletResponse resp) throws Exception {
         request.setCharacterEncoding("UTF-8");
         InputStream inStream = request.getInputStream();
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
@@ -273,18 +273,25 @@ public class WeixinPayController extends BaseController {
             }
         }
 
-        UnifiedNoticeReq responseWeixin = new UnifiedNoticeReq();
+//        UnifiedNoticeReq responseWeixin = new UnifiedNoticeReq();
+        PrintWriter out = resp.getWriter();
+        String resultMsg = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[ERROR]]></return_msg></xml> ";
         if (ret) {
-            responseWeixin.setReturnCode("SUCCESS");
-            responseWeixin.setReturnMsg("OK");
-        } else {
-            responseWeixin.setReturnCode("FAIL");
-            responseWeixin.setReturnMsg("ERROR");
+            resultMsg = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml> ";
         }
-        StringWriter writer = new StringWriter();
-        marshaller.marshal(responseWeixin, new StreamResult(writer));
-        String requestXML = writer.toString();
-        return responseOfPost(requestXML);
+        out.write(resultMsg);
+        out.flush();
+        out.close();
+//            responseWeixin.setReturnCode("SUCCESS");
+//            responseWeixin.setReturnMsg("OK");
+//        } else {
+//            responseWeixin.setReturnCode("FAIL");
+//            responseWeixin.setReturnMsg("ERROR");
+//        }
+//        StringWriter writer = new StringWriter();
+//        marshaller.marshal(responseWeixin, new StreamResult(writer));
+//        String requestXML = writer.toString();
+//        return responseOfPost(requestXML);
     }
 
     /**
