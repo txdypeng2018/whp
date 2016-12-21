@@ -29,6 +29,7 @@
 
   // Config JWT in http header and prefix of url
   var CONTEXT = './api';
+  var reg=/\w+[\s\.]\w+/;
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.requestIndex = 0;
     var requestIndexMinus = function() {
@@ -91,7 +92,7 @@
         if (rejection.status === 502) {
           rejection.data = '网络异常';
         }
-        if(!angular.isUndefined(rejection.data) && rejection.data !== null && rejection.data.length > 25){
+        if(!angular.isUndefined(rejection.data) && rejection.data !== null && reg.test(rejection.data)){
           rejection.data = '系统异常';
         }
         if (excludeUrl(rejection.config.url)) {
