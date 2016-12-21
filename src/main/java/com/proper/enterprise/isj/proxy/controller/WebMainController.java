@@ -58,6 +58,14 @@ public class WebMainController  extends BaseController {
                 + "    \"isLeaf\": \"1\",\n"
                 + "    \"icon\": \"description_black\",\n"
                 + "    \"url\": \"/registration/rulesn\"\n"
+                + "  },\n"
+                + "  {\n"
+                + "    \"code\": \"000007\",\n"
+                + "    \"name\": \"业务统计\",\n"
+                + "    \"level\": 1,\n"
+                + "    \"isLeaf\": \"1\",\n"
+                + "    \"icon\": \"assessment\",\n"
+                + "    \"url\": \"/statistics/statisticsView\"\n"
                 + "  }\n"
                 + "]";
         return responseOfGet(retValue);
