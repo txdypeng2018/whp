@@ -1,10 +1,14 @@
 package com.proper.enterprise.isj.proxy.service.notx;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Pattern;
-
+import com.proper.enterprise.isj.exception.RegisterException;
+import com.proper.enterprise.isj.order.model.Order;
+import com.proper.enterprise.isj.order.service.OrderService;
+import com.proper.enterprise.isj.pay.ali.entity.AliEntity;
 import com.proper.enterprise.isj.pay.ali.model.Ali;
+import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
+import com.proper.enterprise.isj.pay.ali.model.AliRefundRes;
+import com.proper.enterprise.isj.pay.ali.model.AliRefundTradeQueryRes;
+import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
 import com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes;
@@ -12,29 +16,9 @@ import com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes;
 import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupBodyReq;
 import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
-import com.proper.enterprise.isj.pay.weixin.model.Weixin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
-
-import com.proper.enterprise.isj.exception.RegisterException;
-import com.proper.enterprise.isj.order.model.Order;
-import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.entity.AliEntity;
-import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
-import com.proper.enterprise.isj.pay.ali.model.AliRefundRes;
-import com.proper.enterprise.isj.pay.ali.model.AliRefundTradeQueryRes;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
 import com.proper.enterprise.isj.pay.weixin.entity.WeixinEntity;
+import com.proper.enterprise.isj.pay.weixin.model.Weixin;
 import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
 import com.proper.enterprise.isj.pay.weixin.model.WeixinRefundReq;
 import com.proper.enterprise.isj.pay.weixin.model.WeixinRefundRes;
@@ -64,6 +48,21 @@ import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by think on 2016/9/16 0016.
@@ -165,7 +164,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     RegistrationDocument regBack = this.getRegistrationDocumentById(order.getFormId());
                     RegistrationOrderReqDocument payOrderRegDocument = regBack.getRegistrationOrderReq();
                     BeanUtils.copyProperties(payRegReq, payOrderRegDocument);
-                    if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())) {
+                    if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())
+                            && (regBack.getRegistrationOrderReq() == null
+                                    || StringUtil.isEmpty(regBack.getRegistrationOrderReq().getOrderId()))) {
                         LOGGER.debug("挂号单是未支付状态,进行调用,订单号:" + payRegReq.getOrderId());
                         if (regBack.getIsAppointment().equals(String.valueOf(1))) {
                             if (regBack.getRegistrationRefundReq() == null
@@ -760,17 +761,17 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     sendRegistrationMsg(registrationDocument.getId(), SendPushMsgEnum.REG_TODAY_NOT_PAY_HIS_MSG);
                 }
             }
-        }else{
-            boolean canUpdate = false;
-            try {
-                 canUpdate = getPayPlatformRecordFlag(registrationDocument.getOrderNum());
-            } catch (Exception e) {
-                LOGGER.debug("查询支付平台异步回调的保存记录异常,订单号:" + registrationDocument.getOrderNum(), e);
-            }
-            if (canUpdate) {
-                this.saveUpdateRegistrationAndOrder(payReg);
-            }
-            registrationDocument = this.getRegistrationDocumentById(registrationDocument.getId());
+//        }else{
+//            boolean canUpdate = false;
+//            try {
+//                 canUpdate = getPayPlatformRecordFlag(registrationDocument.getOrderNum());
+//            } catch (Exception e) {
+//                LOGGER.debug("查询支付平台异步回调的保存记录异常,订单号:" + registrationDocument.getOrderNum(), e);
+//            }
+//            if (canUpdate) {
+//                this.saveUpdateRegistrationAndOrder(payReg);
+//            }
+            //registrationDocument = this.getRegistrationDocumentById(registrationDocument.getId());
         }
 
         return registrationDocument;
@@ -1059,7 +1060,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 if (regBack.getRegistrationRefundHis() == null
                         || StringUtil.isEmpty(regBack.getRegistrationRefundHis().getRefundFlag())) {
                     if (regBack.getRegistrationOrderHis() != null
-                            && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())) {
+                            && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())
+                            && "1".equals(regBack.getIsAppointment())) {
                         this.saveUpdateRegistrationAndOrderRefund(refundReq);
                     } else {
                         try {

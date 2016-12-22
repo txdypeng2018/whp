@@ -9,11 +9,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Unmarshaller;
@@ -34,11 +34,13 @@ import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
+import com.proper.enterprise.isj.proxy.tasks.AliPayNotice2BusinessTask;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.cipher.RSA;
 
@@ -69,6 +71,9 @@ public class AliPayController extends BaseController {
     @Autowired
     @Qualifier("aliRSA")
     RSA rsa;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     @PostMapping(value = "/prepayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PayResultRes> getPrepayinfo(@RequestBody UnifiedOrderReq uoReq) throws Exception {
@@ -227,7 +232,12 @@ public class AliPayController extends BaseController {
                     // 如果有做过处理，不执行商户的业务程序
 
                     // 付款异步通知内部处理
-                    ret = aliService.saveAliNoticeProcess(outTradeNo, params, "pay");
+                    //ret = aliService.saveAliNoticeProcess(outTradeNo, params, "pay");
+                    ret = true;
+                    AliPayNotice2BusinessTask dealPayNotice2BusinessTask = new AliPayNotice2BusinessTask();
+                    dealPayNotice2BusinessTask.setAliParamMap(params);
+                    dealPayNotice2BusinessTask.setAliService(aliService);
+                    taskExecutor.execute(dealPayNotice2BusinessTask);
 
                     // 注意：
                     // 该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
