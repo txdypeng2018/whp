@@ -14,11 +14,15 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
@@ -32,6 +36,7 @@ import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
+import com.proper.enterprise.isj.proxy.tasks.WeixinPayNotice2BusinessTask;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
@@ -67,6 +72,9 @@ public class WeixinPayController extends BaseController {
 
     @Autowired
     RegistrationService registrationService;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     /**
      * 获取微信预支付ID信息
@@ -269,7 +277,12 @@ public class WeixinPayController extends BaseController {
                     && "SUCCESS".equalsIgnoreCase(noticeRes.getResultCode())) {
                 LOGGER.debug("result_code:SUCCESS");
                 // 保存微信异步通知信息
-                ret = weixinService.saveWeixinNoticeProcess(noticeRes);
+                //ret = weixinService.saveWeixinNoticeProcess(noticeRes);
+                ret = true;
+                WeixinPayNotice2BusinessTask dealPayNotice2BusinessTask = new WeixinPayNotice2BusinessTask();
+                dealPayNotice2BusinessTask.setNoticeRes(noticeRes);
+                dealPayNotice2BusinessTask.setWeixinService(weixinService);
+                taskExecutor.execute(dealPayNotice2BusinessTask);
             }
         }
 

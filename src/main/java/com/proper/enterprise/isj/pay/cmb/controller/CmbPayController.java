@@ -8,6 +8,7 @@ import com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes;
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
+import com.proper.enterprise.isj.proxy.tasks.CmbPayNotice2BusinessTask;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
@@ -19,6 +20,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +54,9 @@ public class CmbPayController extends BaseController {
 
     @Autowired
     CmbService cmbService;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     /**
      * 一网通预支付信息
@@ -121,7 +126,12 @@ public class CmbPayController extends BaseController {
         LOGGER.debug("-----------一网通支付结果异步通知------开始---------------");
         boolean ret = false;
         try {
-            ret = cmbService.saveNoticePayInfo(request);
+//            ret = cmbService.saveNoticePayInfo(request);
+            ret = true;
+            CmbPayNotice2BusinessTask cmbPayNoticeTask = new CmbPayNotice2BusinessTask();
+            cmbPayNoticeTask.setCmbService(cmbService);
+            cmbPayNoticeTask.setRequest(request);
+            taskExecutor.execute(cmbPayNoticeTask);
         } catch (Exception e) {
             LOGGER.debug("CmbPayController.dealNoticePayInfo[Exception]:", e);
             throw e;

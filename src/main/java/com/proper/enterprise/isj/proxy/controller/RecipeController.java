@@ -1,24 +1,9 @@
 package com.proper.enterprise.isj.proxy.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.RecipeDocument;
-import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
@@ -26,6 +11,17 @@ import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by think on 2016/9/13 0013.
@@ -36,8 +32,6 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 @RestController
 @RequestMapping(path = "/recipes")
 public class RecipeController extends BaseController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeController.class);
 
     @Autowired
     RecipeService recipeService;
@@ -87,19 +81,19 @@ public class RecipeController extends BaseController {
                         basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
                     }
                 }
-                List<RecipeOrderDocument> orderList = recipeService.findPatientRecipeOrderList(basicInfo.getId());
-
-                for (RecipeOrderDocument recipeOrderDocument : orderList) {
-                    if (StringUtil.isEmpty(recipeOrderDocument.getRecipeNonPaidDetail().getPayChannelId())) {
-                        continue;
-                    }
-                    try {
-                        recipeService.checkRecipeOrderIsPay(recipeOrderDocument);
-                    } catch (Exception e) {
-                        LOGGER.debug("缴费单初始化校验失败,门诊流水号:" + recipeOrderDocument.getClinicCode(), e);
-                    }
-
-                }
+//                List<RecipeOrderDocument> orderList = recipeService.findPatientRecipeOrderList(basicInfo.getId());
+//
+//                for (RecipeOrderDocument recipeOrderDocument : orderList) {
+//                    if (StringUtil.isEmpty(recipeOrderDocument.getRecipeNonPaidDetail().getPayChannelId())) {
+//                        continue;
+//                    }
+//                    try {
+//                        recipeService.checkRecipeOrderIsPay(recipeOrderDocument);
+//                    } catch (Exception e) {
+//                        LOGGER.debug("缴费单初始化校验失败,门诊流水号:" + recipeOrderDocument.getClinicCode(), e);
+//                    }
+//
+//                }
                 recipeList = recipeService.findRecipeDocumentByUserAndDate(basicInfo, searchStatus, null, null);
                 if (recipeList.size() > 0) {
                     Collections.sort(recipeList, new Comparator<RecipeDocument>() {
