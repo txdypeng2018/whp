@@ -1,8 +1,6 @@
 package com.proper.enterprise.isj.proxy.tasks;
 
-import com.proper.enterprise.isj.pay.cmb.controller.CmbPayController;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
-import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,19 +37,12 @@ public class CmbPayNotice2BusinessTask implements Runnable {
 
     @Override
     public void run() {
-        String threadName = Thread.currentThread().getName();
-        if (StringUtil.isEmpty(threadName)) {
-            LOGGER.debug("线程名称为空或者不合规则");
-        } else {
-            try {
-                if (threadName.equals(CmbPayController.class.getName())) {
-                    cmbNotice2Business(request);
-                } else {
-                    LOGGER.debug("未找到异步通知对应的实例");
-                }
-            } catch (Exception e) {
-                LOGGER.debug("保存一网通异步通知异常:", e);
-            }
+        try {
+            LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理开始");
+            cmbNotice2Business(request);
+            LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理结束");
+        } catch (Exception e) {
+            LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理异常:", e);
         }
     }
 
