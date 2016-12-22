@@ -39,7 +39,7 @@
                     });
 
                     var userdataToJson = [];
-                    $http.get('/msc/service_user_opinion',{params: {query:'{userId:'+ userID +'}'}}).success(function(data) {
+                    $http.get('/msc/service_user_opinion',{params: {query:'{userId:"'+ userID +'"}'}}).success(function(data) {
                         for(var n = 0; n < data.length; n++){
                             userdataToJson.push(JSON.parse(data[n]));
                         }
@@ -86,7 +86,7 @@
         var pageSize = 20;
         var dataLength = 0;
         var dataToJson = [];
-        $http.get('/msc/service_user_opinion',{params: {query:'{}'}}).success(function(data) {
+        $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
             for(var n = 0; n < data.length; n++){
                 dataToJson.push(JSON.parse(data[n]));
             }
@@ -104,7 +104,7 @@
             $timeout(function(){
                 if(page<dataLength){
                     page++;
-                    $http.get('/msc/service_user_opinion',{params: {query:'{}'}}).success(function(data) {
+                    $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
                         var results = data.slice((page-1)*pageSize,page*pageSize);
                         var resultsToJson = [];
                         for(var n = 0; n < results.length; n++){

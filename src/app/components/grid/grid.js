@@ -211,7 +211,14 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
   //关闭高级查询栏快捷键(ESC)
   angular.element(document).bind('keydown', function(event) {
     if (event.keyCode === 27) {
-      $scope.innerParam.closeSearchAdvanced();
+      var searchDisplay = $element[0].querySelector('.search-sheet').style.display;
+      if (angular.isUndefined(searchDisplay) || searchDisplay === '' || searchDisplay === 'none') {
+        $scope.gridParam.selected = [];
+        $scope.$apply($scope.gridParam.selected);
+      }
+      else {
+        $scope.innerParam.closeSearchAdvanced();
+      }
     }
   });
 
@@ -381,6 +388,7 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
  *   onDeselect: function(rowData) {...},              //类型：Function  说明：去除行选择时触发的事件  默认值：null
  *   onSelect: function(rowData) {...},                //类型：Function  说明：行选择时触发的事件  默认值：null
  *   selected: [],                                     //类型：Array  说明：列表选中记录的集合  默认值：空
+ *   dblClick: function(rowData) {...},                //类型：Function  说明：双击行时触发的事件  默认值：null
  *   ngDisabled: function(rowData){                    //类型：Function  说明：指定不能选择的行  默认值：null
  *      return rowData.name === 'aa';
  *   },

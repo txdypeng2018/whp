@@ -40,16 +40,17 @@
             }
 
             //当日数据
-            $scope.nowReqdata1 = $scope.statisticsDatas[timeDataLength-1].userCount;
-            $scope.nowReqdata2 = $scope.statisticsDatas[timeDataLength-1].reqCount;
-            $scope.nowRegdata1 = $scope.statisticsDatas[timeDataLength-1].regApptCount;
-            $scope.nowRegdata2 = $scope.statisticsDatas[timeDataLength-1].regTodayCount;
-            $scope.nowOpinionCountdata = $scope.statisticsDatas[timeDataLength-1].opinionCount;
-            $scope.nowFeedbackCountdata = $scope.statisticsDatas[timeDataLength-1].feedbackCount;
-            $scope.nowWxpayAmoutdata = $scope.statisticsDatas[timeDataLength-1].wxpayAmount;
-            $scope.nowWxpayRAmoutdata = $scope.statisticsDatas[timeDataLength-1].wxpayRAmount;
-            $scope.nowAlipayAmoutdata = $scope.statisticsDatas[timeDataLength-1].alipayAmount;
-            $scope.nowAlipayRAmoutdata = $scope.statisticsDatas[timeDataLength-1].alipayRAmount;
+            $scope.nowReqdata1 = $scope.statisticsDatas[0].userCount;
+            $scope.nowReqdata2 = $scope.statisticsDatas[0].reqCount;
+            $scope.nowRegdata1 = $scope.statisticsDatas[0].regApptCount;
+            $scope.nowRegdata2 = $scope.statisticsDatas[0].regTodayCount;
+            $scope.nowOpinionCountdata = $scope.statisticsDatas[0].opinionCount;
+            $scope.nowFeedbackCountdata = $scope.statisticsDatas[0].feedbackCount;
+
+            $scope.nowWxpayAmoutdata = addComma($scope.statisticsDatas[0].wxpayAmount);
+            $scope.nowWxpayRAmoutdata = addComma($scope.statisticsDatas[0].wxpayRAmount);
+            $scope.nowAlipayAmoutdata = addComma($scope.statisticsDatas[0].alipayAmount);
+            $scope.nowAlipayRAmoutdata = addComma($scope.statisticsDatas[0].alipayRAmount);
 
             for(var i = 0; i < 7; i++) {
                 timeArr.push($scope.statisticsDatas[i].statisticsDate);
@@ -60,13 +61,13 @@
                 opinionCountdata.push($scope.statisticsDatas[i].opinionCount);
                 feedbackCountdata.push($scope.statisticsDatas[i].feedbackCount);
                 alipayCountdata.push($scope.statisticsDatas[i].alipayCount);
-                alipayAmountdata.push($scope.statisticsDatas[i].alipayAmount);
+                alipayAmountdata.push(addDoc($scope.statisticsDatas[i].alipayAmount));
                 alipayRCountdata.push($scope.statisticsDatas[i].alipayRCount);
-                alipayRAmoutdata.push($scope.statisticsDatas[i].alipayRAmount);
+                alipayRAmoutdata.push(addDoc($scope.statisticsDatas[i].alipayRAmount));
                 wxpayCountdata.push($scope.statisticsDatas[i].wxpayCount);
-                wxpayAmountdata.push($scope.statisticsDatas[i].wxpayAmount);
+                wxpayAmountdata.push(addDoc($scope.statisticsDatas[i].wxpayAmount));
                 wxpayRCountdata.push($scope.statisticsDatas[i].wxpayRCount);
-                wxpayRAmoutdata.push($scope.statisticsDatas[i].wxpayRAmount);
+                wxpayRAmoutdata.push(addDoc($scope.statisticsDatas[i].wxpayRAmount));
             }
             //预约挂号数量,当日挂号数量
             $scope.reg = options('挂号数量', '预约挂号数量', '当日挂号数量', 'line', 'line', regdata1, regdata2);
@@ -243,6 +244,37 @@
                 }]
             };
             return opt;
+        };
+        var addComma = function(str){
+            var strIntDoc= (str/100).toString();
+            var strInt = strIntDoc.split('.')[0];
+            var strDoc = strIntDoc.split('.')[1];
+            if(angular.isUndefined(strDoc)){
+                strDoc = new Array(strDoc,'00').join('');
+            }else if(strDoc.length === 1) {
+                strDoc = new Array(strDoc, '0').join('');
+            }
+            var str1=strInt.split('').reverse().join('');
+            var str2='';
+            for(var i = 0; i < str1.length; i++){
+                if(i * 3 + 3 >=str1.length){
+                    str2 += str1.substring(i*3, str1.length);
+                    break;
+                }
+                str2 += str1.substring(i*3, i*3+3)+',';
+            }
+            return new Array(str2.split('').reverse().join(''),strDoc).join('.');
+        };
+        var addDoc = function(str){
+            var strIntDoc = (str/100).toString();
+            var strInt = strIntDoc.split('.')[0];
+            var strDoc = strIntDoc.split('.')[1];
+            if(angular.isUndefined(strDoc)){
+                strDoc = new Array(strDoc,'00').join('');
+            }else if(strDoc.length === 1) {
+                strDoc = new Array(strDoc, '0').join('');
+            }
+            return new Array(strInt,strDoc).join('.');
         };
     };
 

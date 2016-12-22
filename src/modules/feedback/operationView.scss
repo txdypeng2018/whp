@@ -15,9 +15,6 @@ ul,li{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 5px;
-  //overflow: hidden;
-
 }
 .waterfall-list li:after {
   clear: both;
@@ -65,7 +62,7 @@ ul,li{
     background-color: #ffffff;
     font-size: 13px;
     font-family: "Microsoft YaHei";
-    margin:0 32px 20px 32px;
+    padding: 0 32px 20px 32px;
     padding: 0 24px;
     -webkit-box-shadow:0 0 2px rgba(0, 0, 0, .5);
     -moz-box-shadow:0 0 2px rgba(0, 0, 0, .5);
@@ -98,6 +95,11 @@ ul,li{
       color:#fff;
       height: 30px;
       line-height: 30px;
+      border-radius: 5px;
+      transition: .5s;
+    }
+    button:hover{
+      background-color: #3071a9;
     }
   }
 }
@@ -121,7 +123,7 @@ ul,li{
 
 .operationview-piece-title{
   font-size: 13px;
-  margin: 15px 0;
+  margin: 10px 0;
   padding-left: 23px;
 }
 
@@ -139,18 +141,27 @@ h3 {font-size: 14px; font-weight: normal; margin: 10px 0 0; text-transform: uppe
 .member-info{
   background-color: #fff;
   padding-bottom: 15px;
+  .ul-li-h3-div-left{
+    float: left;
+    font-weight: bold;
+  }
+  .ul-li-h3-div-right{
+    float: right;
+    font-size: 12px;
+  }
 }
 /*= common css to all effects end =*/
 
 /*= effect-1 css =*/
 .effect-1{border-radius: 5px 5px 0 0; padding:0 5px;background-color: #ecf0f5;}
-.effect-1 .social-touch{height: 5px; padding: 5px 0 0; width: 100%; transition: 0.3s; color: rgba(255,255,255,0); height: 30px;background-color: #fff;}
-.effect-1 .member-info h3{margin-top: 0px;height: 30px;color:#fff;line-height: 30px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
+.effect-1 .social-touch{height: 5px; padding: 5px 0 0; width: 100%; transition: 0.3s; color: rgba(255,255,255,0); height: 30px;}
+.effect-1 .member-info h3{margin-top: 0px;height: 30px;color:#fff;line-height: 30px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding: 0 25px;}
 /*= effect-1 css end =*/
 
 .operationview-piece-red{
   background-color: #e13157;
   border-color: #e13157;
+  transition: .3s;
 }
 .effect-1:hover .operationview-piece-red{
   background-color: #c9302c;
@@ -159,6 +170,7 @@ h3 {font-size: 14px; font-weight: normal; margin: 10px 0 0; text-transform: uppe
 .operationview-piece-blue{
   background-color: #428bca;
   border-color: #428bca;
+  transition: .3s;
 }
 .effect-1:hover .operationview-piece-blue{
   background-color: #3071a9;
@@ -167,6 +179,7 @@ h3 {font-size: 14px; font-weight: normal; margin: 10px 0 0; text-transform: uppe
 .operationview-piece-green{
   background-color: #5cb85c;
   border-color: #5cb85c;
+  transition: .3s;
 }
 .effect-1:hover .operationview-piece-green{
   background-color: #449d44;

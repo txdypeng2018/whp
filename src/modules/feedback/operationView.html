@@ -1,6 +1,6 @@
 <div layout="column" class="operationview-content">
-    <md-content style="background-color:#fff;">
-        <div layout="column">
+    <md-content style="overflow-x:hidden;">
+        <div layout="column" style="background-color: #fff;">
             <div class="operationview-title">
                 <h3>意见反馈信息</h3>
                 <md-button class="md-icon-button operationview-icon" type="button" ng-click="gotoList()" aria-label="切换">
@@ -43,13 +43,16 @@
         <div class="operationview-piece-title">意见反馈信息列表(双击可回复)</div>
         <ul class="waterfall-list" ng-waterfall cols="3">
             <li ng-repeat="feedBackData in feedBackDatasAll" ng-dblclick="gotoDialog(feedBackData.userId)" repeat-finished class="single-member effect-1">
-            <div class="member-info data-block" >
-            <h3 ng-class="{'operationview-piece-red':feedBackData.statusCode=='0','operationview-piece-green':feedBackData.statusCode=='1','operationview-piece-blue':feedBackData.statusCode=='2'}">{{feedBackData.userName}}</h3>
-            <p><b>电话: </b>{{feedBackData.userTel}}</p>
-            <p><b>意见提出时间: </b>{{feedBackData.opinionTime}}</p>
-            <p><b>用户意见: </b>{{feedBackData.opinion}}</p>
-            <p><b>反馈意见: </b>{{feedBackData.feedback}}</p>
-            </div>
+            <md-card>
+                <div class="member-info data-block" >
+                    <h3 ng-class="{'operationview-piece-red':feedBackData.statusCode=='0','operationview-piece-green':feedBackData.statusCode=='1','operationview-piece-blue':feedBackData.statusCode=='2'}">
+                        <div class="ul-li-h3-div-left">{{feedBackData.userName}}</div>
+                        <div class="ul-li-h3-div-right"><b>电话: </b>{{feedBackData.userTel}}</div>
+                    </h3>
+                    <p><b>意见提出时间: </b>{{feedBackData.opinionTime}}</p>
+                    <p><b>用户意见: </b>{{feedBackData.opinion}}</p>
+                </div>
+            </md-card>
             </li>
             <div class="loadMore" ng-if="loadMore" ng-infinite-scroll ng-click="loadMoreData()">{{text}}</div>
         </ul>

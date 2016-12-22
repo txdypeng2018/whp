@@ -81,6 +81,10 @@
       });
     };
 
+    var dbEditData = function(rowData){
+      var rowDatas = [rowData];
+      editData(rowDatas);
+    };
 
     $scope.gridParam = {
       columns: [
@@ -113,7 +117,8 @@
       searchTemplate: 'modules/feedback/operationSearch.html',
       searchInitData: {
         statusCode: $scope.opStatus
-      }
+      },
+      dblClick: dbEditData
     };
   };
 

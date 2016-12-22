@@ -143,6 +143,7 @@
               ng-disabled="gridParam.ngDisabled(dessert)"
               md-select-id="{{gridParam.idField}}"
               md-auto-select="gridParam.autoSelect"
+              pea-dblclick="gridParam.dblClick(dessert)"
               style="background-color: {{gridParam.rowStyler==null?'':gridParam.rowStyler(dessert)}}">
             <td md-cell ng-repeat="column in gridParam.columns" ng-if="!column.isHide"
                 ng-class="{'fixed-column': column.isFixed, 'no-line-wrap': !column.isLineWrap, 'md-placeholder': !dessert[column.field], 'no-click': !column.edit}"
