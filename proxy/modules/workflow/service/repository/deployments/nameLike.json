@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "id": "10",
+      "name": "activiti-examples.bar",
+      "deploymentTime": "2010-10-13T14:54:26.750+02:00",
+      "category": "examples",
+      "url": "http://localhost:8081/service/repository/deployments/10",
+      "tenantId": null
+    }
+  ],
+  "total": 1,
+  "start": 0,
+  "sort": "deploytime",
+  "order": "desc",
+  "size": 1
+}
