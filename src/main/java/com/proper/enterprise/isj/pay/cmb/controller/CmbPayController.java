@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.pay.cmb.controller;
 
+import cmb.netpayment.Security;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
 import com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes;
@@ -29,6 +30,7 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -128,10 +130,24 @@ public class CmbPayController extends BaseController {
         try {
 //            ret = cmbService.saveNoticePayInfo(request);
             ret = true;
-            CmbPayNotice2BusinessTask cmbPayNoticeTask = new CmbPayNotice2BusinessTask();
-            cmbPayNoticeTask.setCmbService(cmbService);
-            cmbPayNoticeTask.setRequest(request);
-            taskExecutor.execute(cmbPayNoticeTask);
+            // 获取从银行返回的信息
+            String queryStr = request.getQueryString();
+            LOGGER.debug("queryStr:" + queryStr);
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
+            // 构造方法
+            Security cmbSecurity = new Security(cmbService.readStream(inputStream));
+            // 检验数字签名
+            if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
+                LOGGER.debug("验签成功");
+                // 取得一网通支付结果异步通知对象
+                CmbPayEntity cmbInfo = cmbService.getCmbPayNoticeInfo(request);
+
+                CmbPayNotice2BusinessTask cmbPayNoticeTask = new CmbPayNotice2BusinessTask();
+                cmbPayNoticeTask.setCmbService(cmbService);
+                cmbPayNoticeTask.setCmbInfo(cmbInfo);
+                taskExecutor.execute(cmbPayNoticeTask);
+            }
+
         } catch (Exception e) {
             LOGGER.debug("CmbPayController.dealNoticePayInfo[Exception]:", e);
             throw e;

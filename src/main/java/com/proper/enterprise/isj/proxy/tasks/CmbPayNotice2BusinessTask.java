@@ -1,11 +1,10 @@
 package com.proper.enterprise.isj.proxy.tasks;
 
+import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 一网通异步通知
@@ -15,16 +14,16 @@ public class CmbPayNotice2BusinessTask implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmbPayNotice2BusinessTask.class);
 
-    private HttpServletRequest request;
-
     private CmbService cmbService;
 
-    public HttpServletRequest getRequest() {
-        return request;
+    private CmbPayEntity cmbInfo;
+
+    public CmbPayEntity getCmbInfo() {
+        return cmbInfo;
     }
 
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
+    public void setCmbInfo(CmbPayEntity cmbInfo) {
+        this.cmbInfo = cmbInfo;
     }
 
     public CmbService getCmbService() {
@@ -39,7 +38,7 @@ public class CmbPayNotice2BusinessTask implements Runnable {
     public void run() {
         try {
             LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理开始");
-            cmbNotice2Business(request);
+            cmbNotice2Business(cmbInfo);
             LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理结束");
         } catch (Exception e) {
             LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理异常:", e);
@@ -49,11 +48,11 @@ public class CmbPayNotice2BusinessTask implements Runnable {
     /**
      * 一网通异步通知处理业务
      *
-     * @param request 请求
+     * @param cmbInfo 请求对象
      * @throws Exception
      */
-    private void cmbNotice2Business(HttpServletRequest request) throws Exception {
-        cmbService.saveNoticePayInfo(request);
+    private void cmbNotice2Business(CmbPayEntity cmbInfo) throws Exception {
+        cmbService.saveNoticePayInfo(cmbInfo);
     }
 
 }

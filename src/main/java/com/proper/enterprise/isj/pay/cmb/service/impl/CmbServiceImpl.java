@@ -1,6 +1,5 @@
 package com.proper.enterprise.isj.pay.cmb.service.impl;
 
-import cmb.netpayment.Security;
 import com.cmb.b2b.B2BResult;
 import com.cmb.b2b.Base64;
 import com.cmb.b2b.FirmbankCert;
@@ -417,92 +416,80 @@ public class CmbServiceImpl implements CmbService {
     /**
      * 处理保存支付结果异步通知
      *
-     * @param request 请求
+     * @param cmbInfo 请求对象
      * @return 处理结果
      * @throws Exception
      */
-    public boolean saveNoticePayInfo(HttpServletRequest request) throws Exception {
+    public boolean saveNoticePayInfo(CmbPayEntity cmbInfo) throws Exception {
         boolean ret = false;
-        // 获取从银行返回的信息
-        String queryStr = request.getQueryString();
-        LOGGER.debug("queryStr:" + queryStr);
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
-        // 构造方法
-        Security cmbSecurity = new Security(readStream(inputStream));
-        // 检验数字签名
-        if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
-            LOGGER.debug("验签成功");
-            // 取得一网通支付结果异步通知对象
-            CmbPayEntity cmbInfo = getCmbPayNoticeInfo(request);
 
-            // 查询订单号是否已经处理过了
-            StringBuilder partOrderNo = new StringBuilder();
-            partOrderNo.append("%").append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("%");
-            LOGGER.debug("orderNoPart:" + partOrderNo.toString());
-            // 通过日期和订单号拼接的订单号以及支付类型查询订单信息
-            List<OrderEntity> orderList = orderRepo.findByOrderNoLike(partOrderNo.toString());
-            // 获取查询条件并且只有一条
-            if(orderList != null && orderList.size() == 1) {
-                LOGGER.debug("订单数据有效");
-                // 订单信息
-                Order orderInfo = orderList.get(0);
-                // 订单号
-                String orderNo = orderInfo.getOrderNo();
-                LOGGER.debug("订单号:" + orderNo);
-                // 没有处理过订单
-                if (orderInfo.getPaymentStatus() < ConfCenter.getInt("isj.pay.paystatus.unconfirmpay")) {
-                    LOGGER.debug("没有处理过的订单");
-                    // 保存支付宝异步通知信息
-                    synchronized (orderInfo.getOrderNo()) {
-                        try {
-                            // 挂号单
-                            if (orderInfo.getFormClassInstance().equals(RegistrationDocument.class.getName())) {
-                                PayRegReq payReg = registrationService.convertAppInfo2PayReg(cmbInfo,
-                                        orderInfo.getFormId());
-                                if (payReg != null) {
-                                    registrationService.saveUpdateRegistrationAndOrder(payReg);
-                                }else{
-                                    LOGGER.debug("未查到已支付的挂号单信息,订单号:" + orderNo);
-                                }
-                                // 缴费
-                            } else {
-                                orderInfo = recipeService.saveUpdateRecipeAndOrder(orderInfo.getOrderNo(),
-                                        String.valueOf(PayChannel.ALIPAY.getCode()), cmbInfo);
-                                if (orderInfo == null) {
-                                    LOGGER.debug("缴费异常,订单号:" + orderNo);
-                                } else {
-                                    orderService.save(orderInfo);
-                                }
+        // 查询订单号是否已经处理过了
+        StringBuilder partOrderNo = new StringBuilder();
+        partOrderNo.append("%").append(cmbInfo.getDate()).append(cmbInfo.getBillNo()).append("%");
+        LOGGER.debug("orderNoPart:" + partOrderNo.toString());
+        // 通过日期和订单号拼接的订单号以及支付类型查询订单信息
+        List<OrderEntity> orderList = orderRepo.findByOrderNoLike(partOrderNo.toString());
+        // 获取查询条件并且只有一条
+        if(orderList != null && orderList.size() == 1) {
+            LOGGER.debug("订单数据有效");
+            // 订单信息
+            Order orderInfo = orderList.get(0);
+            // 订单号
+            String orderNo = orderInfo.getOrderNo();
+            LOGGER.debug("订单号:" + orderNo);
+            // 没有处理过订单
+            if (orderInfo.getPaymentStatus() < ConfCenter.getInt("isj.pay.paystatus.unconfirmpay")) {
+                LOGGER.debug("没有处理过的订单");
+                // 保存支付宝异步通知信息
+                synchronized (orderInfo.getOrderNo()) {
+                    try {
+                        // 挂号单
+                        if (orderInfo.getFormClassInstance().equals(RegistrationDocument.class.getName())) {
+                            PayRegReq payReg = registrationService.convertAppInfo2PayReg(cmbInfo,
+                                    orderInfo.getFormId());
+                            if (payReg != null) {
+                                registrationService.saveUpdateRegistrationAndOrder(payReg);
+                            }else{
+                                LOGGER.debug("未查到已支付的挂号单信息,订单号:" + orderNo);
                             }
-                        } catch (Exception e) {
-                            LOGGER.debug("支付成功后,调用HIS接口中发生了错误,订单号:" + orderNo, e);
+                            // 缴费
+                        } else {
+                            orderInfo = recipeService.saveUpdateRecipeAndOrder(orderInfo.getOrderNo(),
+                                    String.valueOf(PayChannel.ALIPAY.getCode()), cmbInfo);
+                            if (orderInfo == null) {
+                                LOGGER.debug("缴费异常,订单号:" + orderNo);
+                            } else {
+                                orderService.save(orderInfo);
+                            }
                         }
+                    } catch (Exception e) {
+                        LOGGER.debug("支付成功后,调用HIS接口中发生了错误,订单号:" + orderNo, e);
                     }
-                    LOGGER.debug("更新订单状态为支付成功");
-                    Order orderinfoRet = orderService.findByOrderNo(orderNo);
-                    LOGGER.debug("orderinfoRet.getPaymentStatus():" + orderinfoRet.getPaymentStatus());
-                    ret = true;
-                    // 已经成功处理过的订单
-                } else if (orderInfo.getPaymentStatus() == ConfCenter.getInt("isj.pay.paystatus.payed")) {
-                    LOGGER.debug("已经成功处理过的支付订单");
-                    ret = true;
                 }
-            } else {
-                LOGGER.debug("处理保存一网通支付结果异步通知【异常】: 订单号不唯一!");
+                LOGGER.debug("更新订单状态为支付成功");
+                Order orderinfoRet = orderService.findByOrderNo(orderNo);
+                LOGGER.debug("orderinfoRet.getPaymentStatus():" + orderinfoRet.getPaymentStatus());
+                ret = true;
+                // 已经成功处理过的订单
+            } else if (orderInfo.getPaymentStatus() == ConfCenter.getInt("isj.pay.paystatus.payed")) {
+                LOGGER.debug("已经成功处理过的支付订单");
+                ret = true;
             }
-            // 保存异步通知信息
-            if(ret) {
-                // 取得支付时传入的参数
-                JSONObject paramObj = getParamObj(cmbInfo.getMerchantPara());
-                // 获取用户ID
-                String userId = paramObj.getString("userid");
-                cmbInfo.setUserId(userId);
-                // 获取异步通知信息
-                CmbPayEntity queryPanInfo = getPayNoticeInfoByMsg(cmbInfo.getMsg());
-                if (queryPanInfo == null) {
-                    // 保存异步通知信息
-                    saveCmbPayNoticeInfo(cmbInfo);
-                }
+        } else {
+            LOGGER.debug("处理保存一网通支付结果异步通知【异常】: 订单号不唯一!");
+        }
+        // 保存异步通知信息
+        if(ret) {
+            // 取得支付时传入的参数
+            JSONObject paramObj = getParamObj(cmbInfo.getMerchantPara());
+            // 获取用户ID
+            String userId = paramObj.getString("userid");
+            cmbInfo.setUserId(userId);
+            // 获取异步通知信息
+            CmbPayEntity queryPanInfo = getPayNoticeInfoByMsg(cmbInfo.getMsg());
+            if (queryPanInfo == null) {
+                // 保存异步通知信息
+                saveCmbPayNoticeInfo(cmbInfo);
             }
         }
         return ret;
