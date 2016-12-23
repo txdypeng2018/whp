@@ -163,10 +163,17 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                     RegistrationDocument regBack = this.getRegistrationDocumentById(order.getFormId());
                     RegistrationOrderReqDocument payOrderRegDocument = regBack.getRegistrationOrderReq();
+                    if (payOrderRegDocument == null) {
+                        return;
+                    }
+                    boolean canNoticeHisFlag = false;
+                    if (StringUtil.isEmpty(payOrderRegDocument.getSerialNum())) {
+                        canNoticeHisFlag = true;
+                    }
+                    LOGGER.debug("通知his前确认订单状态,订单号:" + payRegReq.getOrderId() + ",支付状态:" + regBack.getStatusCode());
                     BeanUtils.copyProperties(payRegReq, payOrderRegDocument);
                     if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())
-                            && (regBack.getRegistrationOrderReq() == null
-                                    || StringUtil.isEmpty(regBack.getRegistrationOrderReq().getOrderId()))) {
+                            && canNoticeHisFlag) {
                         LOGGER.debug("挂号单是未支付状态,进行调用,订单号:" + payRegReq.getOrderId());
                         if (regBack.getIsAppointment().equals(String.valueOf(1))) {
                             if (regBack.getRegistrationRefundReq() == null

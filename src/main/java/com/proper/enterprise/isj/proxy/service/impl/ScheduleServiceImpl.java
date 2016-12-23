@@ -1,16 +1,5 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
-import java.text.DecimalFormat;
-import java.util.*;
-
-import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ExpressionException;
-import org.springframework.stereotype.Service;
-
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.*;
 import com.proper.enterprise.isj.proxy.document.doctor.RegisterDoctorDocument;
@@ -36,6 +25,16 @@ import com.proper.enterprise.isj.webservices.model.res.timereglist.TimeReg;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.SpELParser;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
+import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Created by think on 2016/8/19 0019.
@@ -355,12 +354,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         vars.put("doctor", doctor);
         for (RuleEntity rule : rules) {
             try {
-                LOGGER.debug("Parsing {} rule: {}", rule.getName(), rule.getRule());
+                LOGGER.debug("Parsing {} rule({}) with {}", rule.getName(), rule.getRule(), vars);
                 if (!parser.parse(rule.getRule(), vars, Boolean.class)) {
                     return false;
                 }
             } catch (ExpressionException ee) {
-                LOGGER.debug("Parse {} with {} throw exception:", rule.getRule(), vars, ee);
+                LOGGER.debug("Parse {} with {} throw exception!", rule.getRule(), vars, ee);
             }
         }
         return true;
