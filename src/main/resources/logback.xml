@@ -23,11 +23,10 @@
     </appender>
 
     <logger name="com.proper" level="debug">
-        <appender-ref ref="file" />
         <appender-ref ref="mongo" />
     </logger>
 
-    <logger name="ROOT" level="debug">
+    <logger name="ROOT" level="info">
         <appender-ref ref="file" />
     </logger>
 
