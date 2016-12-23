@@ -9,6 +9,26 @@
             $window.location.reload();
         };
 
+        var comJson = {
+            'userCount': '',
+            'reqCount': '',
+            'regApptCount': '',
+            'regTodayCount': '',
+            'opinionCount': '',
+            'feedbackCount': '',
+            'wxpayAmount': '',
+            'wxpayRAmount': '',
+            'wxpayCount': '',
+            'wxpayRCount': '',
+            'alipayCount': '',
+            'alipayAmount': '',
+            'alipayRCount': '',
+            'alipayRAmount': '',
+            'cmbCount': '',
+            'cmbAmount': '',
+            'cmbRCount': '',
+            'cmbRAmount': ''
+        };
         var timeDataLength;
         var timeArr = [];
         var regdata1 = [];
@@ -25,9 +45,13 @@
         var wxpayAmountdata = [];
         var wxpayRCountdata = [];
         var wxpayRAmoutdata = [];
+        var cmbCountdata = [];
+        var cmbAmountdata = [];
+        var cmbRCountdata = [];
+        var cmbRAmoutdata = [];
         var xlength = 0;
-        $scope.statisticsDatas = [];
 
+        $scope.statisticsDatas = [];
         $http.get('/msc/statistics_count',{params: {query:'{}',sort:'{statisticsDate:-1}'}}).success(function(data){
             for(var n = 0; n < data.length; n++){
                 $scope.statisticsDatas.push(JSON.parse(data[n]));
@@ -39,6 +63,13 @@
                 xlength = 7;
             }
 
+            for(var m = 0; m < data.length; m++){
+                for(var x in comJson){
+                    if(angular.isUndefined($scope.statisticsDatas[m][x]) || isNaN($scope.statisticsDatas[m][x])){
+                        $scope.statisticsDatas[m][x] = 0;
+                    }
+                }
+            }
             //当日数据
             $scope.nowReqdata1 = $scope.statisticsDatas[0].userCount;
             $scope.nowReqdata2 = $scope.statisticsDatas[0].reqCount;
@@ -51,6 +82,8 @@
             $scope.nowWxpayRAmoutdata = addComma($scope.statisticsDatas[0].wxpayRAmount);
             $scope.nowAlipayAmoutdata = addComma($scope.statisticsDatas[0].alipayAmount);
             $scope.nowAlipayRAmoutdata = addComma($scope.statisticsDatas[0].alipayRAmount);
+            $scope.nowCmbpayAmoutdata = addComma($scope.statisticsDatas[0].cmbAmount);
+            $scope.nowCmbpayRAmoutdata = addComma($scope.statisticsDatas[0].cmbRAmount);
 
             for(var i = 0; i < 7; i++) {
                 timeArr.push($scope.statisticsDatas[i].statisticsDate);
@@ -68,6 +101,10 @@
                 wxpayAmountdata.push(addDoc($scope.statisticsDatas[i].wxpayAmount));
                 wxpayRCountdata.push($scope.statisticsDatas[i].wxpayRCount);
                 wxpayRAmoutdata.push(addDoc($scope.statisticsDatas[i].wxpayRAmount));
+                cmbCountdata.push($scope.statisticsDatas[i].cmbCount);
+                cmbAmountdata.push(addDoc($scope.statisticsDatas[i].cmbAmount));
+                cmbRCountdata.push($scope.statisticsDatas[i].cmbRCount);
+                cmbRAmoutdata.push(addDoc($scope.statisticsDatas[i].cmbRAmount));
             }
             //预约挂号数量,当日挂号数量
             $scope.reg = options('挂号数量', '预约挂号数量', '当日挂号数量', 'line', 'line', regdata1, regdata2);
@@ -83,6 +120,10 @@
             $scope.wxpayc = options1('微信平台:支付数量,退费数量', '支付数量', '退费数量', 'bar', 'bar', wxpayCountdata, wxpayRCountdata);
             //微信平台=['支付金额','退费金额'];
             $scope.wxpaya = options1('微信平台:支付金额,退费金额', '支付金额', '退费金额', 'bar', 'bar', wxpayAmountdata, wxpayRAmoutdata);
+            //一网通平台=['支付数量','退费数量'];
+            $scope.cmbpayc = options1('一网通平台:支付数量,退费数量', '支付数量', '退费数量', 'bar', 'bar', cmbCountdata, cmbRCountdata);
+            //一网通平台=['支付金额','退费金额'];
+            $scope.cmbpaya = options1('一网通平台:支付金额,退费金额', '支付金额', '退费金额', 'bar', 'bar', cmbAmountdata, cmbRAmoutdata);
         });
         var options = function(title, dataTile1, dataTile2, chartType1, chartType2, httpData1, httpData2){
             var opt = {

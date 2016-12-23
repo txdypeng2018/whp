@@ -1,4 +1,4 @@
-<div layout="column" class="operationview-content">
+<md-card layout="column" class="operationview-content pea-card pea-grid">
     <md-content style="overflow-x:hidden;">
         <div layout="column" style="background-color: #fff;">
             <div class="operationview-title">
@@ -22,7 +22,7 @@
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>反馈状态</label>
-                        <md-select ng-model="selectedopStatus.code">
+                        <md-select ng-model="selectedopStatusCode">
                             <md-option ng-repeat="feedbackType in opStatus" value="{{feedbackType.code}}">
                                 {{feedbackType.name}}
                             </md-option>
@@ -37,12 +37,13 @@
                         <textarea name="feedback" ng-model="filterFeedOp"></textarea>
                     </md-input-container>
                 </div>
-                <button ng-click="operationViewSearch()">查询</button>
+                <md-button aria-label="查询" class="btn-margin-left md-primary btn-advanced-search" ng-click="operationViewSearch()">查询</md-button>
+                <md-button aria-label="重置" ng-click="operationViewReset()">重置</md-button>
             </md-dialog-content>
         </div>
         <div class="operationview-piece-title">意见反馈信息列表(双击可回复)</div>
         <ul class="waterfall-list" ng-waterfall cols="3">
-            <li ng-repeat="feedBackData in feedBackDatasAll" ng-dblclick="gotoDialog(feedBackData.userId)" repeat-finished class="single-member effect-1">
+            <li ng-init="showLoadMore()" ng-repeat="feedBackData in feedBackDatasAll" ng-dblclick="gotoDialog(feedBackData.userId,feedBackData._id.$oid)" repeat-finished class="single-member effect-1">
             <md-card>
                 <div class="member-info data-block" >
                     <h3 ng-class="{'operationview-piece-red':feedBackData.statusCode=='0','operationview-piece-green':feedBackData.statusCode=='1','operationview-piece-blue':feedBackData.statusCode=='2'}">
@@ -57,5 +58,5 @@
             <div class="loadMore" ng-if="loadMore" ng-infinite-scroll ng-click="loadMoreData()">{{text}}</div>
         </ul>
     </md-content>
-</div>
+</md-card>
 

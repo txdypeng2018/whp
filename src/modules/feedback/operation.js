@@ -42,6 +42,21 @@
 
           $http.get('/service/userOpinion/' + rowDatas[0].id).success(function(data) {
             $scope.opinion = data;
+
+            var userdataToJson = [];
+            $http.get('/msc/service_user_opinion',{params: {query:'{ "_id":ObjectId("'+ $scope.opinion._id.$oid +'")}'}}).success(function(data) {
+              for(var n = 0; n < data.length; n++){
+                userdataToJson.push(JSON.parse(data[n]));
+              }
+
+              var historyData=[];
+              $http.get('/msc/service_user_opinion',{params: {query:'{ "userId":"'+ rowDatas[0].id +'","opinionTime":{$lte: "'+ userdataToJson[0].opinionTime +'"}}',sort:'{opinionTime:1}'}}).success(function(data) {
+                for(var n = 0; n < data.length; n++){
+                  historyData.push(JSON.parse(data[n]));
+                }
+                $scope.opinionHistory = historyData;
+              });
+            });
           });
 
           $scope.isSubmit = false;

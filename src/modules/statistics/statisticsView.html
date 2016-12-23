@@ -1,69 +1,59 @@
 <div layout="column" class="statistics-body">
-    <div class="chart-piece bg-color-black" style="margin-top: 15px;">
+    <md-card class="chart-piece pea-card pea-grid" style="margin-top: 15px;">
     <p style="font-size: 13px;color:#999;margin-top: 0;margin-left: 23px;">前一日数据统计</p>
-    <div class="statistics-today" layout-gt-sm="row" style="color: #333;">
-        <div flex class="statistics-today-content">
-            <div flex class="today-content-icon bg-color-black"></div>
+    <div class="statistics-today" style="color: #333;">
+        <div class="statistics-today-content">
             <div class="today-content-font">
-                <p>app访客数</p>
-                <p class="today-font-bold">{{nowReqdata1}}</p>
-                <p>访问次数</p>
-                <p class="today-font-bold">{{nowReqdata2}}</p>
+                <p class="p-border-left-blue"><span>app访客数</span> <b class="today-font-bold">{{nowReqdata1}}</b></p>
+                <p class="p-border-left-blue"><span>访问次数</span> <b class="today-font-bold">{{nowReqdata2}}</b></p>
+            </div>
+            <div class="today-content-font">
+                <p class="p-border-left-blue"><span>预约挂号数量</span> <b class="today-font-bold">{{nowRegdata1}}</b></p>
+                <p class="p-border-left-blue"><span>当日挂号数量</span> <b class="today-font-bold">{{nowRegdata2}}</b></p>
             </div>
         </div>
-        <div flex class="statistics-today-content">
-            <div flex class="today-content-icon bg-color-blue"></div>
+        <div class="statistics-today-content">
             <div class="today-content-font">
-                <p>预约挂号数量</p>
-                <p class="today-font-bold">{{nowRegdata1}}</p>
-                <p>当日挂号数量</p>
-                <p class="today-font-bold">{{nowRegdata2}}</p>
+                <p class="p-border-left-blue"><span>意见数量</span> <b class="today-font-bold">{{nowOpinionCountdata}}</b></p>
+                <p class="p-border-left-blue"><span>反馈数量</span> <b class="today-font-bold">{{nowFeedbackCountdata}}</b></p>
+            </div>
+            <div class="today-content-font">
+                <p class="p-border-left-green"><span>微信支付金额</span> <b class="today-font-bold">{{nowWxpayAmoutdata}}</b></p>
+                <p class="p-border-left-green"><span>微信退费金额</span> <b class="today-font-bold">{{nowWxpayRAmoutdata}}</b></p>
             </div>
         </div>
-        <div flex class="statistics-today-content">
-            <div flex class="today-content-icon bg-color-red"></div>
+        <div class="statistics-today-content">
             <div class="today-content-font">
-                <p>意见数量</p>
-                <p class="today-font-bold">{{nowOpinionCountdata}}</p>
-                <p>反馈数量</p>
-                <p class="today-font-bold">{{nowFeedbackCountdata}}</p>
+                <p class="p-border-left-orange"><span>支付宝支付金额</span> <b class="today-font-bold">{{nowAlipayAmoutdata}}</b></p>
+                <p class="p-border-left-orange"><span>支付宝退费金额</span> <b class="today-font-bold">{{nowAlipayRAmoutdata}}</b></p>
+            </div>
+            <div class="today-content-font">
+                <p class="p-border-left-red"><span>一网通支付金额</span> <b class="today-font-bold">{{nowCmbpayAmoutdata}}</b></p>
+                <p class="p-border-left-red"><span>一网通退费金额</span> <b class="today-font-bold">{{nowCmbpayRAmoutdata}}</b></p>
             </div>
         </div>
-        <div flex class="statistics-today-content">
-            <div flex class="today-content-icon bg-color-green"></div>
-            <div class="today-content-font">
-                <p>微信支付金额</p>
-                <p class="today-font-bold">{{nowWxpayAmoutdata}} 元</p>
-                <p>微信退费金额</p>
-                <p class="today-font-bold">{{nowWxpayRAmoutdata}} 元</p>
-            </div>
-        </div>
-        <div flex class="statistics-today-content">
-            <div flex class="today-content-icon bg-color-orange"></div>
-            <div class="today-content-font">
-                <p>支付宝支付金额</p>
-                <p class="today-font-bold">{{nowAlipayAmoutdata}} 元</p>
-                <p>支付宝退费金额</p>
-                <p class="today-font-bold">{{nowAlipayRAmoutdata}} 元</p>
-            </div>
-        </div>
+        <div style="clear: both;"></div>
     </div>
-    </div>
-    <div class="chart-piece color-blue">
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="reg" style="height: 300px;"></div>
-    </div>
-    <div class="chart-piece color-black">
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="req" style="height: 300px;"></div>
-    </div>
-    <div class="chart-piece color-red">
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="feedback" style="height: 300px;"></div>
-    </div>
-    <div class="chart-piece color-orange">
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="alipayc" style="height: 300px;"></div>
         <div e-chart e-data="alipaya" style="height: 300px;"></div>
-    </div>
-    <div class="chart-piece color-green">
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="wxpayc" style="height: 300px;"></div>
         <div e-chart e-data="wxpaya" style="height: 300px;"></div>
-    </div>
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
+        <div e-chart e-data="cmbpayc" style="height: 300px;"></div>
+        <div e-chart e-data="cmbpaya" style="height: 300px;"></div>
+    </md-card>
 </div>
