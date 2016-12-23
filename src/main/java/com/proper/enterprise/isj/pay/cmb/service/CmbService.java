@@ -30,7 +30,7 @@ public interface CmbService {
 
     boolean saveNoticeProtocolInfo(String reqData) throws Exception;
 
-    boolean saveNoticePayInfo(HttpServletRequest request) throws Exception;
+    boolean saveNoticePayInfo(CmbPayEntity cmbInfo) throws Exception;
 
     CmbPayEntity getQueryInfo(String orderNo) throws Exception;
 

@@ -387,15 +387,15 @@ public class CmbPayServiceImplTest implements CmbService {
     /**
      * 处理保存支付结果异步通知
      *
-     * @param request 请求
+     * @param payInfo 请求
      * @return 处理结果
      * @throws Exception
      */
-    public boolean saveNoticePayInfo(HttpServletRequest request) throws Exception {
+    public boolean saveNoticePayInfo(CmbPayEntity payInfo) throws Exception {
         boolean ret = false;
         // 获取从银行返回的信息
-        String queryStr = request.getQueryString();
-        LOGGER.debug("queryStr:" + queryStr);
+//        String queryStr = request.getQueryString();
+//        LOGGER.debug("queryStr:" + queryStr);
 //        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
         // 构造方法
 //        Security cmbSecurity = new Security(readStream(inputStream));
@@ -403,7 +403,7 @@ public class CmbPayServiceImplTest implements CmbService {
 //        if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
 //            LOGGER.debug("验签成功");
             // 取得一网通支付结果异步通知对象
-            CmbPayEntity payInfo = getCmbPayNoticeInfo(request);
+//            CmbPayEntity payInfo = getCmbPayNoticeInfo(request);
             // 取得支付时传入的参数
             JSONObject paramObj = getParamObj(payInfo.getMerchantPara());
             // 获取用户ID
