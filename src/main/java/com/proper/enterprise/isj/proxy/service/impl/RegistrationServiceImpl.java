@@ -370,6 +370,7 @@ public class RegistrationServiceImpl {
     private void updateRegistrationAndOrderStatus(String channelId, ResModel<PayReg> payRegRes, Order order) throws HisReturnException {
         RegistrationDocument regDoc = this.getRegistrationDocumentById(order.getFormId());
         RegistrationOrderHisDocument his = regDoc.getRegistrationOrderHis();
+        his.setLastModifyTime(DateUtil.getTimestamp(true));
         his.setClientReturnMsg(payRegRes.getReturnMsg() + "(" + payRegRes.getReturnCode() + ")");
         if (payRegRes.getReturnCode() == ReturnCode.SUCCESS) {
 //            String hospMedicalNum = payRegRes.getRes().getHospMedicalNum();
