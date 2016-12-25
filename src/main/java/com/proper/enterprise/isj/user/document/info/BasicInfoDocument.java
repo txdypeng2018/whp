@@ -4,6 +4,7 @@ import com.proper.enterprise.isj.user.model.enums.MemberRelationEnum;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.springframework.data.annotation.Transient;
 
 import java.util.*;
@@ -93,7 +94,11 @@ public class BasicInfoDocument extends BaseDocument {
     }
 
     public void setName(String name) {
-        this.name = converter.convertToDatabaseColumn(name);
+        this.name = converter.convertToDatabaseColumn(validateName(name));
+    }
+
+    private String validateName(String name) {
+        return StringUtil.isNull(name) ? "" : name.replaceAll("[^\\u4e00-\\u9fbf\\u002E\\u00B7\\d\\w]", "");
     }
 
     public List<CardInfoDocument> getCards() {

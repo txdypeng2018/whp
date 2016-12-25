@@ -902,9 +902,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 // 交易日期
                 queryRefundInfo.setDate(cmbInfo.getDate());
                 // 退款流水号
-                queryRefundInfo.setRefundNo(refund.getOutRequestNo());
+                queryRefundInfo.setRefundNo(refund.getCmbRefundNo());
                 QueryRefundRes cmbRefundQuery = cmbService.queryRefundResult(queryRefundInfo);
-                if(cmbRefundQuery != null) {
+                if(cmbRefundQuery != null && cmbRefundQuery.getBody().getBillRecord() != null
+                        && StringUtil.isNotEmpty(cmbRefundQuery.getBody().getBillRecord().get(0).getAmount())) {
                     queryFlag = true;
                 }
             }
@@ -1304,6 +1305,11 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("医院确认成功");
             }
+            if(registration.getRegistrationRefundHis() != null) {
+                String rt = registration.getRegistrationRefundHis().getCreateTime();
+                String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
+                detailStr.append("<br>").append(rtm);
+            }
             orderProcess.setDetail(detailStr.toString());
             orderProcess.setImg("logo.png");
             orders.add(orderProcess);
@@ -1346,6 +1352,11 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("退号失败");
             }
+            if(registration.getRegistrationTradeRefund() != null) {
+                String rt = registration.getRegistrationTradeRefund().getCreateTime();
+                String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
+                detailStr.append("<br>").append(rtm);
+            }
             orderProcess.setDetail(detailStr.toString());
             orderProcess.setImg("user.png");
             orders.add(orderProcess);
@@ -1361,7 +1372,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     private void getRefund2Patient(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
         RegistrationOrderProcessDocument orderProcess = new RegistrationOrderProcessDocument();
-        orderProcess.setName("退款到支付账户");
+        orderProcess.setName("向支付平台申请退款");
         detailStr = new StringBuilder();
         RegistrationTradeRefundDocument refund = registration.getRegistrationTradeRefund();
         String img = "money.png";
@@ -1375,11 +1386,15 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         if (refund == null) {
             orderProcess.setStatus(String.valueOf(1));
             if (registration.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
-                detailStr.append("退款成功");
+                detailStr.append("申请退款成功");
             } else {
-                detailStr.append("退款失败");
+                detailStr.append("申请退款失败");
             }
-
+            if(registration.getRegistrationTradeRefund() != null) {
+                String rt = registration.getRegistrationRefundReq().getCreateTime();
+                String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
+                detailStr.append("<br>").append(rtm);
+            }
             orderProcess.setImg(img);
             orderProcess.setDetail(detailStr.toString());
             orders.add(orderProcess);
@@ -1391,9 +1406,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 LOGGER.debug("流程定义查询退款信息出现异常", e);
             }
             if (refundFlag) {
-                detailStr.append("退款成功");
+                detailStr.append("申请退款成功");
             } else {
-                detailStr.append("退款失败");
+                detailStr.append("申请退款失败");
+            }
+            if(registration.getRegistrationTradeRefund() != null) {
+                String rt = registration.getRegistrationRefundReq().getCreateTime();
+                String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
+                detailStr.append("<br>").append(rtm);
             }
             orderProcess.setStatus(String.valueOf(1));
             orderProcess.setImg(img);
@@ -1421,7 +1441,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 detailStr = new StringBuilder();
                 RegistrationOrderHisDocument orderHis = registration.getRegistrationOrderHis();
                 if (orderHis != null && StringUtil.isNotEmpty(orderHis.getHospPayId())) {
-                    detailStr.append(orderHis.getCreateTime());
+                    String ct = orderHis.getLastModifyTime();
+                    String hct =  StringUtil.isEmpty(ct) ? "" : ct.substring(0, ct.length() - 4);
+                    detailStr.append(hct);
                     if (StringUtil.isNotEmpty(orderHis.getHospRemark())) {
                         detailStr.append("<br/>");
                         detailStr.append(orderHis.getHospRemark());
@@ -1455,7 +1477,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
         RegistrationOrderProcessDocument orderProcess = new RegistrationOrderProcessDocument();
-        orderProcess.setName("订单已支付");
+        orderProcess.setName("订单未支付");
         RegistrationOrderReqDocument orderReq = registration.getRegistrationOrderReq();
         if (orderReq == null || StringUtil.isEmpty(orderReq.getSerialNum())) {
             PayRegReq payRegReq = null;
@@ -1485,6 +1507,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             }
 
             orderProcess.setDetail(detailStr.toString());
+            orderProcess.setName("订单已支付");
             orderProcess.setImg(img);
             orders.add(orderProcess);
         }else{
