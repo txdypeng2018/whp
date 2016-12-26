@@ -43,8 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -898,24 +896,10 @@ public class CmbPayServiceImplTest implements CmbService {
         }
         return paramObj;
     }
-    /**
-     * 读取流
-     *
-     * @param inStream 输入流
-     * @return 字节数组
-     * @throws Exception
-     */
+
     @Override
-    public byte[] readStream(InputStream inStream) throws Exception {
-        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = -1;
-        while ((len = inStream.read(buffer)) != -1) {
-            outSteam.write(buffer, 0, len);
-        }
-        outSteam.close();
-        inStream.close();
-        return outSteam.toByteArray();
+    public boolean isValid(String notice) {
+        return true;
     }
 
     /**

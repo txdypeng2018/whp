@@ -1,6 +1,5 @@
 package com.proper.enterprise.isj.pay.cmb.controller;
 
-import cmb.netpayment.Security;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity;
 import com.proper.enterprise.isj.pay.cmb.entity.CmbQueryRefundEntity;
 import com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes;
@@ -28,9 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -59,6 +58,9 @@ public class CmbPayController extends BaseController {
 
     @Autowired
     private TaskExecutor taskExecutor;
+
+    @Autowired
+    private WebApplicationContext wac;
 
     /**
      * 一网通预支付信息
@@ -126,39 +128,24 @@ public class CmbPayController extends BaseController {
     @GetMapping(value = "/noticePayInfo")
     public ResponseEntity<String> dealNoticePayInfo(HttpServletRequest request) throws Exception {
         LOGGER.debug("-----------一网通支付结果异步通知------开始---------------");
-        boolean ret = false;
-        try {
-//            ret = cmbService.saveNoticePayInfo(request);
-            ret = true;
-            // 获取从银行返回的信息
-            String queryStr = request.getQueryString();
-            LOGGER.debug("queryStr:" + queryStr);
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
-            // 构造方法
-            Security cmbSecurity = new Security(cmbService.readStream(inputStream));
-            // 检验数字签名
-            if (cmbSecurity.checkInfoFromBank(queryStr.getBytes("GB2312"))) {
-                LOGGER.debug("验签成功");
-                // 取得一网通支付结果异步通知对象
-                CmbPayEntity cmbInfo = cmbService.getCmbPayNoticeInfo(request);
-
-                CmbPayNotice2BusinessTask cmbPayNoticeTask = new CmbPayNotice2BusinessTask();
-                cmbPayNoticeTask.setCmbService(cmbService);
-                cmbPayNoticeTask.setCmbInfo(cmbInfo);
-                taskExecutor.execute(cmbPayNoticeTask);
-            }
-
-        } catch (Exception e) {
-            LOGGER.debug("CmbPayController.dealNoticePayInfo[Exception]:", e);
-            throw e;
-        }
-        if (ret) {
-            LOGGER.debug("-----------一网通支付结果异步通知------正常结束---------------");
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-        } else {
+        // 获取从银行返回的信息
+        String queryStr = request.getQueryString();
+        // 检验数字签名
+        if (!cmbService.isValid(queryStr)) {
+            LOGGER.debug("验签失败！{}", queryStr);
             LOGGER.debug("-----------一网通支付结果异步通知:处理过的信息------结束-------------------");
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         }
+
+        LOGGER.debug("验签成功！{}", queryStr);
+        // 取得一网通支付结果异步通知对象
+        CmbPayEntity cmbInfo = cmbService.getCmbPayNoticeInfo(request);
+
+        CmbPayNotice2BusinessTask cmbPayNoticeTask = wac.getBean(CmbPayNotice2BusinessTask.class);
+        cmbPayNoticeTask.setCmbInfo(cmbInfo);
+        taskExecutor.execute(cmbPayNoticeTask);
+        LOGGER.debug("-----------一网通支付结果异步通知------正常结束---------------");
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 
     /**

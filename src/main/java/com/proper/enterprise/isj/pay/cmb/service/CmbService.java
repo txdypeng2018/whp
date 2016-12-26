@@ -9,7 +9,6 @@ import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.wideunique.utils.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 
 /**
  * 招商银行支付Service
@@ -58,7 +57,13 @@ public interface CmbService {
 
     JSONObject getParamObj(String param) throws Exception;
 
-    byte[] readStream(InputStream inStream) throws Exception;
+    /**
+     * 验证异步通知是否合法
+     *
+     * @param  notice 通知内容（包含签名）
+     * @return true：合法；false：非法
+     */
+    boolean isValid(String notice);
 
     CmbPayEntity getNoticePayInfoByOrderNo(String orderNo) throws Exception;
 }
