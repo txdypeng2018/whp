@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.pay.cmb.service.impl;
 
+import cmb.netpayment.Security;
 import com.cmb.b2b.B2BResult;
 import com.cmb.b2b.Base64;
 import com.cmb.b2b.FirmbankCert;
@@ -48,10 +49,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -993,6 +991,20 @@ public class CmbServiceImpl implements CmbService {
         }
         return paramObj;
     }
+
+    @Override
+    public boolean isValid(String notice) {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cmbkey/public.key");
+        try {
+            // 构造方法
+            Security cmbSecurity = new Security(readStream(inputStream));
+            return cmbSecurity.checkInfoFromBank(notice);
+        } catch (Exception ioe) {
+            LOGGER.error("Check validation of CMB notice content ERROR!", ioe);
+            return false;
+        }
+    }
+
     /**
      * 读取流
      *
@@ -1000,8 +1012,7 @@ public class CmbServiceImpl implements CmbService {
      * @return 字节数组
      * @throws Exception
      */
-    @Override
-    public byte[] readStream(InputStream inStream) throws Exception {
+    private byte[] readStream(InputStream inStream) throws IOException {
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len = -1;

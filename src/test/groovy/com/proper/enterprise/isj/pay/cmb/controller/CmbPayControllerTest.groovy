@@ -1,8 +1,8 @@
 package com.proper.enterprise.isj.pay.cmb.controller
-
 import com.proper.enterprise.isj.pay.cmb.document.CmbProtocolDocument
 import com.proper.enterprise.isj.pay.cmb.entity.CmbPayEntity
 import com.proper.enterprise.isj.pay.cmb.model.UnifiedOrderReq
+import com.proper.enterprise.isj.pay.cmb.repository.CmbPayNoticeRepository
 import com.proper.enterprise.isj.pay.cmb.repository.CmbProtocolRepository
 import com.proper.enterprise.isj.pay.cmb.service.CmbService
 import com.proper.enterprise.isj.user.repository.UserInfoRepository
@@ -16,8 +16,8 @@ import com.proper.enterprise.platform.test.AbstractTest
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.test.web.servlet.MvcResult
-
 /**
  * 一网通Controller测试类
  */
@@ -40,6 +40,12 @@ class CmbPayControllerTest extends AbstractTest {
 
     @Autowired
     UserInfoRepository userInfoRepository;
+
+    @Autowired
+    CmbPayNoticeRepository noticeRepository
+
+    @Autowired
+    ThreadPoolTaskExecutor taskExecutor
 
     @Test
     public void prepay() {
@@ -71,7 +77,14 @@ class CmbPayControllerTest extends AbstractTest {
 
     @Test
     public void noticePayInfo() {
-        get("/pay/cmb/noticePayInfo?Succeed=Y&CoNo=000062&BillNo=7253638968&Amount=0.01&Date=20161201&MerchantPara=pno=20161201161423491022|userid=57ee2736ae65e2531aad70fa&Msg=00240000622016120116320165000000000020&Signature=85|43|105|137|32|31|227|23|199|171|181|183|148|207|191|96|207|12|22|128|229|187|215|238|158|145|70|128|27|64|53|5|180|174|217|159|84|159|103|251|223|64|47|197|103|109|199|71|182|41|67|250|141|170|90|66|113|83|156|168|239|225|186|232|", HttpStatus.OK);
+        def count = 5
+        count.times { idx ->
+            get("/pay/cmb/noticePayInfo?Succeed=Y&CoNo=000062&BillNo=7253638968&Amount=0.01&Date=20161201&MerchantPara=pno=20161201161423491022|userid=57ee2736ae65e2531aad70fa&Msg=msg${idx}&Signature=85|43|", HttpStatus.OK)
+        }
+        while (taskExecutor.activeCount > 0) {
+            sleep(5)
+        }
+        assert noticeRepository.count() == count
     }
 
     @Test
