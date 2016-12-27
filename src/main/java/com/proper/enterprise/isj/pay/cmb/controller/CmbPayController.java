@@ -20,14 +20,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -57,10 +55,7 @@ public class CmbPayController extends BaseController {
     CmbService cmbService;
 
     @Autowired
-    private TaskExecutor taskExecutor;
-
-    @Autowired
-    private WebApplicationContext wac;
+    private CmbPayNotice2BusinessTask cmbPayNoticeTask;
 
     /**
      * 一网通预支付信息
@@ -140,10 +135,7 @@ public class CmbPayController extends BaseController {
         LOGGER.debug("验签成功！{}", queryStr);
         // 取得一网通支付结果异步通知对象
         CmbPayEntity cmbInfo = cmbService.getCmbPayNoticeInfo(request);
-
-        CmbPayNotice2BusinessTask cmbPayNoticeTask = wac.getBean(CmbPayNotice2BusinessTask.class);
-        cmbPayNoticeTask.setCmbInfo(cmbInfo);
-        taskExecutor.execute(cmbPayNoticeTask);
+        cmbPayNoticeTask.run(cmbInfo);
         LOGGER.debug("-----------一网通支付结果异步通知------正常结束---------------");
         return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }

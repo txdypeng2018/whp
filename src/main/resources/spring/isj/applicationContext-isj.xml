@@ -143,8 +143,4 @@
         <constructor-arg name="signAlgorithm" value="${isj.pay.ali.signAlgo}"/>
     </bean>
 
-    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-        <property name="corePoolSize" value="100" />
-    </bean>
-
 </beans>

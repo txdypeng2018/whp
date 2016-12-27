@@ -5,29 +5,22 @@ import com.proper.enterprise.isj.pay.cmb.service.CmbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
  * 一网通异步通知
  */
 @Component
-@Scope("prototype")
-public class CmbPayNotice2BusinessTask implements Runnable {
+public class CmbPayNotice2BusinessTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmbPayNotice2BusinessTask.class);
 
     @Autowired
     private CmbService cmbService;
 
-    private CmbPayEntity cmbInfo;
-
-    public void setCmbInfo(CmbPayEntity cmbInfo) {
-        this.cmbInfo = cmbInfo;
-    }
-
-    @Override
-    public void run() {
+    @Async
+    public void run(CmbPayEntity cmbInfo) {
         try {
             LOGGER.debug("启动线程CmbPayNotice2BusinessTask调用一网通异步通知业务处理开始");
             cmbService.saveNoticePayInfo(cmbInfo);

@@ -1,28 +1,5 @@
 package com.proper.enterprise.isj.pay.weixin.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.Marshaller;
-import org.springframework.oxm.Unmarshaller;
-import org.springframework.stereotype.Service;
-
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
@@ -44,6 +21,27 @@ import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
 import com.proper.enterprise.platform.core.utils.http.HttpsClient;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
+import org.springframework.stereotype.Service;
+
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class WeixinServiceImpl implements WeixinService {
@@ -288,6 +286,19 @@ public class WeixinServiceImpl implements WeixinService {
             }
         }
         return res;
+    }
+
+    @Override
+    public boolean isValid(UnifiedNoticeRes noticeRes) {
+        String sign;
+        try {
+            sign = new SignAdapter().marshalObject(noticeRes, UnifiedNoticeRes.class);
+            LOGGER.debug("notice_sign: {}; verify_sign: {}", noticeRes.getSign(), sign);
+            return noticeRes.getSign().equals(sign);
+        } catch (Exception e) {
+            LOGGER.debug("Check validation of sign occurs error!", e);
+            return false;
+        }
     }
 
     @Override
