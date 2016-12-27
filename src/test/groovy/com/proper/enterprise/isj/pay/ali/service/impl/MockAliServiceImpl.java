@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 @Primary
-public class AliServiceImplTest extends AliServiceImpl implements AliService {
+public class MockAliServiceImpl extends AliServiceImpl implements AliService {
 
     @Autowired
     private OrderRepository repository;
@@ -29,7 +29,7 @@ public class AliServiceImplTest extends AliServiceImpl implements AliService {
         order.setOrderStatus("2");
         repository.save(order);
         // avoid async task quickly end
-        Thread.sleep(10);
+        Thread.sleep(100);
         return true;
     }
 
