@@ -1,27 +1,5 @@
 package com.proper.enterprise.isj.pay.ali.controller;
 
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.Unmarshaller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.pay.ali.constants.AliConstants;
@@ -43,6 +21,25 @@ import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.cipher.RSA;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.Unmarshaller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/pay/ali")
@@ -73,7 +70,7 @@ public class AliPayController extends BaseController {
     RSA rsa;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private AliPayNotice2BusinessTask dealPayNotice2BusinessTask;
 
     @PostMapping(value = "/prepayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PayResultRes> getPrepayinfo(@RequestBody UnifiedOrderReq uoReq) throws Exception {
@@ -209,61 +206,26 @@ public class AliPayController extends BaseController {
         String outTradeNo = request.getParameter("out_trade_no");
         // 交易状态
         String tradeStatus = request.getParameter("trade_status");
+        String dealType = "";
 
         // 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
-        if (aliService.verify(params)) {// 验证成功
-            // 移动支付异步通知
-            if (StringUtil.isNotNull(outTradeNo)) {
-                // 取得交易状态
-                if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_FINISHED)) {
-                    // 判断该笔订单是否在商户网站中已经做过处理
-                    // 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                    // 如果有做过处理，不执行商户的业务程序
-
-                    // 付款异步通知内部处理
-                    ret = aliService.saveAliNoticeProcess(outTradeNo, params, "pay");
-
-                    // 注意：
-                    // 退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
-                    // 请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                } else if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_SUCCESS)) {
-                    // 判断该笔订单是否在商户网站中已经做过处理
-                    // 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                    // 如果有做过处理，不执行商户的业务程序
-
-                    // 付款异步通知内部处理
-                    //ret = aliService.saveAliNoticeProcess(outTradeNo, params, "pay");
-                    ret = true;
-                    AliPayNotice2BusinessTask dealPayNotice2BusinessTask = new AliPayNotice2BusinessTask();
-                    dealPayNotice2BusinessTask.setAliParamMap(params);
-                    dealPayNotice2BusinessTask.setAliService(aliService);
-                    taskExecutor.execute(dealPayNotice2BusinessTask);
-
-                    // 注意：
-                    // 该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
-                    // 付款完成后，支付宝系统发送该交易状态通知
-                    // 请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-
-                    // 如果是退费异步通知
-                } else if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_CLOSED) && request
-                        .getParameter("refund_status").equals(AliConstants.ALI_PAY_NOTICE_REFUND_STATUS_SUCCESS)) {
-                    // 判断该笔订单是否在商户网站中已经做过处理
-                    // 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                    // 如果有做过处理，不执行商户的业务程序
-
-                    ret = aliService.saveAliNoticeProcess(outTradeNo, params, "refund");
-                    // 注意：
-                    // 请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                }
-                // 退款异步通知结果
+        if (aliService.verify(params) && StringUtil.isNotNull(outTradeNo)) {// 验证成功
+            // 取得交易状态
+            if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_FINISHED)
+                    || tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_SUCCESS)) {
+                dealType = "pay";
+            } else if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_CLOSED) && request
+                    .getParameter("refund_status").equals(AliConstants.ALI_PAY_NOTICE_REFUND_STATUS_SUCCESS)) {
+                dealType = "refund";
             }
+            if (StringUtil.isNotNull(dealType)) {
+                dealPayNotice2BusinessTask.run(params, dealType);
+                ret = true;
+            }
+            // 退款异步通知结果
         }
 
-        if (ret) {
-            return responseOfPost("SUCCESS");
-        } else {
-            return responseOfPost("FAIL");
-        }
+        return responseOfPost(ret ? "SUCCESS" : "FAIL");
     }
 
     /**

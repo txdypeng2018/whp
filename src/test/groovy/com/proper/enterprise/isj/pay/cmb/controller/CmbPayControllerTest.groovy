@@ -16,7 +16,6 @@ import com.proper.enterprise.platform.test.AbstractTest
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.test.web.servlet.MvcResult
 /**
  * 一网通Controller测试类
@@ -43,9 +42,6 @@ class CmbPayControllerTest extends AbstractTest {
 
     @Autowired
     CmbPayNoticeRepository noticeRepository
-
-    @Autowired
-    ThreadPoolTaskExecutor taskExecutor
 
     @Test
     public void prepay() {
@@ -81,9 +77,9 @@ class CmbPayControllerTest extends AbstractTest {
         count.times { idx ->
             get("/pay/cmb/noticePayInfo?Succeed=Y&CoNo=000062&BillNo=7253638968&Amount=0.01&Date=20161201&MerchantPara=pno=20161201161423491022|userid=57ee2736ae65e2531aad70fa&Msg=msg${idx}&Signature=85|43|", HttpStatus.OK)
         }
-        while (taskExecutor.activeCount > 0) {
-            sleep(5)
-        }
+        assert noticeRepository.count() < count
+
+        waitExecutorDone()
         assert noticeRepository.count() == count
     }
 

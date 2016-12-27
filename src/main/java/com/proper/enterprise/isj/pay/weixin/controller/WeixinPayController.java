@@ -1,32 +1,7 @@
 package com.proper.enterprise.isj.pay.weixin.controller;
 
-import java.io.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.Marshaller;
-import org.springframework.oxm.Unmarshaller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
 import com.proper.enterprise.isj.pay.model.PayResultRes;
 import com.proper.enterprise.isj.pay.weixin.adapter.SignAdapter;
 import com.proper.enterprise.isj.pay.weixin.constants.WeixinConstants;
@@ -45,6 +20,27 @@ import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/pay/weixin")
@@ -62,9 +58,6 @@ public class WeixinPayController extends BaseController {
     WeixinService weixinService;
 
     @Autowired
-    AliService aliService;
-
-    @Autowired
     OrderService orderService;
 
     @Autowired
@@ -74,7 +67,7 @@ public class WeixinPayController extends BaseController {
     RegistrationService registrationService;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private WeixinPayNotice2BusinessTask dealPayNotice2BusinessTask;
 
     /**
      * 获取微信预支付ID信息
@@ -245,48 +238,25 @@ public class WeixinPayController extends BaseController {
     @JWTIgnore
     @PostMapping(value = "/noticeInfo")
     public void receiveWeixinNoticeInfo(HttpServletRequest request, HttpServletResponse resp) throws Exception {
-        request.setCharacterEncoding("UTF-8");
-        InputStream inStream = request.getInputStream();
-        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        while ((len = inStream.read(buffer)) != -1) {
-            outSteam.write(buffer, 0, len);
-        }
         LOGGER.debug("-------------微信异步通知---------------");
-        outSteam.close();
-        inStream.close();
-        // 获取微信调用我们notify_url的返回信息
-        String result = new String(outSteam.toByteArray(), PEPConstants.DEFAULT_CHARSET.name());
-        LOGGER.debug("result:" + result);
-        // 返回给微信服务器的微信异步通知结果
         boolean ret = false;
 
+        request.setCharacterEncoding("UTF-8");
+        InputStream inStream = request.getInputStream();
         UnifiedNoticeRes noticeRes = (UnifiedNoticeRes) unmarshallerMap.get("unmarshallUnifiedNotice")
-                .unmarshal(new StreamSource(new StringReader(result)));
-
-        LOGGER.debug("notice_sign:" + noticeRes.getSign());
+                .unmarshal(new StreamSource(inStream));
+        inStream.close();
 
         // 进行签名验证操作
-        SignAdapter signAdapter = new SignAdapter();
-        LOGGER.debug("verify_sign:" + signAdapter.marshalObject(noticeRes, UnifiedNoticeRes.class));
-        if (noticeRes.getSign().equals(signAdapter.marshalObject(noticeRes, UnifiedNoticeRes.class))) {
+        if (weixinService.isValid(noticeRes) && "SUCCESS".equalsIgnoreCase(noticeRes.getReturnCode())
+                && "SUCCESS".equalsIgnoreCase(noticeRes.getResultCode())) {
             LOGGER.debug("sign_verify:SUCCESS");
-            // 以下字段在return_code为SUCCESS的时候有返回
-            if ("SUCCESS".equalsIgnoreCase(noticeRes.getReturnCode())
-                    && "SUCCESS".equalsIgnoreCase(noticeRes.getResultCode())) {
-                LOGGER.debug("result_code:SUCCESS");
-                // 保存微信异步通知信息
-                //ret = weixinService.saveWeixinNoticeProcess(noticeRes);
-                ret = true;
-                WeixinPayNotice2BusinessTask dealPayNotice2BusinessTask = new WeixinPayNotice2BusinessTask();
-                dealPayNotice2BusinessTask.setNoticeRes(noticeRes);
-                dealPayNotice2BusinessTask.setWeixinService(weixinService);
-                taskExecutor.execute(dealPayNotice2BusinessTask);
-            }
+            LOGGER.debug("result_code:SUCCESS");
+            // 保存微信异步通知信息
+            dealPayNotice2BusinessTask.run(noticeRes);
+            ret = true;
         }
 
-//        UnifiedNoticeReq responseWeixin = new UnifiedNoticeReq();
         PrintWriter out = resp.getWriter();
         String resultMsg = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[ERROR]]></return_msg></xml> ";
         if (ret) {
@@ -295,16 +265,6 @@ public class WeixinPayController extends BaseController {
         out.write(resultMsg);
         out.flush();
         out.close();
-//            responseWeixin.setReturnCode("SUCCESS");
-//            responseWeixin.setReturnMsg("OK");
-//        } else {
-//            responseWeixin.setReturnCode("FAIL");
-//            responseWeixin.setReturnMsg("ERROR");
-//        }
-//        StringWriter writer = new StringWriter();
-//        marshaller.marshal(responseWeixin, new StreamResult(writer));
-//        String requestXML = writer.toString();
-//        return responseOfPost(requestXML);
     }
 
     /**

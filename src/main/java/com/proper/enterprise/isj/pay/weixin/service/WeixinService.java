@@ -28,4 +28,6 @@ public interface WeixinService {
 
     WeixinRefundRes getWeixinRefundRes(String outTradeNo);
 
+    boolean isValid(UnifiedNoticeRes noticeRes);
+
 }
