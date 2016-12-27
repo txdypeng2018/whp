@@ -21,7 +21,7 @@ class WeixinPayControllerTest extends AbstractTest {
 
     @Test
     public void testReceiveWeixinNoticeInfo() throws Exception {
-        def count = 10
+        def count = 20
         count.times { idx ->
             def orderNo = "2016112214104819158269$idx"
             def xml = """
