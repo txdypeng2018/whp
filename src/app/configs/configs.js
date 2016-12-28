@@ -12,24 +12,16 @@
    * @returns {boolean}
    */
   var needContextPrefix = function(url) {
-    var isNeed = true;
-
-    // Activiti modeler.html 不需要服务端上下文根前缀
-    if (url.endsWith('.html')) {
-      isNeed = false;
+    if (url.endsWith('.html')                              // Activiti modeler.html 不需要服务端上下文根前缀
+        || (url.endsWith('.svg') && !url.startsWith('/'))  // md-data-table 组件图标 url(如:navigate-next.svg) 不需要服务端上下文根前缀
+        || url.startsWith('http')) {
+      return false;
     }
-
-    // md-data-table 组件图标 url(如:navigate-next.svg) 不需要服务端上下文根前缀
-    if (url.endsWith('.svg') && !url.startsWith('/')) {
-      isNeed = false;
-    }
-
-    return isNeed;
+    return true;
   };
 
   // Config JWT in http header and prefix of url
   var CONTEXT = 'https://sjh.sj-hospital.org/isj';
-  var reg=/\w+[\s\.]\w+/;
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.requestIndex = 0;
     var requestIndexMinus = function() {
@@ -92,7 +84,7 @@
         if (rejection.status === 502) {
           rejection.data = '网络异常';
         }
-        if(!angular.isUndefined(rejection.data) && rejection.data !== null && reg.test(rejection.data)){
+        if(!angular.isUndefined(rejection.data) && rejection.data !== null && /\w+[\s\.]\w+/.test(rejection.data)){
           rejection.data = '系统异常';
         }
         if (excludeUrl(rejection.config.url)) {
