@@ -453,7 +453,7 @@ public class CmbServiceImpl implements CmbService {
                             // 缴费
                         } else {
                             orderInfo = recipeService.saveUpdateRecipeAndOrder(orderInfo.getOrderNo(),
-                                    String.valueOf(PayChannel.ALIPAY.getCode()), cmbInfo);
+                                    String.valueOf(PayChannel.WEB_UNION.getCode()), cmbInfo);
                             if (orderInfo == null) {
                                 LOGGER.debug("缴费异常,订单号:" + orderNo);
                             } else {
