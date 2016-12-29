@@ -1,0 +1,1 @@
+INSERT INTO isj_rules (id, create_user_id, create_time, last_modify_user_id, last_modify_time, catalogue, rule_name, rule) VALUES ('fal1', 'pep', '2016-12-22 13:00:00.00', 'pep', '2016-12-22 13:00:00.00', 'FAMILY_ADD_LIMIT', '家庭成员添加限制', '@familyRule.addLimit(#familyMemberSize, #lastCreateTime, 1, 36500)');

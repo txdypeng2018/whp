@@ -1,11 +1,18 @@
 package com.proper.enterprise.isj.user.service.impl.notx;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.proper.enterprise.isj.rule.entity.RuleEntity;
+import com.proper.enterprise.isj.rule.repository.RuleRepository;
+import com.proper.enterprise.platform.core.utils.SpELParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.exception.HisReturnException;
@@ -52,6 +59,12 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
 
     @Autowired
     private JWTService jwtService;
+
+    @Autowired
+    RuleRepository ruleRepository;
+
+    @Autowired
+    SpELParser parser;
 
     @Autowired
     @Lazy
@@ -190,5 +203,22 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
                 .toDateString(DateUtil.toDate(IdcardUtils.getBirthByIdCard(basicInfo.getIdCard()), "yyyyMMdd")));
         req.setAddress("");
         return webServicesClient.createPat(req);
+    }
+
+    public int getFamilyAddLeftIntervalDays(int familyMemberSize, String lastCreateTime) {
+        int leftIntervalDays = 0;
+        Collection<RuleEntity> rules = ruleRepository.findByCatalogue("FAMILY_ADD_LIMIT");
+        Map<String, Object> vars = new HashMap<String, Object>();
+        vars.put("familyMemberSize", familyMemberSize);
+        vars.put("lastCreateTime", lastCreateTime);
+        if (rules != null && rules.size() > 0) {
+            RuleEntity ruleEntity = rules.iterator().next();
+            try {
+                leftIntervalDays = parser.parse(ruleEntity.getRule(), vars, Integer.class);
+            } catch (ExpressionException e) {
+                LOGGER.debug("Parse {} with {} throw exception:", ruleEntity.getRule(), vars, e);
+            }
+        }
+        return leftIntervalDays;
     }
 }

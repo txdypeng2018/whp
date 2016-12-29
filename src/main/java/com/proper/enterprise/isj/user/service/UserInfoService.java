@@ -51,4 +51,8 @@ public interface UserInfoService {
      */
     UserInfoDocument saveOrUpdatePatientMedicalNum(String userId, String memberId, String medicalNum) throws Exception;
 
+    /**
+     * 获取家庭成员添加限制天数
+     */
+    int getFamilyAddLeftIntervalDays(int familyMemberSize, String lastCreateTime);
 }

@@ -48,8 +48,7 @@ class CmbPayControllerTest extends AbstractTest {
         userRepo.deleteAll();
         userInfoRepository.deleteAll();
         User user = userInfoPublicServiceTest.saveUser();
-        String token = userInfoService.userLogin(user);
-        mockRequest.addHeader("Authorization", token);
+        mockUser(user.getId(),user.getUsername());
         UnifiedOrderReq uoReq = new UnifiedOrderReq();
         uoReq.setBillNo("2016120800164018299951");
         uoReq.setAmount("0.01");

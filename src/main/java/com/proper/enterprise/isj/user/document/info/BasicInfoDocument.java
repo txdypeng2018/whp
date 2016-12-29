@@ -73,6 +73,11 @@ public class BasicInfoDocument extends BaseDocument {
     private String sex;
 
     /**
+     * 是否删除  1:是,null:否
+     */
+    private String deleteStatus;
+
+    /**
      * 年龄
      */
     @Transient
@@ -187,6 +192,14 @@ public class BasicInfoDocument extends BaseDocument {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public String getDeleteStatus() {
+        return deleteStatus;
+    }
+
+    public void setDeleteStatus(String deleteStatus) {
+        this.deleteStatus = deleteStatus;
     }
 
     public String getMemberId() {
