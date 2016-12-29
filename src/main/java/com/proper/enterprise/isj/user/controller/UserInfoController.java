@@ -199,8 +199,11 @@ public class UserInfoController extends BaseController {
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
 
         List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
-        if (familyList != null && familyList.size() > 0) {
-            String lastCreateTime = "";
+
+        int familyMemberSize = 1;
+        String lastCreateTime = userInfo.getCreateTime();
+        if (familyList != null) {
+            familyMemberSize += familyList.size();
             for (FamilyMemberInfoDocument familyMemberInfoDocument : familyList) {
                 if (StringUtil.isNotEmpty(familyMemberInfoDocument.getCreateTime())) {
                     if (StringUtil.isEmpty(lastCreateTime)
@@ -209,13 +212,13 @@ public class UserInfoController extends BaseController {
                     }
                 }
             }
-            if (StringUtil.isNotEmpty(lastCreateTime)) {
-                int leftIntervalDays = userInfoServiceImpl.getFamilyAddLeftIntervalDays(familyList.size(), lastCreateTime);
-                if (leftIntervalDays > 0) {
-                    StringBuilder errMsg = new StringBuilder();
-                    errMsg.append("家庭成员添加次数过多，请").append(leftIntervalDays).append("天后再添加");
-                    return new ResponseEntity<String>(errMsg.toString(), HttpStatus.BAD_REQUEST);
-                }
+        }
+        if (StringUtil.isNotEmpty(lastCreateTime)) {
+            int leftIntervalDays = userInfoServiceImpl.getFamilyAddLeftIntervalDays(familyMemberSize, lastCreateTime);
+            if (leftIntervalDays > 0) {
+                StringBuilder errMsg = new StringBuilder();
+                errMsg.append("家庭成员添加次数过多，请").append(leftIntervalDays).append("天后再添加");
+                return new ResponseEntity<String>(errMsg.toString(), HttpStatus.BAD_REQUEST);
             }
         }
 
