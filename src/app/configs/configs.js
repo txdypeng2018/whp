@@ -24,7 +24,7 @@
   var CONTEXT = 'https://sjh.sj-hospital.org/isj';
 
   app.run(function($http) {
-    $http.get('http://172.28.235.106/isj/app/latest').success(function() {
+    $http.get('http://172.28.235.106/isj/app/latest', {timeout: 1000}).success(function() {
       CONTEXT = 'http://172.28.235.106/isj';
     });
   });
