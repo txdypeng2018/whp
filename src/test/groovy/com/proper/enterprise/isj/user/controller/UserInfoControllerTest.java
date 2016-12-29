@@ -1,14 +1,14 @@
 package com.proper.enterprise.isj.user.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
@@ -20,6 +20,7 @@ import com.proper.enterprise.isj.user.service.impl.custom.UserInfoWebServiceClie
 import com.proper.enterprise.isj.user.service.impl.notx.UserInfoServiceNotxImpl;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.test.AbstractTest;
 
 /**
@@ -113,6 +114,28 @@ public class UserInfoControllerTest extends AbstractTest {
         /*----------删除测试数据----------*/
         userInfoRepository.delete(userInfo.getId());
 
+    }
+
+    @Test
+    @Sql
+    public void testFamilyAddLimit() throws Exception {
+        /*----------添加基础数据----------*/
+        UserInfoDocument userInfo = this.saveTestUserInfo();
+        userInfo = this.updateCurrentFamilyMember(userInfo.getId());
+        mockUser(userInfo.getUserId(), "13800000001");
+        /*----------验证方法----------*/
+        Map<String, String> jsonMap = new HashMap<>();
+        jsonMap.put("name", "啊啊啊");
+        jsonMap.put("sexCode", "1");
+        jsonMap.put("idCard", "210101198901015937");
+        jsonMap.put("phone", "13800000001");
+        jsonMap.put("memberCode", "10");
+        jsonMap.put("member", "其他");
+        jsonMap.put("patientVisits", "0");
+        post("/user/familyMembers/familyMember", MediaType.TEXT_PLAIN,
+                JSONUtil.toJSON(jsonMap), HttpStatus.BAD_REQUEST);
+        /*----------删除测试数据----------*/
+        userInfoRepository.delete(userInfo.getId());
     }
 
     /*----------------绑卡检验规则-----------*/

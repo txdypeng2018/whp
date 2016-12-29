@@ -110,8 +110,10 @@ public class UserInfoController extends BaseController {
             List<FamilyMemberInfoDocument> userMemberList = userInfo.getFamilyMemberInfo();
             if (userMemberList != null) {
                 for (FamilyMemberInfoDocument familyMemberInfoDocument : userMemberList) {
-                    familyMemberInfoDocument.setAge(IdcardUtils.getAgeByIdCard(familyMemberInfoDocument.getIdCard()));
-                    memberList.add(familyMemberInfoDocument);
+                    if (StringUtil.isEmpty(familyMemberInfoDocument.getDeleteStatus())) {
+                        familyMemberInfoDocument.setAge(IdcardUtils.getAgeByIdCard(familyMemberInfoDocument.getIdCard()));
+                        memberList.add(familyMemberInfoDocument);
+                    }
                 }
             }
         } else {
@@ -193,7 +195,30 @@ public class UserInfoController extends BaseController {
         if (user == null) {
             return new ResponseEntity<String>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
         }
+
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
+
+        List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
+        if (familyList != null && familyList.size() > 0) {
+            String lastCreateTime = "";
+            for (FamilyMemberInfoDocument familyMemberInfoDocument : familyList) {
+                if (StringUtil.isNotEmpty(familyMemberInfoDocument.getCreateTime())) {
+                    if (StringUtil.isEmpty(lastCreateTime)
+                            || familyMemberInfoDocument.getCreateTime().compareTo(lastCreateTime) > 0) {
+                        lastCreateTime = familyMemberInfoDocument.getCreateTime();
+                    }
+                }
+            }
+            if (StringUtil.isNotEmpty(lastCreateTime)) {
+                int leftIntervalDays = userInfoServiceImpl.getFamilyAddLeftIntervalDays(familyList.size(), lastCreateTime);
+                if (leftIntervalDays > 0) {
+                    StringBuilder errMsg = new StringBuilder();
+                    errMsg.append("家庭成员添加次数过多，请").append(leftIntervalDays).append("天后再添加");
+                    return new ResponseEntity<String>(errMsg.toString(), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
         FamilyMemberInfoDocument familyMemberInfoDocument = new FamilyMemberInfoDocument();
         familyMemberInfoDocument.setPhone(phone);
         familyMemberInfoDocument.setPatientVisits(patientVisits);
@@ -217,7 +242,6 @@ public class UserInfoController extends BaseController {
             familyMemberInfoDocument.setId(UUID.randomUUID().toString().substring(0, 32));
         }
 
-        List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
         if (familyList == null) {
             familyList = new ArrayList<>();
         }
@@ -232,7 +256,7 @@ public class UserInfoController extends BaseController {
             hasIdCard = true;
         } else {
             for (FamilyMemberInfoDocument memberInfoDocument : familyList) {
-                if (memberInfoDocument.getIdCard().equals(idCard)) {
+                if (StringUtil.isEmpty(memberInfoDocument.getDeleteStatus()) && memberInfoDocument.getIdCard().equals(idCard)) {
                     hasIdCard = true;
                 }
 
@@ -328,17 +352,15 @@ public class UserInfoController extends BaseController {
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
         List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
         if (familyList != null && familyList.size() > 0) {
-            List<FamilyMemberInfoDocument> newList = new ArrayList<>();
             for (FamilyMemberInfoDocument familyMemberInfoDocument : familyList) {
-                if (!familyMemberInfoDocument.getId().equals(memberId)) {
-                    newList.add(familyMemberInfoDocument);
-                } else {
+                if (familyMemberInfoDocument.getId().equals(memberId)) {
+                    familyMemberInfoDocument.setId(UUID.randomUUID().toString().substring(0, 32));
+                    familyMemberInfoDocument.setDeleteStatus(String.valueOf(1));
                     if (familyMemberInfoDocument.getPatientVisits().equals(String.valueOf(1))) {
                         userInfo.setPatientVisits(String.valueOf(1));
                     }
                 }
             }
-            userInfo.setFamilyMemberInfo(newList);
             userInfoServiceImpl.saveOrUpdateUserInfo(userInfo);
         }
         return new ResponseEntity<String>("", HttpStatus.OK);
@@ -347,9 +369,16 @@ public class UserInfoController extends BaseController {
     @RequestMapping(path = "/familyMembers/count", method = RequestMethod.GET)
     public ResponseEntity<Integer> getFamilyMemberCount(HttpServletRequest request) throws Exception {
         UserInfoDocument userInfo = this.getLoginUserInfoDocument(request);
-        Integer familyMemberCount = 0;
+        Integer familyMemberCount = 1;
         if (userInfo != null) {
-            familyMemberCount = userInfo.getFamilyMemberInfo().size() + 1;
+            List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
+            if (familyList != null && familyList.size() > 0) {
+                for (FamilyMemberInfoDocument familyMemberInfoDocument : familyList) {
+                    if (StringUtil.isEmpty(familyMemberInfoDocument.getDeleteStatus())) {
+                        familyMemberCount++;
+                    }
+                }
+            }
         } else {
             return new ResponseEntity<Integer>(familyMemberCount, HttpStatus.UNAUTHORIZED);
         }
