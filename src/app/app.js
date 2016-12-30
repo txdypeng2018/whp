@@ -112,6 +112,17 @@
         document.addEventListener('Properpush.openNotification', onOpenNotification, false);
         //push end
 
+        var switchContext = function() {
+          $http.get('http://172.28.235.106/isj/app/latest', {timeout: 500})
+            .success(function() {
+              $window.localStorage.serverContext = 'http://172.28.235.106/isj';
+            })
+            .error(function() {
+              $window.localStorage.serverContext = 'https://sjh.sj-hospital.org/isj';
+            });
+        };
+        document.addEventListener('resume', switchContext, false);
+
         //检查程序版本
         $properProperpush.getDeviceInfo().then(function (success) {
           cordova.getAppVersion.getVersionCode(function (versionCode) {
@@ -142,7 +153,7 @@
         }, function (error) {
           alert('error:' + error);
         });
-        
+
       });
     }
   );

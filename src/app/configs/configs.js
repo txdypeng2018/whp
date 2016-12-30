@@ -18,14 +18,6 @@
   };
 
   // Config JWT in http header and prefix of url
-  var CONTEXT = 'https://sjh.sj-hospital.org/isj';
-
-  app.run(function($http) {
-    $http.get('http://172.28.235.106/isj/app/latest', {timeout: 1000}).success(function() {
-      CONTEXT = 'http://172.28.235.106/isj';
-    });
-  });
-
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.requestIndex = 0;
     var requestIndexMinus = function() {
@@ -52,7 +44,7 @@
         }
         // Add context path of api server
         if (needContextPrefix(config.url)) {
-          config.url = CONTEXT + config.url;
+          config.url = $window.localStorage.serverContext + config.url;
         }
         return config;
       },
