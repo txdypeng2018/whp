@@ -12,12 +12,9 @@
    * @returns {boolean}
    */
   var needContextPrefix = function(url) {
-    if (url.endsWith('.html') ||                           // Activiti modeler.html 不需要服务端上下文根前缀
-        (url.endsWith('.svg') && !url.startsWith('/')) ||  // md-data-table 组件图标 url(如:navigate-next.svg) 不需要服务端上下文根前缀
-        url.startsWith('http')) {
-      return false;
-    }
-    return true;
+    return !url.endsWith('.html') &&                           // Activiti modeler.html 不需要服务端上下文根前缀
+          !(url.endsWith('.svg') && !url.startsWith('/')) &&   // md-data-table 组件图标 url(如:navigate-next.svg) 不需要服务端上下文根前缀
+          !url.startsWith('http');
   };
 
   // Config JWT in http header and prefix of url

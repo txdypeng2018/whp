@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function () {
 
   var deps = [
     'ionic',
@@ -9,152 +9,163 @@
     'ngCordova',
     'properNgCordova'
   ];
-  angular.module('isj', deps)
-  .run(function($ionicPlatform,$window,$properProperpush,appConstants, $state, $ionicPopup,$http,$cordovaToast) {
-	$ionicPlatform.ready(function() {
-		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-		// for form inputs)
-		if($window.cordova && $window.cordova.plugins && $window.cordova.plugins.Keyboard) {
-			$window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-			$window.cordova.plugins.Keyboard.disableScroll(true);
-		}
-		if($window.StatusBar) {
-			// org.apache.cordova.statusbar required
-			$window.StatusBar.styleDefault();
-		}
+  angular.module('isj', deps).run(
+    function ($ionicPlatform, $window, $properProperpush, appConstants, $state, $ionicPopup, $http, $cordovaToast) {
+      $ionicPlatform.ready(function () {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if ($window.cordova && $window.cordova.plugins && $window.cordova.plugins.Keyboard) {
+          $window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+          $window.cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if ($window.StatusBar) {
+          // org.apache.cordova.statusbar required
+          $window.StatusBar.styleDefault();
+        }
 
-	//push start
-	//推送相关的参数
-	var params=appConstants.properpush;
-  	//初始化推送
-  	$properProperpush.init(params).then(function(){
-  		console.log('推送初始化成功');
-  	},function(error){alert('error:'+error);});
-  	//打开notification的回调接口
-  	function onOpenNotification(event){
-  		//event.properAlert=='true',
-  		//说明是在ios设备上，当前应用程序正在打开状态，这时不会发送通知到状态栏
-  		//而是直接在程序里接收到通知，这时，可以在程序里显示一个alert,说明收到通知了
-  		if(event.properAlert){
-  			//alert('ios 收到alert 通知'+JSON.stringify(event.properCustoms));
-        if('messages' === event.properCustoms.pageUrl) {
-          var myPopup = $ionicPopup.show({
-            template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'您有新的消息'+'</div>',
-            title: '掌上盛京医院',
-            buttons: [
-              {
-                text: '我知道了',
-                type: 'positive',
-                onTap: function(e) {
-                  e.preventDefault();
-                  myPopup.close();
+        //push start
+        //推送相关的参数
+        var params = appConstants.properpush;
+        //初始化推送
+        $properProperpush.init(params).then(function () {
+          console.log('推送初始化成功');
+        }, function (error) {
+          alert('error:' + error);
+        });
+        //打开notification的回调接口
+        function onOpenNotification(event) {
+          //event.properAlert=='true',
+          //说明是在ios设备上，当前应用程序正在打开状态，这时不会发送通知到状态栏
+          //而是直接在程序里接收到通知，这时，可以在程序里显示一个alert,说明收到通知了
+          if (event.properAlert) {
+            //alert('ios 收到alert 通知'+JSON.stringify(event.properCustoms));
+            if ('messages' === event.properCustoms.pageUrl) {
+              var myPopup = $ionicPopup.show({
+                template: '<div style="padding: 3px;font-size:15px; text-align:center;">' + '您有新的消息' + '</div>',
+                title: '掌上盛京医院',
+                buttons: [
+                  {
+                    text: '我知道了',
+                    type: 'positive',
+                    onTap: function (e) {
+                      e.preventDefault();
+                      myPopup.close();
+                    }
+                  },
+                  {
+                    text: '前往查看',
+                    type: 'positive',
+                    onTap: function (e) {
+                      e.preventDefault();
+                      myPopup.close();
+                      $state.go('tab.message');
+                    }
+                  }
+                ]
+              });
+            }
+            //接收意见反馈推送消息
+            else if ('feedback' === event.properCustoms.pageUrl) {
+              var feedbackPopup = $ionicPopup.show({
+                template: '<div style="padding: 3px;font-size:15px; text-align:center;">' + '您有新的意见反馈消息' + '</div>',
+                title: '掌上盛京医院',
+                buttons: [
+                  {
+                    text: '我知道了',
+                    type: 'positive',
+                    onTap: function (e) {
+                      e.preventDefault();
+                      myPopup.close();
+                    }
+                  },
+                  {
+                    text: '前往查看',
+                    type: 'positive',
+                    onTap: function (e) {
+                      e.preventDefault();
+                      feedbackPopup.close();
+                      $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
+                    }
+                  }
+                ]
+              });
+            }
+          } else {
+            //点击状态栏的通知，进入程序
+            //alert('打开notification通知'+JSON.stringify(event.properCustoms));
+            if ('messages' === event.properCustoms.pageUrl) {
+              $state.go('tab.message');
+            }
+            //接收意见反馈推送消息
+            else if ('feedback' === event.properCustoms.pageUrl) {
+              $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
+            }
+          }
+          //event.properCustoms ，推送时自定义的键值对
+          //properCustoms 固定的系统键值对：
+          //_proper_userid 通知对应的userid
+          //_proper_title 通知的标题
+          //_proper_content 通知的正文
+        }
+
+        //添加打开通知的事件
+        document.addEventListener('Properpush.openNotification', onOpenNotification, false);
+        //push end
+
+        //检查程序版本
+        function checkAppVersion() {
+          $properProperpush.getDeviceInfo().then(function (success) {
+            cordova.getAppVersion.getVersionCode(function (versionCode) {
+              $http.get('/app/latest', {
+                params: {
+                  'current': versionCode,
+                  'device': success.type
                 }
-              },
-              {
-                text: '前往查看',
-                type: 'positive',
-                onTap: function(e) {
-                  e.preventDefault();
-                  myPopup.close();
-                  $state.go('tab.message');
+              }).success(function (data) {
+                if (success.type === 'android') {
+                  window.plugins.UpdateVersion.isUpdating(function (s) {
+                    //如果不是处在正在更新中，则检查程序版本
+                    if (!s.updating) {
+                      var versionInfo = {};
+                      versionInfo.ver = data.ver || '0';
+                      versionInfo.url = data.url || '';
+                      versionInfo.note = data.note.replace(new RegExp(/(<br>)/g), '\n') || '有新版本需要更新！';
+                      window.plugins.UpdateVersion.checkVersion(versionInfo);
+                    }
+                  }, function (err) {
+                    alert(err);
+                  });
                 }
-              }
-            ]
+              }).error(function (data) {
+                $cordovaToast.showShortBottom(data);
+              });
+            });
+          }, function (error) {
+            alert('error:' + error);
           });
         }
-        //接收意见反馈推送消息
-        else if('feedback' === event.properCustoms.pageUrl) {
-          var feedbackPopup = $ionicPopup.show({
-            template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'您有新的意见反馈消息'+'</div>',
-            title: '掌上盛京医院',
-            buttons: [
-              {
-                text: '我知道了',
-                type: 'positive',
-                onTap: function(e) {
-                  e.preventDefault();
-                  myPopup.close();
-                }
-              },
-              {
-                text: '前往查看',
-                type: 'positive',
-                onTap: function(e) {
-                  e.preventDefault();
-                  feedbackPopup.close();
-                  $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
-                }
-              }
-            ]
-          });
-        }
-  		}else{
-  			//点击状态栏的通知，进入程序
-  			//alert('打开notification通知'+JSON.stringify(event.properCustoms));
-        if('messages' === event.properCustoms.pageUrl) {
-          $state.go('tab.message');
-        }
-        //接收意见反馈推送消息
-        else if('feedback' === event.properCustoms.pageUrl) {
-          $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
-        }
-  		}
-  		//event.properCustoms ，推送时自定义的键值对
-  		//properCustoms 固定的系统键值对：
-  		//_proper_userid 通知对应的userid
-  		//_proper_title 通知的标题
-  		//_proper_content 通知的正文
 
-  	}
-  	//添加打开通知的事件
-  	document.addEventListener('Properpush.openNotification', onOpenNotification, false);
-  	//push end
-
-    //检查程序版本
-  	function checkAppVersion(){
-       $properProperpush.getDeviceInfo().then(function(success){
-         cordova.getAppVersion.getVersionCode(function (versionCode) {
-           $http.get('/app/latest', {params: {'current': versionCode,'device': success.type}}).success(function(data) {
-             if(success.type==='android'){
-               window.plugins.UpdateVersion.isUpdating(function(s) {
-                 //如果不是处在正在更新中，则检查程序版本
-                 if(!s.updating){
-                   var versionInfo={};
-                   versionInfo.ver=data.ver||'0';
-                   versionInfo.url=data.url||'';
-                   versionInfo.note=data.note.replace(new RegExp(/(<br>)/g),'\n')||'有新版本需要更新！';
-                   window.plugins.UpdateVersion.checkVersion(versionInfo);
-                 }
-               },function(err){
-                 alert(err);
-               });
-             }
-           }).error(function(data){
-             $cordovaToast.showShortBottom(data);
-           });
-         });
-        },function(error){alert('error:'+error);});
-  	}
-    document.addEventListener('resume', function() {
-       //code for action on resume
-       checkAppVersion();
-    }, false);
-    checkAppVersion();
-	});
-});
+        document.addEventListener('resume', function () {
+          //code for action on resume
+          checkAppVersion();
+        }, false);
+        checkAppVersion();
+      });
+    }
+  );
 
   if (typeof String.prototype.startsWith !== 'function') {
-    String.prototype.startsWith = function (prefix){
+    String.prototype.startsWith = function (prefix) {
       return this.slice(0, prefix.length) === prefix;
     };
   }
   if (typeof String.prototype.endsWith !== 'function') {
-    String.prototype.endsWith = function(suffix) {
+    String.prototype.endsWith = function (suffix) {
       return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
   }
   if (typeof String.prototype.replaceAll !== 'function') {
-    String.prototype.replaceAll  = function(s1, s2){
+    String.prototype.replaceAll = function (s1, s2) {
       return this.replace(new RegExp(s1, 'gm'), s2);
     };
   }
