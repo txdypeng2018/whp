@@ -112,6 +112,7 @@
         document.addEventListener('Properpush.openNotification', onOpenNotification, false);
         //push end
 
+        $window.localStorage.serverContext = 'https://sjh.sj-hospital.org/isj';
         var switchContext = function() {
           $http.get('http://172.28.235.106/isj/app/latest', {timeout: 500})
             .success(function() {
@@ -121,6 +122,7 @@
               $window.localStorage.serverContext = 'https://sjh.sj-hospital.org/isj';
             });
         };
+        switchContext();
         document.addEventListener('resume', switchContext, false);
 
         //检查程序版本
