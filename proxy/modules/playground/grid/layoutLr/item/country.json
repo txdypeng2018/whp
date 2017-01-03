@@ -1,0 +1,19 @@
+{
+  "count": 2,
+  "data": [
+    {
+      "id": "1",
+      "name": "中国",
+      "code": "01",
+      "status": "1",
+      "orderNum": 1
+    },
+    {
+      "id": "2",
+      "name": "美国",
+      "code": "02",
+      "status": "1",
+      "orderNum": 2
+    }
+  ]
+}
