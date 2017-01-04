@@ -119,7 +119,7 @@
                       }
                     }).error(function (data) {
                       console.debug('data', data);
-                      toastService.show('内部错误!请联系管理员!');
+                      toastService.show(data);
                     });
                   } else if(data.resultCode === '-1'){
                     console.debug('data', data);
@@ -135,7 +135,7 @@
             }
           }).error(function (data) {
               console.debug('data', data);
-              toastService.show('请求服务端数据错误!请联系管理员!');
+              toastService.show(data);
             }
           );
         } else
@@ -200,7 +200,7 @@
             }
           }).error(function (data) {
             console.debug('data', data);
-            toastService.show('请求服务端数据错误!请联系管理员!');
+            toastService.show(data);
           });
 
           //微信支付
@@ -279,6 +279,9 @@
               console.debug('data', data);
               toastService.show(data.resultMsg);
             }
+          }).error(function (data) {
+              console.debug('data', data);
+              toastService.show(data);
           });
         }
       }

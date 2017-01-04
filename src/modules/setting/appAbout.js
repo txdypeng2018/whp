@@ -8,6 +8,9 @@
 
     cordova.getAppVersion.getVersionCode(function (versionCode) {
       $scope.versionCode = versionCode;
+      $http.get('/app/versions/' + versionCode).success(function(data) {
+        $scope.description = data.note;
+      });
     });
 
     //取得客服电话
