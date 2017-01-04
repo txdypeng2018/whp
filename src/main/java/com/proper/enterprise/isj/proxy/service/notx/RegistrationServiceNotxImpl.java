@@ -1033,7 +1033,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 if (StringUtil.isEmpty(regBack.getOrderNum())) {
                     throw new Exception("挂号单中订单号字段信息为空,退费失败,挂号单号:" + regBack.getNum());
                 }
-                this.saveRegRefund(registrationId);
+                if(regBack.getRegistrationOrderReq() != null
+                        && StringUtil.isNotNull(regBack.getRegistrationOrderReq().getSerialNum())) {
+                    this.saveRegRefund(registrationId);
+                }
                 regBack = this.getRegistrationDocumentById(registrationId);
                 if (regBack.getRegistrationRefundReq() != null
                         && StringUtil.isNotEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
