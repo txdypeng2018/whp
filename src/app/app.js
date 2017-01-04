@@ -30,7 +30,7 @@
         $properProperpush.init(params).then(function () {
           console.log('推送初始化成功');
         }, function (error) {
-          alert('error:' + error);
+          console.error('error:' + error);
         });
         //打开notification的回调接口
         function onOpenNotification(event) {
@@ -145,15 +145,13 @@
                     window.plugins.UpdateVersion.checkVersion(versionInfo);
                   }
                 }, function (err) {
-                  alert(err);
+                  console.error(err);
                 });
               }
-            }).error(function (data) {
-              $cordovaToast.showShortBottom(data);
             });
           });
         }, function (error) {
-          alert('error:' + error);
+          console.error('error:' + error);
         });
 
       });
