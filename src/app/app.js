@@ -10,7 +10,7 @@
     'properNgCordova'
   ];
   angular.module('isj', deps).run(
-    function ($ionicPlatform, $window, $properProperpush, appConstants, $state, $ionicPopup, $http, $cordovaToast) {
+    function ($ionicPlatform, $window, $properProperpush, appConstants, $state, $ionicPopup, $http) {
       $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
