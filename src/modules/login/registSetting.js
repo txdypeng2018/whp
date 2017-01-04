@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registSettingCtrl = function($scope, $ionicHistory, $stateParams, $http, toastService, $state, userService) {
+  var registSettingCtrl = function($scope, $ionicHistory, $stateParams, $http, toastService, $state, userService, utilsService) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.isResend = false;
       $scope.isSubmit = false;
@@ -43,8 +43,6 @@
       $ionicHistory.goBack(-2);
     };
 
-
-
     //重发验证码
     $scope.resendCode = function() {
       var param = {
@@ -79,6 +77,8 @@
         toastService.show('密码不能为空');
         return false;
       }
+      //姓名有特殊字符时进行替换
+      $scope.input.name = utilsService.specialCodeReplace($scope.input.name);
       if ($scope.input.name === '') {
         toastService.show('姓名不能为空');
         return false;

@@ -10,12 +10,7 @@
     <div class="version">
       V{{ versionNumber }}({{ versionCode }})
     </div>
-    <ul class="list">
-      <li class="item item-icon-right" ng-click="itemRouter('settingVersionDescription')">
-        版本说明
-        <i class="icon ion-ios-arrow-right icon-right"></i>
-      </li>
-    </ul>
+    <div ng-bind-html="description" style="margin: 25px;"></div>
     <!-- <div class="service-phone">
       客服电话：<span class="positive">{{servicePhone}}</span>
     </div> -->

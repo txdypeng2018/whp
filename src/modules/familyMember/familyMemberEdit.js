@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var familyMemberEditCtrl = function($scope, $http, $stateParams, $ionicPopup, $ionicHistory, toastService) {
+  var familyMemberEditCtrl = function($scope, $http, $stateParams, $ionicPopup, $ionicHistory, toastService, utilsService) {
     //性别类别
     $http.get('/dataBase/sexTypes').success(function(data) {
       $scope.sexTypes = data;
@@ -112,6 +112,8 @@
 
     //数据验证
     var dataValidation = function() {
+      //姓名有特殊字符时进行替换
+      $scope.member.name = utilsService.specialCodeReplace($scope.member.name);
       if ($scope.member.name === '') {
         toastService.show('姓名不能为空');
         return false;
