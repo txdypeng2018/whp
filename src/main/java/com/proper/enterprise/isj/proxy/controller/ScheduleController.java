@@ -174,7 +174,9 @@ public class ScheduleController extends BaseController {
                 return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.USER_APP_TIME_ERR,
                         HttpStatus.BAD_REQUEST);
             }
-            timeList = scheduleService.findDoctorTimeRegList(doctorId, DateUtil.toDate(date));
+            if(StringUtil.isNotNull(date)) {
+                timeList = scheduleService.findDoctorTimeRegList(doctorId, DateUtil.toDate(date));
+            }
         } catch (UnmarshallingFailureException e) {
             LOGGER.debug("解析HIS接口返回参数错误", e);
             return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
