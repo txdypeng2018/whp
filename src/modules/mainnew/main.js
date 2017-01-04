@@ -63,9 +63,51 @@
     };
 
     //取得用户的功能树
-    $http.get('/main/resources').success(function(data) {
-      $scope.resources = data;
+    $http.get('/auth/menus').success(function(data) {
+      $scope.resources = createTreeModel(data);
     });
+
+    var createTreeModel = function(data) {
+      var nodes = [];
+      // 前端使用的模型跟后端返回的数据有差异,先进行一下转换
+      // 可考虑重构前端模型以消除此段转换
+      angular.forEach(data, function(node) {
+        nodes.push({
+          code: node.id,
+          name: node.name,
+          isLeaf: '1',
+          icon: node.icon,
+          url: node.route,
+          parentId: node.parentId,
+          orderNum: node.sequenceNumber
+        });
+      });
+
+      var treeModel = [];
+      // Map<nodeId, nodeObject>
+      var treeMap = [];
+
+      angular.forEach(nodes, function(node) {
+        treeMap[node.code] = node;
+      });
+
+      angular.forEach(nodes, function(node) {
+        var parentNode = treeMap[node.parentId];
+        if(parentNode) {
+          parentNode.isLeaf = '0';
+          parentNode.treeMenu = parentNode.treeMenu || [];
+          node.parent = parentNode;
+          node.level = parentNode.level + 1;
+          parentNode.treeMenu.push(node);
+        } else {
+          node.level = 1;
+          treeModel.push(node);
+        }
+      });
+
+      console.debug(treeModel);
+      return treeModel;
+    };
 
     //从浏览器本地存储取得宽屏下上次左侧功能栏设置的显示方式
     var isSidebarDisplayMini = $window.localStorage.isSidebarDisplayMini;
