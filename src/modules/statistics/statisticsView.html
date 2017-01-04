@@ -1,6 +1,6 @@
 <div layout="column" class="statistics-body">
     <md-card class="chart-piece pea-card pea-grid" style="margin-top: 15px;">
-    <p style="font-size: 13px;color:#999;margin-top: 0;margin-left: 23px;">前一日数据统计</p>
+    <p style="font-size: 19px;color:rgba(0, 0, 0, 0.7);;margin-top: 0;margin-left: 5px;font-weight: bold;">前一日数据统计</p>
     <div class="statistics-today" style="color: #333;">
         <div class="statistics-today-content">
             <div class="today-content-font">
@@ -18,22 +18,34 @@
                 <p class="p-border-left-blue"><span>反馈数量</span> <b class="today-font-bold">{{nowFeedbackCountdata}}</b></p>
             </div>
             <div class="today-content-font">
-                <p class="p-border-left-green"><span>微信支付金额</span> <b class="today-font-bold">{{nowWxpayAmoutdata}}</b></p>
-                <p class="p-border-left-green"><span>微信退费金额</span> <b class="today-font-bold">{{nowWxpayRAmoutdata}}</b></p>
+                <p class="p-border-left-green"><span>微信支付金额</span> <b class="today-font-bold">{{nowWxpayAmoutdata}} 元</b></p>
+                <p class="p-border-left-green"><span>微信退费金额</span> <b class="today-font-bold">{{nowWxpayRAmoutdata}} 元</b></p>
             </div>
         </div>
         <div class="statistics-today-content">
             <div class="today-content-font">
-                <p class="p-border-left-orange"><span>支付宝支付金额</span> <b class="today-font-bold">{{nowAlipayAmoutdata}}</b></p>
-                <p class="p-border-left-orange"><span>支付宝退费金额</span> <b class="today-font-bold">{{nowAlipayRAmoutdata}}</b></p>
+                <p class="p-border-left-orange"><span>支付宝支付金额</span> <b class="today-font-bold">{{nowAlipayAmoutdata}} 元</b></p>
+                <p class="p-border-left-orange"><span>支付宝退费金额</span> <b class="today-font-bold">{{nowAlipayRAmoutdata}} 元</b></p>
             </div>
             <div class="today-content-font">
-                <p class="p-border-left-red"><span>一网通支付金额</span> <b class="today-font-bold">{{nowCmbpayAmoutdata}}</b></p>
-                <p class="p-border-left-red"><span>一网通退费金额</span> <b class="today-font-bold">{{nowCmbpayRAmoutdata}}</b></p>
+                <p class="p-border-left-red"><span>一网通支付金额</span> <b class="today-font-bold">{{nowCmbpayAmoutdata}} 元</b></p>
+                <p class="p-border-left-red"><span>一网通退费金额</span> <b class="today-font-bold">{{nowCmbpayRAmoutdata}} 元</b></p>
             </div>
         </div>
         <div style="clear: both;"></div>
     </div>
+    <div>
+        <div class="today-content-font">
+            <div class="statistics-today-content">
+                <div class="today-content-font">
+                    <p style="margin-left: 23px;"><span>总人数</span> <b class="today-font-bold">{{sumPeopleNum}}</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </md-card>
+    <md-card class="chart-piece pea-card pea-grid">
+        <div e-chart e-data="sumCount" style="height: 300px;"></div>
     </md-card>
     <md-card class="chart-piece pea-card pea-grid">
         <div e-chart e-data="reg" style="height: 300px;"></div>

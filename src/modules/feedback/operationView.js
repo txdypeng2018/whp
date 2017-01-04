@@ -40,15 +40,15 @@
 
                     var userdataToJson = [];
                     $http.get('/msc/service_user_opinion',{params: {query:'{ "_id":ObjectId("'+ useroID +'")}'}}).success(function(data) {
-                        for(var n = 0; n < data.length; n++){
-                            userdataToJson.push(JSON.parse(data[n]));
+                        for(var n = 0; n < data.data.length; n++){
+                            userdataToJson.push(JSON.parse(data.data[n]));
                         }
                         $scope.opinion = userdataToJson[0];
 
                         var historyData=[];
                         $http.get('/msc/service_user_opinion',{params: {query:'{ "userId":"'+ userID +'","opinionTime":{$lte: "'+ userdataToJson[0].opinionTime +'"}}',sort:'{opinionTime:1}'}}).success(function(data) {
-                            for(var n = 0; n < data.length; n++){
-                                historyData.push(JSON.parse(data[n]));
+                            for(var n = 0; n < data.data.length; n++){
+                                historyData.push(JSON.parse(data.data[n]));
                             }
                             $scope.opinionHistory = historyData;
                         });
@@ -98,6 +98,7 @@
             });
         };
 
+        //重置
         $scope.operationViewReset = function(){
             $scope.filterName = undefined;
             $scope.filterTel = undefined;
@@ -108,20 +109,29 @@
             var dataToJson = [];
             $scope.feedBackDatasAll = [];
             $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
-                for(var n = 0; n < data.length; n++){
-                    dataToJson.push(JSON.parse(data[n]));
+                for(var n = 0; n < data.data.length; n++){
+                    dataToJson.push(JSON.parse(data.data[n]));
                 }
-                dataLength = dataToJson.length/pageSize;
-                $scope.results = dataToJson.slice(0,page*pageSize);
-                for (var i = 0; i < $scope.results.length; i++) {
-                    $scope.feedBackDatasAll.push($scope.results[i]);
+                for (var i = 0; i < dataToJson.length; i++) {
+                    $scope.feedBackDatasAll.push(dataToJson[i]);
                 }
+                //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
+                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
+                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
+                            $scope.feedBackDatasAll.splice(j,1);
+                            j--;
+                        }
+                    }
+                }
+                $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,20);
             });
         };
-        $scope.operationViewSearch = function(){
+        //返回要过滤的条件
+        var filterQuery = function () {
             var myQueryArray = [];
             if(!angular.isUndefined($scope.filterName) && $scope.filterName !== ''){
-                myQueryArray.push('"userName" :"'+ $scope.filterName + '"');
+                myQueryArray.push('"userName" : /'+ $scope.filterName + '/');
             }
             if(!angular.isUndefined($scope.filterTel) && $scope.filterTel !== ''){
                 myQueryArray.push('"userTel" :"'+ $scope.filterTel + '"');
@@ -136,20 +146,30 @@
                 myQueryArray.push('"statusCode" :"'+ $scope.selectedopStatusCode + '"');
             }
             var myQuery = myQueryArray.join(',');
-
+            return myQuery;
+        };
+        //查询
+        $scope.operationViewSearch = function(){
             var dataToJson = [];
             $scope.feedBackDatasAll = [];
-            $http.get('/msc/service_user_opinion',{params: {query:'{' + myQuery + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
-                for(var n = 0; n < data.length; n++){
-                    dataToJson.push(JSON.parse(data[n]));
+            $http.get('/msc/service_user_opinion',{params: {query:'{' + filterQuery() + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
+                for(var n = 0; n < data.data.length; n++){
+                    dataToJson.push(JSON.parse(data.data[n]));
                 }
-                dataLength = dataToJson.length/pageSize;
-                $scope.results = dataToJson.slice(0,page*pageSize);
-                for (var i = 0; i < $scope.results.length; i++) {
-                    $scope.feedBackDatasAll.push($scope.results[i]);
+                for (var i = 0; i < dataToJson.length; i++) {
+                    $scope.feedBackDatasAll.push(dataToJson[i]);
                 }
+                //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
+                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
+                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
+                            $scope.feedBackDatasAll.splice(j,1);
+                            j--;
+                        }
+                    }
+                }
+                $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,pageSize);
             });
-
         };
 
         $scope.feedBackDatasAll = [];
@@ -157,13 +177,23 @@
         var pageSize = 20;
         var dataLength = 0;
         var dataToJson = [];
-        $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}',limit:'20'}}).success(function(data) {
-            for(var n = 0; n < data.length; n++){
-                dataToJson.push(JSON.parse(data[n]));
+        $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
+            for(var n = 0; n < data.data.length; n++){
+                dataToJson.push(JSON.parse(data.data[n]));
             }
             for (var i = 0; i < dataToJson.length; i++) {
                 $scope.feedBackDatasAll.push(dataToJson[i]);
             }
+            //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
+            for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
+                for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
+                    if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
+                        $scope.feedBackDatasAll.splice(j,1);
+                        j--;
+                    }
+                }
+            }
+            $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,page*pageSize);
         });
 
         $scope.showLoadMore = function(){
@@ -172,25 +202,32 @@
         $scope.text = '点击加载';
         $scope.loadMoreData = function(){
             $scope.text = '加载中，请稍后···';
-
-            $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
-                dataLength = data.length/pageSize;
+            var dataToJson = [];
+            $http.get('/msc/service_user_opinion',{params: {query:'{' + filterQuery() + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
+                for(var n = 0; n < data.data.length; n++){
+                    dataToJson.push(JSON.parse(data.data[n]));
+                }
+                $scope.feedBackDatasAll = [];
+                for (var i = 0; i < dataToJson.length; i++) {
+                    $scope.feedBackDatasAll.push(dataToJson[i]);
+                }
+                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
+                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
+                            $scope.feedBackDatasAll.splice(j,1);
+                            j--;
+                        }
+                    }
+                }
+                dataLength = $scope.feedBackDatasAll.length/pageSize;
+                page++;
                 if(page<dataLength){
-                    page++;
-                    var results = data.slice((page-1)*pageSize,page*pageSize);
-                    var resultsToJson = [];
-                    for(var n = 0; n < results.length; n++){
-                        resultsToJson.push(JSON.parse(results[n]));
-                    }
-                    for (var i = 0; i < resultsToJson.length; i++) {
-                        $scope.feedBackDatasAll.push(resultsToJson[i]);
-                    }
+                    $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,page*pageSize);
                     $scope.text = '点击加载更多';
                 }else{
                     $scope.text = '全部数据加载完成';
                 }
             });
-
         };
         $scope.$on('waterfall:loadMore',function(){
             $scope.loadMoreData();

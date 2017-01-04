@@ -39,15 +39,6 @@
       </div>
       <div layout-gt-sm="row">
         <md-input-container class="md-block" flex-gt-sm>
-          <label style="margin-bottom: 32px;font-size: 12px;color: rgba(0,0,0,0.54);">用户历史意见</label>
-          <div style="border-bottom: 1px solid rgba(0,0,0,0.12);padding: 1px 0 5px 3px;">
-            <div ng-repeat="op in opinionHistory">{{op.opinion}}</div>
-          </div>
-
-        </md-input-container>
-      </div>
-      <div layout-gt-sm="row">
-        <md-input-container class="md-block" flex-gt-sm>
           <label>反馈意见</label>
           <textarea name="feedback" ng-model="opinion.feedback" required></textarea>
         </md-input-container>

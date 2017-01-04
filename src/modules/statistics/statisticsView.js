@@ -51,10 +51,146 @@
         var cmbRAmoutdata = [];
         var xlength = 0;
 
+        //取得要计算人数总和的日期
+        var timeForCount = [];
+        var timeYear = [];
+        var timeMonth = [];
+        for(var i = 0; i < 7; i++){
+            var nowMonth = new Date().getMonth()+1;
+            var nowYear = new Date().getFullYear();
+            if(nowMonth - i <= 0){
+                nowYear = nowYear - 1;
+                nowMonth = 12 - (i - nowMonth);
+            }else{
+                nowMonth = nowMonth-i;
+            }
+            timeYear[i] = nowYear;
+            timeMonth[i] = nowMonth;
+            timeForCount[i] = nowYear + '-' + nowMonth;
+        }
+        var timeForCountNext = [];
+        for(var j = 0; j < 7; j++){
+           var myYear = timeYear[j];
+           var myMonth = timeMonth[j];
+           if(myMonth + 1 > 12){
+               myMonth = 1;
+               myYear = myYear + 1;
+           }else{
+               myMonth = myMonth + 1;
+           }
+            timeForCountNext[j] = myYear + '-' + myMonth;
+        }
+        var sumForCount = {};
+
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[0] +'-01",$lt:"'+ timeForCountNext[0] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[0]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[0]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[1] +'-01",$lt:"'+ timeForCountNext[1] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[1]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[1]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[2] +'-01",$lt:"'+ timeForCountNext[2] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[2]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[2]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[3] +'-01",$lt:"'+ timeForCountNext[3] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[3]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[3]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[4] +'-01",$lt:"'+ timeForCountNext[4] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[4]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[4]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[5] +'-01",$lt:"'+ timeForCountNext[5] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[5]] = data.total;
+        }).error(function(){
+            sumForCount[timeForCount[5]] = 0;
+        });
+        $http.get('/msc/statistics_count',{params: {query:'{"statisticsDate":{$gte:"'+ timeForCount[6] +'-01",$lt:"'+ timeForCountNext[6] +'-01"}}'}}).success(function(data){
+            sumForCount[timeForCount[6]] = data.total;
+            $scope.sumCount = options2(timeForCount,sumForCount);
+        }).error(function(){
+            sumForCount[timeForCount[6]] = 0;
+            $scope.sumCount = options2(timeForCount,sumForCount);
+        });
+
+        var options2 = function(timeForCount,sumForCount) {
+            return {
+                title: {
+                    text: '每月人数统计'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {
+                            readOnly: false,
+                            optionToContent: function () {
+                                var table = '<div style="overflow-y: scroll;height: 220px;"><table style="width:100%;text-align:center;color:#333;"><tbody><tr>' + '<td>时间</td>' + '<td>人数</td>' + '</tr>';
+                                for (var i = 0; i < timeForCount.length; i++) {
+                                    table += '<tr>' + '<td>' + timeForCount[i] + '</td>' + '<td>' + sumForCount[timeForCount[i]] + '</td>' + '</tr>';
+                                }
+                                table += '</tbody></table></div>';
+                                return table;
+                            }
+                        },
+                        restore: {}
+                    }
+                },
+                xAxis: [
+                    {
+                        name: '日期',
+                        type: 'category',
+                        boundaryGap: true,
+                        data: (function () {
+                            var res = timeForCount;
+                            return res.reverse();
+                        })()
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '人数',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: (function () {
+                            var res = [];
+                            for (var i = 0; i < timeForCount.length; i++) {
+                                res[i] = sumForCount[timeForCount[i]];
+                            }
+                            return res;
+                        })()
+                    }
+                ]
+            };
+        };
         $scope.statisticsDatas = [];
         $http.get('/msc/statistics_count',{params: {query:'{}',sort:'{statisticsDate:-1}'}}).success(function(data){
-            for(var n = 0; n < data.length; n++){
-                $scope.statisticsDatas.push(JSON.parse(data[n]));
+            $scope.sumPeopleNum = data.total;
+            for(var n = 0; n < data.data.length; n++){
+                $scope.statisticsDatas.push(JSON.parse(data.data[n]));
             }
             timeDataLength = $scope.statisticsDatas.length;
             if($scope.statisticsDatas.length < 8){
@@ -63,7 +199,7 @@
                 xlength = 7;
             }
 
-            for(var m = 0; m < data.length; m++){
+            for(var m = 0; m < data.data.length; m++){
                 for(var x in comJson){
                     if(angular.isUndefined($scope.statisticsDatas[m][x]) || isNaN($scope.statisticsDatas[m][x])){
                         $scope.statisticsDatas[m][x] = 0;
