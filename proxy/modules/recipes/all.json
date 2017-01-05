@@ -1,0 +1,100 @@
+[
+  {
+    "outpatientNum": "27301654",
+    "outpatientDate": "2016年09月01日",
+    "recipes": [
+      {
+        "recipeNum": "101662981",
+        "items": [
+          {
+            "name": "肯特令散",
+            "amount": "1.20",
+            "number": 1
+          },
+          {
+            "name": "红霉素",
+            "amount": "12.20",
+            "number": 2
+          }
+        ],
+        "dept": "门诊药房",
+        "location": "1号楼1楼",
+        "total": "25.60",
+        "statusCode": "0",
+        "status": "未支付"
+      },
+      {
+        "recipeNum": "101662981",
+        "items": [
+          {
+            "name": "血常规",
+            "amount": "32.00",
+            "number": 1
+          }
+        ],
+        "dept": "检验科",
+        "location": "",
+        "total": "32.00",
+        "statusCode": "0",
+        "status": "未支付"
+      },
+      {
+        "recipeNum": "101662983",
+        "items": [
+          {
+            "name": "胸透",
+            "amount": "109.00",
+            "number": 1
+          }
+        ],
+        "dept": "放射科",
+        "location": "",
+        "total": "109.00",
+        "statusCode": "1",
+        "status": "已支付"
+      }
+    ]
+  },
+  {
+    "outpatientNum": "27301655",
+    "outpatientDate": "2016年09月01日",
+    "recipes": [
+      {
+        "recipeNum": "101662989",
+        "items": [
+          {
+            "name": "血常规",
+            "amount": "32.00",
+            "number": 1
+          }
+        ],
+        "dept": "检验科",
+        "location": "",
+        "total": "32.00",
+        "statusCode": "0",
+        "status": "未付款"
+      }
+    ]
+  },
+  {
+    "outpatientNum": "27301653",
+    "outpatientDate": "2016年08月30日",
+    "recipes": [
+      {
+        "recipeNum": "101662980",
+        "items": [
+          {
+            "name": "血常规",
+            "amount": "32.00",
+            "number": 1
+          }
+        ],
+        "dept": "检验科",
+        "location": "",
+        "total": "32.00",
+        "statusCode": "6",
+        "status": "已退款"
+      }
+    ]
+  }
+]
