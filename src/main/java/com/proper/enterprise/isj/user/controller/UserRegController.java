@@ -193,8 +193,7 @@ public class UserRegController extends BaseController {
                     userInfo.setSex(CenterFunctionUtils.getSexMap().get(userInfo.getSexCode()));
                     try {
                         userInfoServiceImpl.saveUserAndUserInfo(user, userInfo);
-                        user = (UserEntity) userService.getByUsername(phone);
-                        resultMsg = userInfoServiceImpl.userLogin(user);
+                        resultMsg = userInfoServiceImpl.getToken(phone);
                         tempCache.evict("verificationcode_" + phone);
                     } catch (Exception e) {
                         LOGGER.debug("注册用户出现异常", e);
@@ -331,8 +330,7 @@ public class UserRegController extends BaseController {
         }
 
         try {
-            User user = userService.getByUsername(phone);
-            return responseOfPost(userInfoServiceImpl.userLogin(user));
+            return responseOfPost(userInfoServiceImpl.getToken(phone));
         } catch (Exception e) {
             throw new RuntimeException(CenterFunctionUtils.LOGIN_ERROR);
         }

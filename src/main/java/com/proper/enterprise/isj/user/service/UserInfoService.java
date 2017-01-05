@@ -2,8 +2,9 @@ package com.proper.enterprise.isj.user.service;
 
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
-import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
+
+import java.io.IOException;
 
 /**
  * Created by think on 2016/8/15 0015. 用户扩展信息接口
@@ -25,14 +26,13 @@ public interface UserInfoService {
     UserInfoDocument saveUserAndUserInfo(UserEntity user, UserInfoDocument userInfo) throws Exception;
 
     /**
-     * 用户登录
+     * 根据用户名获得用户 token
      * 
-     * @param user
-     *            用户
-     * @return 成功后产生的token
-     * @throws Exception
+     * @param  username 用户名
+     * @return token
+     * @throws IOException
      */
-    String userLogin(User user) throws Exception;
+    String getToken(String username) throws IOException;
 
     /**
      * 根据用户Id查询信息
