@@ -1,0 +1,3 @@
+INSERT INTO pep_auth_users (id, create_user_id, create_time, last_modify_user_id, last_modify_time, username, password, superuser, pep_dtype) VALUES ('isj-sysadmin', 'isj', '2015-08-18 09:38:00', 'isj', '2015-08-18 09:38:00', 'isj', '453098036b3e8d9cf37ebed71362d465302fe632a1795b82efb6b587166c098b', 'Y', 'UserEntity');
+INSERT INTO pep_auth_users (id, create_user_id, create_time, last_modify_user_id, last_modify_time, username, password, superuser, pep_dtype) VALUES ('isj-hinex', 'isj', '2015-08-18 09:38:00', 'isj', '2015-08-18 09:38:00', 'hinex', '453098036b3e8d9cf37ebed71362d465302fe632a1795b82efb6b587166c098b', 'N', 'UserEntity');
+COMMIT;

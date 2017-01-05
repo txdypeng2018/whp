@@ -1,21 +1,8 @@
 package com.proper.enterprise.isj.user.service.impl.notx;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.rule.entity.RuleEntity;
 import com.proper.enterprise.isj.rule.repository.RuleRepository;
-import com.proper.enterprise.platform.core.utils.SpELParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.expression.ExpressionException;
-import org.springframework.stereotype.Service;
-
-import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
@@ -38,7 +25,20 @@ import com.proper.enterprise.platform.auth.jwt.model.JWTHeader;
 import com.proper.enterprise.platform.auth.jwt.model.impl.JWTPayloadImpl;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.SpELParser;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.expression.ExpressionException;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by think on 2016/9/16 0016.
@@ -108,14 +108,17 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
     }
 
     @Override
-    public String userLogin(User user) throws Exception {
+    public String getToken(String username) throws IOException {
+        User user = userService.getByUsername(username);
         JWTHeader header = new JWTHeader();
         header.setId(user.getId());
         header.setName(user.getUsername());
+        // APP user have no role, should clear token when login on another device
+        if (user.getRoles().isEmpty()) {
+            jwtService.clearToken(header);
+        }
         JWTPayloadImpl payload = new JWTPayloadImpl();
-        jwtService.clearToken(header);
-        String token = jwtService.generateToken(header, payload);
-        return token;
+        return jwtService.generateToken(header, payload);
     }
 
     @Override

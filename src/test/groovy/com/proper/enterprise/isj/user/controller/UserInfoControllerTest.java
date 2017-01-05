@@ -1,16 +1,5 @@
 package com.proper.enterprise.isj.user.controller;
 
-import java.util.*;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MvcResult;
-
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.repository.UserInfoRepository;
@@ -22,6 +11,16 @@ import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.test.AbstractTest;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.*;
 
 /**
  * Created by think on 2016/8/15 0015.
@@ -48,7 +47,7 @@ public class UserInfoControllerTest extends AbstractTest {
     public void testGetUserInfoByToken() {
         try {
             User user = userInfoPublicServiceTest.saveUser();
-            String token = userInfoService.userLogin(user);
+            String token = userInfoService.getToken(user.getUsername());
             mockRequest.addHeader("Authorization", token);
             MvcResult result = get("/user/userInfo", HttpStatus.OK);
             LOGGER.debug(result.getResponse().getContentAsString());

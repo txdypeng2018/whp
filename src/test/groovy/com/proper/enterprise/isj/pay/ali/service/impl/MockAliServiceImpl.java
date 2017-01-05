@@ -29,7 +29,7 @@ public class MockAliServiceImpl extends AliServiceImpl implements AliService {
         order.setOrderStatus("2");
         repository.save(order);
         // avoid async task quickly end
-        Thread.sleep(100);
+        Thread.sleep(200);
         return true;
     }
 
