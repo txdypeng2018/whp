@@ -1,6 +1,6 @@
 apply from: "$rootDir/configs/dependencies.gradle"
 
-versions.pep = '0.1.1-SNAPSHOT'
+versions.pep = '0.2.0-SNAPSHOT'
 
 libraries.groovy_xml = "org.codehaus.groovy:groovy-xml:${versions.groovy}"
 libraries.jsoup = 'org.jsoup:jsoup:1.9.2'

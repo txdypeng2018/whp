@@ -22,7 +22,7 @@ class MockWeixinServiceImpl extends WeixinServiceImpl implements WeixinService {
         order.setOrderStatus("2");
         repository.save(order);
         // avoid async task quickly end
-        Thread.sleep(200);
+        Thread.sleep(300);
         return true;
     }
 
