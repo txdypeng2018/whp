@@ -11,11 +11,12 @@ import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.user.utils.IdcardUtils;
 import com.proper.enterprise.isj.user.utils.MobileNoUtils;
 import com.proper.enterprise.platform.api.auth.model.User;
+import com.proper.enterprise.platform.api.auth.service.AuthcService;
 import com.proper.enterprise.platform.api.auth.service.PasswordEncryptService;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
 import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
-import com.proper.enterprise.platform.auth.jwt.authc.AuthcService;
+import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
@@ -67,6 +68,9 @@ public class UserRegController extends BaseController {
 
     @Autowired
     BaseInfoRepository baseRepo;
+
+    @Autowired
+    private JWTAuthcService jwtAuthcService;
 
     /**
      * 发送验证码
@@ -193,7 +197,7 @@ public class UserRegController extends BaseController {
                     userInfo.setSex(CenterFunctionUtils.getSexMap().get(userInfo.getSexCode()));
                     try {
                         userInfoServiceImpl.saveUserAndUserInfo(user, userInfo);
-                        resultMsg = userInfoServiceImpl.getToken(phone);
+                        resultMsg = jwtAuthcService.getUserToken(phone);
                         tempCache.evict("verificationcode_" + phone);
                     } catch (Exception e) {
                         LOGGER.debug("注册用户出现异常", e);
@@ -330,8 +334,9 @@ public class UserRegController extends BaseController {
         }
 
         try {
-            return responseOfPost(userInfoServiceImpl.getToken(phone));
+            return responseOfPost(jwtAuthcService.getUserToken(phone));
         } catch (Exception e) {
+            LOGGER.error("Login ERROR!", e);
             throw new RuntimeException(CenterFunctionUtils.LOGIN_ERROR);
         }
     }
