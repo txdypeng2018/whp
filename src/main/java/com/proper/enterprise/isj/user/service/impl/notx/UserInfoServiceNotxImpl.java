@@ -21,8 +21,6 @@ import com.proper.enterprise.isj.webservices.model.res.ResModel;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
-import com.proper.enterprise.platform.auth.jwt.model.JWTHeader;
-import com.proper.enterprise.platform.auth.jwt.model.impl.JWTPayloadImpl;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.SpELParser;
@@ -34,7 +32,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -105,20 +102,6 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
         }
 
         return userInfo;
-    }
-
-    @Override
-    public String getToken(String username) throws IOException {
-        User user = userService.getByUsername(username);
-        JWTHeader header = new JWTHeader();
-        header.setId(user.getId());
-        header.setName(user.getUsername());
-        // APP user have no role, should clear token when login on another device
-        if (user.getRoles().isEmpty()) {
-            jwtService.clearToken(header);
-        }
-        JWTPayloadImpl payload = new JWTPayloadImpl();
-        return jwtService.generateToken(header, payload);
     }
 
     @Override

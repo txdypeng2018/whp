@@ -4,10 +4,10 @@ import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.repository.UserInfoRepository;
 import com.proper.enterprise.isj.user.service.UserInfoPublicServiceTest;
-import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.service.impl.custom.UserInfoWebServiceClientCustom;
 import com.proper.enterprise.isj.user.service.impl.notx.UserInfoServiceNotxImpl;
 import com.proper.enterprise.platform.api.auth.model.User;
+import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.test.AbstractTest;
@@ -32,7 +32,7 @@ public class UserInfoControllerTest extends AbstractTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoControllerTest.class);
 
     @Autowired
-    UserInfoService userInfoService;
+    JWTAuthcService jwtAuthcService;
 
     @Autowired
     UserInfoPublicServiceTest userInfoPublicServiceTest;
@@ -47,7 +47,7 @@ public class UserInfoControllerTest extends AbstractTest {
     public void testGetUserInfoByToken() {
         try {
             User user = userInfoPublicServiceTest.saveUser();
-            String token = userInfoService.getToken(user.getUsername());
+            String token = jwtAuthcService.getUserToken(user.getUsername());
             mockRequest.addHeader("Authorization", token);
             MvcResult result = get("/user/userInfo", HttpStatus.OK);
             LOGGER.debug(result.getResponse().getContentAsString());
