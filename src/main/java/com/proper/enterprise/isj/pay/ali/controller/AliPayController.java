@@ -206,23 +206,21 @@ public class AliPayController extends BaseController {
         String outTradeNo = request.getParameter("out_trade_no");
         // 交易状态
         String tradeStatus = request.getParameter("trade_status");
-        String dealType = "";
+        // 退款状态
+        String refundStatus = request.getParameter("refund_status");
 
         // 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
         if (aliService.verify(params) && StringUtil.isNotNull(outTradeNo)) {// 验证成功
             // 取得交易状态
-            if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_FINISHED)
-                    || tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_SUCCESS)) {
-                dealType = "pay";
-            } else if (tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_CLOSED) && request
-                    .getParameter("refund_status").equals(AliConstants.ALI_PAY_NOTICE_REFUND_STATUS_SUCCESS)) {
-                dealType = "refund";
-            }
-            if (StringUtil.isNotNull(dealType)) {
-                dealPayNotice2BusinessTask.run(params, dealType);
+            if (StringUtil.isNull(refundStatus)
+                    && tradeStatus.equals(AliConstants.ALI_PAY_NOTICE_TARDESTATUS_TRADE_SUCCESS)) {
+                LOGGER.debug("支付宝异步通知业务相关Notice,新起线程进行业务处理");
+                dealPayNotice2BusinessTask.run(params, "pay");
+                ret = true;
+            } else {
+                LOGGER.debug("支付宝异步通知业务无关Notice,直接返回SUCCESS。trade_status:{},refund_status:{}", tradeStatus, refundStatus);
                 ret = true;
             }
-            // 退款异步通知结果
         }
 
         return responseOfPost(ret ? "SUCCESS" : "FAIL");
