@@ -1008,10 +1008,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // 交易日期
                 queryRefundInfo.setDate(cmbInfo.getDate());
                 // 退款流水号
-                StringBuilder sb = new StringBuilder();
-                refundNo = cmbInfo.getBillNo().concat(dfCmb.format(tempIndex));
-                sb.append(cmbInfo.getDate()).append(refundNo);
-                queryRefundInfo.setRefundNo(sb.toString());
+                refundNo = cmbInfo.getDate().concat(cmbInfo.getBillNo()).concat(dfCmb.format(tempIndex));
+                queryRefundInfo.setRefundNo(refundNo);
                 QueryRefundRes refundQuery = cmbService.queryRefundResult(queryRefundInfo);
                 if (refundQuery != null) {
                     // 如果查询有该订单的退款信息
