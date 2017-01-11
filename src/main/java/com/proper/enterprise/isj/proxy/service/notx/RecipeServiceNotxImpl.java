@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.service.notx;
 
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.remoting.RemoteAccessException;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.exception.HisLinkException;
@@ -348,7 +350,16 @@ public class RecipeServiceNotxImpl implements RecipeService {
 
     public Order updateRegistrationAndOrder(Order order, PayOrderReq payOrderReq, RecipeOrderDocument recipeOrder,
             String channelId) throws Exception {
-        ResModel<PayOrder> payOrderResModel = webServicesClient.payOrder(payOrderReq);
+        ResModel<PayOrder> payOrderResModel = null;
+        try {
+            payOrderResModel = webServicesClient.payOrder(payOrderReq);
+        } catch (InvocationTargetException ite) {
+            if(ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
+                LOGGER.debug("缴费网络连接异常", ite);
+                return null;
+            }
+            throw ite;
+        }
         if (payOrderResModel == null) {
             LOGGER.debug("诊间缴费返回信息解析失败,不能确定缴费是否成功");
             RecipeOrderHisDocument payHis = new RecipeOrderHisDocument();
