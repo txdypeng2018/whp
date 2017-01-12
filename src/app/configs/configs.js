@@ -63,8 +63,9 @@
     return isNeed;
   };
 
-  // Config JWT in http header and prefix of url
   var CONTEXT = './api';
+  //var CONTEXT = location.protocol + '//' + location.host + '/isj';
+  // Config JWT in http header and prefix of url
   app.factory('authInterceptor', function($q, $window, $rootScope) {
     return {
       request: function(config) {
