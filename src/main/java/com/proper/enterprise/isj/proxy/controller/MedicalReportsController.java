@@ -88,16 +88,20 @@ public class MedicalReportsController extends BaseController {
                             basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
                         }
                     }
-                    // 检验报告
-                    if("1".equals(category)) {
-                        // 取得请求对象
-                        ReportListReq reportReq = reportsService.getReportListReq(basicInfo);
-                        // 获取返回报告列表
-                        result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
-                        // 检查报告
-                    } else if ("2".equals(category)) {
-                        // 获取返回报告列表
-                        result = reportsService.getPacsReportsList(null, searchStatus, basicInfo, searchTime);
+                    if(StringUtil.isNotEmpty(basicInfo.getMedicalNum())) {
+                        // 检验报告
+                        if("1".equals(category)) {
+                            // 取得请求对象
+                            ReportListReq reportReq = reportsService.getReportListReq(basicInfo);
+                            // 获取返回报告列表
+                            result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
+                            // 检查报告
+                        } else if ("2".equals(category)) {
+                            // 获取返回报告列表
+                            result = reportsService.getPacsReportsList(null, searchStatus, basicInfo, searchTime);
+                        }
+                    } else {
+                        throw new RuntimeException(CenterFunctionUtils.PATIENTINFO_MEDICALNUM_NULL_ERR);
                     }
                 }
             }

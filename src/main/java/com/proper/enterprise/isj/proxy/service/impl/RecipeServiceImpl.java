@@ -191,7 +191,7 @@ public class RecipeServiceImpl {
         calS.setTime(new Date());
         calE.setTime(new Date());
         if (StringUtil.isEmpty(sDate)) {
-            calS.add(Calendar.DAY_OF_MONTH, -CenterFunctionUtils.PAYMENT_MAX_DAY);
+            calS.add(Calendar.MONTH, -6);
         } else {
             calS.setTime(DateUtil.toDate(sDate));
         }
