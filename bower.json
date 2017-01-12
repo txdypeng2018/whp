@@ -22,7 +22,7 @@
   },
   "overrides": {
     "echarts": {
-      "main": "dist/echarts.min.js"
+      "main": "dist/echarts.js"
     }
   }
 }
