@@ -1,7 +1,7 @@
 package com.proper.enterprise.platform.auth.common.mock
 import com.proper.enterprise.platform.api.auth.model.User
 import com.proper.enterprise.platform.auth.common.entity.UserEntity
-import com.proper.enterprise.platform.auth.common.service.impl.CommonUserServiceImpl
+import com.proper.enterprise.platform.auth.common.service.impl.AbstractUserServiceImpl
 import com.proper.enterprise.platform.core.utils.ConfCenter
 import com.proper.enterprise.platform.core.utils.RequestUtil
 import org.slf4j.Logger
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service("mockUserService")
 @Primary
-class MockUserServiceImpl extends CommonUserServiceImpl {
+class MockUserServiceImpl extends AbstractUserServiceImpl {
 
     def static final Logger LOGGER = LoggerFactory.getLogger(MockUserServiceImpl.class)
 

@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.remoting.RemoteAccessException;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.exception.HisReturnException;
@@ -341,7 +343,15 @@ public class RegistrationServiceImpl {
             if(order != null){
                 LOGGER.debug("预约挂号缴费请求参数----------->>>");
                 LOGGER.debug(JSONUtil.toJSON(payRegReq));
-                payRegRes = webServicesClient.payReg(payRegReq);
+                try {
+                    payRegRes = webServicesClient.payReg(payRegReq);
+                } catch (InvocationTargetException ite) {
+                    if(ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
+                        LOGGER.debug("预约挂号缴费网络连接异常", ite);
+                        return;
+                    }
+                    throw ite;
+                }
             }
         }else{
             PayOrderRegReq payOrderRegReq = (PayOrderRegReq)req;
@@ -352,7 +362,15 @@ public class RegistrationServiceImpl {
             if(order != null) {
                 LOGGER.debug("当日挂号缴费请求参数----------->>>");
                 LOGGER.debug(JSONUtil.toJSON(payOrderRegReq));
-                payRegRes = webServicesClient.payOrderReg(payOrderRegReq);
+                try {
+                    payRegRes = webServicesClient.payOrderReg(payOrderRegReq);
+                } catch (InvocationTargetException ite) {
+                    if(ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
+                        LOGGER.debug("当日挂号缴费网络连接异常", ite);
+                        return;
+                    }
+                    throw ite;
+                }
             }
         }
         if (order != null) {
