@@ -5,6 +5,7 @@ isj-nginx:
     - ./sslconfig.conf:/etc/nginx/sslconfig.conf
     - ./bundle.sjh.sj-hospital.crt:/etc/nginx/bundle.sjh.sj-hospital.crt
     - ./sjh.csr.private.key:/etc/nginx/sjh.csr.private.key
+    - ./log:/var/log/nginx
   ports:
     - "80:80"
     - "443:443"
