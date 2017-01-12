@@ -1,0 +1,4 @@
+isjadm:
+  image: propersoft/docker-cd:isjadm
+  environment:
+    - GH_OAUTH_TOKEN
