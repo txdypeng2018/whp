@@ -10,6 +10,9 @@ node_modules
 .tmp
 dist/
 .sass-cache/
+build/
+out/
+.gradle/
 
 # ignore temp files
 .DS_Store
@@ -17,3 +20,6 @@ dist/
 # ignore ide related
 .idea/
 .project
+*.iml
+*.ipr
+*.iws
