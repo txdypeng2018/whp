@@ -6,7 +6,7 @@
     </div>
     <form name="opinionForm">
         <md-dialog-content class="md-dialog-content">
-            <div ng-repeat="ophis in opinionHistory">
+            <div ng-repeat="ophis in opinionHistory" pea-repeat-finish="scrollToEnd()" id="newOpDialog">
                 <div class="send"><div class="arrow"></div><div class="arrow-cover"></div>{{ophis.opinion}}</div>
                 <div class="content-opinion-time">{{ophis.opinionTime}}</div>
 

@@ -4,7 +4,7 @@
 (function(app) {
     'use strict';
 
-    var viewOperationCtrl = function($scope, $http, $mdDialog, $mdToast,$state,$timeout) {
+    var viewOperationCtrl = function($scope, $http, $mdDialog, $mdToast, $state, $timeout, $window, $rootScope) {
         $scope.gotoList=function(){
             $state.go('main.feedbackGridOperation');
         };
@@ -24,7 +24,7 @@
 
         $scope.gotoDialog = function(userID,useroID){
             $mdDialog.show({
-                controller: function($scope) {
+                controller: function($scope, $rootScope) {
                     //取得反馈类型
                     $http.get('/dataBase/feedbackTypes').success(function(data){
                         $scope.thefeedbackTypes=data;
@@ -66,6 +66,12 @@
                             $scope.opinion.feedback = $scope.feedbackText;
                             $scope.opinion.status = '已反馈';
                             $scope.opinion.statusCode = '1';
+                            for(var i = 0; i < $rootScope.feedBackDatasAll.length; i++){
+                                if($rootScope.feedBackDatasAll[i]._id.$oid === useroID){
+                                    $rootScope.feedBackDatasAll[i].statusCode = '1';
+                                }
+                            }
+                            $scope.opinion.id = useroID;
                             $http.put('/service/feedbackOpinion', $scope.opinion).success(function(data) {
                                 if (angular.isUndefined(data.errMsg)) {
                                     $scope.opinionHistory[$scope.opinionHistory.length-1].feedback = $scope.feedbackText;
@@ -83,6 +89,12 @@
                         }else if($scope.selectedfeedbackType.code ==='2'){
                             $scope.opinion.status = '已关闭';
                             $scope.opinion.statusCode = '2';
+                            for(var j = 0; j < $rootScope.feedBackDatasAll.length; j++){
+                                if($rootScope.feedBackDatasAll[j]._id.$oid === useroID){
+                                    $rootScope.feedBackDatasAll[j].statusCode = '2';
+                                }
+                            }
+                            $scope.opinion.id = useroID;
                             $scope.isSubmit = true;
                             $http.put('/service/feedbackOpinion', $scope.opinion).success(function() {
                                 $timeout(function(){
@@ -90,6 +102,10 @@
                                 },2000);
                             });
                         }
+                    };
+                    $scope.scrollToEnd = function(){
+                        var div = document.getElementById('newOpDialog');
+                        div.parentNode.scrollTop = div.parentNode.scrollHeight;
                     };
                 },
                 templateUrl: 'modules/feedback/operationDialogNew.html',
@@ -107,24 +123,24 @@
             $scope.selectedopStatusCode = undefined;
 
             var dataToJson = [];
-            $scope.feedBackDatasAll = [];
+            $rootScope.feedBackDatasAll = [];
             $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
                 for(var n = 0; n < data.data.length; n++){
                     dataToJson.push(JSON.parse(data.data[n]));
                 }
                 for (var i = 0; i < dataToJson.length; i++) {
-                    $scope.feedBackDatasAll.push(dataToJson[i]);
+                    $rootScope.feedBackDatasAll.push(dataToJson[i]);
                 }
                 //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
-                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
-                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
-                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
-                            $scope.feedBackDatasAll.splice(j,1);
+                for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
+                        if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
+                            $rootScope.feedBackDatasAll.splice(j,1);
                             j--;
                         }
                     }
                 }
-                $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,20);
+                $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,20);
             });
         };
         //返回要过滤的条件
@@ -151,49 +167,50 @@
         //查询
         $scope.operationViewSearch = function(){
             var dataToJson = [];
-            $scope.feedBackDatasAll = [];
+            $rootScope.feedBackDatasAll = [];
             $http.get('/msc/service_user_opinion',{params: {query:'{' + filterQuery() + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
                 for(var n = 0; n < data.data.length; n++){
                     dataToJson.push(JSON.parse(data.data[n]));
                 }
                 for (var i = 0; i < dataToJson.length; i++) {
-                    $scope.feedBackDatasAll.push(dataToJson[i]);
+                    $rootScope.feedBackDatasAll.push(dataToJson[i]);
                 }
                 //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
-                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
-                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
-                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
-                            $scope.feedBackDatasAll.splice(j,1);
+                for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
+                        if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
+                            $rootScope.feedBackDatasAll.splice(j,1);
                             j--;
                         }
                     }
                 }
-                $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,pageSize);
+                $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,pageSize);
             });
         };
 
-        $scope.feedBackDatasAll = [];
+        $rootScope.feedBackDatasAll = [];
         var page = 1;
         var pageSize = 20;
         var dataLength = 0;
         var dataToJson = [];
-        $http.get('/msc/service_user_opinion',{params: {query:'{}',sort:'{opinionTime:-1}'}}).success(function(data) {
+        $scope.selectedopStatusCode = '0';
+        $http.get('/msc/service_user_opinion',{params: {query:'{"statusCode":"0"}',sort:'{opinionTime:-1}'}}).success(function(data) {
             for(var n = 0; n < data.data.length; n++){
                 dataToJson.push(JSON.parse(data.data[n]));
             }
             for (var i = 0; i < dataToJson.length; i++) {
-                $scope.feedBackDatasAll.push(dataToJson[i]);
+                $rootScope.feedBackDatasAll.push(dataToJson[i]);
             }
             //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
-            for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
-                for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
-                    if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
-                        $scope.feedBackDatasAll.splice(j,1);
+            for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
+                for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
+                    if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
+                        $rootScope.feedBackDatasAll.splice(j,1);
                         j--;
                     }
                 }
             }
-            $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,page*pageSize);
+            $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,page*pageSize);
         });
 
         $scope.showLoadMore = function(){
@@ -203,26 +220,32 @@
         $scope.loadMoreData = function(){
             $scope.text = '加载中，请稍后···';
             var dataToJson = [];
-            $http.get('/msc/service_user_opinion',{params: {query:'{' + filterQuery() + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
+            var queryStr = '';
+            if(!angular.isUndefined(filterQuery()) && filterQuery() !== ''){
+                queryStr = filterQuery();
+            }else{
+                queryStr = '"statusCode":"0"' ;
+            }
+            $http.get('/msc/service_user_opinion',{params: {query:'{' + queryStr + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
                 for(var n = 0; n < data.data.length; n++){
                     dataToJson.push(JSON.parse(data.data[n]));
                 }
-                $scope.feedBackDatasAll = [];
+                $rootScope.feedBackDatasAll = [];
                 for (var i = 0; i < dataToJson.length; i++) {
-                    $scope.feedBackDatasAll.push(dataToJson[i]);
+                    $rootScope.feedBackDatasAll.push(dataToJson[i]);
                 }
-                for(var m = 0; m < $scope.feedBackDatasAll.length; m++){
-                    for(var j = m + 1; j < $scope.feedBackDatasAll.length; j++){
-                        if($scope.feedBackDatasAll[m].userId === $scope.feedBackDatasAll[j].userId){
-                            $scope.feedBackDatasAll.splice(j,1);
+                for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
+                    for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
+                        if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
+                            $rootScope.feedBackDatasAll.splice(j,1);
                             j--;
                         }
                     }
                 }
-                dataLength = $scope.feedBackDatasAll.length/pageSize;
+                dataLength = $rootScope.feedBackDatasAll.length/pageSize;
                 page++;
                 if(page<dataLength){
-                    $scope.feedBackDatasAll = $scope.feedBackDatasAll.slice(0,page*pageSize);
+                    $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,page*pageSize);
                     $scope.text = '点击加载更多';
                 }else{
                     $scope.text = '全部数据加载完成';

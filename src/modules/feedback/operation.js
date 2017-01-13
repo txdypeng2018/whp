@@ -133,7 +133,10 @@
       searchInitData: {
         statusCode: $scope.opStatus
       },
-      dblClick: dbEditData
+      dblClick: dbEditData,
+      searchData: {
+        statusCode: '0'
+      }
     };
   };
 
