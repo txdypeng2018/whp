@@ -1,0 +1,52 @@
+.feedbackListNew-footer{
+  .feedback-new-textarea{
+    width: 80%;
+    height: 90%;
+    line-height: 180%;
+    resize: none;
+    border-bottom: 1px solid #387ef5;
+    margin-right: 3%;
+    padding-left: 2%;
+  }
+  .feedback-new-submit{
+    width: 15%;
+  }
+}
+.feedbackListNew-content{
+  .send {
+    width:55%;
+    border: 1px solid #387ef5;
+    background-color: #387ef5;
+    border-radius:5px;
+    margin-top:15px;
+    padding: 12px;
+    font-size: 13px;
+    margin-left: 40%;
+    color: #fff;
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  .content-opinion-time{
+    font-size: 12px;
+    margin-left: 41%;
+    color: #aaa;
+  }
+  .replay{
+    width:55%;
+    border:1px solid #bbbbbb;
+    border-radius:5px;
+    margin-top:15px;
+    padding: 12px;
+    font-size: 13px;
+    margin-left: 5%;
+    color: #444;
+    background-color: #fff;
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  .content-feedback-time{
+    font-size: 12px;
+    margin-left: 6%;
+    color: #aaa;
+  }
+}
