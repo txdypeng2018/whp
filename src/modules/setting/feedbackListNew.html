@@ -1,0 +1,20 @@
+<ion-view>
+  <isj-spinner is-show="$root.inProcess" callback="spinnerCancel()"></isj-spinner>
+  <ion-header-bar class="bar-light">
+    <isj-back-button></isj-back-button>
+    <div class="title">意见列表</div>
+  </ion-header-bar>
+  <ion-content class="has-header content-gray feedbackListNew-content">
+    <div ng-repeat="ophis in feedbacks">
+      <div class="send">{{ophis.opinion}}</div>
+      <div class="content-opinion-time">{{ophis.opinionTime}}</div>
+
+      <div ng-if="ophis.feedback !== undefined && ophis.feedback !== '' && ophis.feedback !== null" class="replay">{{ophis.feedback}}</div>
+      <div ng-if="ophis.feedback !== undefined && ophis.feedback !== '' && ophis.feedback !== null" class="content-feedback-time">{{ophis.feedbackTime}}</div>
+    </div>
+  </ion-content>
+  <ion-footer-bar class="feedbackListNew-footer">
+    <textarea class="feedback-new-textarea" placeholder="对掌上盛京有什么意见，请告诉我们" ng-model="inputOpinion"></textarea>
+    <button class="button feedback-new-submit" ng-click="submitOpinion()" ng-disabled="!isSubmit" ng-class="{'button-positive':isSubmit}">提交</button>
+  </ion-footer-bar>
+</ion-view>

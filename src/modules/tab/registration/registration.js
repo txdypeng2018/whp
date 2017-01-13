@@ -37,7 +37,14 @@
         'name': '已完成'
       }
     ];
+
     $scope.$on('$ionicView.beforeEnter', function(){
+      for (var i in $ionicHistory.viewHistory().views) {
+        var view = $ionicHistory.viewHistory().views[i];
+        if (view.stateName === 'registerConfirmAppt' || view.stateName === 'paymentResult'){
+          $scope.viewTypeId = '1';
+        }
+      }
       $scope.httpIndex = {index:1};
       diffRegistrations = {};
       $scope.patient = {};

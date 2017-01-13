@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tabMessageCtrl = function($scope, $http, toastService) {
+  var tabMessageCtrl = function($scope, $http, toastService, $ionicHistory) {
     //取得消息列表
     var getMessages = function() {
       $scope.messages = null;
@@ -25,6 +25,7 @@
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.httpIndex = {index:1};
       getMessages();
+      $ionicHistory.clearHistory();
     });
 
     //遮蔽罩取消

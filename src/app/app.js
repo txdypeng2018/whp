@@ -10,7 +10,8 @@
     'properNgCordova'
   ];
   angular.module('isj', deps).run(
-    function ($ionicPlatform, $window, $properProperpush, appConstants, $state, $ionicPopup, $http) {
+
+    function ($ionicPlatform, $window, $properProperpush, appConstants, $state, $ionicPopup, $http, $location, $ionicHistory, $rootScope, toastService) {
       $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -155,6 +156,31 @@
         });
 
       });
+      //退出时提示
+      var setBackBtn = function(){
+        $rootScope.backButtonPressedOnceToExit = true;
+        toastService.show('再按一次退出系统');
+        setTimeout(function(){
+          $rootScope.backButtonPressedOnceToExit = false;
+        }, 2000);
+      };
+      $ionicPlatform.registerBackButtonAction(function(e){
+        e.preventDefault();
+        if($location.path() === '/tab/main'){
+          if($rootScope.backButtonPressedOnceToExit){
+            navigator.app.exitApp();
+          }else{
+            setBackBtn();
+          }
+        }else if($location.path() === '/tab/personal' || $location.path() === '/tab/registration/' || $location.path() === '/tab/message'){
+          $state.go('tab.main');
+        }else if($ionicHistory.backView()){
+          $ionicHistory.goBack();
+        }else{
+          setBackBtn();
+        }
+        return false;
+      },101);//101优先级常用于覆盖‘返回上一个页面’的默认行为
     }
   );
 
