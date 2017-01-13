@@ -300,5 +300,15 @@
     "icon": "assessment",
     "route": "/statistics/statisticsView",
     "sequenceNumber": 4
+  },
+  {
+    "id": "000009",
+    "name": "客服查询",
+    "parentId": null,
+    "leaf": true,
+    "root": true,
+    "icon": "search_black",
+    "route": "/customerQuery/customer",
+    "sequenceNumber": 4
   }
 ]
