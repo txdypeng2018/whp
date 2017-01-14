@@ -15,9 +15,9 @@ import com.proper.enterprise.isj.proxy.service.rule.RegistrationRuleService;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
@@ -75,7 +75,7 @@ public class RegisterController extends BaseController {
      *
      * @return 就诊退号说明
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/visitAndBacknumDesc", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Map<String, String>> getVisitAndBacknumDesc() {
         List<BaseInfoEntity> visitInfo1 = baseRepo.findByInfoType(ConfCenter.get("isj.info.visit1"));
@@ -93,7 +93,7 @@ public class RegisterController extends BaseController {
      *
      * @return 挂号须知信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/agreement", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAgreement() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.agreement"));
@@ -107,7 +107,7 @@ public class RegisterController extends BaseController {
      *
      * @return 预约挂号提示信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/apptPrompt", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getApptPrompt() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.apptPrompt"));
@@ -121,7 +121,7 @@ public class RegisterController extends BaseController {
      *
      * @return 当日挂号提示信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/todayPrompt", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getTodayPrompt() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.todayPrompt"));
@@ -139,7 +139,7 @@ public class RegisterController extends BaseController {
      *            挂号时间
      * @return 医生挂号信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/doctor", method = RequestMethod.GET)
     public ResponseEntity<RegisterDoctorDocument> getRegisterDoctor(@RequestParam(required = true) String id,
             @RequestParam(required = true) String date) {

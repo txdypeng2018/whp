@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.controller;
 
 import java.util.List;
 
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import com.proper.enterprise.isj.proxy.service.SubjectService;
 import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 
 /**
@@ -41,7 +41,7 @@ public class OrganizationController extends BaseController {
      * 
      * @return 院区列表
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/districts", method = RequestMethod.GET)
     public ResponseEntity<List<SubjectDocument>> getDistricts() throws Exception {
         List<SubjectDocument> disList = null;

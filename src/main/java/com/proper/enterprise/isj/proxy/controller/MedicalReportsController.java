@@ -11,9 +11,9 @@ import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.req.ReportInfoReq;
 import com.proper.enterprise.isj.webservices.model.req.ReportListReq;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
@@ -177,7 +177,7 @@ public class MedicalReportsController extends BaseController {
      *
      * @return 报告单须知信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/prompt", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAgreement() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.report"));

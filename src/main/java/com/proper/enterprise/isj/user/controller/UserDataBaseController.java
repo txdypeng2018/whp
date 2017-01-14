@@ -3,9 +3,9 @@ package com.proper.enterprise.isj.user.controller;
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class UserDataBaseController extends BaseController {
         return responseOfGet(CenterFunctionUtils.getFamilyMenberTypeMap(sexCode));
     }
 
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/sexTypes", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Map<String, String>>> getSexTypes() {
         return responseOfGet(CenterFunctionUtils.getSexCodeMap());
@@ -62,7 +62,7 @@ public class UserDataBaseController extends BaseController {
         return responseOfGet(CenterFunctionUtils.getFamilyMenberTypeMap(sexCode).get(typeCode));
     }
 
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/feedbackTypes", method = RequestMethod.GET)
     public ResponseEntity<List<Map<String, String>>> getFeedbackTypes() {
         return responseOfGet(CenterFunctionUtils.getFeedbackListMap());

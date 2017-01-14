@@ -12,9 +12,9 @@ import com.proper.enterprise.isj.proxy.tasks.CmbPayNotice2BusinessTask;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class CmbPayController extends BaseController {
      * @return 处理结果
      * @throws Exception
      */
-    @JWTIgnore
+    @AuthcIgnore
     @PostMapping(value = "/noticeProtocolInfo")
     public ResponseEntity<String> dealNoticeProtocolInfo(HttpServletRequest request) throws Exception {
         LOGGER.debug("-----------一网通签约异步通知------开始---------------");
@@ -119,7 +119,7 @@ public class CmbPayController extends BaseController {
      * @return 处理结果
      * @throws Exception
      */
-    @JWTIgnore
+    @AuthcIgnore
     @GetMapping(value = "/noticePayInfo")
     public ResponseEntity<String> dealNoticePayInfo(HttpServletRequest request) throws Exception {
         LOGGER.debug("-----------一网通支付结果异步通知------开始---------------");
@@ -147,7 +147,7 @@ public class CmbPayController extends BaseController {
      * @return 处理结果
      * @throws Exception
      */
-    @JWTIgnore
+    @AuthcIgnore
     @PostMapping(value = "/querySinglePayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PayResultRes> querySinglePayInfo(@RequestBody CmbPayEntity payInfo) throws Exception {
         PayResultRes resObj = new PayResultRes();
@@ -170,7 +170,7 @@ public class CmbPayController extends BaseController {
      * @return 处理结果
      * @throws Exception
      */
-    @JWTIgnore
+    @AuthcIgnore
     @PostMapping(value = "/refundPayInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RefundNoDupRes> refundPayInfo(@RequestBody RefundNoDupBodyReq refundInfo) throws Exception {
         RefundNoDupRes resObj = new RefundNoDupRes();
@@ -191,7 +191,7 @@ public class CmbPayController extends BaseController {
      * @return 处理结果
      * @throws Exception
      */
-    @JWTIgnore
+    @AuthcIgnore
     @PostMapping(value = "/queryRefundInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QueryRefundRes> queryRefundInfo(@RequestBody CmbQueryRefundEntity queryRefundInfo) throws Exception {
         QueryRefundRes resObj = new QueryRefundRes();

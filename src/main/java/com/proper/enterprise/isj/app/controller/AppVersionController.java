@@ -2,7 +2,7 @@ package com.proper.enterprise.isj.app.controller;
 
 import com.proper.enterprise.isj.app.document.AppVersionDocument;
 import com.proper.enterprise.isj.app.service.AppVersionService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class AppVersionController extends BaseController {
     @Autowired
     AppVersionService service;
 
-    @JWTIgnore
+    @AuthcIgnore
     @GetMapping("/latest")
     public ResponseEntity<AppVersionDocument> getLatestVersionInfo(@RequestParam(required = false) String current) {
         int latestVersion = service.getLatestVersion();
@@ -33,7 +33,7 @@ public class AppVersionController extends BaseController {
         return responseOfPut(service.save(document));
     }
 
-    @JWTIgnore
+    @AuthcIgnore
     @GetMapping(path = "/versions/{version}")
     public ResponseEntity<AppVersionDocument> getCertainVersionInfo(@PathVariable String version) {
         int certainVersion = StringUtil.isNull(version) ? -1 : Integer.parseInt(version);

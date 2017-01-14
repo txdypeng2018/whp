@@ -2,7 +2,7 @@ package com.proper.enterprise.isj.proxy.controller;
 
 import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
 import com.proper.enterprise.isj.proxy.repository.BaseInfoRepository;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class MedicalGuideController extends BaseController {
      * 
      * @return 就医指南信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getMedicalGuide() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.medicalGuide"));

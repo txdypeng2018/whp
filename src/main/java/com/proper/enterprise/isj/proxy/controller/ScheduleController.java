@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.controller;
 
 import java.util.*;
 
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import com.proper.enterprise.isj.proxy.document.TimeRegDocument;
 import com.proper.enterprise.isj.proxy.document.doctor.ScheDoctorDocument;
 import com.proper.enterprise.isj.proxy.service.ScheduleService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
@@ -29,7 +29,7 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
  */
 @RestController
 @RequestMapping(path = "/schedule")
-@JWTIgnore
+@AuthcIgnore
 public class ScheduleController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class);

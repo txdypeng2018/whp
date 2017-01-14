@@ -3,7 +3,7 @@ package com.proper.enterprise.isj.proxy.controller;
 import com.proper.enterprise.isj.proxy.document.SubjectDocument;
 import com.proper.enterprise.isj.proxy.service.SubjectService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class SubjectController extends BaseController {
      *            挂号类别，2 为预约挂号，1 为当日挂号
      * @return 学科列表
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<SubjectDocument>> getSubject(String districtId, @RequestParam String type) {
         List<SubjectDocument> list;
