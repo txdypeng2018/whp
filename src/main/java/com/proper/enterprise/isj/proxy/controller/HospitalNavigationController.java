@@ -4,7 +4,7 @@ import com.proper.enterprise.isj.proxy.entity.*;
 import com.proper.enterprise.isj.proxy.repository.NavInfoRepository;
 import com.proper.enterprise.isj.proxy.service.HospitalNavigationService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class HospitalNavigationController extends BaseController {
      *            院区ID（没有时返回所有院区的楼）
      * @return 楼信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/builds", method = RequestMethod.GET)
     public ResponseEntity<List<Map<String, Object>>> getBuilds(@RequestParam(required = false) String districtId) throws Exception {
         List<Map<String, Object>> retList;
@@ -56,7 +56,7 @@ public class HospitalNavigationController extends BaseController {
      *            楼ID
      * @return 楼层信息及包含科室
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/builds/floors", method = RequestMethod.GET)
     public ResponseEntity<List<Map<String, Object>>> getFloor(@RequestParam(required = true) String buildId) throws Exception {
         List<Map<String, Object>> retList = new ArrayList<>();

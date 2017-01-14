@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.controller;
 
 import java.util.*;
 
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import com.proper.enterprise.isj.proxy.utils.cache.WebServiceCacheUtil;
 import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 
@@ -32,7 +32,7 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
  */
 @RestController
 @RequestMapping(path = "/doctors")
-@JWTIgnore
+@AuthcIgnore
 public class DoctorController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);

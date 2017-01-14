@@ -15,7 +15,7 @@ import com.proper.enterprise.isj.proxy.service.RegistrationService;
 import com.proper.enterprise.isj.proxy.tasks.AliPayNotice2BusinessTask;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.DateUtil;
@@ -185,7 +185,7 @@ public class AliPayController extends BaseController {
         return null;
     }
 
-    @JWTIgnore
+    @AuthcIgnore
     @PostMapping(value = "/noticeInfo")
     public ResponseEntity<String> dealNoticeInfo(HttpServletRequest request) throws Exception {
         LOGGER.debug("-----------支付宝异步通知---------------------");

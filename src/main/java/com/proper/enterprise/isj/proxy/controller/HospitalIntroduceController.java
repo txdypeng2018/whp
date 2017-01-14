@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.controller;
 
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.service.HospitalIntroduceService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.res.HosInfo;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 
 /**
@@ -34,7 +34,7 @@ public class HospitalIntroduceController extends BaseController {
      * 
      * @return 医院简介信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getHospitalIntroduce() {
         HosInfo info = null;

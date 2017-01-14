@@ -10,9 +10,9 @@ import com.proper.enterprise.isj.push.PushService;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
@@ -51,7 +51,7 @@ public class ServiceController extends BaseController {
     /**
      * 取得服务电话号码
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(value="/phone", method = RequestMethod.GET)
     public ResponseEntity<String> getPhoneNum() throws Exception {
         String retValue = "";
@@ -186,7 +186,7 @@ public class ServiceController extends BaseController {
      *
      * @return 取得应用名称信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/appName", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAppName() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.appName"));

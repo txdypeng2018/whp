@@ -10,12 +10,12 @@ import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.user.utils.IdcardUtils;
 import com.proper.enterprise.isj.user.utils.MobileNoUtils;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.AuthcService;
 import com.proper.enterprise.platform.api.auth.service.PasswordEncryptService;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
-import com.proper.enterprise.platform.auth.jwt.annotation.JWTIgnore;
 import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
@@ -82,7 +82,7 @@ public class UserRegController extends BaseController {
      *
      * @return
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/verificationCode", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> verificationCode(@RequestParam String phone, @RequestParam String category) {
         if (StringUtil.isNull(phone)) {
@@ -129,7 +129,7 @@ public class UserRegController extends BaseController {
     /**
      * 注册
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/account", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> registUser(@RequestBody Map<String, String> userMsgMap, HttpServletRequest request,
             HttpServletResponse response) {
@@ -216,7 +216,7 @@ public class UserRegController extends BaseController {
      * @param userMsgMap
      *            category "1:修改密码;2:找回密码"
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/account", method = RequestMethod.PUT, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> modifyPassword(@RequestBody Map<String, String> userMsgMap) {
         String phone = userMsgMap.get("phone");
@@ -324,7 +324,7 @@ public class UserRegController extends BaseController {
      *            包含手机号和密码
      * @return 登录用户
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/login", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> login(@RequestBody Map<String, String> phoneMap) {
         String phone = phoneMap.get("phone");
@@ -346,7 +346,7 @@ public class UserRegController extends BaseController {
      *
      * @return 注册提示信息
      */
-    @JWTIgnore
+    @AuthcIgnore
     @RequestMapping(path = "/loginPrompt", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getLoginPrompt() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.loginPrompt"));
