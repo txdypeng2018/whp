@@ -12,5 +12,8 @@ then
     git clone https://${GH_OAUTH_TOKEN}@github.com/propersoft-cn/ihos.git -b fe-deploy --depth=1 $WORKDIR
 fi
 
+cd $WORKDIR/www/scripts
+sed -i 's/"\.\/api"/location.protocol+"\/\/"+location.host+"\/isj"/' scripts*.js
+
 cd $WORKDIR/www
 python -m SimpleHTTPServer 9000
