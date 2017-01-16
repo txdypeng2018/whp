@@ -1,10 +1,9 @@
 package com.proper.enterprise.platform.auth.jwt.service.impl;
 
-import com.proper.enterprise.isj.user.model.IHosJWTPayload;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.jwt.model.JWTHeader;
-import com.proper.enterprise.platform.auth.jwt.model.JWTPayload;
+import com.proper.enterprise.platform.auth.jwt.model.impl.JWTPayloadImpl;
 import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,8 @@ public class IHosJWTAuthcServiceImpl implements JWTAuthcService {
         if (!hasRole) {
             jwtService.clearToken(header);
         }
-        JWTPayload payload = new IHosJWTPayload(hasRole);
+        JWTPayloadImpl payload = new JWTPayloadImpl();
+        payload.setHasRole(hasRole);
         return jwtService.generateToken(header, payload);
     }
 
