@@ -6,4 +6,5 @@ INSERT INTO pep_auth_roles_menus (role_id, menu_id) VALUES ('role-xxwh', 'app-gh
 INSERT INTO pep_auth_roles_menus (role_id, menu_id) VALUES ('role-kf', 'app-ywtj');
 INSERT INTO pep_auth_roles_menus (role_id, menu_id) VALUES ('role-xxwh', 'app-ywtj');
 INSERT INTO pep_auth_roles_menus (role_id, menu_id) VALUES ('role-xxwh', 'app-apppz');
+INSERT INTO pep_auth_roles_menus (role_id, menu_id) VALUES ('role-xxwh', 'app-tomcat-log');
 COMMIT;
