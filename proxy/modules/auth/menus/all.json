@@ -145,15 +145,6 @@
     "sequenceNumber": 15
   },
   {
-    "id": "990201",
-    "name": "瀑布流",
-    "parentId": "9901",
-    "leaf": true,
-    "icon": "panorama_fish_eye",
-    "route": "/playground/waterfall/waterfallView",
-    "sequenceNumber": 16
-  },
-  {
     "id": "0101",
     "name": "组织规划",
     "parentId": null,
@@ -318,6 +309,17 @@
     "root": true,
     "icon": "search_black",
     "route": "/customerQuery/customer",
-    "sequenceNumber": 4
+    "sequenceNumber": 5
+  },
+  {
+    "id": "000010",
+    "name": "Tomcat日志",
+    "parentId": null,
+    "leaf": true,
+    "root": true,
+    "icon": "event_note",
+    "route": "/logview/tomcatLogs",
+    "sequenceNumber": 6
+
   }
 ]
