@@ -339,6 +339,8 @@ public class CenterFunctionUtils {
 
     public final static String REPLAYED = "已反馈";
 
+    public final static String CLOSED = "已关闭";
+
     /*----------职称---------------------*/
     public final static String DOCTOR_TITLE_ZHURENYISHI="主任医师";
 
@@ -643,6 +645,10 @@ public class CenterFunctionUtils {
         feedbackMap = new HashMap<>();
         feedbackMap.put("code", FeedbackEnum.REPLAYED.getValue());
         feedbackMap.put("name", REPLAYED);
+        feedbackList.add(feedbackMap);
+        feedbackMap = new HashMap<>();
+        feedbackMap.put("code", FeedbackEnum.CLOSED.getValue());
+        feedbackMap.put("name", CLOSED);
         feedbackList.add(feedbackMap);
         return feedbackList;
     }
