@@ -11,6 +11,7 @@
     'ngResource',
     'pea.tree',
     'pea.grid',
+    'pea.buttonToggle',
     'ui.router',
     'ngAnimate',
     'as.sortable',

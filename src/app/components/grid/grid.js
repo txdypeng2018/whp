@@ -4,10 +4,10 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
   //表格满屏显示函数
   var setGridFullHeight = function($element, $window, screenSizeSm) {
     if ($window.innerWidth < screenSizeSm) {
-      $element.css('height', document.body.clientHeight - 160 + 'px');
+      $element.css('height', document.body.clientHeight - 118 + 'px');
     }
     else {
-      $element.css('height', document.body.clientHeight - 110 + 'px');
+      $element.css('height', document.body.clientHeight - 68 + 'px');
     }
   };
 

@@ -67,10 +67,9 @@
       $scope.resources = createTreeModel(data);
     });
 
+    //功能树数据模型转换
     var createTreeModel = function(data) {
       var nodes = [];
-      // 前端使用的模型跟后端返回的数据有差异,先进行一下转换
-      // 可考虑重构前端模型以消除此段转换
       angular.forEach(data, function(node) {
         nodes.push({
           code: node.id,
@@ -105,7 +104,6 @@
         }
       });
 
-      console.debug(treeModel);
       return treeModel;
     };
 

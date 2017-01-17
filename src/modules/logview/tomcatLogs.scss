@@ -1,0 +1,165 @@
+$logLevelDebug: #00a65a;
+$logLevelInfo: #3c8dbc;
+$logLevelWarn: #f39c12;
+$logLevelError: #dd4b39;
+
+
+.tomcat-logs-level.debug {
+  color: $logLevelDebug !important;
+  .md-select-value {
+    color: $logLevelDebug !important;
+    border-bottom-color: $logLevelDebug !important;
+  }
+}
+.tomcat-logs-level.info {
+  color: $logLevelInfo !important;
+  .md-select-value {
+    color: $logLevelInfo !important;
+    border-bottom-color: $logLevelInfo !important;
+  }
+}
+.tomcat-logs-level.warn {
+  color: $logLevelWarn !important;
+  .md-select-value {
+    color: $logLevelWarn !important;
+    border-bottom-color: $logLevelWarn !important;
+  }
+}
+.tomcat-logs-level.error {
+  color: $logLevelError !important;
+  .md-select-value {
+    color: $logLevelError !important;
+    border-bottom-color: $logLevelError !important;
+  }
+}
+
+.tomcat-logs {
+  width: 100%;
+  height: 100%;
+
+  md-card {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .search-bar {
+      border-bottom: 1px solid #e0e0e0;
+      width: 100%;
+      min-height: 43px;
+      display: flex;
+      flex-direction: row;
+      padding: 1px 6px;
+
+      .level {
+        padding: 2px 5px 0 5px;
+
+        md-select {
+          width: 100%;
+          margin: 0;
+          padding: 2px;
+        }
+      }
+
+      .search {
+        flex-grow: 1;
+        padding: 2px 5px 0 5px;
+
+        md-input-container {
+          width: 100%;
+          margin: 0;
+
+          .md-errors-spacer {
+            min-height: 0;
+          }
+        }
+      }
+
+      .more {
+        padding: 0 0 0 5px;
+
+        .md-button.md-icon-button {
+          margin: 0;
+        }
+      }
+    }
+
+    .log-content {
+      padding: 4px 2px;
+      font-size: 12px;
+      width: 100%;
+      flex-grow: 1;
+      overflow: auto;
+
+      .log {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 2px 0;
+
+        .log-echo-lv {
+          display: inline-block;
+          white-space: nowrap;
+          width: 68px;
+          min-width: 68px;
+          padding: 0 4px 0 0;
+          text-align: right;
+
+          .log-echo {
+            display: inline-block;
+            white-space: nowrap;
+            width: 16px;
+            min-width: 16px;
+            text-align: right;
+
+            span {
+              display: inline-block;
+              width: 14px;
+              color: #ffffff;
+              border-radius: 50%;
+              background-color: $logLevelError;
+              text-align: center;
+            }
+          }
+
+          .log-lv {
+            display: inline-block;
+            width: 45px;
+            text-align: right;
+
+            span {
+              display: inline-block;
+              white-space: nowrap;
+              padding: 0 1px;
+              border-radius: 3px;
+
+              &.debug {
+                color: $logLevelDebug;
+                border: 1px solid $logLevelDebug;
+              }
+              &.info {
+                color: $logLevelInfo;
+                border: 1px solid $logLevelInfo;
+              }
+              &.warn {
+                color: $logLevelWarn;
+                border: 1px solid $logLevelWarn;
+              }
+              &.error {
+                color: $logLevelError;
+                border: 1px solid $logLevelError;
+              }
+            }
+          }
+        }
+
+        .log-other {
+          padding: 0 0 0 4px;
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+}

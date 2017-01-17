@@ -1,0 +1,44 @@
+<div class="content-padding tomcat-logs">
+  <md-card class="pea-card">
+    <div class="search-bar">
+      <div class="level">
+        <md-select ng-model="logLevel" class="tomcat-logs-level" ng-class="{'DEBUG': 'debug', 'INFO': 'info', 'WARN': 'warn', 'ERROR':'error'}[logLevel]">
+          <md-option ng-repeat="item in logLevelItems" value="{{item.value}}" class="tomcat-logs-level" ng-class="{'DEBUG': 'debug', 'INFO': 'info', 'WARN': 'warn', 'ERROR':'error'}[item.value]">
+            {{item.label}}
+          </md-option>
+        </md-select>
+      </div>
+      <div class="search">
+        <md-input-container md-no-float>
+          <input ng-model="search" type="text" ng-keyup="searchKeyup($event)" placeholder="使用mongo语法查询,不需要最外层大括号" >
+        </md-input-container>
+      </div>
+      <div class="more">
+        <md-button class="md-icon-button" ng-class="{true:'md-primary'}[autoUpdate]" aria-label="自动更新" ng-click="autoUpdateClk()">
+          <md-tooltip md-direction="bottom">自动更新</md-tooltip>
+          <md-icon>system_update_alt</md-icon>
+        </md-button>
+        <md-button class="md-icon-button md-primary" aria-label="锁定滚动条" ng-click="overflowLockClk()" style="margin-left: 4px">
+          <md-tooltip md-direction="bottom">锁定滚动条</md-tooltip>
+          <md-icon ng-if="overflowLock">lock</md-icon>
+          <md-icon ng-if="!overflowLock">lock_open</md-icon>
+        </md-button>
+        <md-button class="md-icon-button md-primary" aria-label="清空日志" ng-click="clearLogClk()">
+          <md-tooltip md-direction="bottom">清空日志</md-tooltip>
+          <md-icon>delete</md-icon>
+        </md-button>
+      </div>
+    </div>
+    <div class="log-content" id="log_content">
+      <div ng-repeat="log in logs" pea-repeat-finish="repeatFinish()" class="log">
+        <div class="log-echo-lv">
+          <span class="log-echo"><span ng-if="log.times>1">{{log.times}}</span></span>
+          <span class="log-lv"><span ng-class="{'DEBUG': 'debug', 'INFO': 'info', 'WARN': 'warn', 'ERROR': 'error'}[log.lv]">{{log.lv}}</span></span>
+        </div>
+        <div class="log-other">
+          <div ng-bind-html="log.msgAfter" class="log-msg"></div>
+        </div>
+      </div>
+    </div>
+  </md-card>
+</div>
