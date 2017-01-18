@@ -61,12 +61,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.regex.Pattern;
 
-/**
- * Created by think on 2016/9/16 0016.
- */
 @Service
 public class RegistrationServiceNotxImpl implements RegistrationService {
 
@@ -102,39 +100,35 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     @Autowired
     WebService4HisInterfaceCacheUtil webService4HisInterfaceCacheUtil;
-    
+
     @Autowired
     RegistrationRefundLogRepository registrationRefundLogRepository;
 
 
     /**
-     * 创建挂号单
-     * 
-     * @param reg
-     *            挂号单信息
-     * @param isAppointment
-     * @return
-     * @throws Exception
+     * 创建挂号单.
+     *
+     * @param reg           挂号单信息.
+     * @param isAppointment 是否预约挂号.
+     * @return 挂号单.
+     * @throws Exception 异常.
      */
     @Override
-    public RegistrationDocument saveCreateRegistrationAndOrder(RegistrationDocument reg, String isAppointment)
-            throws Exception {
+    public RegistrationDocument saveCreateRegistrationAndOrder(RegistrationDocument reg, String isAppointment) throws Exception {
         RegistrationDocument saveReg = null;
         try {
             saveReg = registrationServiceImpl.saveCreateRegistration(reg);
             saveReg = registrationServiceImpl.saveCreateRegistrationAndOrder(saveReg, isAppointment);
             if (isAppointment.equals(String.valueOf(1))) {
-                webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(saveReg.getDoctorId(),
-                        saveReg.getRegDate());
-                saveOrRemoveRegCache(String.valueOf(1), saveReg.getId(),
-                        DateUtil.toDate(saveReg.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT));
+                webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(saveReg.getDoctorId(), saveReg.getRegDate());
+                saveOrRemoveRegCache(String.valueOf(1), saveReg.getId(), DateUtil.toDate(saveReg.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT));
             }
         } catch (Exception e) {
             LOGGER.debug("挂号出现异常", e);
             if (saveReg != null) {
                 if (isAppointment.equals(String.valueOf(1))) {
                     try {
-                        if(saveReg.getRegistrationOrderHis()!=null&&StringUtil.isNotEmpty(saveReg.getRegistrationOrderHis().getHospOrderId())){
+                        if (saveReg.getRegistrationOrderHis() != null && StringUtil.isNotEmpty(saveReg.getRegistrationOrderHis().getHospOrderId())) {
                             registrationServiceImpl.saveCancelRegistrationImpl(saveReg.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
                         }
                     } catch (Exception e2) {
@@ -142,7 +136,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         LOGGER.debug(e2.getCause().getMessage());
                     }
                 }
-                if(StringUtil.isNotEmpty(saveReg.getId())){
+                if (StringUtil.isNotEmpty(saveReg.getId())) {
                     registrationRepository.delete(saveReg.getId());
                 }
             }
@@ -172,12 +166,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                     LOGGER.debug("通知his前确认订单状态,订单号:" + payRegReq.getOrderId() + ",支付状态:" + regBack.getStatusCode());
                     BeanUtils.copyProperties(payRegReq, payOrderRegDocument);
-                    if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())
-                            && canNoticeHisFlag) {
+                    if (regBack.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue()) && canNoticeHisFlag) {
                         LOGGER.debug("挂号单是未支付状态,进行调用,订单号:" + payRegReq.getOrderId());
                         if (regBack.getIsAppointment().equals(String.valueOf(1))) {
-                            if (regBack.getRegistrationRefundReq() == null
-                                    || StringUtil.isEmpty(regBack.getRegistrationRefundReq().getOrderId())) {
+                            if (regBack.getRegistrationRefundReq() == null || StringUtil.isEmpty(regBack.getRegistrationRefundReq().getOrderId())) {
                                 updateGTtodayRegAndOrder(payRegReq, order, regBack, payOrderRegDocument);
                             }
                         } else {
@@ -185,8 +177,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                         }
                     } else {
                         LOGGER.debug("挂号单是已支付状态,不进行调用,订单号:" + payRegReq.getOrderId());
-                        webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                                regBack.getRegDate());
+                        webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
                     }
                 }
             } catch (Exception e) {
@@ -197,16 +188,15 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 更新当日挂号
-     * 
-     * @param payRegReq
-     * @param order
-     * @param regBack
-     * @param payOrderRegDocument
-     * @throws Exception
+     * 更新当日挂号.
+     *
+     * @param payRegReq           支付请求.
+     * @param order               订单.
+     * @param regBack             挂号信息.
+     * @param payOrderRegDocument 订单支付报文.
+     * @throws Exception 异常.
      */
-    private void updateEqualtodayRegAndOrder(PayRegReq payRegReq, Order order, RegistrationDocument regBack,
-            RegistrationOrderReqDocument payOrderRegDocument) throws Exception {
+    private void updateEqualtodayRegAndOrder(PayRegReq payRegReq, Order order, RegistrationDocument regBack, RegistrationOrderReqDocument payOrderRegDocument) throws Exception {
         OrderRegReq orderReq = registrationServiceImpl.convertRegistration2OrderReg(regBack);
         BeanUtils.copyProperties(orderReq, payOrderRegDocument);
         regBack.setRegistrationOrderReq(payOrderRegDocument);
@@ -217,8 +207,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             registrationServiceImpl.updateRegistrationAndOrder(payOrderRegReq);
             sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_PAY_SUCCESS);
             saveOrRemoveRegCache(String.valueOf(0), order.getFormId(), null);
-            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                    regBack.getRegDate());
+            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
         } catch (Exception e) {
             RegistrationOrderHisDocument his = regBack.getRegistrationOrderHis();
             his.setClientReturnMsg(e.getMessage());
@@ -226,8 +215,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             regBack = registrationRepository.save(regBack);
             payBackTodayReg(payRegReq, order, regBack);
             LOGGER.info("当日挂号更新出现异常", e);
-            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                    regBack.getRegDate());
+            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
             throw e;
         }
 
@@ -235,15 +223,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     /**
      * 更新预约挂号
-     * 
-     * @param payRegReq
-     * @param order
-     * @param regBack
-     * @param payOrderRegDocument
-     * @throws Exception
+     *
+     * @param payRegReq           支付请求.
+     * @param order               订单.
+     * @param regBack             挂号记录.
+     * @param payOrderRegDocument 支付报文.
+     * @throws Exception 异常.
      */
-    private void updateGTtodayRegAndOrder(PayRegReq payRegReq, Order order, RegistrationDocument regBack,
-            RegistrationOrderReqDocument payOrderRegDocument) throws Exception {
+    private void updateGTtodayRegAndOrder(PayRegReq payRegReq, Order order, RegistrationDocument regBack, RegistrationOrderReqDocument payOrderRegDocument) throws Exception {
         regBack.setRegistrationOrderReq(payOrderRegDocument);
         regBack = this.saveRegistrationDocument(regBack);
         try {
@@ -251,23 +238,19 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             regBack = this.getRegistrationDocumentById(regBack.getId());
             sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_PAY_SUCCESS);
             saveOrRemoveRegCache(String.valueOf(0), order.getFormId(), null);
-            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                    regBack.getRegDate());
+            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
         } catch (Exception e) {
             RegistrationOrderHisDocument his = regBack.getRegistrationOrderHis();
             his.setClientReturnMsg(e.getMessage());
             regBack.setRegistrationOrderHis(his);
             registrationRepository.save(regBack);
             LOGGER.info("预约挂号出现异常", e);
-            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                    regBack.getRegDate());
+            webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
             try {
-                if (regBack.getRegistrationOrderHis() != null
-                        && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())) {
+                if (regBack.getRegistrationOrderHis() != null && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())) {
                     this.saveCancelRegistration(regBack.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
                 } else {
-                    registrationServiceImpl.saveCancelRegistrationImpl(regBack.getId(),
-                            OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
+                    registrationServiceImpl.saveCancelRegistrationImpl(regBack.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
                     try {
                         this.saveRegRefund(regBack.getId());
                     } catch (Exception e3) {
@@ -277,8 +260,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                     try {
                         regBack.setStatusCode(RegistrationStatusEnum.REFUND.getValue());
-                        regBack.setStatus(CenterFunctionUtils
-                                .getRegistrationStatusName(RegistrationStatusEnum.REFUND.getValue()));
+                        regBack.setStatus(CenterFunctionUtils.getRegistrationStatusName(RegistrationStatusEnum.REFUND.getValue()));
                         this.saveRegistrationDocument(regBack);
 
                         order.setPayWay(regBack.getPayChannelId());
@@ -302,15 +284,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 当日挂号,异常情况进行退费
-     * 
-     * @param payRegReq
-     * @param order
-     * @param regBack
-     * @throws RegisterException
+     * 当日挂号,异常情况进行退费.
+     *
+     * @param payRegReq 支付请求.
+     * @param order     订单.
+     * @param regBack   挂号信息.
+     * @throws RegisterException 异常.
      */
-    private void payBackTodayReg(PayRegReq payRegReq, Order order, RegistrationDocument regBack)
-            throws RegisterException {
+    private void payBackTodayReg(PayRegReq payRegReq, Order order, RegistrationDocument regBack) throws RegisterException {
         try {
             RefundReq req = this.saveRegRefund(regBack.getId());
             regBack = this.getRegistrationDocumentById(regBack.getId());
@@ -347,17 +328,17 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 清除或保存30分钟倒计时的挂号单
+     * 清除或保存30分钟倒计时的挂号单.
      *
-     * @param type
-     *            1:添加,0:清除
-     * @param regId
+     * @param type  1:添加,0:清除.
+     * @param regId 挂号ID.
      */
     private synchronized void saveOrRemoveRegCache(String type, String regId, Date regCreateTime) {
         Cache tempCache = cacheManager.getCache(CenterFunctionUtils.CACHE_NAME_PEP_TEMP);
         Cache.ValueWrapper valueWrapper = tempCache.get(CenterFunctionUtils.CACHE_KEY_REGITRATION_SCHEDULER_TASK);
         Map<String, Date> regMap = new HashMap<>();
         if (valueWrapper != null && valueWrapper.get() != null) {
+            //noinspection unchecked
             regMap = (Map<String, Date>) valueWrapper.get();
         }
         if (type.equals(String.valueOf(1))) {
@@ -369,23 +350,23 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 退款操作
+     * 退款操作.
      *
-     * @param registrationId
-     * @return
-     * @throws Exception
+     * @param registrationId 挂号信息.
+     * @return 退款请求.
+     * @throws Exception 异常.
      */
     @Override
     public RefundReq saveRegRefund(String registrationId) throws Exception {
         RegistrationDocument reg = this.getRegistrationDocumentById(registrationId);
         if (reg == null) {
-            LOGGER.debug("未查到挂号单信息,挂号单Id:"+registrationId);
+            LOGGER.debug("未查到挂号单信息,挂号单Id:" + registrationId);
             throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
         }
         Order order = orderService.getByFormId(registrationId);
         RefundReq refundReq = null;
         if (order == null) {
-            LOGGER.debug("未查到订单表信息,挂号单Id:"+registrationId);
+            LOGGER.debug("未查到订单表信息,挂号单Id:" + registrationId);
             throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
         }
         if (StringUtil.isEmpty(reg.getPayChannelId())) {
@@ -393,10 +374,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
         }
         if (reg.getPayChannelId().equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
-            RegistrationTradeRefundDocument trade = null;
+            RegistrationTradeRefundDocument trade;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
-                trade.setOutRefundNo(reg.getOrderNum()+"001");
+                trade.setOutRefundNo(reg.getOrderNum() + "001");
                 trade.setRefundFee(String.valueOf(reg.getAmount()));
                 trade.setTotalFee(String.valueOf(reg.getAmount()));
                 trade.setOutTradeNo(reg.getOrderNum());
@@ -425,11 +406,11 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
             }
         } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
-            RegistrationTradeRefundDocument trade = null;
+            RegistrationTradeRefundDocument trade;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
-                trade.setOutRequestNo(reg.getOrderNum()+"001");
+                trade.setOutRequestNo(reg.getOrderNum() + "001");
                 trade.setRefundAmount(reg.getAmount());
                 reg.setRegistrationTradeRefund(trade);
                 this.saveRegistrationDocument(reg);
@@ -437,33 +418,30 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 trade = reg.getRegistrationTradeRefund();
             }
             BigDecimal bigDecimal = new BigDecimal(String.valueOf(reg.getAmount()));
-            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
-            AliRefundRes refundRes = aliService.saveAliRefundResProcess(trade.getOutTradeNo(), trade.getOutRequestNo(),
-                    bigDecimal.toString(), null);
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY);
+            AliRefundRes refundRes = aliService.saveAliRefundResProcess(trade.getOutTradeNo(), trade.getOutRequestNo(), bigDecimal.toString(), null);
             if (refundRes != null) {
                 if (refundRes.getCode().equals("10000") && refundRes.getMsg().equals("Success")) {
                     RegistrationRefundReqDocument refundHisReq = new RegistrationRefundReqDocument();
                     try {
-                        refundReq = this.convertAppRefundInfo2RefundReq(refundRes, order.getOrderNo(),
-                                trade.getOutRequestNo());
+                        refundReq = this.convertAppRefundInfo2RefundReq(refundRes, order.getOrderNo(), trade.getOutRequestNo());
                         BeanUtils.copyProperties(refundReq, refundHisReq);
                     } catch (Exception e) {
                         LOGGER.debug("挂号退费转换成HIS需要的参数时异常", e);
                     }
                     reg.setRegistrationRefundReq(refundHisReq);
-                    reg.setRefundApplyType(String.valueOf(1));
+                    reg.setRefundApplyType("1");
                     this.saveRegistrationDocument(reg);
                 } else {
-                    LOGGER.debug("退号(支付宝退费失败),支付宝返回Code" + refundRes.getCode() + ",支付宝返回消息:" + refundRes.getMsg()
-                            + ",订单号:" + trade.getOutTradeNo());
+                    LOGGER.debug("退号(支付宝退费失败),支付宝返回Code" + refundRes.getCode() + ",支付宝返回消息:" + refundRes.getMsg() + ",订单号:" + trade.getOutTradeNo());
                     //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
                 }
             } else {
                 LOGGER.debug("退号(支付宝退费失败),支付宝返回对象为空,订单号:" + trade.getOutTradeNo());
                 //throw new RegisterException(CenterFunctionUtils.ORDERREG_REFUND_ERR);
             }
-        }  else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
-            RegistrationTradeRefundDocument trade = null;
+        } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            RegistrationTradeRefundDocument trade;
             if (reg.getRegistrationTradeRefund() == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
@@ -475,7 +453,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 trade = reg.getRegistrationTradeRefund();
             }
             BigDecimal bigDecimal = new BigDecimal(String.valueOf(reg.getAmount()));
-            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY);
             // 生成一网通退款请求对象
             RefundNoDupBodyReq refundInfo = new RefundNoDupBodyReq();
             CmbPayEntity cmbInfo = cmbService.getQueryInfo(trade.getOutTradeNo());
@@ -492,8 +470,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 if (StringUtil.isNull(cmbRefundRes.getHead().getCode())) {
                     RegistrationRefundReqDocument refundHisReq = new RegistrationRefundReqDocument();
                     try {
-                        refundReq = this.convertAppRefundInfo2RefundReq(cmbRefundRes, order.getOrderNo(),
-                                trade.getCmbRefundNo());
+                        refundReq = this.convertAppRefundInfo2RefundReq(cmbRefundRes, order.getOrderNo(), trade.getCmbRefundNo());
                         BeanUtils.copyProperties(refundReq, refundHisReq);
                     } catch (Exception e) {
                         LOGGER.debug("挂号退费转换成HIS需要的参数时异常", e);
@@ -518,8 +495,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     /**
      * 付款成功后,发送挂号成功短信
      *
-     * @param registrationId
-     * @throws Exception
+     * @param registrationId 挂号ID.
+     * @throws Exception 异常.
      */
     private void sendRegistrationMsg(String registrationId, SendPushMsgEnum pushType) throws Exception {
         RegistrationDocument updateReg = this.getRegistrationDocumentById(registrationId);
@@ -673,7 +650,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         String hosId = CenterFunctionUtils.getHosId();
         RefundReq refundReq = new RefundReq();
         refundReq.setHosId(hosId);
-        int fee = 0;
+        //int fee = 0;
         Order order = orderService.findByOrderNo(orderNo);
         if (orderNo != null) {
             RegistrationDocument reg = this.getRegistrationDocumentById(order.getFormId());
@@ -715,7 +692,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     refundReq.setRefundResDesc("");
                     refundReq.setRefundRemark("");
                     // 招行退款请求对象
-                } else if(infoObj instanceof RefundNoDupRes) {
+                } else if (infoObj instanceof RefundNoDupRes) {
                     RefundNoDupRes refund = (RefundNoDupRes) infoObj;
                     refundReq.setOrderId(reg.getOrderNum());
                     refundReq.setHospOrderId(reg.getRegistrationOrderHis().getHospOrderId());
@@ -742,8 +719,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     @Override
-    public List<RegistrationDocument> findRegistrationByCreateUserIdAndPayStatus(String userId, String status,
-            String isAppointment) {
+    public List<RegistrationDocument> findRegistrationByCreateUserIdAndPayStatus(String userId, String status, String isAppointment) {
         return registrationRepository.findByCreateUserIdAndStatusCodeAndIsAppointment(userId, status, isAppointment);
     }
 
@@ -753,16 +729,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     @Override
-    public RegistrationDocument saveQueryPayTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
-            throws Exception {
+    public RegistrationDocument saveQueryPayTradeStatusAndUpdateReg(RegistrationDocument registrationDocument) throws Exception {
         PayRegReq payReg = getPayRegReq(registrationDocument);
         if (payReg == null) {
             if (registrationDocument.getIsAppointment().equals(String.valueOf(0))) {
                 synchronized (registrationDocument.getId()) {
                     registrationDocument = this.getRegistrationDocumentById(registrationDocument.getId());
                     registrationDocument.setStatusCode(RegistrationStatusEnum.EXCHANGE_CLOSED.getValue());
-                    registrationDocument.setStatus(
-                            CenterFunctionUtils.getRegistrationStatusName(registrationDocument.getStatusCode()));
+                    registrationDocument.setStatus(CenterFunctionUtils.getRegistrationStatusName(registrationDocument.getStatusCode()));
                     registrationDocument.setNum("F" + DateUtil.toString(new Date(), "yyMMddHHmmssSSS"));
                     registrationDocument = registrationRepository.save(registrationDocument);
                     sendRegistrationMsg(registrationDocument.getId(), SendPushMsgEnum.REG_TODAY_NOT_PAY_HIS_MSG);
@@ -786,10 +760,10 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     /**
      * 检查是否已经保存异步消息
-     * 
-     * @param orderNum
-     * @return
-     * @throws Exception
+     *
+     * @param orderNum 订单编号.
+     * @return 是否已经保存.
+     * @throws Exception 异常.
      */
     private boolean getPayPlatformRecordFlag(String orderNum) throws Exception {
         boolean canUpdate = false;
@@ -818,32 +792,30 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     /**
      * 根据订单号获得支付信息,并转换为HIS的请求参数
-     * @param registrationDocument
-     * @return
-     * @throws Exception
+     *
+     * @param registrationDocument 挂号信息.
+     * @return 支付信息.
+     * @throws Exception 异常.
      */
     private PayRegReq getPayRegReq(RegistrationDocument registrationDocument) throws Exception {
         PayRegReq payReg = null;
-        String payWay =  registrationDocument.getPayChannelId();
+        String payWay = registrationDocument.getPayChannelId();
         if (StringUtil.isEmpty(payWay)) {
             payWay = "";
         }
         if (payWay.equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             AliPayTradeQueryRes query = aliService.getAliPayTradeQueryRes(registrationDocument.getOrderNum());
-            if (query != null && query.getCode().equals("10000")
-                    && query.getTradeStatus().equals("TRADE_SUCCESS")) {
+            if (query != null && query.getCode().equals("10000") && query.getTradeStatus().equals("TRADE_SUCCESS")) {
                 payReg = this.convertAppInfo2PayReg(query, registrationDocument.getId());
             }
         } else if (payWay.equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
             WeixinPayQueryRes wQuery = weixinService.getWeixinPayQueryRes(registrationDocument.getOrderNum());
-            if (wQuery != null && wQuery.getResultCode().equals("SUCCESS")
-                    && wQuery.getTradeState().equals("SUCCESS")) {
+            if (wQuery != null && wQuery.getResultCode().equals("SUCCESS") && wQuery.getTradeState().equals("SUCCESS")) {
                 payReg = this.convertAppInfo2PayReg(wQuery, registrationDocument.getId());
             }
         } else if (payWay.equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
             QuerySingleOrderRes cmbQuery = cmbService.getCmbPayQueryRes(registrationDocument.getOrderNum());
-            if (cmbQuery != null && StringUtil.isNull(cmbQuery.getHead().getCode())
-                    && cmbQuery.getBody().getStatus().equals("0")) {
+            if (cmbQuery != null && StringUtil.isNull(cmbQuery.getHead().getCode()) && cmbQuery.getBody().getStatus().equals("0")) {
                 payReg = this.convertAppInfo2PayReg(cmbQuery, registrationDocument.getId());
             }
         }
@@ -851,15 +823,14 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     *  查询挂号单退款信息
+     * 查询挂号单退款信息.
      *
-     * @param registrationDocument
-     * @return
-     * @throws Exception
+     * @param registrationDocument 挂号.
+     * @return 挂号单退款信息.
+     * @throws Exception 异常.
      */
     @Override
-    public RegistrationDocument saveQueryRefundTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
-            throws Exception {
+    public RegistrationDocument saveQueryRefundTradeStatusAndUpdateReg(RegistrationDocument registrationDocument) throws Exception {
         boolean queryFlag = getRefundQueryFlag(registrationDocument);
         if (queryFlag) {
             RegistrationRefundReqDocument req = registrationDocument.getRegistrationRefundReq();
@@ -872,22 +843,22 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 校验退款单号是否已退款
-     * @param registrationDocument
-     * @return
-     * @throws Exception
+     * 校验退款单号是否已退款.
+     *
+     * @param registrationDocument 挂号单.
+     * @return 退款单号是否已退款.
+     * @throws Exception 异常.
      */
     private boolean getRefundQueryFlag(RegistrationDocument registrationDocument) throws Exception {
         boolean queryFlag = false;
         RegistrationTradeRefundDocument refund = registrationDocument.getRegistrationTradeRefund();
-        if(refund!=null){
+        if (refund != null) {
             if (StringUtil.isNotEmpty(refund.getOutRequestNo())) {
-                AliRefundTradeQueryRes refundQuery = aliService.getAliRefundTradeQueryRes(refund.getOutTradeNo(),
-                        refund.getOutRequestNo());
+                AliRefundTradeQueryRes refundQuery = aliService.getAliRefundTradeQueryRes(refund.getOutTradeNo(), refund.getOutRequestNo());
                 if (refundQuery != null && refundQuery.getCode().equals("10000")) {
                     queryFlag = true;
                 }
-            } else if (StringUtil.isNotEmpty(refund.getOutRefundNo())){
+            } else if (StringUtil.isNotEmpty(refund.getOutRefundNo())) {
                 WeixinRefundRes weixinRefundQuery = weixinService.getWeixinRefundRes(refund.getOutRefundNo());
                 if (weixinRefundQuery != null) {
                     queryFlag = true;
@@ -904,8 +875,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 // 退款流水号
                 queryRefundInfo.setRefundNo(refund.getCmbRefundNo());
                 QueryRefundRes cmbRefundQuery = cmbService.queryRefundResult(queryRefundInfo);
-                if(cmbRefundQuery != null && cmbRefundQuery.getBody().getBillRecord() != null
-                        && StringUtil.isNotEmpty(cmbRefundQuery.getBody().getBillRecord().get(0).getAmount())) {
+                if (cmbRefundQuery != null && cmbRefundQuery.getBody().getBillRecord() != null && StringUtil.isNotEmpty(cmbRefundQuery.getBody().getBillRecord().get(0).getAmount())) {
                     queryFlag = true;
                 }
             }
@@ -942,9 +912,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         cal.setTime(new Date());
         cal.add(Calendar.MINUTE, -overTimeMinute);
         Query query = new Query();
-        query.addCriteria(Criteria.where("createTime")
-                .lte(DateUtil.toString(cal.getTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode")
-                .is(RegistrationStatusEnum.NOT_PAID.getValue()));
+        query.addCriteria(Criteria.where("createTime").lte(DateUtil.toString(cal.getTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode").is(RegistrationStatusEnum.NOT_PAID.getValue()));
         query.with(new Sort(Sort.Direction.DESC, "apptDate"));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
@@ -952,10 +920,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     @Override
     public List<RegistrationDocument> findAlreadyCancelRegAndRefundErrRegList() {
         Query query = new Query();
-        Pattern cancelHisReturnMsgPattern = Pattern.compile("^.*" + ReturnCode.SUCCESS + ".*$",
-                Pattern.CASE_INSENSITIVE);
-        query.addCriteria(Criteria.where("statusCode").is(RegistrationStatusEnum.PAID.getValue())
-                .and("cancelHisReturnMsg").regex(cancelHisReturnMsgPattern));
+        Pattern cancelHisReturnMsgPattern = Pattern.compile("^.*" + ReturnCode.SUCCESS + ".*$", Pattern.CASE_INSENSITIVE);
+        query.addCriteria(Criteria.where("statusCode").is(RegistrationStatusEnum.PAID.getValue()).and("cancelHisReturnMsg").regex(cancelHisReturnMsgPattern));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
 
@@ -972,17 +938,13 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         if (cancelType == null) {
             cancelType = OrderCancelTypeEnum.CANCEL_OVERTIME;
         }
-        List<RegistrationRefundLogDocument> refundLogDocumentList = registrationRefundLogRepository
-                .findByNum(regBack.getNum());
+        List<RegistrationRefundLogDocument> refundLogDocumentList = registrationRefundLogRepository.findByNum(regBack.getNum());
         RegistrationRefundLogDocument newRefund = null;
         if (refundLogDocumentList.size() == 0) {
             newRefund = new RegistrationRefundLogDocument();
         }
         synchronized (regBack.getNum()) {
-            if (regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.NOT_PAID.getValue()))
-                    || (regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.PAID.getValue()))
-                            && regBack.getRegistrationTradeRefund() == null)
-                    || regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.SUSPEND_MED.getValue()))) {
+            if (regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.NOT_PAID.getValue())) || (regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.PAID.getValue())) && regBack.getRegistrationTradeRefund() == null) || regBack.getStatusCode().equals(String.valueOf(RegistrationStatusEnum.SUSPEND_MED.getValue()))) {
                 try {
                     regBack.setCancelRegToHisTime(DateUtil.toTimestamp(new Date()));
                     regBack = registrationRepository.save(regBack);
@@ -990,16 +952,13 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     saveOrRemoveRegCache(String.valueOf(0), registrationId, null);
                     regBack = this.getRegistrationDocumentById(registrationId);
                     try {
-                        webService4HisInterfaceCacheUtil.cacheDoctorTimeRegInfoRes(regBack.getDoctorId(),
-                                regBack.getRegDate());
+                        webService4HisInterfaceCacheUtil.cacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
                         if (cancelType == OrderCancelTypeEnum.CANCEL_OVERTIME) {
-                            if (regBack.getRegistrationOrderHis() != null
-                                    && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospOrderId())) {
+                            if (regBack.getRegistrationOrderHis() != null && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospOrderId())) {
                                 sendRegistrationMsg(SendPushMsgEnum.REG_OVERTIME_CANCEL, regBack);
                             }
                         }
-                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(-1),
-                                String.valueOf(0));
+                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(-1), String.valueOf(0));
                     } catch (Exception e) {
                         LOGGER.debug("医生号点信息缓存释放失败,或者是超时推送出现异常:" + regBack.getNum(), e);
                     }
@@ -1010,8 +969,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     try {
                         regBack.setCancelRegErrMsg(e.getMessage());
                         registrationRepository.save(regBack);
-                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(0), String.valueOf(-1),
-                                String.valueOf(0));
+                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(0), String.valueOf(-1), String.valueOf(0));
                     } catch (Exception e2) {
                         LOGGER.debug("RegistrationServiceNotxImpl.saveCancelRegistration[Exception]:", e2);
                         LOGGER.debug("保存错误消息时出现异常信息:" + regBack.getNum() + ",异常" + e2.getMessage());
@@ -1033,20 +991,17 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 if (StringUtil.isEmpty(regBack.getOrderNum())) {
                     throw new Exception("挂号单中订单号字段信息为空,退费失败,挂号单号:" + regBack.getNum());
                 }
-                if(regBack.getRegistrationOrderReq() != null
-                        && StringUtil.isNotNull(regBack.getRegistrationOrderReq().getSerialNum())) {
+                if (regBack.getRegistrationOrderReq() != null && StringUtil.isNotNull(regBack.getRegistrationOrderReq().getSerialNum())) {
                     this.saveRegRefund(registrationId);
                 }
                 regBack = this.getRegistrationDocumentById(registrationId);
-                if (regBack.getRegistrationRefundReq() != null
-                        && StringUtil.isNotEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
+                if (regBack.getRegistrationRefundReq() != null && StringUtil.isNotEmpty(regBack.getRegistrationRefundReq().getRefundId())) {
                     refundReq = new RefundReq();
                     BeanUtils.copyProperties(regBack.getRegistrationRefundReq(), refundReq);
                 }
                 LOGGER.debug("挂号完成退费到支付平台,订单号:" + regBack.getOrderNum());
                 try {
-                    saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
-                            String.valueOf(0));
+                    saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1), String.valueOf(0));
                 } catch (Exception e) {
                     LOGGER.debug("退费后,保存日志信息出现异常,订单号:" + regBack.getOrderNum(), e);
                 }
@@ -1058,8 +1013,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 try {
                     regBack.setRefundErrMsg(e.getMessage());
                     registrationRepository.save(regBack);
-                    saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(0),
-                            String.valueOf(0));
+                    saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(0), String.valueOf(0));
                 } catch (Exception e2) {
                     LOGGER.debug("RegistrationServiceNotxImpl.saveCancelRegistration[Exception]:", e2);
                     LOGGER.debug("保存挂号退费日志时出现异常,订单号:" + regBack.getOrderNum() + ",异常信息:" + e2.getMessage());
@@ -1068,11 +1022,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 throw e;
             }
             if (refundReq != null && StringUtil.isNotEmpty(refundReq.getRefundId())) {
-                if (regBack.getRegistrationRefundHis() == null
-                        || StringUtil.isEmpty(regBack.getRegistrationRefundHis().getRefundFlag())) {
-                    if (regBack.getRegistrationOrderHis() != null
-                            && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())
-                            && "1".equals(regBack.getIsAppointment())) {
+                if (regBack.getRegistrationRefundHis() == null || StringUtil.isEmpty(regBack.getRegistrationRefundHis().getRefundFlag())) {
+                    if (regBack.getRegistrationOrderHis() != null && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId()) && "1".equals(regBack.getIsAppointment())) {
                         this.saveUpdateRegistrationAndOrderRefund(refundReq);
                     } else {
                         try {
@@ -1080,8 +1031,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                             if (order != null) {
                                 regBack = this.getRegistrationDocumentById(order.getFormId());
                                 regBack.setStatusCode(RegistrationStatusEnum.REFUND.getValue());
-                                regBack.setStatus(CenterFunctionUtils
-                                        .getRegistrationStatusName(RegistrationStatusEnum.REFUND.getValue()));
+                                regBack.setStatus(CenterFunctionUtils.getRegistrationStatusName(RegistrationStatusEnum.REFUND.getValue()));
                                 regBack.setRefundApplyType(String.valueOf(1));
                                 this.saveRegistrationDocument(regBack);
                                 order.setOrderStatus(String.valueOf(3));
@@ -1102,8 +1052,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                     }
                     LOGGER.debug("完成退费通知HIS,订单号:" + regBack.getOrderNum());
                     try {
-                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1),
-                                String.valueOf(1));
+                        saveOrUpdateRegRefundLog(regBack, newRefund, String.valueOf(1), String.valueOf(1), String.valueOf(1));
                     } catch (Exception e) {
                         LOGGER.debug("保存挂号退费日志时出现异常,订单号:" + regBack.getOrderNum(), e);
                     }
@@ -1114,9 +1063,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     @Override
-    public void saveOrUpdateRegRefundLog(RegistrationDocument regBack, RegistrationRefundLogDocument refundLogDocument,
-            String cancelRegStatus, String refundStatus, String refundHisStatus) {
-        if(refundLogDocument!=null){
+    public void saveOrUpdateRegRefundLog(RegistrationDocument regBack, RegistrationRefundLogDocument refundLogDocument, String cancelRegStatus, String refundStatus, String refundHisStatus) {
+        if (refundLogDocument != null) {
             refundLogDocument.setNum(regBack.getNum());
             refundLogDocument.setOrderNum(regBack.getOrderNum());
             refundLogDocument.setPayChannelId(regBack.getPayChannelId());
@@ -1131,10 +1079,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     @Override
     public List<RegistrationDocument> findRegistrationDocumentByStopReg(Map<String, String> paramMap) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("doctorId").is(paramMap.get("doctorId")).and("deptId")
-                .is(paramMap.get("deptId")).and("regDate").is(paramMap.get("regDate")).and("beginTime")
-                .gte(paramMap.get("beginTime")).lte(paramMap.get("endTime")).and("statusCode")
-                .in(RegistrationStatusEnum.NOT_PAID.getValue(), RegistrationStatusEnum.PAID.getValue()));
+        query.addCriteria(Criteria.where("doctorId").is(paramMap.get("doctorId")).and("deptId").is(paramMap.get("deptId")).and("regDate").is(paramMap.get("regDate")).and("beginTime").gte(paramMap.get("beginTime")).lte(paramMap.get("endTime")).and("statusCode").in(RegistrationStatusEnum.NOT_PAID.getValue(), RegistrationStatusEnum.PAID.getValue()));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
 
@@ -1146,7 +1091,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             if (trade == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
-                trade.setOutRefundNo(reg.getOrderNum()+"001");
+                trade.setOutRefundNo(reg.getOrderNum() + "001");
                 trade.setRefundFee(reg.getAmount());
                 trade.setTotalFee(reg.getAmount());
                 reg.setRegistrationTradeRefund(trade);
@@ -1161,28 +1106,25 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             if (resultRes.getResultCode().equals("0")) {
                 refundFlag = true;
             } else {
-                LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:"
-                        + resultRes.getResultMsg());
+                LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + resultRes.getResultMsg());
             }
         } else if (reg.getPayChannelId().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             if (trade == null) {
                 trade = new RegistrationTradeRefundDocument();
                 trade.setOutTradeNo(reg.getOrderNum());
-                trade.setOutRequestNo(reg.getOrderNum()+"001");
+                trade.setOutRequestNo(reg.getOrderNum() + "001");
                 trade.setRefundAmount(reg.getAmount());
                 reg.setRegistrationTradeRefund(trade);
                 reg = this.saveRegistrationDocument(reg);
             }
             BigDecimal bigDecimal = new BigDecimal(reg.getAmount());
-            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
-            AliRefundRes refunRes = aliService.saveAliRefundResProcess(trade.getOutTradeNo(), trade.getOutRequestNo(),
-                    bigDecimal.toString(), null);
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY);
+            AliRefundRes refunRes = aliService.saveAliRefundResProcess(trade.getOutTradeNo(), trade.getOutRequestNo(), bigDecimal.toString(), null);
             if (refunRes != null) {
                 if (refunRes.getCode().equals("10000")) {
                     refundFlag = true;
                 } else {
-                    LOGGER.debug(
-                            "挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + refunRes.getMsg());
+                    LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + refunRes.getMsg());
                 }
             } else {
                 LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:返回为空");
@@ -1199,7 +1141,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 trade = reg.getRegistrationTradeRefund();
             }
             BigDecimal bigDecimal = new BigDecimal(String.valueOf(reg.getAmount()));
-            bigDecimal = bigDecimal.divide(new BigDecimal("100"));
+            bigDecimal = bigDecimal.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY);
             // 生成一网通退款请求对象
             RefundNoDupBodyReq refundInfo = new RefundNoDupBodyReq();
             CmbPayEntity cmbInfo = cmbService.getQueryInfo(trade.getOutTradeNo());
@@ -1216,8 +1158,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 if (StringUtil.isEmpty(cmbRefundRes.getHead().getCode())) {
                     refundFlag = true;
                 } else {
-                    LOGGER.debug(
-                            "挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + cmbRefundRes.getHead().getErrMsg());
+                    LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:" + cmbRefundRes.getHead().getErrMsg());
                 }
             } else {
                 LOGGER.debug("挂号退费失败,挂号单号:" + reg.getNum() + ",订单号:" + reg.getOrderNum() + ",失败原因:返回为空");
@@ -1247,10 +1188,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     @Override
-    public List<RegistrationDocument> findRegistrationDocumentByCreateUserIdAndPatientIdCard(String createUserId,
-            String patientIdCard) {
-        return registrationRepository.findRegistrationDocumentByCreateUserIdAndPatientIdCard(createUserId,
-                patientIdCard);
+    public List<RegistrationDocument> findRegistrationDocumentByCreateUserIdAndPatientIdCard(String createUserId, String patientIdCard) {
+        return registrationRepository.findRegistrationDocumentByCreateUserIdAndPatientIdCard(createUserId, patientIdCard);
     }
 
     @Override
@@ -1258,7 +1197,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         List<RegistrationOrderProcessDocument> orders = registration.getOrders();
         getNotPaidProcess(registration, orders);
         getOrder2PayPlatform(registration, orders);
-        if(orders.size()>1){
+        if (orders.size() > 1) {
             getHospitalConfirm(registration, orders);
         }
         if ("1".equals(registration.getIsAppointment())) {
@@ -1280,8 +1219,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         } else if ("0".equals(registration.getIsAppointment())) {
             if (orders.size() > 2) {
                 RegistrationOrderProcessDocument hospConfirmProcess = orders.get(2);
-                if (hospConfirmProcess.getDetail().contains("挂号失败") || (hospConfirmProcess.getDetail().contains("未确认")
-                        && !registration.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue()))) {
+                if (hospConfirmProcess.getDetail().contains("挂号失败") || (hospConfirmProcess.getDetail().contains("未确认") && !registration.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue()))) {
                     getRefund2Patient(registration, orders);
                 }
             }
@@ -1289,13 +1227,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 订单流程(医院确认退号)
-     * 
-     * @param registration
-     * @param orders
+     * 订单流程(医院确认退号).
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
-    private void getHospitalConfirmCancel(RegistrationDocument registration,
-            List<RegistrationOrderProcessDocument> orders) {
+    private void getHospitalConfirmCancel(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         RegistrationRefundReqDocument refundReq = registration.getRegistrationRefundReq();
         if (refundReq != null && StringUtil.isNotEmpty(refundReq.getRefundSerialNum())) {
             RegistrationOrderProcessDocument orderProcess = new RegistrationOrderProcessDocument();
@@ -1308,7 +1245,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("医院确认成功");
             }
-            if(registration.getRegistrationRefundHis() != null) {
+            if (registration.getRegistrationRefundHis() != null) {
                 String rt = registration.getRegistrationRefundHis().getCreateTime();
                 String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
                 detailStr.append("<br>").append(rtm);
@@ -1320,13 +1257,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 订单流程(退号)
-     * 
-     * @param registration
-     * @param orders
+     * 订单流程(退号).
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
-    private void getCancelReg2Hospital(RegistrationDocument registration,
-            List<RegistrationOrderProcessDocument> orders) {
+    private void getCancelReg2Hospital(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         boolean isShowCancel = false;
         boolean cancelRegFlag = false;
         if (StringUtil.isNotEmpty(registration.getCancelHisReturnMsg())) {
@@ -1355,7 +1291,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("退号失败");
             }
-            if(registration.getRegistrationTradeRefund() != null) {
+            if (registration.getRegistrationTradeRefund() != null) {
                 String rt = registration.getRegistrationTradeRefund().getCreateTime();
                 String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
                 detailStr.append("<br>").append(rtm);
@@ -1368,9 +1304,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     /**
      * 订单流程(退款)
-     * 
-     * @param registration
-     * @param orders
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
     private void getRefund2Patient(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
@@ -1379,11 +1315,11 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
         detailStr = new StringBuilder();
         RegistrationTradeRefundDocument refund = registration.getRegistrationTradeRefund();
         String img = "money.png";
-        if(String.valueOf(PayChannel.ALIPAY.getCode()).equals(registration.getPayChannelId())){
+        if (String.valueOf(PayChannel.ALIPAY.getCode()).equals(registration.getPayChannelId())) {
             img = "alipay_icon.png";
-        }else if(String.valueOf(PayChannel.WECHATPAY.getCode()).equals(registration.getPayChannelId())){
+        } else if (String.valueOf(PayChannel.WECHATPAY.getCode()).equals(registration.getPayChannelId())) {
             img = "weixin.png";
-        }else if(String.valueOf(PayChannel.WEB_UNION.getCode()).equals(registration.getPayChannelId())){
+        } else if (String.valueOf(PayChannel.WEB_UNION.getCode()).equals(registration.getPayChannelId())) {
             img = "CMB_icon.jpg";
         }
         if (refund == null) {
@@ -1393,7 +1329,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("申请退款失败");
             }
-            if(registration.getRegistrationTradeRefund() != null) {
+            if (registration.getRegistrationTradeRefund() != null) {
                 String rt = registration.getRegistrationRefundReq().getCreateTime();
                 String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
                 detailStr.append("<br>").append(rtm);
@@ -1413,7 +1349,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             } else {
                 detailStr.append("申请退款失败");
             }
-            if(registration.getRegistrationTradeRefund() != null) {
+            if (registration.getRegistrationTradeRefund() != null) {
                 String rt = registration.getRegistrationRefundReq().getCreateTime();
                 String rtm = StringUtil.isEmpty(rt) ? "" : rt.substring(0, rt.length() - 4);
                 detailStr.append("<br>").append(rtm);
@@ -1427,9 +1363,9 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
 
     /**
      * 订单流程(医院确认)
-     * 
-     * @param registration
-     * @param orders
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
     private void getHospitalConfirm(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
@@ -1445,7 +1381,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 RegistrationOrderHisDocument orderHis = registration.getRegistrationOrderHis();
                 if (orderHis != null && StringUtil.isNotEmpty(orderHis.getHospPayId())) {
                     String ct = orderHis.getLastModifyTime();
-                    String hct =  StringUtil.isEmpty(ct) ? "" : ct.substring(0, ct.length() - 4);
+                    String hct = StringUtil.isEmpty(ct) ? "" : ct.substring(0, ct.length() - 4);
                     detailStr.append(hct);
                     if (StringUtil.isNotEmpty(orderHis.getHospRemark())) {
                         detailStr.append("<br/>");
@@ -1462,7 +1398,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
                 }
                 orderProcess.setDetail(detailStr.toString());
                 orders.add(orderProcess);
-            }else{
+            } else {
                 orderProcess.setStatus(String.valueOf(0));
                 orderProcess.setDetail("未确认");
                 orders.add(orderProcess);
@@ -1471,13 +1407,12 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 订单流程(支付给支付平台)
-     * 
-     * @param registration
-     * @param orders
+     * 订单流程(支付给支付平台).
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
-    private void getOrder2PayPlatform(RegistrationDocument registration,
-            List<RegistrationOrderProcessDocument> orders) {
+    private void getOrder2PayPlatform(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
         RegistrationOrderProcessDocument orderProcess = new RegistrationOrderProcessDocument();
         orderProcess.setName("订单未支付");
@@ -1513,7 +1448,7 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             orderProcess.setName("订单已支付");
             orderProcess.setImg(img);
             orders.add(orderProcess);
-        }else{
+        } else {
             orderProcess.setStatus(String.valueOf(0));
             orderProcess.setDetail("");
             orderProcess.setImg(img);
@@ -1522,27 +1457,25 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
     }
 
     /**
-     * 订单流程(待支付)
-     * 
-     * @param registration
-     * @param orders
+     * 订单流程(待支付).
+     *
+     * @param registration 挂号信息.
+     * @param orders 订单列表.
      */
     private void getNotPaidProcess(RegistrationDocument registration, List<RegistrationOrderProcessDocument> orders) {
         StringBuilder detailStr;
-        RegistrationOrderProcessDocument orderProcess = null;
+        RegistrationOrderProcessDocument orderProcess;
         orderProcess = new RegistrationOrderProcessDocument();
         orderProcess.setStatus(String.valueOf(1));
         orderProcess.setName("生成订单，待支付");
         detailStr = new StringBuilder();
         detailStr.append(registration.getNum());
         detailStr.append("<br/>");
-        detailStr.append(DateUtil
-                .toTimestamp(DateUtil.toDate(registration.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)));
+        detailStr.append(DateUtil.toTimestamp(DateUtil.toDate(registration.getCreateTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)));
         orderProcess.setDetail(detailStr.toString());
         orderProcess.setImg("user.png");
         orders.add(orderProcess);
     }
-
 
 
     private PayRegReq getOrderProcessPayRegReq(RegistrationDocument registrationDocument) throws Exception {

@@ -16,7 +16,7 @@ public class AliPayNotice2BusinessTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(AliPayNotice2BusinessTask.class);
 
     @Autowired
-    private AliService aliService;
+    AliService aliService;
 
     @Async
     public void run(Map<String, String> aliParamMap, String dealType) {

@@ -41,9 +41,6 @@ import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 
-/**
- * Created by think on 2016/9/13 0013.
- */
 @Service
 public class RecipeServiceImpl {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeServiceImpl.class);
@@ -93,7 +90,7 @@ public class RecipeServiceImpl {
     }
 
     public RecipeOrderDocument saveOrderAndRecipeOrderDocument(String memberId, String clinicCode) throws Exception {
-        RecipeOrderDocument recipeOrder = null;
+        RecipeOrderDocument recipeOrder;
         User user = userService.getCurrentUser();
         UserInfoDocument userInfo = userInfoService.getUserInfoByUserId(user.getId());
         BasicInfoDocument info = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
@@ -111,7 +108,7 @@ public class RecipeServiceImpl {
         }
 
         List<RecipeDetailAllDocument> detailList = new ArrayList<>();
-        RecipeDetailAllDocument dt = null;
+        RecipeDetailAllDocument dt;
         BigDecimal bigDecimal = new BigDecimal("0");
         String hospSeq = "";
         for (Pay pay : payList) {

@@ -1,5 +1,9 @@
 package com.proper.enterprise.isj.user.utils;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,39 +11,46 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class IdcardUtils extends StringUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CenterFunctionUtils.class);
-    
-    /** 中国公民身份证号码最小长度。 */
+
+    /**
+     * 中国公民身份证号码最小长度。
+     */
     public static final int CHINA_ID_MIN_LENGTH = 15;
 
-    /** 中国公民身份证号码最大长度。 */
+    /**
+     * 中国公民身份证号码最大长度。
+     */
     public static final int CHINA_ID_MAX_LENGTH = 18;
 
     /**
      * 省、直辖市代码表
      */
-    public static final String[] CITY_CODE = new String[] {"11", "12", "13", "14", "15", "21", "22", "23", "31", "32",
-            "33", "34", "35", "36", "37", "41", "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62",
-            "63", "64", "65", "71", "81", "82", "91" };
+    public static final String[] CITY_CODE = new String[]{"11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37", "41", "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65", "71", "81", "82", "91"};
 
-    /** 每位加权因子 */
-    private static final int POWER[] = new int[] {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+    /**
+     * 每位加权因子
+     */
+    private static final int POWER[] = new int[]{7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
 
-    /** 第18位校检码 */
-    public static final String VERIFY_CODE[] = new String[] {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
-    /** 最低年限 */
+    /**
+     * 第18位校检码
+     */
+    public static final String VERIFY_CODE[] = new String[]{"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
+    /**
+     * 最低年限
+     */
     public static final int MIN = 1930;
-    private static Map<String, String> cityCodes = new HashMap<String, String>();
-    /** 台湾身份首字母对应数字 */
-    private static Map<String, Integer> twFirstCode = new HashMap<String, Integer>();
-    /** 香港身份首字母对应数字 */
-    private static Map<String, Integer> hkFirstCode = new HashMap<String, Integer>();
+    private static Map<String, String> cityCodes = new HashMap<>();
+    /**
+     * 台湾身份首字母对应数字
+     */
+    private static Map<String, Integer> twFirstCode = new HashMap<>();
+    /* 香港身份首字母对应数字 */
+    private static Map<String, Integer> hkFirstCode = new HashMap<>();
+
     static {
         cityCodes.put("11", "北京");
         cityCodes.put("12", "天津");
@@ -117,12 +128,11 @@ public class IdcardUtils extends StringUtils {
     /**
      * 将15位身份证号码转换为18位
      *
-     * @param idCard
-     *            15位身份编码
+     * @param idCard 15位身份编码
      * @return 18位身份编码
      */
     public static String conver15CardTo18(String idCard) {
-        String idCard18 = "";
+        String idCard18;
         if (idCard.length() != CHINA_ID_MIN_LENGTH) {
             return null;
         }
@@ -144,17 +154,16 @@ public class IdcardUtils extends StringUtils {
             idCard18 = idCard.substring(0, 6) + sYear + idCard.substring(8);
             // 转换字符数组
             char[] cArr = idCard18.toCharArray();
-            if (cArr != null) {
-                int[] iCard = converCharToInt(cArr);
-                int iSum17 = getPowerSum(iCard);
-                // 获取校验位
-                String sVal = getCheckCode18(iSum17);
-                if (sVal.length() > 0) {
-                    idCard18 += sVal;
-                } else {
-                    return null;
-                }
+            int[] iCard = converCharToInt(cArr);
+            int iSum17 = getPowerSum(iCard);
+            // 获取校验位
+            String sVal = getCheckCode18(iSum17);
+            if (sVal.length() > 0) {
+                idCard18 += sVal;
+            } else {
+                return null;
             }
+
         } else {
             return null;
         }
@@ -162,7 +171,7 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 验证身份证是否合法
+     * 验证身份证是否合法.
      */
     public static boolean validateCard(String idCard) {
         String card = idCard.trim();
@@ -182,11 +191,10 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 验证18位身份编码是否合法
+     * 验证18位身份编码是否合法.
      *
-     * @param idCard
-     *            身份编码
-     * @return 是否合法
+     * @param idCard 身份编码.
+     * @return 是否合法.
      */
     public static boolean validateIdCard18(String idCard) {
         boolean bTrue = false;
@@ -197,17 +205,16 @@ public class IdcardUtils extends StringUtils {
             String code18 = idCard.substring(17, CHINA_ID_MAX_LENGTH);
             if (isNum(code17)) {
                 char[] cArr = code17.toCharArray();
-                if (cArr != null) {
-                    int[] iCard = converCharToInt(cArr);
-                    int iSum17 = getPowerSum(iCard);
-                    // 获取校验位
-                    String val = getCheckCode18(iSum17);
-                    if (val.length() > 0) {
-                        if (val.equalsIgnoreCase(code18)) {
-                            bTrue = true;
-                        }
+                int[] iCard = converCharToInt(cArr);
+                int iSum17 = getPowerSum(iCard);
+                // 获取校验位
+                String val = getCheckCode18(iSum17);
+                if (val.length() > 0) {
+                    if (val.equalsIgnoreCase(code18)) {
+                        bTrue = true;
                     }
                 }
+
             }
         }
         return bTrue;
@@ -216,8 +223,7 @@ public class IdcardUtils extends StringUtils {
     /**
      * 验证15位身份编码是否合法
      *
-     * @param idCard
-     *            身份编码
+     * @param idCard 身份编码
      * @return 是否合法
      */
     public static boolean validateIdCard15(String idCard) {
@@ -240,8 +246,7 @@ public class IdcardUtils extends StringUtils {
             if (birthDate != null) {
                 cal.setTime(birthDate);
             }
-            if (!valiDate(cal.get(Calendar.YEAR), Integer.parseInt(birthCode.substring(2, 4)),
-                    Integer.parseInt(birthCode.substring(4, 6)))) {
+            if (!valiDate(cal.get(Calendar.YEAR), Integer.parseInt(birthCode.substring(2, 4)), Integer.parseInt(birthCode.substring(4, 6)))) {
                 return false;
             }
         } else {
@@ -253,13 +258,12 @@ public class IdcardUtils extends StringUtils {
     /**
      * 验证10位身份编码是否合法
      *
-     * @param idCard
-     *            身份编码
+     * @param idCard 身份编码
      * @return 身份证信息数组
-     *         <p>
-     *         [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false)
-     *         若不是身份证件号码则返回null
-     *         </p>
+     * <p>
+     * [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false)
+     * 若不是身份证件号码则返回null
+     * </p>
      */
     public static String[] validateIdCard10(String idCard) {
         String[] info = new String[3];
@@ -270,14 +274,17 @@ public class IdcardUtils extends StringUtils {
         if (idCard.matches("^[a-zA-Z][0-9]{9}$")) { // 台湾
             info[0] = "台湾";
             String char2 = idCard.substring(1, 2);
-            if (char2.equals("1")) {
-                info[1] = "M";
-            } else if (char2.equals("2")) {
-                info[1] = "F";
-            } else {
-                info[1] = "N";
-                info[2] = "false";
-                return info;
+            switch (char2) {
+                case "1":
+                    info[1] = "M";
+                    break;
+                case "2":
+                    info[1] = "F";
+                    break;
+                default:
+                    info[1] = "N";
+                    info[2] = "false";
+                    return info;
             }
             info[2] = validateTWCard(idCard) ? "true" : "false";
         } else if (idCard.matches("^[1|5|7][0-9]{6}\\(?[0-9A-Z]\\)?$")) { // 澳门
@@ -296,8 +303,7 @@ public class IdcardUtils extends StringUtils {
     /**
      * 验证台湾身份证号码
      *
-     * @param idCard
-     *            身份证号码
+     * @param idCard 身份证号码
      * @return 验证码是否符合
      */
     public static boolean validateTWCard(String idCard) {
@@ -316,7 +322,7 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 验证香港身份证号码(存在Bug，部份特殊身份证无法检查)
+     * 验证香港身份证号码(存在Bug，部份特殊身份证无法检查).
      * <p>
      * 身份证前2位为英文字符，如果只出现一个英文字符则表示第一位是空格，对应数字58 前2位英文字符A-Z分别对应数字10-35
      * 最后一位校验码为0-9的数字加上字符"A"，"A"代表10
@@ -325,20 +331,17 @@ public class IdcardUtils extends StringUtils {
      * 将身份证号码全部转换为数字，分别对应乘9-1相加的总和，整除11则证件号码有效
      * </p>
      *
-     * @param idCard
-     *            身份证号码
-     * @return 验证码是否符合
+     * @param idCard 身份证号码.
+     * @return 验证码是否符合.
      */
     public static boolean validateHKCard(String idCard) {
         String card = idCard.replaceAll("[\\(|\\)]", "");
-        Integer sum = 0;
+        Integer sum;
         if (card.length() == 9) {
-            sum = (Integer.parseInt(String.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0])) - 55) * 9
-                    + (Integer.parseInt(String.valueOf(card.substring(1, 2).toUpperCase().toCharArray()[0])) - 55) * 8;
+            sum = (Integer.parseInt(String.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0])) - 55) * 9 + (Integer.parseInt(String.valueOf(card.substring(1, 2).toUpperCase().toCharArray()[0])) - 55) * 8;
             card = card.substring(1, 9);
         } else {
-            sum = 522
-                    + (Integer.parseInt(String.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0])) - 55) * 8;
+            sum = 522 + (Integer.parseInt(String.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0])) - 55) * 8;
         }
         String mid = card.substring(1, 7);
         String end = card.substring(7, 8);
@@ -359,8 +362,7 @@ public class IdcardUtils extends StringUtils {
     /**
      * 将字符数组转换成数字数组
      *
-     * @param ca
-     *            字符数组
+     * @param ca 字符数组
      * @return 数字数组
      */
     public static int[] converCharToInt(char[] ca) {
@@ -379,7 +381,7 @@ public class IdcardUtils extends StringUtils {
     /**
      * 将身份证的每位和对应位的加权因子相乘之后，再得到和值
      *
-     * @param iArr
+     * @param iArr 加权因子.
      * @return 身份证编码。
      */
     public static int getPowerSum(int[] iArr) {
@@ -399,48 +401,48 @@ public class IdcardUtils extends StringUtils {
     /**
      * 将power和值与11取模获得余数进行校验码判断
      *
-     * @param iSum
+     * @param iSum 和值.
      * @return 校验位
      */
     public static String getCheckCode18(int iSum) {
         String sCode = "";
         switch (iSum % 11) {
-        case 10:
-            sCode = "2";
-            break;
-        case 9:
-            sCode = "3";
-            break;
-        case 8:
-            sCode = "4";
-            break;
-        case 7:
-            sCode = "5";
-            break;
-        case 6:
-            sCode = "6";
-            break;
-        case 5:
-            sCode = "7";
-            break;
-        case 4:
-            sCode = "8";
-            break;
-        case 3:
-            sCode = "9";
-            break;
-        case 2:
-            sCode = "x";
-            break;
-        case 1:
-            sCode = "0";
-            break;
-        case 0:
-            sCode = "1";
-            break;
-        default:
-            sCode = "1";
-            break;
+            case 10:
+                sCode = "2";
+                break;
+            case 9:
+                sCode = "3";
+                break;
+            case 8:
+                sCode = "4";
+                break;
+            case 7:
+                sCode = "5";
+                break;
+            case 6:
+                sCode = "6";
+                break;
+            case 5:
+                sCode = "7";
+                break;
+            case 4:
+                sCode = "8";
+                break;
+            case 3:
+                sCode = "9";
+                break;
+            case 2:
+                sCode = "x";
+                break;
+            case 1:
+                sCode = "0";
+                break;
+            case 0:
+                sCode = "1";
+                break;
+            default:
+                sCode = "1";
+                break;
         }
 
         return sCode;
@@ -449,18 +451,18 @@ public class IdcardUtils extends StringUtils {
     /**
      * 根据身份编号获取年龄
      *
-     * @param idCard
-     *            身份编号
+     * @param idCard 身份编号
      * @return 年龄(周岁)
      */
     public static int getAgeByIdCard(String idCard) {
-        int iAge = 0;
+        int iAge;
         if (idCard.length() == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        String year = idCard.substring(6, 10);
-        String month = idCard.substring(10, 12);
-        String day = idCard.substring(12, 14);
+        StringBuilder buf = new StringBuilder(idCard==null?"":idCard);
+        String year = buf.substring(6, 10);
+        String month = buf.substring(10, 12);
+        String day = buf.substring(12, 14);
         Calendar cal = Calendar.getInstance();
         int iCurrYear = cal.get(Calendar.YEAR);
         int iCurrMonth = cal.get(Calendar.MONTH) + 1;
@@ -477,11 +479,10 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 根据身份编号获取生日
+     * 根据身份编号获取生日.
      *
-     * @param idCard
-     *            身份编号
-     * @return 生日(yyyyMMdd)
+     * @param idCard 身份编号.
+     * @return 生日(yyyyMMdd).
      */
     public static String getBirthByIdCard(String idCard) {
         Integer len = idCard.length();
@@ -490,15 +491,14 @@ public class IdcardUtils extends StringUtils {
         } else if (len == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        return idCard.substring(6, 14);
+        return new StringBuilder(idCard==null?"":idCard).substring(6, 14);
     }
 
     /**
-     * 根据身份编号获取生日年
+     * 根据身份编号获取生日年.
      *
-     * @param idCard
-     *            身份编号
-     * @return 生日(yyyy)
+     * @param idCard 身份编号.
+     * @return 生日(yyyy).
      */
     public static Short getYearByIdCard(String idCard) {
         Integer len = idCard.length();
@@ -507,15 +507,14 @@ public class IdcardUtils extends StringUtils {
         } else if (len == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        return Short.valueOf(idCard.substring(6, 10));
+        return Short.valueOf(new StringBuilder(idCard==null?"":idCard).substring(6, 10));
     }
 
     /**
-     * 根据身份编号获取生日月
+     * 根据身份编号获取生日月.
      *
-     * @param idCard
-     *            身份编号
-     * @return 生日(MM)
+     * @param idCard 身份编号.
+     * @return 生日(MM).
      */
     public static Short getMonthByIdCard(String idCard) {
         Integer len = idCard.length();
@@ -524,15 +523,14 @@ public class IdcardUtils extends StringUtils {
         } else if (len == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        return Short.valueOf(idCard.substring(10, 12));
+        return Short.valueOf(new StringBuilder(idCard==null?"":idCard).substring(10, 12));
     }
 
     /**
-     * 根据身份编号获取生日天
+     * 根据身份编号获取生日天.
      *
-     * @param idCard
-     *            身份编号
-     * @return 生日(dd)
+     * @param idCard 身份编号.
+     * @return 生日(dd).
      */
     public static Short getDateByIdCard(String idCard) {
         Integer len = idCard.length();
@@ -541,22 +539,22 @@ public class IdcardUtils extends StringUtils {
         } else if (len == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        return Short.valueOf(idCard.substring(12, 14));
+        return Short.valueOf(new StringBuilder(idCard==null?"":idCard).substring(12, 14));
     }
 
     /**
-     * 根据身份编号获取性别
+     * 根据身份编号获取性别.
      *
-     * @param idCard
-     *            身份编号
-     * @return 性别(M-男，F-女，N-未知)
+     * @param idCard 身份编号.
+     * @return 性别.
+     * (M-男，F-女，N-未知)
      */
     public static String getGenderByIdCard(String idCard) {
-        String sGender = "N";
+        String sGender;
         if (idCard.length() == CHINA_ID_MIN_LENGTH) {
             idCard = conver15CardTo18(idCard);
         }
-        String sCardNum = idCard.substring(16, 17);
+        String sCardNum = new StringBuilder(idCard==null?"":idCard).substring(16, 17);
         if (Integer.parseInt(sCardNum) % 2 != 0) {
             sGender = "M";
         } else {
@@ -566,15 +564,14 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 根据身份编号获取户籍省份
+     * 根据身份编号获取户籍省份.
      *
-     * @param idCard
-     *            身份编码
+     * @param idCard 身份编码.
      * @return 省级编码。
      */
     public static String getProvinceByIdCard(String idCard) {
         int len = idCard.length();
-        String sProvince = null;
+        String sProvince;
         String sProvinNum = "";
         if (len == CHINA_ID_MIN_LENGTH || len == CHINA_ID_MAX_LENGTH) {
             sProvinNum = idCard.substring(0, 2);
@@ -584,25 +581,22 @@ public class IdcardUtils extends StringUtils {
     }
 
     /**
-     * 数字验证
+     * 数字验证.
      *
-     * @param val
-     * @return 提取的数字。
+     * @param val 被验证的字符串.
+     * @return 提取的数字.
      */
     public static boolean isNum(String val) {
-        return val == null || "".equals(val) ? false : val.matches("^[0-9]*$");
+        return !(val == null || "".equals(val)) && val.matches("^[0-9]*$");
     }
 
     /**
-     * 验证小于当前日期 是否有效
+     * 验证小于当前日期 是否有效.
      *
-     * @param iYear
-     *            待验证日期(年)
-     * @param iMonth
-     *            待验证日期(月 1-12)
-     * @param iDate
-     *            待验证日期(日)
-     * @return 是否有效
+     * @param iYear  待验证日期(年).
+     * @param iMonth 待验证日期(月 1-12).
+     * @param iDate  待验证日期(日).
+     * @return 是否有效.
      */
     public static boolean valiDate(int iYear, int iMonth, int iDate) {
         Calendar cal = Calendar.getInstance();
@@ -615,18 +609,18 @@ public class IdcardUtils extends StringUtils {
             return false;
         }
         switch (iMonth) {
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            datePerMonth = 30;
-            break;
-        case 2:
-            boolean dm = ((iYear % 4 == 0 && iYear % 100 != 0) || (iYear % 400 == 0)) && (iYear > MIN && iYear < year);
-            datePerMonth = dm ? 29 : 28;
-            break;
-        default:
-            datePerMonth = 31;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                datePerMonth = 30;
+                break;
+            case 2:
+                boolean dm = ((iYear % 4 == 0 && iYear % 100 != 0) || (iYear % 400 == 0)) && (iYear > MIN && iYear < year);
+                datePerMonth = dm ? 29 : 28;
+                break;
+            default:
+                datePerMonth = 31;
         }
         return (iDate >= 1) && (iDate <= datePerMonth);
     }

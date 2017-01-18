@@ -23,6 +23,7 @@ import com.proper.enterprise.isj.webservices.model.res.stopreg.StopReg;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 
 /**
+ * 终止挂号任务.
  * Created by think on 2016/10/6 0006.
  */
 @Component
@@ -64,14 +65,14 @@ public class StopRegTask implements Runnable {
                 }
                 cal.add(Calendar.DAY_OF_MONTH, CenterFunctionUtils.SCHEDULING_MAXADD_DAY + 2);
                 List<StopReg> stopReglist = res.getRes().getStopRegList();
-                String regDate = null;
-                String beginTime = null;
-                String endTime = null;
-                String doctorId = null;
-                String deptId = null;
-                StringBuilder regKey = null;
-                Map<String, String> paramMap = null;
-                List<RegistrationDocument> regList = null;
+                String regDate;
+                String beginTime;
+                String endTime;
+                String doctorId;
+                String deptId;
+                StringBuilder regKey;
+                Map<String, String> paramMap;
+                List<RegistrationDocument> regList;
                 for (StopReg stopReg : stopReglist) {
                     doctorId = stopReg.getDoctorId();
                     deptId = stopReg.getDeptId();

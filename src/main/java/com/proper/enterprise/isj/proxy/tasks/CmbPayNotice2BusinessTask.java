@@ -17,7 +17,7 @@ public class CmbPayNotice2BusinessTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(CmbPayNotice2BusinessTask.class);
 
     @Autowired
-    private CmbService cmbService;
+    CmbService cmbService;
 
     @Async
     public void run(CmbPayEntity cmbInfo) {

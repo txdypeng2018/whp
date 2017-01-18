@@ -13,19 +13,26 @@ import com.proper.enterprise.isj.webservices.model.res.ResModel;
 import com.proper.enterprise.isj.webservices.model.res.refundbyhis.RefundByHis;
 
 /**
+ * 缴费服务.
  * Created by think on 2016/9/13 0013.
  */
 public interface RecipeService {
 
     /**
-     * 获得人员的缴费信息
+     * 获得人员的缴费信息.
+     * @param basic 基础信息.
+     * @param payStatus 支付状态.
+     * @param sDate 开始时间.
+     * @param eDate 结束时间.
+     * @return 缴费报文.
+     * @throws Exception 异常.
      */
-    List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate,
-
-            String eDate) throws Exception;
+    List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus,
+                                                         @SuppressWarnings("SameParameterValue") String sDate,
+                                                         @SuppressWarnings("SameParameterValue") String eDate) throws Exception;
 
     /**
-     * 生成缴费订单
+     * 生成缴费订单.
      */
     RecipeOrderDocument saveOrderAndRecipeOrderDocument(String memberId, String clinicCode) throws Exception;
 
@@ -50,10 +57,13 @@ public interface RecipeService {
     RecipeOrderDocument getRecipeOrderDocumentByClinicCode(String clinicCode);
 
     /**
-     * 校验订单下的金额与待缴费的金额是否一致
      *
-     * @param orderNum
-     * @return
+     * 校验订单下的金额与待缴费的金额是否一致.
+     * @param orderNum 订单编号.
+     * @param orderAmount 订单金额.
+     * @param payWay 支付渠道.
+     * @return 校验结果.
+     * @throws Exception 异常.
      */
     boolean checkRecipeAmount(String orderNum, String orderAmount, PayChannel payWay) throws Exception;
 

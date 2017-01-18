@@ -7,6 +7,7 @@ import java.util.Date;
 import static com.proper.enterprise.platform.core.utils.DateUtil.safeClone;
 
 /**
+ * 订单支付请求.
  * Created by think on 2016/10/9 0009.
  */
 public class PayOrderRegReq {

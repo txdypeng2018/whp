@@ -1,8 +1,9 @@
 package com.proper.enterprise.isj.webservices.model.req;
 
 /**
- * Created by think on 2016/9/11 0011. 用户挂号并支付成功后需要取消挂号并退款时，调用该接口
+ * 用户挂号并支付成功后需要取消挂号并退款时，调用该接口.
  * 如果在平台调用医院退款接口，医院订单已经退款成功的情况下，医院应该直接返回退款成功。
+ * Created by think on 2016/9/11 0011.
  * 
  */
 public class RefundReq {

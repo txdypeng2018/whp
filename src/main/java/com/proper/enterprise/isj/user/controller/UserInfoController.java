@@ -37,7 +37,8 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
 
 /**
- * Created by think on 2016/8/23 0023. 用户登录相关信息
+ * 用户登录相关信息.
+ * Created by think on 2016/8/23 0023.
  */
 
 @RestController
@@ -67,13 +68,13 @@ public class UserInfoController extends BaseController {
         try {
             boolean flag = this.isTokenVerify(token);
             if (flag) {
-                return new ResponseEntity<String>("", HttpStatus.OK);
+                return new ResponseEntity<>("", HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             LOGGER.debug("获得token异常", e);
-            return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -89,7 +90,7 @@ public class UserInfoController extends BaseController {
     public ResponseEntity<UserInfoDocument> getUserInfo(HttpServletRequest request) throws Exception {
         UserInfoDocument userInfo = getLoginUserInfoDocument(request);
         if (userInfo == null) {
-            return new ResponseEntity<UserInfoDocument>(new UserInfoDocument(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new UserInfoDocument(), HttpStatus.UNAUTHORIZED);
         }
         return responseOfGet(userInfo);
     }
@@ -117,7 +118,7 @@ public class UserInfoController extends BaseController {
                 }
             }
         } else {
-            return new ResponseEntity<List<FamilyMemberInfoDocument>>(memberList, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(memberList, HttpStatus.UNAUTHORIZED);
         }
         return responseOfGet(memberList);
     }
@@ -150,7 +151,8 @@ public class UserInfoController extends BaseController {
                 }
             }
         } else {
-            return new ResponseEntity<FamilyMemberInfoDocument>(tempMember, HttpStatus.UNAUTHORIZED);
+            //noinspection ConstantConditions
+            return new ResponseEntity<>(tempMember, HttpStatus.UNAUTHORIZED);
         }
         return responseOfGet(tempMember);
     }
@@ -171,29 +173,29 @@ public class UserInfoController extends BaseController {
         String patientVisits = userMap.get("patientVisits");
         if (StringUtil.isEmpty(name) || StringUtil.isEmpty(sexCode) || StringUtil.isEmpty(idCard)
                 || StringUtil.isEmpty(phone) || StringUtil.isEmpty(memberCode) || StringUtil.isEmpty(patientVisits)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
         }
         idCard = idCard.toUpperCase();
         if (!IdcardUtils.validateCard(idCard)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.IDCARD_ERROR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.IDCARD_ERROR, HttpStatus.BAD_REQUEST);
         }
         if (IdcardUtils.getGenderByIdCard(idCard).equals("M")) {
             if (!sexCode.equals(String.valueOf(SexTypeEnum.MALE.getCode()))) {
-                return new ResponseEntity<String>(CenterFunctionUtils.IDCARD_SEX_ERROR, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(CenterFunctionUtils.IDCARD_SEX_ERROR, HttpStatus.BAD_REQUEST);
             }
 
         } else if (IdcardUtils.getGenderByIdCard(idCard).equals("F")) {
             if (!sexCode.equals(String.valueOf(SexTypeEnum.FEMALE.getCode()))) {
-                return new ResponseEntity<String>(CenterFunctionUtils.IDCARD_SEX_ERROR, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(CenterFunctionUtils.IDCARD_SEX_ERROR, HttpStatus.BAD_REQUEST);
             }
         }
 
         if (!MobileNoUtils.isMobileNo(phone)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.PHONE_ERROR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.PHONE_ERROR, HttpStatus.BAD_REQUEST);
         }
         User user = userService.getCurrentUser();
         if (user == null) {
-            return new ResponseEntity<String>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
         }
 
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
@@ -216,9 +218,7 @@ public class UserInfoController extends BaseController {
         if (StringUtil.isNotEmpty(lastCreateTime)) {
             int leftIntervalDays = userInfoServiceImpl.getFamilyAddLeftIntervalDays(familyMemberSize, lastCreateTime);
             if (leftIntervalDays > 0) {
-                StringBuilder errMsg = new StringBuilder();
-                errMsg.append("家庭成员添加次数过多，请").append(leftIntervalDays).append("天后再添加");
-                return new ResponseEntity<String>(errMsg.toString(), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<String>("家庭成员添加次数过多，请" + leftIntervalDays + "天后再添加", HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -266,42 +266,44 @@ public class UserInfoController extends BaseController {
             }
         }
         if (hasIdCard) {
-            return new ResponseEntity<String>(CenterFunctionUtils.IDCARD_EXIST, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.IDCARD_EXIST, HttpStatus.BAD_REQUEST);
         }
         familyList.add(familyMemberInfoDocument);
         userInfo.setFamilyMemberInfo(familyList);
         userInfoServiceImpl.saveOrUpdateUserInfo(userInfo);
-        return new ResponseEntity<String>("", HttpStatus.CREATED);
+        return new ResponseEntity<>("", HttpStatus.CREATED);
     }
 
     /**
      * 修改家庭成员
      */
     @RequestMapping(path = "/familyMembers/familyMember", method = RequestMethod.PUT)
-    public ResponseEntity<String> modifyFamilyMember(@RequestBody Map<String, String> userMap,
-            HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> modifyFamilyMember(
+            @RequestBody Map<String, String> userMap) throws Exception {
         String id = userMap.get("id");
         String name = userMap.get("name");
         String phone = userMap.get("phone");
         String patientVisits = userMap.get("patientVisits");
         if (StringUtil.isEmpty(id) || StringUtil.isEmpty(name) || StringUtil.isEmpty(phone)
                 || StringUtil.isEmpty(patientVisits)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
         }
         User user = userService.getCurrentUser();
         if (user == null) {
-            return new ResponseEntity<String>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
         }
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
         List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
         if (familyList == null) {
             familyList = new ArrayList<>();
         }
-        boolean clearMedicalNumFlag = true;
+        //boolean clearMedicalNumFlag = true;
         if (userInfo.getId().equals(id)) {
+            /*
             if (userInfo.getName().equals(name)&&userInfo.getPhone().equals(phone)) {
                 clearMedicalNumFlag = false;
             }
+            */
             userInfo.setName(name);
             userInfo.setPhone(phone);
             userInfo.setPatientVisits(patientVisits);
@@ -319,9 +321,11 @@ public class UserInfoController extends BaseController {
         } else {
             for (FamilyMemberInfoDocument familyMemberInfoDocument : familyList) {
                 if (familyMemberInfoDocument.getId().equals(id)) {
+                    /*
                     if (familyMemberInfoDocument.getName().equals(name)&&familyMemberInfoDocument.getPhone().equals(phone)) {
                         clearMedicalNumFlag = false;
                     }
+                    */
                     familyMemberInfoDocument.setPhone(phone);
                     familyMemberInfoDocument.setName(name);
                     familyMemberInfoDocument.setPatientVisits(patientVisits);
@@ -343,14 +347,14 @@ public class UserInfoController extends BaseController {
         }
         userInfo.setFamilyMemberInfo(familyList);
         userInfoServiceImpl.saveOrUpdateUserInfo(userInfo);
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @RequestMapping(path = "/familyMembers/familyMember", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteFamilyMember(@RequestParam(required = true) String memberId) throws Exception {
         User user = userService.getCurrentUser();
         if (user == null) {
-            return new ResponseEntity<String>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.LOGIN_INVALID_ERR, HttpStatus.BAD_REQUEST);
         }
         UserInfoDocument userInfo = userInfoServiceImpl.getUserInfoByUserId(user.getId());
         List<FamilyMemberInfoDocument> familyList = userInfo.getFamilyMemberInfo();
@@ -366,7 +370,7 @@ public class UserInfoController extends BaseController {
             }
             userInfoServiceImpl.saveOrUpdateUserInfo(userInfo);
         }
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @RequestMapping(path = "/familyMembers/count", method = RequestMethod.GET)
@@ -383,7 +387,7 @@ public class UserInfoController extends BaseController {
                 }
             }
         } else {
-            return new ResponseEntity<Integer>(familyMemberCount, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(familyMemberCount, HttpStatus.UNAUTHORIZED);
         }
         return responseOfGet(familyMemberCount);
     }
@@ -392,8 +396,7 @@ public class UserInfoController extends BaseController {
      * 修改用户信息
      */
     @RequestMapping(path = "/modifyUserInfo", method = RequestMethod.PUT)
-    public ResponseEntity<UserInfoDocument> modifyUserInfo(@RequestBody Map<String, String> phoneMap,
-            HttpServletRequest request) {
+    public ResponseEntity<UserInfoDocument> modifyUserInfo(@RequestBody Map<String, String> phoneMap) {
         String userId = phoneMap.get("userId");
         String name = phoneMap.get("name");
         String phoneNo = phoneMap.get("phoneNo");
@@ -416,7 +419,7 @@ public class UserInfoController extends BaseController {
         if (userInfo != null) {
             collectionDoctorsCount = userInfo.getDoctors().size();
         } else {
-            return new ResponseEntity<Integer>(collectionDoctorsCount, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(collectionDoctorsCount, HttpStatus.UNAUTHORIZED);
         }
         return responseOfGet(collectionDoctorsCount);
     }
@@ -516,16 +519,16 @@ public class UserInfoController extends BaseController {
     }
 
     /**
-     * 获得登录用户
+     * 获得登录用户.
      *
-     * @param request
-     * @return
-     * @throws IOException
+     * @param request http请求.
+     * @return 用户信息.
+     * @throws IOException 异常.
      */
     private UserInfoDocument getLoginUserInfoDocument(HttpServletRequest request) throws Exception {
         String token = jwtService.getTokenFromHeader(request);
         boolean tokenVerify = isTokenVerify(token);
-        UserInfoDocument userInfo = null;
+        UserInfoDocument userInfo;
         if (tokenVerify) {
             JWTHeader header = jwtService.getHeader(token);
             String userId = header.getId();
@@ -537,11 +540,11 @@ public class UserInfoController extends BaseController {
     }
 
     /**
-     * 检验token
+     * 检验token.
      *
-     * @param token
-     * @return
-     * @throws IOException
+     * @param token token.
+     * @return 检验结果.
+     * @throws IOException 异常.
      */
     private boolean isTokenVerify(String token) throws IOException {
         boolean tokenVerify = true;
@@ -557,52 +560,52 @@ public class UserInfoController extends BaseController {
     /**
      * 在线建档生成病历号
      * 
-     * @param memberIdMap
-     * @return
-     * @throws Exception
+     * @param memberIdMap 会员信息.
+     * @return 病历号.
+     * @throws Exception 异常.
      */
     @RequestMapping(path = "/medicalNum", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> addMedicalNum(@RequestBody Map<String, String> memberIdMap) throws Exception {
         String memberId = memberIdMap.get("memberId");
         if (StringUtil.isEmpty(memberId)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
         }
         User user = this.userService.getCurrentUser();
         if (user == null) {
-            return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         BasicInfoDocument basicInfo = userInfoServiceImpl.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
         if (basicInfo == null) {
-            return new ResponseEntity<String>(CenterFunctionUtils.PATIENTINFO_GET_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.PATIENTINFO_GET_ERR, HttpStatus.BAD_REQUEST);
         }
         userInfoServiceImpl.saveOrUpdatePatientMedicalNum(user.getId(), memberId, null);
-        return new ResponseEntity<String>("", HttpStatus.CREATED);
+        return new ResponseEntity<>("", HttpStatus.CREATED);
     }
 
     /**
      * 更新病历号
      * 
-     * @param memberIdMap
-     * @return
-     * @throws Exception
+     * @param memberIdMap 会员信息.
+     * @return 病历号.
+     * @throws Exception 异常.
      */
     @RequestMapping(path = "/medicalNum", method = RequestMethod.PUT, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> updateMedicalNum(@RequestBody Map<String, String> memberIdMap) throws Exception {
         String memberId = memberIdMap.get("memberId");
         String medicalNum = memberIdMap.get("medicalNum");
         if (StringUtil.isEmpty(memberId) || StringUtil.isEmpty(medicalNum)) {
-            return new ResponseEntity<String>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.FORM_DATA_ERR, HttpStatus.BAD_REQUEST);
         }
         User user = this.userService.getCurrentUser();
         if (user == null) {
-            return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         BasicInfoDocument basicInfo = userInfoServiceImpl.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
         if (basicInfo == null) {
-            return new ResponseEntity<String>(CenterFunctionUtils.PATIENTINFO_GET_ERR, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(CenterFunctionUtils.PATIENTINFO_GET_ERR, HttpStatus.BAD_REQUEST);
         }
         userInfoServiceImpl.saveOrUpdatePatientMedicalNum(user.getId(), memberId, medicalNum);
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
 }

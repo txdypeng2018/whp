@@ -1,8 +1,12 @@
 package com.proper.enterprise.isj.webservices.model.req;
 
 /**
- * Created by think on 2016/9/8 0008. 挂号成功后调用。 医院his根据平台订单号（挂号接口有传入）进行挂号订单的支付操作。
+ * 挂号成功后调用.
+ * <p>
+ * 医院his根据平台订单号（挂号接口有传入）进行挂号订单的支付操作。
  * 用户在支付时，平台将支付结果同步到平台（支付仅限30分钟内提交的订单）。
+ * </p>
+ * Created by think on 2016/9/8 0008.
  * 
  */
 public class PayRegReq {

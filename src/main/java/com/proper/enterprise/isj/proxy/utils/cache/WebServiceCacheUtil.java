@@ -19,6 +19,7 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
 
 /**
+ * WebService缓存工具.
  * Created by think on 2016/9/20 0020.
  */
 @Component
@@ -31,7 +32,7 @@ public class WebServiceCacheUtil {
 
     private static final String DOCTORINFO_KEY = "'doctorDocument'";
 
-    private static final String VERIFICATIONCODE_KEY = "'verificationcodeMap'";
+    //private static final String VERIFICATIONCODE_KEY = "'verificationcodeMap'";
 
     @Autowired
     DoctorService doctorService;
@@ -45,17 +46,17 @@ public class WebServiceCacheUtil {
 
 
     /**
-     * 医生科室对应关系
+     * 医生科室对应关系.
      *
-     * @return
+     * @return 医生科室对应关系.
      */
     @CachePut(key = DOCTOR_SUBJECT_REL_KEY)
     public Map<String, String> cacheDoctorSubjectRelMap() throws Exception {
         Map<String, List<SubjectDocument>> docMap = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
                 .get(String.valueOf(DeptLevel.DOCTOR.getCode()));
         Iterator<Map.Entry<String, List<SubjectDocument>>> docIter = docMap.entrySet().iterator();
-        String subjectId = null;
-        List<SubjectDocument> docList = null;
+        String subjectId;
+        List<SubjectDocument> docList;
         Map<String, String> docSubjectRelMap = new HashMap<>();
         while (docIter.hasNext()) {
             Map.Entry<String, List<SubjectDocument>> entry = docIter.next();
@@ -69,10 +70,10 @@ public class WebServiceCacheUtil {
     }
 
     /**
-     * 获得医生科室对应关系
+     * 获得医生科室对应关系.
      *
-     * @return
-     * @throws Exception
+     * @return 医生科室对应关系.
+     * @throws Exception 异常.
      */
     @Cacheable(key = DOCTOR_SUBJECT_REL_KEY)
     public Map<String, String> getCacheDoctorSubjectRelMap() throws Exception {
@@ -93,7 +94,7 @@ public class WebServiceCacheUtil {
         }
         Map<String, Map<String, Object>> oaInfoMap = webServiceDataSecondCacheUtil.getCacheOA2HISInfo();
         Map<String, DoctorDocument> doctorMap = new HashMap<>();
-        DoctorDocument tempDoc = null;
+        DoctorDocument tempDoc;
         for (Doctor doctor : doctorList) {
             if (docIdSet.contains(doctor.getDoctorId())) {
                 tempDoc = this.convertDoctor2Document(doctor, oaInfoMap.get(doctor.getDoctorId()));
@@ -171,7 +172,7 @@ public class WebServiceCacheUtil {
     public Map<String, Set<String>> cacheDoctorInfoLike() throws Exception {
         Map<String, DoctorDocument> docMap = this.getCacheDoctorDocument();
         Map<String, Set<String>> infoMap = new HashMap<>();
-        Set<String> docIdSet = null;
+        Set<String> docIdSet;
         for (DoctorDocument doctorDocument : docMap.values()) {
             if (StringUtil.isNotEmpty(doctorDocument.getName())) {
                 docIdSet = infoMap.get(doctorDocument.getName());

@@ -24,9 +24,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * 缴费.
  * Created by think on 2016/9/13 0013.
- * 
- * 缴费
  */
 
 @RestController
@@ -52,21 +51,21 @@ public class RecipeController extends BaseController {
     WeixinService weixinService;
 
     /**
-     * 缴费记录查询
+     * 缴费记录查询.
      * 
      * @param memberId
-     *            家庭成员Id
+     *            家庭成员Id.
      * @param searchStatus
-     *            缴费状态
-     * @return
+     *            缴费状态.
+     * @return 返回给调用方的应答.
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<RecipeDocument>> getAgreement(@RequestParam(required = true) String memberId,
+    public ResponseEntity<List<RecipeDocument>> getAgreement(@RequestParam String memberId,
             String searchStatus) throws Exception {
         User user = userService.getCurrentUser();
         List<RecipeDocument> recipeList = new ArrayList<>();
         if (user != null) {
-            BasicInfoDocument basicInfo = null;
+            BasicInfoDocument basicInfo;
             if (StringUtil.isEmpty(memberId)) {
                 basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
             } else {

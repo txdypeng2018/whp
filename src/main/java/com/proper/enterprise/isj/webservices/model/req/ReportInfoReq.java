@@ -3,7 +3,7 @@ package com.proper.enterprise.isj.webservices.model.req;
 import java.io.Serializable;
 
 /**
- * 检验/检测报告详细信息请求对象
+ * 检验/检测报告详细信息请求对象.
  */
 public class ReportInfoReq implements Serializable {
 

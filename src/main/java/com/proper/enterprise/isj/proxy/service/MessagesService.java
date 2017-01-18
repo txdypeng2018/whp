@@ -5,7 +5,7 @@ import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import java.util.List;
 
 /**
- * 消息Service
+ * 消息Service.
  */
 public interface MessagesService {
 

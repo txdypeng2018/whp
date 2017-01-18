@@ -19,7 +19,7 @@ public enum FeedbackEnum {
 
     private String value;
 
-    private FeedbackEnum(String value) {
+    FeedbackEnum(String value) {
         this.value = value;
     }
 

@@ -22,10 +22,10 @@ public class SMSServiceImpl implements SMSService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SMSServiceImpl.class);
 
     @Value("${isj.sms.url}")
-    private String url;
+    String url;
 
     @Value("${isj.sms.send}")
-    private String template;
+    String template;
 
     /**
      * 异步调用发送手机短信接口

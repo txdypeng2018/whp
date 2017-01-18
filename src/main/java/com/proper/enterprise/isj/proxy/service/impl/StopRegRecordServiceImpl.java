@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * 停止挂号服务.
  * Created by think on 2016/10/7 0007.
  */
 @Service

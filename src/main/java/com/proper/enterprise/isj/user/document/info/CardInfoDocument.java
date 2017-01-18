@@ -4,6 +4,7 @@ import com.proper.enterprise.isj.user.model.enums.CardTypeEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 /**
+ * 卡信息.
  * Created by think on 2016/8/12 0012.
  */
 

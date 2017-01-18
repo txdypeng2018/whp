@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 温馨提示Service接口实现类
+ * 温馨提示Service接口实现类.
  */
 @Service
 public class PromptTipsServiceImpl implements PromptTipsService{
@@ -39,21 +39,20 @@ public class PromptTipsServiceImpl implements PromptTipsService{
     }
 
     /**
-     * 获取温馨提示信息
+     * 获取温馨提示信息.
      *
      * @param infoType
-     *        温馨提示类型编码
+     *        温馨提示类型编码.
      * @param typeName
-     *        温馨提示类型名称
+     *        温馨提示类型名称.
      * @param info
-     *        温馨提示内容
+     *        温馨提示内容.
      * @param pageNo
-     *        当前页码
+     *        当前页码.
      * @param pageSize
-     *        每页数量
-     * @return retObj
-     *         温馨提示信息
-     * @throws Exception
+     *        每页数量.
+     * @return 温馨提示信息.
+     * @throws Exception 异常.
      */
     @Override
     public PromptTipsEntity getTipsInfo(String infoType, String typeName, String info, String pageNo, String pageSize)
@@ -98,9 +97,11 @@ public class PromptTipsServiceImpl implements PromptTipsService{
       * 创建分页请求.
       */
     private PageRequest buildPageRequest(int pageNo, int pageSize) {
-        Sort sort = null;
-        sort = new Sort(Sort.Direction.DESC, "createTime").and(new Sort(Sort.Direction.DESC, "typeName"));
-        return new PageRequest(pageNo - 1, pageSize, sort);
+        return new PageRequest(
+                pageNo - 1, pageSize,
+                new Sort(Sort.Direction.DESC, "createTime")
+                        .and(new Sort(Sort.Direction.DESC, "typeName"))
+        );
     }
 
 }

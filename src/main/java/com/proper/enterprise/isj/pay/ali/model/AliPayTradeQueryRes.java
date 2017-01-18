@@ -3,9 +3,11 @@ package com.proper.enterprise.isj.pay.ali.model;
 import java.io.Serializable;
 
 /**
- * Created by think on 2016/10/4 0004. 查询接口文档地址
- * https://doc.open.alipay.com/docs/api.htm?spm=a219a.7629065.0.0.IR5LMA&apiId=
- * 757&docType=4
+ * <p>
+ * <a href="https://doc.open.alipay.com/docs/api.htm?spm=a219a.7629065.0.0.IR5LMA&apiId=757&docType=4">查询接口文档地址</a>
+ * </p>
+ * Created by think on 2016/10/4 0004.
+ *
  */
 public class AliPayTradeQueryRes implements Serializable {
 

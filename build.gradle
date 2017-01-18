@@ -19,6 +19,11 @@ allprojects {
         options.compilerArgs = ['-Xlint:-options']
         groovyOptions.encoding = 'utf-8'
     }
+
+    tasks.withType(Javadoc){
+        options.encoding = "utf-8"
+        options.charSet = "utf-8"
+    }
 }
 
 buildscript {

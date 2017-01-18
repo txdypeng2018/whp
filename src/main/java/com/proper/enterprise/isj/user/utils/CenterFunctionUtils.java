@@ -1,22 +1,9 @@
 package com.proper.enterprise.isj.user.utils;
 
 
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.*;
-
-import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeRefundDetailDocument;
 import com.proper.enterprise.isj.proxy.document.registration.RegistrationOrderHisDocument;
 import com.proper.enterprise.isj.proxy.enums.FeedbackEnum;
@@ -28,8 +15,18 @@ import com.proper.enterprise.isj.webservices.model.enmus.RegLevel;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
+ * 工具类.
  * Created by think on 2016/8/25 0025.
  */
 public class CenterFunctionUtils {
@@ -50,17 +47,17 @@ public class CenterFunctionUtils {
 
     public final static String IDCARD_ERROR = "身份证号输入有误";
 
-    public final static String IDCARD_X_ERROR = "身份证号中的x请输入大写";
+    //public final static String IDCARD_X_ERROR = "身份证号中的x请输入大写";
 
     public final static String IDCARD_SEX_ERROR = "身份证号与性别不符";
 
     public final static String IDCARD_EXIST = "该身份证已添加";
 
-    public final static String VERIFICATIONCODE_VOID = "验证码无效";
+    //public final static String VERIFICATIONCODE_VOID = "验证码无效";
 
     public final static String VERIFICATIONCODE_ERROR = "请输入正确的验证码";
 
-    public final static String VERIFICATIONCODE_SEND_ERROR = "发送失败";
+    //public final static String VERIFICATIONCODE_SEND_ERROR = "发送失败";
 
     public final static String VERIFICATIONCODE_NULL = "请输入验证码";
 
@@ -90,9 +87,9 @@ public class CenterFunctionUtils {
 
     public final static String SEX_FEMALE = "女";
 
-    public final static String SEX_SECRET = "保密";
+    //public final static String SEX_SECRET = "保密";
 
-    public final static String SEX_OTHERS = "其他";
+    //public final static String SEX_OTHERS = "其他";
 
     public final static String MEMBER_FATHER = "爸爸";
 
@@ -118,7 +115,7 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_NON_PAY_ERR = "有未付款的挂号单,不能进行挂号";
 
-    public final static String MEDICALNUM_NON_ERR = "患者没有门诊号";
+    //public final static String MEDICALNUM_NON_ERR = "患者没有门诊号";
 
     public final static String ORDER_SAVE_ERR = "生成订单失败";
 
@@ -142,7 +139,7 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_CANCEL_PLATFORM_MSG = "平台退号";
 
-    public final static String ORDER_CANCEL_STOPREG_MSG = "该医生已经停诊";
+    //public final static String ORDER_CANCEL_STOPREG_MSG = "该医生已经停诊";
 
     public final static String ORDER_CANCEL_SYS_MSG = "系统异常,平台发起退号";
 
@@ -192,13 +189,13 @@ public class CenterFunctionUtils {
 
     public final static String REG_STATUS_REFUND_FAIL = "退费失败";
 
-    public final static String MSG_REGISTRATION_SUCCESS = "你已成功挂号";
+    //public final static String MSG_REGISTRATION_SUCCESS = "你已成功挂号";
 
     public final static String MSG_REGISTRATION_ORDER_SUCCESS = "挂号成功！";
 
     public final static String MSG_REFUND_SUCCESS = "费用已退还至相应的支付平台";
 
-    public final static String MSG_RECIPE_SUCCESS = "缴费成功";
+    //public final static String MSG_RECIPE_SUCCESS = "缴费成功";
 
     public final static String FORM_DATA_ERR = "信息填写错误";
 
@@ -220,41 +217,41 @@ public class CenterFunctionUtils {
 
     public final static String SCHEDULE_MISTAKE_DEPT_NON_DISTRICT = "排班科室没有院区信息";
 
-    public final static String REGLEVEL_1 = "普通";
-    public final static String REGLEVEL_2 = "副教授";
-    public final static String REGLEVEL_3 = "教授";
-    public final static String REGLEVEL_4 = "名专家15";
-    public final static String REGLEVEL_5 = "名专家30";
-    public final static String REGLEVEL_6 = "名专家50";
-    public final static String REGLEVEL_7 = "急诊";
-    public final static String REGLEVEL_8 = "开药";
-    public final static String REGLEVEL_9 = "老年证普通";
-    public final static String REGLEVEL_A = "副教授咨询";
-    public final static String REGLEVEL_B = "教授咨询";
-    public final static String REGLEVEL_C = "老年证副教";
-    public final static String REGLEVEL_D = "干诊(老年证)";
-    public final static String REGLEVEL_E = "疗程内挂号";
-    public final static String REGLEVEL_F = "透析医保";
-    public final static String REGLEVEL_G = "老年证正教";
-    public final static String REGLEVEL_H = "普通(特困减)";
-    public final static String REGLEVEL_I = "副教(特困减)";
-    public final static String REGLEVEL_J = "教授(特困减)";
-    public final static String REGLEVEL_K = "急诊(特困减)";
-    public final static String REGLEVEL_L = "婴儿结石";
-    public final static String REGLEVEL_M = "VIP特需服务";
-    public final static String REGLEVEL_N = "VIP特需复诊";
-    public final static String REGLEVEL_O = "省级干诊";
-    public final static String REGLEVEL_P = "婴儿结石正";
-    public final static String REGLEVEL_Q = "婴儿结石副";
-    public final static String REGLEVEL_R = "奶粉(咨询)";
-    public final static String REGLEVEL_S = "奶粉副(咨询)";
-    public final static String REGLEVEL_T = "奶粉正(咨询)";
-    public final static String REGLEVEL_U = "老年证名专家";
-    public final static String REGLEVEL_V = "老年证VIP";
-    public final static String REGLEVEL_W = "院工离休";
-    public final static String REGLEVEL_X = "老年正教咨询";
-    public final static String REGLEVEL_Y = "老年副教咨询";
-    public final static String REGLEVEL_Z = "特需服务";
+//    public final static String REGLEVEL_1 = "普通";
+//    public final static String REGLEVEL_2 = "副教授";
+//    public final static String REGLEVEL_3 = "教授";
+//    public final static String REGLEVEL_4 = "名专家15";
+//    public final static String REGLEVEL_5 = "名专家30";
+//    public final static String REGLEVEL_6 = "名专家50";
+//    public final static String REGLEVEL_7 = "急诊";
+//    public final static String REGLEVEL_8 = "开药";
+//    public final static String REGLEVEL_9 = "老年证普通";
+//    public final static String REGLEVEL_A = "副教授咨询";
+//    public final static String REGLEVEL_B = "教授咨询";
+//    public final static String REGLEVEL_C = "老年证副教";
+//    public final static String REGLEVEL_D = "干诊(老年证)";
+//    public final static String REGLEVEL_E = "疗程内挂号";
+//    public final static String REGLEVEL_F = "透析医保";
+//    public final static String REGLEVEL_G = "老年证正教";
+//    public final static String REGLEVEL_H = "普通(特困减)";
+//    public final static String REGLEVEL_I = "副教(特困减)";
+//    public final static String REGLEVEL_J = "教授(特困减)";
+//    public final static String REGLEVEL_K = "急诊(特困减)";
+//    public final static String REGLEVEL_L = "婴儿结石";
+//    public final static String REGLEVEL_M = "VIP特需服务";
+//    public final static String REGLEVEL_N = "VIP特需复诊";
+//    public final static String REGLEVEL_O = "省级干诊";
+//    public final static String REGLEVEL_P = "婴儿结石正";
+//    public final static String REGLEVEL_Q = "婴儿结石副";
+//    public final static String REGLEVEL_R = "奶粉(咨询)";
+//    public final static String REGLEVEL_S = "奶粉副(咨询)";
+//    public final static String REGLEVEL_T = "奶粉正(咨询)";
+//    public final static String REGLEVEL_U = "老年证名专家";
+//    public final static String REGLEVEL_V = "老年证VIP";
+//    public final static String REGLEVEL_W = "院工离休";
+//    public final static String REGLEVEL_X = "老年正教咨询";
+//    public final static String REGLEVEL_Y = "老年副教咨询";
+//    public final static String REGLEVEL_Z = "特需服务";
 
 
 
@@ -272,43 +269,43 @@ public class CenterFunctionUtils {
     public final static String CACHE_NAME_PEP_TEMP_2592000 = "pep-temp_2592000";
     /*-----------------缓存的KEY值---------------*/
     //验证码
-    public final static String CACHE_KEY_PHONE_VERIFICATIONCODE = "cache_key_phone_verificationcode";
+    //public final static String CACHE_KEY_PHONE_VERIFICATIONCODE = "cache_key_phone_verificationcode";
     //超时挂号
     public final static String CACHE_KEY_REGITRATION_SCHEDULER_TASK = "cache_key_regitration_scheduler_task";
     //挂号订单
-    public final static String CACHE_KEY_REG_ORDERID_SET = "cache_key_reg_orderid_set";
+    //public final static String CACHE_KEY_REG_ORDERID_SET = "cache_key_reg_orderid_set";
     //缴费订单
-    public final static String CACHE_KEY_RECIPE_ORDERID_SET = "cache_key_recipe_orderid_set";
+    //public final static String CACHE_KEY_RECIPE_ORDERID_SET = "cache_key_recipe_orderid_set";
     //医生分时排班信息
-    public final static String CACHE_KEY_DOCTOR_TIME_REG_SET = "cache_key_doctor_time_reg";
+    //public final static String CACHE_KEY_DOCTOR_TIME_REG_SET = "cache_key_doctor_time_reg";
     //停诊
-    public final static String CACHE_KEY_STOP_REG_SET = "cache_key_stop_reg_set";
+    //public final static String CACHE_KEY_STOP_REG_SET = "cache_key_stop_reg_set";
 
     //医生排班信息
-    public final static String CACHE_KEY_DOCTOR_SCHEDULING_SET = "cache_key_doctor_scheduling_set";
+    //public final static String CACHE_KEY_DOCTOR_SCHEDULING_SET = "cache_key_doctor_scheduling_set";
 
     //医生信息
-    public final static String CACHE_KEY_DOCTOR_PHOTO_MAP = "cache_key_doctor_photo_map";
+    //public final static String CACHE_KEY_DOCTOR_PHOTO_MAP = "cache_key_doctor_photo_map";
 
     //pacs报告信息
-    public final static String CACHE_KEY_REPORT_PHOTO_MAP = "cache_key_report_photo_map";
+    //public final static String CACHE_KEY_REPORT_PHOTO_MAP = "cache_key_report_photo_map";
 
     //检验报告列表报告信息
-    public final static String CACHE_KEY_REPORT_LIST_MAP = "cache_key_report_list_map";
+    //public final static String CACHE_KEY_REPORT_LIST_MAP = "cache_key_report_list_map";
 
     //检验报告列表报告详细信息
-    public final static String CACHE_KEY_REPORT_INFO_MAP = "cache_key_report_info_map";
+    //public final static String CACHE_KEY_REPORT_INFO_MAP = "cache_key_report_info_map";
 
     //pacs报告列表信息
-    public final static String CACHE_KEY_REPORT_PACS_LIST_MAP = "cache_key_report_pacs_list_map";
+    //public final static String CACHE_KEY_REPORT_PACS_LIST_MAP = "cache_key_report_pacs_list_map";
 
     //缴费
-    public final static String CACHE_KEY_PATIENT_RECIPE_SET = "cache_key_patient_recipe_set";
+    //public final static String CACHE_KEY_PATIENT_RECIPE_SET = "cache_key_patient_recipe_set";
 
-    /**
+    /*
      * 验证码倒计时分钟
      */
-    public final static Integer VERIFICATIONCODE_COUNTDOWN = 15;
+    //public final static Integer VERIFICATIONCODE_COUNTDOWN = 15;
 
     /**
      * 分页每页条数
@@ -325,10 +322,10 @@ public class CenterFunctionUtils {
      */
     public final static Integer SCHEDULING_MAXADD_DAY = 30;
 
-    /**
+    /*
      * 排班最大天数
      */
-    public final static Integer PAYMENT_MAX_DAY = 30;
+    //public final static Integer PAYMENT_MAX_DAY = 30;
 
     /**
      * 允许退号提前天数(大于)
@@ -357,18 +354,27 @@ public class CenterFunctionUtils {
     public static int getDoctorTitleSeq(String doctorTitleName){
         int seq = 99;
         if(StringUtil.isNotEmpty(doctorTitleName)){
-            if(doctorTitleName.equals(DOCTOR_TITLE_ZHURENYISHI)){
-                seq = 1;
-            }else if(doctorTitleName.equals(DOCTOR_TITLE_FUZHURENYISHI)){
-                seq = 2;
-            }else if(doctorTitleName.equals(DOCTOR_TITLE_ZHUZHIYISHI)){
-                seq = 3;
-            }else if(doctorTitleName.equals(DOCTOR_TITLE_YISHI)){
-                seq = 4;
-            }else if(doctorTitleName.equals(DOCTOR_TITLE_JIANXIYISHI)){
-                seq = 5;
-            }else if(doctorTitleName.equals(DOCTOR_TITLE_WU)){
-                seq = 6;
+            switch (doctorTitleName) {
+                case DOCTOR_TITLE_ZHURENYISHI:
+                    seq = 1;
+                    break;
+                case DOCTOR_TITLE_FUZHURENYISHI:
+                    seq = 2;
+                    break;
+                case DOCTOR_TITLE_ZHUZHIYISHI:
+                    seq = 3;
+                    break;
+                case DOCTOR_TITLE_YISHI:
+                    seq = 4;
+                    break;
+                case DOCTOR_TITLE_JIANXIYISHI:
+                    seq = 5;
+                    break;
+                case DOCTOR_TITLE_WU:
+                    seq = 6;
+                    break;
+                default:
+                    seq = 99;
             }
         }
         return seq;
@@ -386,9 +392,9 @@ public class CenterFunctionUtils {
 
     public static String getPushMsgContent(SendPushMsgEnum pushType, Object pushObj) throws Exception {
         StringBuilder content = new StringBuilder();
-        RegistrationDocument reg = null;
-        RecipeOrderDocument recipe = null;
-        RecipeRefundDetailDocument refundDetail = null;
+        RegistrationDocument reg;
+        RecipeOrderDocument recipe;
+        RecipeRefundDetailDocument refundDetail;
         DecimalFormat df = new DecimalFormat("0.00");
         switch (pushType) {
             case REG_PAY_SUCCESS:
@@ -419,7 +425,7 @@ public class CenterFunctionUtils {
                 }
                 content.append("\n");
                 BigDecimal bigDecimal = new BigDecimal(reg.getAmount());
-                content.append("挂号金额：").append(df.format(bigDecimal.divide(new BigDecimal("100")))).append(" 元");
+                content.append("挂号金额：").append(df.format(bigDecimal.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY))).append(" 元");
                 content.append("\n");
                 content.append("看诊序号：");
                 RegistrationOrderHisDocument payHis = reg.getRegistrationOrderHis();
@@ -469,7 +475,7 @@ public class CenterFunctionUtils {
                 if (paidList.size() > 0) {
                     BigDecimal recipeBig = new BigDecimal(
                             recipe.getRecipePaidDetailList().get(paidList.size() - 1).getAmount());
-                    content.append("缴费金额:").append(recipeBig.divide(new BigDecimal("100"))).append(" 元").append("\n");
+                    content.append("缴费金额:").append(recipeBig.divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY)).append(" 元").append("\n");
                 }
                 if (StringUtil.isNotEmpty(recipe.getPatientName())) {
                     content.append("就诊人:").append(recipe.getPatientName());
@@ -510,7 +516,7 @@ public class CenterFunctionUtils {
                 content.append("退费项目：").append(refundDetail.getName()).append("\n");
                 content.append("退款金额：")
                         .append(df.format(
-                                new BigDecimal(refundDetail.getCost().replace("-", "")).divide(new BigDecimal("100")))).append(" 元")
+                                new BigDecimal(refundDetail.getCost().replace("-", "")).divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY))).append(" 元")
                         .append("\n");
                 content.append(MSG_REFUND_SUCCESS);
                 break;
@@ -522,7 +528,7 @@ public class CenterFunctionUtils {
                 content.append("退费项目：").append(refundDetail.getName()).append("\n");
                 content.append("退款金额：")
                         .append(df.format(
-                                new BigDecimal(refundDetail.getCost().replace("-", "")).divide(new BigDecimal("100")))).append(" 元")
+                                new BigDecimal(refundDetail.getCost().replace("-", "")).divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY))).append(" 元")
                         .append("\n");
                 content.append("您的诊间缴费我们会尽快核对,预计3-5个工作日内返回支付平台");
                 break;
@@ -567,7 +573,7 @@ public class CenterFunctionUtils {
         Map<String, String> regLevelNameMap = new HashMap<>();
         try {
             CenterFunctionUtils cfUtile = new CenterFunctionUtils();
-            Field field = null;
+            Field field;
             RegLevel[] vals = RegLevel.values();
             for (RegLevel val : vals) {
                 field = cfUtile.getClass().getField("REGLEVEL_" + val.getCode());
@@ -580,39 +586,27 @@ public class CenterFunctionUtils {
     }
 
     /**
-     * 获取医院ID
+     * 获取医院ID.
      *
-     * @return 医院Id
+     * @return 医院Id.
      */
     public static String getHosId() {
         return ConfCenter.get("isj.his.hosId");
     }
 
     /**
-     * 将错误以字符串形式抛到前台
-     *
-     * @param errMsg
-     *            错误消息
-     * @return
+     * 生成挂号单号或(订单号/退单号).
+     * @param category 1:挂号单,2:订单.
      */
-    public static ResponseEntity setTextResponseEntity(String errMsg, HttpStatus httpStatus) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setContentType(MediaType.TEXT_PLAIN);
-        return new ResponseEntity(errMsg, responseHeaders, httpStatus);
-    }
-
-    /**
-     * 生成挂号单号或(订单号/退单号) 1:挂号单,2:订单
-     */
+    @SuppressWarnings("SameParameterValue")
     public synchronized static String createRegOrOrderNo(int category) {
-        String num = "";
+        String num;
         switch (category) {
             case 1:
                 num = DateUtil.toString(new Date(), "yyyyMMddHHmmssSSS");
                 break;
             case 2:
-                num = new StringBuilder(DateUtil.toString(new Date(), "yyyyMMddHHmmssSSS"))
-                        .append(RandomStringUtils.randomNumeric(5)).toString();
+                num = DateUtil.toString(new Date(), "yyyyMMddHHmmssSSS") + RandomStringUtils.randomNumeric(5);
                 break;
             default:
                 num = DateUtil.toString(new Date(), "yyyyMMddHHmmssSSS");
@@ -625,7 +619,7 @@ public class CenterFunctionUtils {
      * 封装性别
      */
     public static Map<String, String> getSexMap() {
-        Map<String, String> sexMap = new HashMap<String, String>();
+        Map<String, String> sexMap = new HashMap<>();
         sexMap.put(String.valueOf(SexTypeEnum.MALE.getCode()), SEX_MALE);
         sexMap.put(String.valueOf(SexTypeEnum.FEMALE.getCode()), SEX_FEMALE);
         // sexMap.put(String.valueOf(SexTypeEnum.SECRET.getCode()), SEX_SECRET);
@@ -655,11 +649,9 @@ public class CenterFunctionUtils {
 
     public static Map<String, Map<String, String>> getSexCodeMap() {
         Map<String, Map<String, String>> sMap = new HashMap<>();
-        Map<String, String> tempMap = null;
+        Map<String, String> tempMap;
         Map<String, String> sexMap = getSexMap();
-        Iterator<Map.Entry<String, String>> sexIter = sexMap.entrySet().iterator();
-        while (sexIter.hasNext()) {
-            Map.Entry<String, String> entry = sexIter.next();
+        for (Map.Entry<String, String> entry : sexMap.entrySet()) {
             tempMap = new HashMap<>();
             tempMap.put("sexCode", entry.getKey());
             tempMap.put("name", entry.getValue());
@@ -669,18 +661,18 @@ public class CenterFunctionUtils {
     }
 
     /**
-     * 家庭关系映射
-     *
-     * @return
+     * 家庭关系映射.
+     * @param onlineUserSexCode 用户性别.
+     * @return 家庭关系.
      */
     public static Map<String, Map<String, String>> getFamilyMenberTypeMap(String onlineUserSexCode) {
 
         MemberRelationEnum[] relArr = MemberRelationEnum.values();
         Map<String, Map<String, String>> relMap = new HashMap<>();
-        Map<String, String> tempMap = null;
-        String imgUrl = "";
-        String sexCode = "";
-        String name = "";
+        Map<String, String> tempMap;
+        String imgUrl;
+        String sexCode;
+        String name;
         for (MemberRelationEnum memberRelationEnum : relArr) {
             tempMap = new HashMap<>();
             switch (memberRelationEnum) {
@@ -779,7 +771,7 @@ public class CenterFunctionUtils {
     }
 
     public static String getRegistrationStatusName(String regStatusCode) {
-        String name = "";
+        String name;
 
         switch (Integer.parseInt(regStatusCode)) {
             case 0:
@@ -815,8 +807,8 @@ public class CenterFunctionUtils {
     /**
      * 根据原有院区id获取院区名称
      *
-     * @param districtId
-     * @return
+     * @param districtId 院区ID.
+     * @return 院区名称.
      */
     public static String convertHisDisId2SubjectId(String districtId) {
         String subId = "";
@@ -842,7 +834,7 @@ public class CenterFunctionUtils {
      * 根据院区获得操作员Id
      */
     public static String convertDistrictId2OperatorId(String districtId) {
-        String subId = "";
+        String subId;
         switch (Integer.parseInt(districtId)) {
             case 1207:
                 subId = String.valueOf("900008");
@@ -860,10 +852,10 @@ public class CenterFunctionUtils {
     }
 
     /**
-     * 预约时间
+     * 预约时间.
      *
-     * @param reg
-     * @return
+     * @param reg 挂号信息.
+     * @return 检查结果.
      */
     public static boolean checkRegCanBack(RegistrationDocument reg) {
         boolean canBack = false;

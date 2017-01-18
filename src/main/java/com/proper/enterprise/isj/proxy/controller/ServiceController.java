@@ -1,8 +1,8 @@
 package com.proper.enterprise.isj.proxy.controller;
 
 import com.proper.enterprise.isj.proxy.document.ServiceFeedbackDocument;
-import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
 import com.proper.enterprise.isj.proxy.document.ServiceUserOpinionDocument;
+import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
 import com.proper.enterprise.isj.proxy.enums.FeedbackEnum;
 import com.proper.enterprise.isj.proxy.repository.BaseInfoRepository;
 import com.proper.enterprise.isj.proxy.service.ServiceService;
@@ -20,13 +20,17 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_SYSTEM_ERR;
+
+/**
+ * .
+ */
 @RestController
 @RequestMapping(path = "/service")
 public class ServiceController extends BaseController {
@@ -49,18 +53,20 @@ public class ServiceController extends BaseController {
     PushService pushService;
 
     /**
-     * 取得服务电话号码
+     * 取得服务电话号码.
+     * @return 返回给调用方的应答.
      */
     @AuthcIgnore
     @RequestMapping(value="/phone", method = RequestMethod.GET)
     public ResponseEntity<String> getPhoneNum() throws Exception {
-        String retValue = "";
-        retValue = serviceService.getPhoneNum();
+        String retValue = serviceService.getPhoneNum();
         return responseOfGet(retValue);
     }
 
     /**
-     * 保存用户意见
+     * 保存用户意见.
+     * @param opinionDocment .
+     * @return 返回给调用方的应答.
      */
     @PostMapping(path = "/userOpinion", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> saveUserOpinion(@RequestBody ServiceUserOpinionDocument opinionDocment) throws Exception {
@@ -78,14 +84,15 @@ public class ServiceController extends BaseController {
             serviceService.saveOpinion(opinionDocment);
         } catch (Exception e) {
             LOGGER.debug("ServiceController.saveUserOpinion[Exception]:", e);
-            return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(APP_SYSTEM_ERR, e);
         }
         return responseOfPost(retValue);
     }
 
     /**
-     * 保存反馈意见
+     * 保存反馈意见.
+     * @param opinionDocment .
+     * @return 返回给调用方的应答.
      */
     @PutMapping(path = "/feedbackOpinion", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> saveFeedbackOpinion(@RequestBody ServiceUserOpinionDocument opinionDocment) throws Exception {
@@ -114,16 +121,15 @@ public class ServiceController extends BaseController {
     }
 
     /**
-     * 取得登录用户意见列表
+     * 取得登录用户意见列表.
      *
-     * @param feedbackStatus
-     * @return
-     * @throws Exception
+     * @param feedbackStatus .
+     * @return 返回给调用方的应答.
+     * @throws Exception 异常.
      */
     @GetMapping(path = "/userOpinion")
     public ResponseEntity<List<ServiceUserOpinionDocument>> getUserOpinion(@RequestParam(required = false) String feedbackStatus) throws Exception {
-        boolean isStatus = false;
-        isStatus = StringUtil.isNull(feedbackStatus) ? false : true;
+        boolean isStatus = !StringUtil.isNull(feedbackStatus);
         User currentUser = userService.getCurrentUser();
         String currentUserId = currentUser.getId();
         List<ServiceUserOpinionDocument> opinionList;
@@ -136,32 +142,32 @@ public class ServiceController extends BaseController {
     }
 
     /**
-     * 取得意见列表
+     * 取得意见列表.
      *
      * @param userName
-     *        用户姓名
+     *        用户姓名.
      * @param userTel
-     *        用户手机号
+     *        用户手机号.
      * @param statusCode
-     *        反馈状态
+     *        反馈状态.
      * @param opinion
-     *        用户意见
+     *        用户意见.
      * @param feedback
-     *        反馈意见
+     *        反馈意见.
      * @param pageNo
-     *        当前页码
+     *        当前页码.
      * @param pageSize
-     *        每页数量
-     * @return opinionList
-     *         意见列表
+     *        每页数量.
+     * @return
+     *         意见列表.
      * @throws Exception
-     *         异常
+     *         异常.
      */
     @GetMapping(path = "/feedbackOpinion")
     public ResponseEntity<ServiceFeedbackDocument> feedbackOpinion(@RequestParam(required = false) String userName,
        @RequestParam(required = false) String userTel, @RequestParam(required = false) String statusCode,
        @RequestParam(required = false) String opinion, @RequestParam(required = false) String feedback,
-       @RequestParam(required = true) String pageNo, @RequestParam(required = true) String pageSize) throws Exception {
+       @RequestParam String pageNo, @RequestParam String pageSize) throws Exception {
 
         // 取得反馈意见列表
         ServiceFeedbackDocument feedbackInfo = serviceService.getFeedBackInfo(userName, userTel, statusCode,
@@ -170,10 +176,10 @@ public class ServiceController extends BaseController {
     }
 
     /**
-     * 取得指定反馈意见信息
+     * 取得指定反馈意见信息.
      *
-     * @param opinionId
-     * @return
+     * @param opinionId 反馈意见ID.
+     * @return 返回给调用方的应答.
      */
     @GetMapping(path = "/userOpinion/{opinionId}")
     public ResponseEntity<ServiceUserOpinionDocument> getOpinionInfo(@PathVariable String opinionId) {
@@ -182,16 +188,15 @@ public class ServiceController extends BaseController {
     }
 
     /**
-     * 取得应用名称信息
+     * 取得应用名称信息.
      *
-     * @return 取得应用名称信息
+     * @return 取得应用名称信息.
      */
     @AuthcIgnore
     @RequestMapping(path = "/appName", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAppName() {
         List<BaseInfoEntity> infoList = baseRepo.findByInfoType(ConfCenter.get("isj.info.appName"));
-        String guideMsg = "";
-        guideMsg = infoList.get(0).getInfo();
+        String guideMsg = infoList.get(0).getInfo();
         return responseOfGet(guideMsg);
     }
 }

@@ -16,7 +16,7 @@ public class WeixinPayNotice2BusinessTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeixinPayNotice2BusinessTask.class);
 
     @Autowired
-    private WeixinService weixinService;
+    WeixinService weixinService;
 
     @Async
     public void run(UnifiedNoticeRes noticeRes) {

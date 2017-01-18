@@ -20,7 +20,7 @@ public class DistrictsServiceImpl implements DistrictsService {
 
 	@Autowired
 	@Lazy
-	private WebServicesClient webServicesClient;
+	WebServicesClient webServicesClient;
 
 	@Override
 	public List<DistrictDocument> getDistrict() {

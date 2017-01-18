@@ -11,9 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.proper.enterprise.isj.webservices.model.res.timereglist.TimeReg;
 
-/**
- * Created by think on 2016/9/1 0001.
- */
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeRegInfo implements Serializable {

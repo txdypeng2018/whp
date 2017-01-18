@@ -16,13 +16,14 @@ import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
 import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
 
 /**
+ * Web Service数据二级缓存.
  * Created by think on 2016/9/23 0023.
  */
 @Component
 @CacheConfig(cacheNames = "pep-temp")
 public class WebServiceDataSecondCacheUtil {
 
-    private static final String SUBJECT_DISTRICT_MAP_KEY = "'subjectDistrictMap'";
+    //private static final String SUBJECT_DISTRICT_MAP_KEY = "'subjectDistrictMap'";
 
     private static final String SUBJECT_MAP_KEY = "'subjectMap'";
 
@@ -62,10 +63,10 @@ public class WebServiceDataSecondCacheUtil {
     @CachePut(key = SUBJECTDOCUMENT_KEY)
     public Map<String, Map<String, List<SubjectDocument>>> cacheSubjectDocument() throws Exception {
         Map<String, Map<String, List<SubjectDocument>>> allSubMap = new HashMap<>();
-        Map<String, List<SubjectDocument>> subjectMap = null;
-        String levelCode = "";
-        List<SubjectDocument> list = null;
-        SubjectDocument sub = null;
+        Map<String, List<SubjectDocument>> subjectMap;
+        String levelCode;
+        List<SubjectDocument> list;
+        SubjectDocument sub;
         List<Dept> deptInfoList = webService4HisInterfaceCacheUtil.getCacheDeptInfo();
         Collections.sort(deptInfoList, new Comparator<Dept>() {
             @Override
@@ -98,9 +99,9 @@ public class WebServiceDataSecondCacheUtil {
     }
 
     /**
-     * 获得学科或医生
+     * 获得学科或医生.
      *
-     * @return
+     * @return 获得学科或医生.
      */
     @Cacheable(key = SUBJECTDOCUMENT_KEY)
     public Map<String, Map<String, List<SubjectDocument>>> getCacheSubjectAndDoctorDocument() throws Exception {

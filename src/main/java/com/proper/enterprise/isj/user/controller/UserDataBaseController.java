@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 用户信息基础控制器.
  * Created by think on 2016/9/2 0002.
  */
 

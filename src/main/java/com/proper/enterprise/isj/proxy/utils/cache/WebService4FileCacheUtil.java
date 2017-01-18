@@ -32,6 +32,7 @@ import com.proper.enterprise.platform.core.utils.http.HttpClient;
 import net.coobird.thumbnailator.Thumbnails;
 
 /**
+ * Web Service缓存工具.
  * Created by think on 2016/9/27 0027.
  */
 @Component
@@ -40,7 +41,7 @@ public class WebService4FileCacheUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebService4FileCacheUtil.class);
 
-    private static final String OA2HISDOCINFO_KEY = "'oa2hisdocInfo'";
+    //private static final String OA2HISDOCINFO_KEY = "'oa2hisdocInfo'";
 
     @Autowired
     DoctorService doctorService;
@@ -49,22 +50,22 @@ public class WebService4FileCacheUtil {
     TaskSchedulerUtil taskSchedulerUtil;
 
     @Value("${isj.photo.url}")
-    private String photoUrl;
+    String photoUrl;
 
     @Value("${isj.photo.thumbnail.width}")
-    private String photoWidth;
+    String photoWidth;
 
     @Value("${isj.photo.thumbnail.height}")
-    private String photoHeight;
+    String photoHeight;
 
     @Value("${isj.photo.thumbnail.quality}")
-    private String photoQuality;
+    String photoQuality;
 
     @Value("${isj.report.photo.thumbnail.width}")
-    private String reportPhotoWidth;
+    String reportPhotoWidth;
 
     @Value("${isj.report.photo.thumbnail.height}")
-    private String reportPhotoHeight;
+    String reportPhotoHeight;
 
     @CachePut(value= CenterFunctionUtils.CACHE_NAME_PEP_TEMP_2592000, key = "'doctorPic_'+#p0.id")
     public String cacheDoctorPhoto(DoctorDocument doctor) throws Exception {
@@ -101,10 +102,8 @@ public class WebService4FileCacheUtil {
         String photoStr = "";
         try {
             if (StringUtil.isNotEmpty(reportId)) {
-                StringBuilder strReportUrl = new StringBuilder();
-                strReportUrl.append(ConfCenter.get("isj.report.baseUrl"));
-                strReportUrl.append(ConfCenter.get("isj.report.getSendUrl"));
-                String sendUrl = new String(HttpClient.get(strReportUrl.toString()).getBody(), PEPConstants.DEFAULT_CHARSET);
+                String strReportUrl = ConfCenter.get("isj.report.baseUrl") + ConfCenter.get("isj.report.getSendUrl");
+                String sendUrl = new String(HttpClient.get(strReportUrl).getBody(), PEPConstants.DEFAULT_CHARSET);
                 LOGGER.debug("sendUrl:" + sendUrl);
                 StringBuilder strReportDetaiUrl = new StringBuilder();
                 strReportDetaiUrl.append(sendUrl.replaceAll("\"", ""));
@@ -118,13 +117,12 @@ public class WebService4FileCacheUtil {
                 Matcher m = p.matcher(reportElement.html());
                 // 详细信息图片url地址
                 String rpturi = null;
-                while (m.find()) {
+                if (m.find()) {
                     // 解析javaScript
                     String retValue = m.group(1);
                     int startPos = retValue.indexOf("http");
                     int endPos = retValue.lastIndexOf("\'");
                     rpturi = retValue.substring(startPos, endPos);
-                    break;
                 }
                 LOGGER.debug("strReportDetaiUrl:" + strReportDetaiUrl);
                 if (StringUtil.isNotEmpty(rpturi)) {

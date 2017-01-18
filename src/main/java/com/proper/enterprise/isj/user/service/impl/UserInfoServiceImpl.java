@@ -10,6 +10,7 @@ import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
 
 /**
+ * 用户信息服务.
  * Created by think on 2016/8/15 0015.
  */
 @Service

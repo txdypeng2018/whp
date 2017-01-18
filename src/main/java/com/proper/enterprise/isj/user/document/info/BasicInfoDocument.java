@@ -84,7 +84,7 @@ public class BasicInfoDocument extends BaseDocument {
     private Integer age = 0;
 
     @Transient
-    private String memberId;
+    String memberId;
 
     /**
      * 病历号最新的使用记录

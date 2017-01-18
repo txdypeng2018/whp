@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 医院导航Service
+ * 医院导航Service.
  */
 public interface HospitalNavigationService {
 

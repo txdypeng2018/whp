@@ -7,7 +7,7 @@ import com.proper.enterprise.isj.webservices.model.enmus.Sex;
 import java.io.Serializable;
 
 /**
- * 检验/检测报告请求对象
+ * 检验/检测报告请求对象.
  */
 public class ReportListReq implements Serializable {
 

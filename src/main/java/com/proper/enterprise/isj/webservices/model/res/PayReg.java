@@ -6,9 +6,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-/**
- * Created by think on 2016/9/8 0008.
- */
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PayReg implements Serializable {

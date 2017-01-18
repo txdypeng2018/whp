@@ -20,10 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.oxm.UnmarshallingFailureException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 医院导航ServiceImpl
@@ -95,12 +92,12 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 取得手机端指定楼宇各楼层科室信息
+     * 取得手机端指定楼宇各楼层科室信息.
      *
      * @param buildId
-     *        楼宇ID
+     *        楼宇ID.
      * @return retList
-     *         手机端指定楼宇各楼层科室信息
+     *         手机端指定楼宇各楼层科室信息.
      */
     @Override
     public List<Map<String, Object>> getAppFloorList(String buildId) throws Exception {
@@ -129,9 +126,7 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
                                 && roomDetail.getParentId().equals(detail.getNavId())) {
                             if(StringUtil.isNotNull(roomDetail.getNavName())) {
                                 String[] deptsArr = roomDetail.getNavName().split("\\^");
-                                for(String dept : deptsArr) {
-                                    detailList.add(dept);
-                                }
+                                Collections.addAll(detailList, deptsArr);
                             }
                         }
                     }
@@ -148,11 +143,11 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 新增Web端楼宇信息
+     * 新增Web端楼宇信息.
      *
      * @param buildInfo
-     *        楼宇信息
-     * @throws Exception
+     *        楼宇信息.
+     * @throws Exception 异常.
      */
     @Override
     public void saveWebBuildInfo(NavigationBuildDetailEntity buildInfo) throws Exception {
@@ -176,11 +171,11 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 新增Web端楼层科室信息
+     * 新增Web端楼层科室信息.
      *
      * @param floorInfo
-     *        楼层科室信息
-     * @throws Exception
+     *        楼层科室信息.
+     * @throws Exception 异常.
      */
     @Override
     public void saveWebFloorInfo(NavigationFloorDetailEntity floorInfo) throws Exception {
@@ -227,11 +222,11 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 更新Web端楼宇信息
+     * 更新Web端楼宇信息.
      *
      * @param buildInfo
-     *        楼宇信息
-     * @throws Exception
+     *        楼宇信息.
+     * @throws Exception 异常.
      */
     @Override
     public void updateWebBuildInfo(NavigationBuildDetailEntity buildInfo) throws Exception {
@@ -244,11 +239,11 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 更新Web端楼层科室信息
+     * 更新Web端楼层科室信息.
      *
      * @param floorInfo
-     *        楼层科室信息
-     * @throws Exception
+     *        楼层科室信息.
+     * @throws Exception 异常.
      */
     @Override
     public void updateWebFloorInfo(NavigationFloorDetailEntity floorInfo) throws Exception {
@@ -265,25 +260,23 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 删除Web端楼宇信息
+     * 删除Web端楼宇信息.
      *
      * @param idList
-     *        待删除ID列表
-     * @throws Exception
+     *        待删除ID列表.
+     * @throws Exception 异常.
      */
     @Override
     public void deleteWebNavInfo(List<String> idList) throws Exception {
-        List<NavInfoEntity> navList = navRepo.findAll(idList);
-        navRepo.delete(navList);
+        navRepo.delete(navRepo.findAll(idList));
     }
 
     /**
-     * 取得指定楼宇ID的楼宇信息
-     *
+     * 取得指定楼宇ID的楼宇信息.
      * @param buildingId
-     *        楼宇ID
-     * @return retObj
-     * @throws Exception
+     *        楼宇ID.
+     * @return retObj.
+     * @throws Exception 异常.
      */
     @Override
     public NavigationBuildDetailEntity getWebBuildById(String buildingId) throws Exception {
@@ -298,12 +291,12 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * 取得指定楼层ID的楼宇信息
+     * 取得指定楼层ID的楼宇信息.
      *
      * @param floorId
-     *        楼层ID
-     * @return retObj
-     * @throws Exception
+     *        楼层ID.
+     * @return retObj.
+     * @throws Exception 异常.
      */
     @Override
     public NavigationFloorDetailEntity getWebFloorById(String floorId) throws Exception {
@@ -332,18 +325,18 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * Web端取得各院区楼列表
+     * Web端取得各院区楼列表.
      *
      * @param districtCode
-     *        院区ID
+     *        院区ID.
      * @param buildingName
-     *        楼宇名称
+     *        楼宇名称.
      * @param pageNo
-     *        当前页码
+     *        当前页码.
      * @param pageSize
-     *        每页数量
-     * @return retObj
-     * @throws Exception
+     *        每页数量.
+     * @return retObj.
+     * @throws Exception 异常.
      */
     @Override
     public NavigationBuildEntity getWebBuildInfo(String districtCode, String buildingName,
@@ -390,18 +383,18 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
     }
 
     /**
-     * Web端取得楼层科室列表
+     * Web端取得楼层科室列表.
      *
      * @param floorParentId
-     *        楼层所在楼宇ID
+     *        楼层所在楼宇ID.
      * @param deptName
-     *        科室名称
+     *        科室名称.
      * @param pageNo
-     *        当前页码
+     *        当前页码.
      * @param pageSize
-     *        每页数量
-     * @return retObj
-     * @throws Exception
+     *        每页数量.
+     * @return retObj.
+     * @throws Exception 异常.
      */
     @Override
     public NavigationFloorEntity getWebFloorInfo(String floorParentId, String deptName,
@@ -409,9 +402,8 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
         NavigationFloorEntity retObj = new NavigationFloorEntity();
         List<NavigationFloorDetailEntity> dataList = new ArrayList<>();
         PageRequest pageReq = buildPageRequest(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<NavInfoEntity> countList;
         Page<NavInfoEntity> pageInfo;
-        String parentType = "";
+        String parentType;
         String buildType = ConfCenter.get("isj.info.build");
         String floorType = ConfCenter.get("isj.info.floor");
         boolean flg = false;
@@ -491,16 +483,16 @@ public class HospitalNavigationServiceImpl implements HospitalNavigationService 
      * 创建分页请求.
      */
     private PageRequest buildPageRequest(int pageNo, int pageSize) {
-        Sort sort = null;
-        sort = new Sort(Sort.Direction.ASC, "navId");
-        return new PageRequest(pageNo - 1, pageSize, sort);
+        return new PageRequest(pageNo - 1, pageSize,
+                new Sort(Sort.Direction.ASC, "navId")
+        );
     }
 
     /**
-     * 通过HIS接口获取院区列表信息
+     * 通过HIS接口获取院区列表信息.
      *
-     * @return
-     * @throws Exception
+     * @return 返回应答.
+     * @throws Exception 异常.
      */
     private List<SubjectDocument> getDisList() throws Exception {
         List<SubjectDocument> disList;

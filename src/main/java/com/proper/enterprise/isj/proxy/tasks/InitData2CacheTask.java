@@ -10,6 +10,7 @@ import com.proper.enterprise.isj.proxy.utils.cache.WebServiceCacheUtil;
 import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
 
 /**
+ * 初始化数据到缓存任务.
  * Created by think on 2016/9/24 0024.
  */
 @Component

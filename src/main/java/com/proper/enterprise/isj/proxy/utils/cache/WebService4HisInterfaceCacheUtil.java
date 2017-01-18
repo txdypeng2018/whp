@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,6 +28,7 @@ import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
 
 /**
+ * His Web Service服务接口.
  * Created by think on 2016/9/23 0023.
  */
 @Component
@@ -37,7 +36,7 @@ import com.proper.enterprise.platform.core.utils.http.HttpClient;
 public class WebService4HisInterfaceCacheUtil {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebService4HisInterfaceCacheUtil.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(WebService4HisInterfaceCacheUtil.class);
 
     private static final String HIS_DEPTINFO_KEY = "'his_deptinfo'";
 
@@ -71,8 +70,7 @@ public class WebService4HisInterfaceCacheUtil {
     @CachePut(key = HIS_DOCTORINFO_KEY)
     public List<Doctor> cacheDoctorInfoRes() throws Exception {
         List<Doctor> doctorList = new ArrayList<>();
-        ResModel<DoctorInfo> doctorInfoRes = webServicesClient.getDoctorInfo(CenterFunctionUtils.getHosId(),
-                String.valueOf(-1), String.valueOf(-1));
+        ResModel<DoctorInfo> doctorInfoRes = webServicesClient.getDoctorInfo(CenterFunctionUtils.getHosId(), String.valueOf(-1), String.valueOf(-1));
         if (doctorInfoRes.getRes().getDoctorList() != null) {
             doctorList.addAll(doctorInfoRes.getRes().getDoctorList());
         }
@@ -99,70 +97,65 @@ public class WebService4HisInterfaceCacheUtil {
         return this.cacheHospitalInfoRes();
     }
 
-    @CachePut(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
     public ResModel<RegInfo> cacheDoctorScheInfoRes(String doctorId, String startDate, String endDate) throws Exception {
         String hosId = CenterFunctionUtils.getHosId();
-        ResModel<RegInfo> regInfo = webServicesClient.getRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(startDate),
-                DateUtil.toDate(endDate));
-        return regInfo;
+        return webServicesClient.getRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(startDate), DateUtil.toDate(endDate));
     }
 
-    @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
     public ResModel<RegInfo> getCacheDoctorScheInfoRes(String doctorId, String startDate, String endDate) throws Exception {
         return cacheDoctorScheInfoRes(doctorId, startDate, endDate);
     }
 
-    @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
     public void evictCacheDoctorScheInfoRes(String doctorId, String startDate, String endDate) throws Exception {
     }
 
-    @CachePut(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
-    public ResModel<TimeRegInfo> cacheDoctorTimeRegInfoRes(String doctorId, String regDate)
-            throws Exception {
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
+    public ResModel<TimeRegInfo> cacheDoctorTimeRegInfoRes(String doctorId, String regDate) throws Exception {
         String hosId = CenterFunctionUtils.getHosId();
-        ResModel<TimeRegInfo> timeRegInfo = webServicesClient.getTimeRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(regDate), -1);
-        return timeRegInfo;
+        return webServicesClient.getTimeRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(regDate), -1);
     }
 
-    @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
-    public ResModel<TimeRegInfo> getCacheDoctorTimeRegInfoRes(String doctorId, String regDate)
-            throws Exception {
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
+    public ResModel<TimeRegInfo> getCacheDoctorTimeRegInfoRes(String doctorId, String regDate) throws Exception {
         return cacheDoctorTimeRegInfoRes(doctorId, regDate);
     }
 
-    @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorTimeReg_'+#p0+#p1")
     public void evictCacheDoctorTimeRegInfoRes(String doctorId, String regDate) throws Exception {
     }
 
-    @CachePut(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0.hospPatientId+'_'+#p0.queryType+'_'+#p0.cardNo")
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0.hospPatientId+'_'+#p0.queryType+'_'+#p0.cardNo")
     public ResModel<PayList> cachePayListRes(PayListReq payListReq) throws Exception {
         return webServicesClient.getPayDetailAll(payListReq);
     }
 
-    @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0.hospPatientId+'_'+#p0.queryType+'_'+#p0.cardNo")
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0.hospPatientId+'_'+#p0.queryType+'_'+#p0.cardNo")
     public ResModel<PayList> getCachePayListRes(PayListReq payListReq) throws Exception {
         return cachePayListRes(payListReq);
     }
 
-    @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0+'_'+#p1+'_'+#p2")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60, key = "'recipe_idcard_'+#p0+'_'+#p1+'_'+#p2")
     public void evictCachePayListRes(String patientId, String queryType, String cardNo) throws Exception {
     }
 
-    @CachePut(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
     public ResModel<ReportInfo> cacheOutReportList(ReportListReq reportListReq) throws Exception {
         return webServicesClient.getCheckOutReportList(reportListReq);
     }
 
-    @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
     public ResModel<ReportInfo> getCheckOutReportList(ReportListReq reportListReq) throws Exception {
         ResModel<ReportInfo> res = cacheOutReportList(reportListReq);
-        if(res.getReturnCode()!= ReturnCode.SUCCESS){
+        if (res.getReturnCode() != ReturnCode.SUCCESS) {
             this.evictCacheReportList(reportListReq);
         }
         return res;
     }
 
-    @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_idcard_'+#p0.patientCardNo")
     public void evictCacheReportList(ReportListReq reportListReq) throws Exception {
     }
 
@@ -184,23 +177,18 @@ public class WebService4HisInterfaceCacheUtil {
     public void evictCacheReportInfo(ReportInfoReq reportInfoReq) throws Exception {
     }
 
-    @CachePut(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
+    @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
     public String cachePacsListInfo(String patientId) throws IOException {
-        StringBuilder reportListUrl = new StringBuilder();
-        reportListUrl.append(ConfCenter.get("isj.report.baseUrl"));
-        reportListUrl.append(ConfCenter.get("isj.report.showListParam1"));
-        reportListUrl.append(patientId);
+        String reportListUrl = ConfCenter.get("isj.report.baseUrl") + ConfCenter.get("isj.report.showListParam1") + patientId + ConfCenter.get("isj.report.showListParam2");
         //reportListUrl.append("M004830551"); // TODO TEMP
-        reportListUrl.append(ConfCenter.get("isj.report.showListParam2"));
-        String reportRet = new String(HttpClient.get(reportListUrl.toString()).getBody(), PEPConstants.DEFAULT_CHARSET);
-        return reportRet;
+        return new String(HttpClient.get(reportListUrl).getBody(), PEPConstants.DEFAULT_CHARSET);
     }
-    @Cacheable(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
+    @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
     public String getCachePacsListInfo(String patientId) throws Exception {
         return this.cachePacsListInfo(patientId);
     }
 
-    @CacheEvict(value=CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
+    @CacheEvict(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
     public void evictCachePacsListInfo(String patientId) throws Exception {
     }
 }

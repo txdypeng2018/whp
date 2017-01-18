@@ -1,20 +1,5 @@
 package com.proper.enterprise.isj.proxy.controller;
 
-import java.util.*;
-
-import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.DoctorDocument;
 import com.proper.enterprise.isj.proxy.document.SubjectDocument;
@@ -24,11 +9,28 @@ import com.proper.enterprise.isj.proxy.utils.cache.WebServiceCacheUtil;
 import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
+import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.*;
+
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_SYSTEM_ERR;
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.HIS_DATALINK_ERR;
 
 /**
- * Created by think on 2016/8/16 0016. 查询全院医生列表
+ * 查询全院医生列表.
+ * Created by think on 2016/8/16 0016.
  */
 @RestController
 @RequestMapping(path = "/doctors")
@@ -50,19 +52,19 @@ public class DoctorController extends BaseController {
     WebService4FileCacheUtil webService4FileCacheUtil;
 
     /**
-     * 查询全院医生列表
+     * 查询全院医生列表.
      *
      * @param searchName
-     *            全文检索条件
+     *            全文检索条件.
      * @param subjectId
-     *            学科ID
-     * @return 医生列表
+     *            学科ID.
+     * @return 医生列表.
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Map<String, String>>> getDoctors(Integer pageNo, String searchName, String subjectId) {
-        List<DoctorDocument> docList = null;
+        List<DoctorDocument> docList;
         List<Map<String, String>> result = new ArrayList<>();
-        Map<String, String> resultDocMap = null;
+        Map<String, String> resultDocMap;
         try {
             if (pageNo == null) {
                 pageNo = 1;
@@ -85,8 +87,8 @@ public class DoctorController extends BaseController {
             if (StringUtil.isNotEmpty(searchName)) {
                 Map<String, Set<String>> mapSet = webServiceCacheUtil.getCacheDoctorInfoLike();
                 Iterator<Map.Entry<String, Set<String>>> mapIter = mapSet.entrySet().iterator();
-                String key = "";
-                Set<String> docIdSet = null;
+                String key;
+                Set<String> docIdSet;
                 Set<String> resultSet = new HashSet<>();
                 while (mapIter.hasNext()) {
                     Map.Entry<String, Set<String>> entry = mapIter.next();
@@ -97,7 +99,7 @@ public class DoctorController extends BaseController {
                     }
                 }
                 Iterator<Map.Entry<String, DoctorDocument>> iter = doctorMap.entrySet().iterator();
-                Map.Entry<String, DoctorDocument> entry = null;
+                Map.Entry<String, DoctorDocument> entry;
                 while (iter.hasNext()) {
                     entry = iter.next();
                     if (subSet != null && !subSet.contains(entry.getKey())) {
@@ -144,48 +146,44 @@ public class DoctorController extends BaseController {
             }
         } catch (UnmarshallingFailureException e) {
             LOGGER.debug("解析HIS接口返回参数错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(HIS_DATALINK_ERR, e);
         } catch (HisReturnException e) {
             LOGGER.debug("HIS接口返回错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.debug("系统错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(APP_SYSTEM_ERR, e);
         }
         return responseOfGet(result);
     }
 
     /**
-     * 指定医生个人信息
+     * 指定医生个人信息.
      *
      * @param id
-     *            医生Id
-     * @return 医生个人信息
+     *            医生Id.
+     * @return 医生个人信息.
      */
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<DoctorDocument> getDoctorById(@PathVariable String id) {
-        DoctorDocument doc = null;
+        DoctorDocument doc;
         try {
             doc = webServiceCacheUtil.getCacheDoctorDocument().get(id);
         } catch (UnmarshallingFailureException e) {
             LOGGER.debug("解析HIS接口返回参数错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.HIS_DATALINK_ERR,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(HIS_DATALINK_ERR, e);
         } catch (HisReturnException e) {
             LOGGER.debug("HIS接口返回错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.debug("系统错误", e);
-            return CenterFunctionUtils.setTextResponseEntity(CenterFunctionUtils.APP_SYSTEM_ERR,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(APP_SYSTEM_ERR, e);
         }
         return responseOfGet(doc);
     }
 
     @RequestMapping(path = "/photo", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getDoctorPhoto(String doctorId, String index) throws Exception {
+    public ResponseEntity<String> getDoctorPhoto(String doctorId) throws Exception {
         Map<String, DoctorDocument> docMap = webServiceCacheUtil.getCacheDoctorDocument();
         DoctorDocument doc = docMap.get(doctorId);
         String photoStr = "";

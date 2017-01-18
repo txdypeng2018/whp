@@ -65,6 +65,7 @@ import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
+ * 挂号服务.
  * Created by think on 2016/9/4 0004.
  */
 @Service
@@ -77,7 +78,7 @@ public class RegistrationServiceImpl {
 
     @Autowired
     @Lazy
-    private WebServicesClient webServicesClient;
+    WebServicesClient webServicesClient;
 
     @Autowired
     UserInfoService userInfoService;
@@ -86,7 +87,7 @@ public class RegistrationServiceImpl {
     UserService userService;
 
     @Autowired
-    private SubjectService subjectService;
+    SubjectService subjectService;
 
     @Autowired
     HospitalIntroduceService hospitalIntroduceService;
@@ -121,8 +122,8 @@ public class RegistrationServiceImpl {
     /**
      * 生成未缴费订单,更新挂号单
      * 
-     * @param saveReg
-     * @return
+     * @param saveReg 挂号单.
+     * @return 订单.
      */
     private OrderRegReq saveOrderAndUpdateReg(RegistrationDocument saveReg) {
         Order orderInfo = orderService.saveCreateOrder(saveReg);
@@ -138,9 +139,9 @@ public class RegistrationServiceImpl {
     /**
      * 生成挂号单
      * 
-     * @param reg
-     * @return
-     * @throws Exception
+     * @param reg 挂号请求.
+     * @return 挂号单.
+     * @throws Exception 异常.
      */
     public RegistrationDocument saveCreateRegistration(RegistrationDocument reg) throws Exception {
         Map<String, String> subMap = webServiceDataSecondCacheUtil.getCacheSubjectMap();
@@ -287,7 +288,7 @@ public class RegistrationServiceImpl {
             SimpleDateFormat orderSdf = new SimpleDateFormat("yyMMddHHmm");
             DecimalFormat df = new DecimalFormat("00000");
             List<RegistrationDocument> list = mongoTemplate.find(query, RegistrationDocument.class);
-            long nextNum = 0l;
+            long nextNum;
             if (list.size() == 0) {
                 nextNum = Long.parseLong(orderSdf.format(now.clone()).concat(df.format(1)));
             } else {
@@ -301,11 +302,11 @@ public class RegistrationServiceImpl {
     }
 
     /**
-     * 更新his号点,根据his单号生成挂号单号,方便查询,挂号单号格式yyMMdd+his挂号单号
+     * 更新his号点,根据his单号生成挂号单号,方便查询,挂号单号格式yyMMdd+his挂号单号.
      * 
-     * @param saveReg
-     * @param orderReg
-     * @throws Exception
+     * @param saveReg 挂号请求.
+     * @param orderReg 挂号请求.
+     * @throws Exception 异常.
      */
     private RegistrationDocument saveReg2His(RegistrationDocument saveReg, OrderRegReq orderReg) throws Exception {
         ResModel<OrderReg> ordrRegModel = webServicesClient.orderReg(orderReg);
@@ -318,7 +319,7 @@ public class RegistrationServiceImpl {
         if (ordrRegModel.getRes().getConcessions() != null) {
             List<Concession> conList = ordrRegModel.getRes().getConcessions();
             List<RegistrationConcession> regConList = new ArrayList<>();
-            RegistrationConcession regCon = null;
+            RegistrationConcession regCon;
             for (Concession concession : conList) {
                 regCon = new RegistrationConcession();
                 BeanUtils.copyProperties(concession, regCon);
@@ -331,9 +332,9 @@ public class RegistrationServiceImpl {
     }
 
     public void updateRegistrationAndOrder(Object req) throws Exception {
-        String channelId = null;
+        String channelId;
         ResModel<PayReg> payRegRes = null;
-        Order order = null;
+        Order order;
         if(req instanceof PayRegReq){
             PayRegReq payRegReq = (PayRegReq)req;
             channelId = payRegReq.getPayChannelId();
@@ -379,11 +380,11 @@ public class RegistrationServiceImpl {
     }
 
     /**
-     * 订单不为空,更新挂号单和订单状态
-     * @param channelId
-     * @param payRegRes
-     * @param order
-     * @throws HisReturnException
+     * 订单不为空,更新挂号单和订单状态.
+     * @param channelId 渠道ID.
+     * @param payRegRes 支取结果.
+     * @param order 订单.
+     * @throws HisReturnException 异常.
      */
     private void updateRegistrationAndOrderStatus(String channelId, ResModel<PayReg> payRegRes, Order order) throws HisReturnException {
         RegistrationDocument regDoc = this.getRegistrationDocumentById(order.getFormId());
@@ -472,7 +473,7 @@ public class RegistrationServiceImpl {
         String hosId = CenterFunctionUtils.getHosId();
         RefundReq refundReq = new RefundReq();
         refundReq.setHosId(hosId);
-        int fee = 0;
+
         Order order = orderService.findByOrderNo(orderNo);
         if (orderNo != null) {
             RegistrationDocument reg = this.getRegistrationDocumentById(order.getFormId());
@@ -532,9 +533,8 @@ public class RegistrationServiceImpl {
         String hosId = CenterFunctionUtils.getHosId();
         RegistrationDocument reg = this.getRegistrationDocumentById(registrationId);
         String cancelTime = DateUtil.toTimestamp(new Date());
-        String cancelRemark = "";
-        String regStatus = "";
-        String regStatusCode = "";
+        String cancelRemark;
+        String regStatusCode;
         if (cancelType == OrderCancelTypeEnum.CANCEL_HANDLE) {
             cancelRemark = CenterFunctionUtils.ORDER_CANCEL_MANUAL_MSG;
             regStatusCode = RegistrationStatusEnum.CANCEL.getValue();
@@ -575,12 +575,12 @@ public class RegistrationServiceImpl {
     }
 
     /**
-     * 修改退号未支付的状态
-     * @param registrationId
-     * @param reg
-     * @param cancelTime
-     * @param cancelRemark
-     * @param regStatusCode
+     * 修改退号未支付的状态.
+     * @param registrationId 挂号ID.
+     * @param reg 挂号请求.
+     * @param cancelTime 取消时间.
+     * @param cancelRemark 取消标记.
+     * @param regStatusCode 挂号状态码.
      */
     private void saveNonPaidCancelRegistration(String registrationId, RegistrationDocument reg, String cancelTime, String cancelRemark, String regStatusCode) {
         if (reg.getStatusCode().equals(RegistrationStatusEnum.NOT_PAID.getValue())) {

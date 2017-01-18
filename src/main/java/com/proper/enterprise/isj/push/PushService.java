@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 推送Service
+ * 推送Service.
  */
 public interface PushService {
 

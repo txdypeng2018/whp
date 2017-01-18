@@ -6,7 +6,7 @@ import com.proper.enterprise.isj.rule.entity.RuleEntity;
 import java.util.List;
 
 /**
- * 挂号规则Service
+ * 挂号规则Service.
  */
 public interface RegistrationRulesService {
 

@@ -10,18 +10,19 @@ import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
 import com.proper.enterprise.isj.webservices.model.req.RefundReq;
 
 /**
+ * 挂号服务.
  * Created by think on 2016/9/4 0004.
  */
 
 public interface RegistrationService {
 
     /**
-     * 生成挂号单和订单
+     * 生成挂号单和订单.
      * 
      * @param reg
-     *            挂号单信息
-     * @return 订单
-     * @throws Exception
+     *            挂号单信息.
+     * @return 订单.
+     * @throws Exception 异常.
      */
     RegistrationDocument saveCreateRegistrationAndOrder(RegistrationDocument reg, String isAppointment) throws Exception;
 
@@ -43,48 +44,48 @@ public interface RegistrationService {
     RegistrationDocument getRegistrationDocumentById(String id);
 
     /**
-     * 查询未付款订单,更新状态
+     * 查询未付款订单,更新状态.
      * 
-     * @param registrationDocument
+     * @param registrationDocument 挂号报文.
      */
     RegistrationDocument saveQueryPayTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
             throws Exception;
 
     /**
-     * 查询已退款订单,更新状态
+     * 查询已退款订单,更新状态.
      * 
-     * @param registrationDocument
-     * @return
-     * @throws Exception
+     * @param registrationDocument 挂号报文.
+     * @return 挂号报文.
+     * @throws Exception 异常.
      */
     RegistrationDocument saveQueryRefundTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
             throws Exception;
 
     /**
-     * 根据挂号单号查询挂号单
+     * 根据挂号单号查询挂号单.
      * 
      * @param num
-     *            挂号单号
-     * @return 挂号单
+     *            挂号单号.
+     * @return 挂号单.
      */
     RegistrationDocument getRegistrationDocumentByNum(String num);
 
     void deleteRegistrationDocument(RegistrationDocument reg);
 
     /**
-     * 保存或更新挂号单信息
+     * 保存或更新挂号单信息.
      * 
-     * @param reg
-     * @return
+     * @param reg 挂号报文.
+     * @return 挂号报文.
      */
     RegistrationDocument saveRegistrationDocument(RegistrationDocument reg);
 
     List<RegistrationDocument> findRegistrationDocumentList(String patientId);
 
     /**
-     * 获取订单超时未付款的挂号单
+     * 获取订单超时未付款的挂号单.
      * 
-     * @return
+     * @return 挂号单.
      */
     List<RegistrationDocument> findOverTimeRegistrationDocumentList(int overTimeMinute);
 
@@ -107,9 +108,9 @@ public interface RegistrationService {
     List<RegistrationDocument> findRegistrationDocumentByStopReg(Map<String, String> paramMap);
 
     /**
-     * 线下申请退费,根据支付平台返还支付费用,修改相应的数据为已退费
+     * 线下申请退费,根据支付平台返还支付费用,修改相应的数据为已退费.
      * 
-     * @param reg
+     * @param reg 挂号单.
      */
     void saveRefundAndUpdateRegistrationDocument(RegistrationDocument reg) throws Exception;
 

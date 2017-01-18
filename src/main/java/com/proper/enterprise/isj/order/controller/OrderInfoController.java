@@ -25,6 +25,7 @@ import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 
 /**
+ * 订单.
  * Created by think on 2016/9/5 0005.
  */
 @RestController
@@ -67,7 +68,7 @@ public class OrderInfoController extends BaseController {
                 sec = 0;
             }
         }
-        String description = "";
+        String description;
         String isAppointment = "";
         if (order.getFormClassInstance().equals(RegistrationDocument.class.getName())) {
             RegistrationDocument reg = registrationService.getRegistrationDocumentById(order.getFormId());
@@ -95,6 +96,7 @@ public class OrderInfoController extends BaseController {
     public ResponseEntity<Map<String, String>> recipeOrder(@RequestBody Map<String, Object> recipeMap)
             throws Exception {
         String memberId = (String) recipeMap.get("memberId");
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> outpatientList = (List<Map<String, Object>>) recipeMap.get("outpatients");
         String clinicCode = "";
         for (Map<String, Object> map : outpatientList) {
