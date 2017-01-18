@@ -11,4 +11,4 @@
 ------------
 
 **TODO**
-- [isjadm](./isjadm): `/opt/docker/isj_official/isjadm`
+- [isjadm](./isjadm): `/opt/docker/isj_official/nginx/isjadm`

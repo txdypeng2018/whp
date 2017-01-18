@@ -1,11 +1,30 @@
-isjadm
-======
+掌上盛京后台管理端
+===============
+
+更新代码
+-------
 
 ```
-# 构建镜像
-$ docker build -t propersoft/docker-cd:isjadm .
-# 启动容器
-$ GH_OAUTH_TOKEN=xxxx docker-compose up -d
-# admin 分支有变化，fe-deploy 部署完后，重启容器
-$ docker restart isjadm_isjadm_1
+$ cd /opt/docker/isj_official/nginx/isjadm
+# 赋权限
+$ chmod +x update.sh
+# 更新，需 github 访问权限
+$ ./update.sh
+```
+
+docker-compose 相关内容
+----------------------
+
+```
+  - ./nginx/isjadm/repo/www:/etc/nginx/isjadm
+```
+
+nginx.conf 相关内容
+------------------
+
+```
+location ^~ /isjadm/ {
+  default_type application/octet-stream;
+  root /etc/nginx;
+}
 ```

@@ -1,6 +1,0 @@
-isjadm:
-  image: propersoft/docker-cd:isjadm
-  ports:
-    - "9000:9000"
-  environment:
-    - GH_OAUTH_TOKEN
