@@ -1,0 +1,95 @@
+isj-pep1_official:
+  image: propersoft/pep
+  volumes:
+    - ./pep1/tomcat/webapps:/usr/local/tomcat/webapps
+    - ./pep1/tomcat/logs:/usr/local/tomcat/logs
+  ports:
+    - "39091:8080"
+  extra_hosts:
+    - "his-server:172.28.235.115"
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=4096M -XX:MaxPermSize=8192m -Xms16384m -Xmx16384m
+isj-pep2_official:
+  image: propersoft/pep
+  volumes:
+    - ./pep2/tomcat/webapps:/usr/local/tomcat/webapps
+    - ./pep2/tomcat/logs:/usr/local/tomcat/logs
+  ports:
+    - "39092:8080"
+  extra_hosts:
+    - "his-server:172.28.235.115"
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=4096M -XX:MaxPermSize=8192m -Xms16384m -Xmx16384m
+isj-properpush_official:
+  image: propersoft/pep-isj
+  volumes:
+    - ./properpush/tomcat/webapps:/usr/local/tomcat/webapps
+    - ./properpush/tomcat/logs:/usr/local/tomcat/logs
+  ports:
+    - "35555:9090"
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=512M -XX:MaxPermSize=2048m -Xms512m -Xmx4096m
+isj-mongo_official_cf3:
+  image: mongo
+  volumes:
+    - ./mongo_cf3/data:/data/db
+    - ./mongo_cf3/keyfile:/opt/keyfile
+  ports:
+    - "37103:27017"
+  command: mongod --configsvr --keyFile /opt/keyfile/mongodb-keyfile --replSet cf --port 27017
+isj-mongo_official_rs1_3:
+  image: mongo
+  volumes:
+    - ./mongo_rs1_3/data:/data/db
+    - ./mongo_rs1_3/keyfile:/opt/keyfile
+  ports:
+    - "37013:27017"
+  command: mongod --keyFile /opt/keyfile/mongodb-keyfile --replSet rs1
+isj-mongo_official_rs2_1:
+  image: mongo
+  volumes:
+    - ./mongo_rs2_1/data:/data/db
+    - ./mongo_rs2_1/keyfile:/opt/keyfile
+  ports:
+    - "37021:27017"
+  command: mongod --keyFile /opt/keyfile/mongodb-keyfile --replSet rs2
+isj-mysql_slave_official:
+  image: mysql
+  volumes:
+    - ./mysql_slave/data:/var/lib/mysql
+    - ./mysql_slave/conf:/etc/mysql/conf.d
+  environment:
+    - MYSQL_ROOT_PASSWORD=Proper123
+    - MYSQL_DATABASE=isj
+    - MYSQL_USER=isj
+    - MYSQL_PASSWORD=isj
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  ports:
+    - "33306:3306"
+isj-mysql_push_official:
+  image: mysql
+  volumes:
+    - ./mysql_push/data:/var/lib/mysql
+    - ./mysql_push/conf:/etc/mysql/conf.d
+  environment:
+    - MYSQL_ROOT_PASSWORD=123456
+    - MYSQL_DATABASE=properpush
+    - MYSQL_USER=root
+    - MYSQL_PASSWORD=123456
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  ports:
+    - "53307:3306"
+isj-redis1_official:
+  image: redis
+  net: host
+  volumes:
+    - ./redis1/data:/data
+    - ./redis1/redis.conf:/usr/local/etc/redis/redis.conf
+  command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+isj-redis2_official:
+  image: redis
+  net: host
+  volumes:
+    - ./redis2/data:/data
+    - ./redis2/redis.conf:/usr/local/etc/redis/redis.conf
+  command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes

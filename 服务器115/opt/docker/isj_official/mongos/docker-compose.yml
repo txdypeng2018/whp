@@ -1,0 +1,7 @@
+isj-mongo_official_router:
+  image: mongo
+  volumes:
+    - ./keyfile:/opt/keyfile
+  ports:
+    - "27017:27017"
+  command: mongos --keyFile /opt/keyfile/mongodb-keyfile --configdb cf/172.28.235.115:37101,172.28.235.114:37102,172.28.235.113:37103

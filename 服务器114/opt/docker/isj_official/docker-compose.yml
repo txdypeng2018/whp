@@ -1,0 +1,86 @@
+isj-pep1_official:
+  image: propersoft/pep-isj
+  volumes:
+    - ./pep1/tomcat/webapps:/usr/local/tomcat/webapps
+    - ./pep1/tomcat/logs:/usr/local/tomcat/logs
+  extra_hosts:
+    - "his-server:172.28.235.115"
+  ports:
+    - "39091:9090"
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=4096M -XX:MaxPermSize=8192m -Xms4096m -Xmx16384m
+isj-properpush_official:
+  image: propersoft/pep-isj
+  volumes:
+    - ./properpush/tomcat/webapps:/usr/local/tomcat/webapps
+    - ./properpush/tomcat/logs:/usr/local/tomcat/logs
+  ports:
+    - "35555:9090"
+  environment:
+    - JAVA_OPTS=-server -XX:PermSize=512M -XX:MaxPermSize=2048m -Xms512m -Xmx4096m
+isj-mongo_official_cf2:
+  image: mongo
+  volumes:
+    - ./mongo_cf2/data:/data/db
+    - ./mongo_cf2/keyfile:/opt/keyfile
+  ports:
+    - "37102:27017"
+  command: mongod --configsvr --keyFile /opt/keyfile/mongodb-keyfile --replSet cf --port 27017
+isj-mongo_official_rs1_2:
+  image: mongo
+  volumes:
+    - ./mongo_rs1_2/data:/data/db
+    - ./mongo_rs1_2/keyfile:/opt/keyfile
+  ports:
+    - "37012:27017"
+  command: mongod --keyFile /opt/keyfile/mongodb-keyfile --replSet rs1
+isj-mongo_official_rs2_2:
+  image: mongo
+  volumes:
+    - ./mongo_rs2_2/data:/data/db
+    - ./mongo_rs2_2/keyfile:/opt/keyfile
+  ports:
+    - "37022:27017"
+  command: mongod --keyFile /opt/keyfile/mongodb-keyfile --replSet rs2
+isj-mysql_official:
+  image: mysql
+  volumes:
+    - ./mysql/data:/var/lib/mysql
+    - ./mysql/conf:/etc/mysql/conf.d
+  environment:
+    - MYSQL_ROOT_PASSWORD=Proper123
+    - MYSQL_DATABASE=isj
+    - MYSQL_USER=isj
+    - MYSQL_PASSWORD=isj
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  ports:
+    - "33306:3306"
+isj-redis_official:
+  image: redis
+  volumes:
+    - ./redis/data:/data
+    - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+  ports:
+    - "36379:6379"
+  command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+isj-redis1_official:
+  image: redis
+  net: host
+  volumes:
+    - ./redis1/data:/data
+    - ./redis1/redis.conf:/usr/local/etc/redis/redis.conf
+  command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+isj-redis2_official:
+  image: redis
+  net: host
+  volumes:
+    - ./redis2/data:/data
+    - ./redis2/redis.conf:/usr/local/etc/redis/redis.conf
+  command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+isj-mongo_log:
+  image: mongo
+  volumes:
+    - ./mongo_log/data:/data/db
+  ports:
+    - "27017:27017"
+  command: --auth
