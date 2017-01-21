@@ -11,7 +11,7 @@
 ### 服务器：172.28.235.106 ###
 - 正式服务器
 - 用户：root 密码：oaABC123!
-- 掌上盛京反向代理服务器（容器：isjofficial_isj-nginx_official_1）
+- 掌上盛京 [反向代理](./服务器106/opt/docker/isj_official/nginx/nginx.conf) 服务器（容器：isjofficial_isj-nginx_official_1）
 - 掌上盛京后台管理端，执行./opt/docker/isj_official/nginx/isjadm/update.sh更新（需 github 访问权限）
 - 掌上盛京kettle统计定时任务，自动统计掌上盛京业务数据
 - 掌上盛京反向代理nginx定时任务，日志按天分割，及日志保留天数策略
@@ -55,7 +55,7 @@
 - 用户：root 密码：oaABC123!
 - 掌上盛京tomcat服务器（容器：isjofficial_isj-pep1_official_1、isjofficial_isj-pep2_official_1）
 - 掌上盛京推送通知tomcat服务器（容器：isjofficial_isj-properpush_official_1）
-- his的webservice反向代理服务器（容器：isjofficial_isj-nginx_official_1）
+- HIS 的 Web Service [反向代理](./服务器115/opt/docker/isj_official/nginx/nginx.conf) 服务器（容器：isjofficial_isj-nginx_official_1）
 - 掌上盛京mongos服务器，及集群部分服务器（容器：mongos_isj-mongo_official_router_1、isjofficial_isj-mongo_official_cf1_1、isjofficial_isj-mongo_official_rs1_1_1、isjofficial_isj-mongo_official_rs2_3_1）
 
 ## 各类应用详细 ##
