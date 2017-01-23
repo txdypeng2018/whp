@@ -57,6 +57,7 @@
 - 掌上盛京推送通知tomcat服务器（容器：isjofficial_isj-properpush_official_1）
 - HIS 的 Web Service [反向代理](./服务器115/opt/docker/isj_official/nginx/nginx.conf) 服务器（容器：isjofficial_isj-nginx_official_1）
 - 掌上盛京mongos服务器，及集群部分服务器（容器：mongos_isj-mongo_official_router_1、isjofficial_isj-mongo_official_cf1_1、isjofficial_isj-mongo_official_rs1_1_1、isjofficial_isj-mongo_official_rs2_3_1）
+- HIS 的 Web Service反向代理nginx定时任务，日志按天分割，及日志保留天数策略
 
 ## 各类应用详细 ##
 
@@ -176,7 +177,7 @@
 
 #### nginx日志定时处理 ####
 - 对nginx日志进行分割，删除超期的日志
-- 定时任务服务器：172.28.235.106
+- 定时任务服务器：172.28.235.106、172.28.235.115
 - 定时脚本位置：/opt/backup/nginx/
 
 #### kettle统计定时任务 ####
