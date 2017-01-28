@@ -13,10 +13,7 @@ public class ReqEncryptedAdapter extends XmlAdapter<String, Map<String, Object>>
     private static final com.proper.enterprise.platform.core.utils.cipher.AES AES;
 
     static {
-        AES = new com.proper.enterprise.platform.core.utils.cipher.AES(
-                ConfCenter.get("isj.his.aes.mode"),
-                ConfCenter.get("isj.his.aes.padding"),
-                ConfCenter.get("isj.his.aes.key"));
+        AES = new com.proper.enterprise.platform.core.utils.cipher.AES(ConfCenter.get("isj.his.aes.mode"), ConfCenter.get("isj.his.aes.padding"), ConfCenter.get("isj.his.aes.key"));
     }
 
     @Override
@@ -37,15 +34,16 @@ public class ReqEncryptedAdapter extends XmlAdapter<String, Map<String, Object>>
 
     private String iterateCollection(Map<String, Object> map) {
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String, Object> entry : map.entrySet()) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() instanceof String) {
                 sb.append(MessageFormat.format(ConfCenter.get("isj.his.template.req"), entry.getKey(), entry.getValue()));
             } else if (entry.getValue() instanceof Collection) {
                 for (Object ele : (Collection) entry.getValue()) {
                     if (ele instanceof Map) {
-                        sb.append("<" + entry.getKey() + ">")
-                          .append(iterateCollection((Map<String, Object>) ele))
-                          .append("</" + entry.getKey() + ">");
+                        Map tmp = (Map)ele;
+                        sb.append("<").append(entry.getKey()).append(">")
+                                .append(iterateCollection(tmp))
+                                .append("</").append(entry.getKey()).append(">");
                     }
                 }
             }

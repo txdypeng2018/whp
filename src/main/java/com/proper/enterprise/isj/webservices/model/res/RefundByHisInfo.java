@@ -11,9 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.proper.enterprise.isj.webservices.model.res.refundbyhis.RefundByHis;
 
-/**
- * Created by think on 2016/10/2 0002.
- */
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RefundByHisInfo  implements Serializable {

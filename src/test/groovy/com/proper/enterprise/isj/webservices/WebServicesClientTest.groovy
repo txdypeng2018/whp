@@ -6,7 +6,7 @@ import com.proper.enterprise.isj.webservices.model.req.OrderRegReq
 import com.proper.enterprise.isj.webservices.model.req.PayListReq
 import com.proper.enterprise.isj.webservices.model.req.PayOrderReq
 import com.proper.enterprise.isj.webservices.model.res.NetTestResult
-import com.proper.enterprise.isj.webservices.repository.WSLogRepository
+import com.proper.enterprise.isj.log.repository.WSLogRepository
 import com.proper.enterprise.platform.core.enums.WhetherType
 import com.proper.enterprise.platform.core.utils.JSONUtil
 import com.proper.enterprise.platform.core.utils.StringUtil

@@ -37,6 +37,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 /**
+ * 排班服务.
  * Created by think on 2016/8/19 0019.
  */
 @Service
@@ -63,11 +64,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     SpELParser parser;
 
     @Override
-    public List<ScheDoctorDocument> getScheduleDoctors(String districtId, String deptId, String major, Date startDate,
-            Date endDate, boolean isAppointment, int maxScheDoctorIndex) throws Exception {
+    public List<ScheDoctorDocument> getScheduleDoctors(String districtId, String deptId, String major, Date startDate, Date endDate, boolean isAppointment, int maxScheDoctorIndex) throws Exception {
         // 获得院区
-        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
-                .get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
+        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument().get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
         Map<String, SubjectDocument> districtMap = new HashMap<>();
         for (SubjectDocument dis : districtList) {
             districtMap.put(dis.getId(), dis);
@@ -76,14 +75,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         String today = DateUtil.toDateString(new Date());
         String hourMin = DateUtil.toString(new Date(), "HH:mm");
         List<ScheDoctorDocument> docList = new ArrayList<>();
-        ScheDoctorDocument scheDoc = null;
-        List<Reg> tempRegList = null;
+        ScheDoctorDocument scheDoc;
+        List<Reg> tempRegList;
         for (DoctorDocument doctor : scheDoctorList) {
-            ResModel<RegInfo> allRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(
-                    doctor.getId(), DateUtil.toDateString(startDate), DateUtil.toDateString(endDate));
+            ResModel<RegInfo> allRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(doctor.getId(), DateUtil.toDateString(startDate), DateUtil.toDateString(endDate));
             if (allRegInfo.getReturnCode() != ReturnCode.SUCCESS) {
-                LOGGER.debug("HIS返回的数据出错,returnCode:" + allRegInfo.getReturnCode() + ",错误对象:"
-                        + RegInfo.class.getName());
+                LOGGER.debug("HIS返回的数据出错,returnCode:" + allRegInfo.getReturnCode() + ",错误对象:" + RegInfo.class.getName());
                 throw new HisReturnException(allRegInfo.getReturnMsg());
             }
             List<RegDoctor> allRegDocList = allRegInfo.getRes().getRegDoctorList();
@@ -111,24 +108,22 @@ public class ScheduleServiceImpl implements ScheduleService {
                     continue;
                 }
 
-                ResModel<TimeRegInfo> timeRegInfo = webService4HisInterfaceCacheUtil
-                        .getCacheDoctorTimeRegInfoRes(regDoctor.getDoctorId(), DateUtil.toDateString(reg.getRegDate()));
+                ResModel<TimeRegInfo> timeRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorTimeRegInfoRes(regDoctor.getDoctorId(), DateUtil.toDateString(reg.getRegDate()));
                 if (timeRegInfo.getReturnCode() != ReturnCode.SUCCESS) {
-                    LOGGER.debug("HIS返回的数据出错,returnCode:" + timeRegInfo.getReturnCode() + ",错误对象:"
-                            + TimeRegInfo.class.getName());
+                    LOGGER.debug("HIS返回的数据出错,returnCode:" + timeRegInfo.getReturnCode() + ",错误对象:" + TimeRegInfo.class.getName());
                     continue;
                 }
                 List<TimeReg> timeRegList = timeRegInfo.getRes().getTimeRegList();
                 if (timeRegList.size() > 0) {
                     timeRegFlag = true;
                 }
-                if (checkDoctorOverCount(today, hourMin, scheDoc, reg, timeRegList)){
+                if (checkDoctorOverCount(today, hourMin, scheDoc, reg, timeRegList)) {
                     break;
                 }
             }
             if (timeRegFlag) {
                 docList.add(scheDoc);
-                if(docList.size() == maxScheDoctorIndex){
+                if (docList.size() == maxScheDoctorIndex) {
                     break;
                 }
             }
@@ -138,8 +133,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private boolean checkDoctorOverCount(String today, String hourMin, ScheDoctorDocument scheDoc, Reg reg, List<TimeReg> timeRegList) {
         for (TimeReg tempReg : timeRegList) {
-            if (today.equals(DateUtil.toDateString(reg.getRegDate()))
-                    && hourMin.compareTo(tempReg.getBeginTime()) >= 0) {
+            if (today.equals(DateUtil.toDateString(reg.getRegDate())) && hourMin.compareTo(tempReg.getBeginTime()) >= 0) {
                 continue;
             }
             scheDoc.setTotal(scheDoc.getTotal() + tempReg.getTotal());
@@ -148,28 +142,25 @@ public class ScheduleServiceImpl implements ScheduleService {
                 break;
             }
         }
-        if (scheDoc.getOverCount() > 0) {
-            return true;
-        }
-        return false;
+        return scheDoc.getOverCount() > 0;
     }
 
     /**
-     * 获得过滤好的医生集合
-     * @param deptId
-     * @param major
-     * @return
-     * @throws Exception
+     * 获得过滤好的医生集合.
+     *
+     * @param deptId 科室.
+     * @param major  专业.
+     * @return 医生列表.
+     * @throws Exception 异常.
      */
     private List<DoctorDocument> getScheDoctorList(String deptId, String major) throws Exception {
-        Map<String, List<SubjectDocument>> subMap = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
-                .get(String.valueOf(DeptLevel.DOCTOR.getCode()));
+        Map<String, List<SubjectDocument>> subMap = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument().get(String.valueOf(DeptLevel.DOCTOR.getCode()));
         List<SubjectDocument> disList = new ArrayList<>();
         Set<String> idSet = null;
         if (StringUtil.isNotEmpty(deptId)) {
             disList = subMap.get(deptId);
             if (disList == null) {
-                disList =  new ArrayList<>();
+                disList = new ArrayList<>();
             }
         } else {
             for (Map.Entry<String, List<SubjectDocument>> entry : subMap.entrySet()) {
@@ -177,29 +168,27 @@ public class ScheduleServiceImpl implements ScheduleService {
             }
         }
         if (StringUtil.isNotEmpty(major)) {
-            idSet = new HashSet<String>();
+            idSet = new HashSet<>();
             Map<String, Set<String>> likeMap = webServiceCacheUtil.getCacheDoctorInfoLike();
-            Iterator<Map.Entry<String, Set<String>>> likeIter = likeMap.entrySet().iterator();
-            while (likeIter.hasNext()) {
-                Map.Entry<String, Set<String>> entry = likeIter.next();
+            for (Map.Entry<String, Set<String>> entry : likeMap.entrySet()) {
                 if (entry.getKey().contains(major)) {
                     idSet.addAll(likeMap.get(entry.getKey()));
                 }
             }
         }
-        Set<String> doctorIdSet = new HashSet<String>();
-        DoctorDocument doc = null;
+        Set<String> doctorIdSet = new HashSet<>();
+        DoctorDocument doc;
         List<DoctorDocument> scheDoctorList = new ArrayList<>();
         for (SubjectDocument districtDocument : disList) {
             if (idSet != null && !idSet.contains(districtDocument.getId())) {
                 continue;
             }
-            if(doctorIdSet.contains(districtDocument.getId())) {
+            if (doctorIdSet.contains(districtDocument.getId())) {
                 continue;
             }
             doctorIdSet.add(districtDocument.getId());
             doc = webServiceCacheUtil.getCacheDoctorDocument().get(districtDocument.getId());
-            if(doc!=null){
+            if (doc != null) {
                 scheDoctorList.add(doc);
             }
         }
@@ -208,10 +197,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             public int compare(DoctorDocument doc1, DoctorDocument doc2) {
                 int seq1 = CenterFunctionUtils.getDoctorTitleSeq(doc1.getTitle());
                 int seq2 = CenterFunctionUtils.getDoctorTitleSeq(doc2.getTitle());
-                if(seq1-seq2==0){
+                if (seq1 - seq2 == 0) {
                     return new CNStrComparator().compare(doc1.getName(), doc2.getName());
-                }else{
-                    return seq1-seq2;
+                } else {
+                    return seq1 - seq2;
                 }
             }
         });
@@ -219,20 +208,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
-     * 校验医生排班是否合法
-     * 
-     * @param districtId
-     * @param deptId
-     * @param docList
-     * @param scheDoc
-     * @param regDateMoreSet
-     * @param reg
-     * @param disId
-     * @return
+     * 校验医生排班是否合法.
+     *
+     * @param districtId     院区ID.
+     * @param deptId         科室ID.
+     * @param docList        医生列表.
+     * @param scheDoc        排班信息.
+     * @param regDateMoreSet 挂号日期.
+     * @param reg            挂号信息.
+     * @param disId          挂号院区.
+     * @return 检查结果.
      */
-    private boolean checkDoctorRegIsValid(String districtId, String deptId, List<ScheDoctorDocument> docList,
-            ScheDoctorDocument scheDoc, Set<String> regDateMoreSet, Reg reg, String disId, boolean isAppointment,
-            Map<String, SubjectDocument> districtMap) {
+    private boolean checkDoctorRegIsValid(String districtId, String deptId, List<ScheDoctorDocument> docList, ScheDoctorDocument scheDoc, Set<String> regDateMoreSet, Reg reg, String disId, boolean isAppointment, Map<String, SubjectDocument> districtMap) {
         // 过滤医生排班没返回出诊院区人员
         if (StringUtil.isEmpty(disId)) {
             LOGGER.debug("医生排班没返回出诊院区");
@@ -258,7 +245,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheDoc.setDistrictId(disId);
             if (StringUtil.isNotEmpty(scheDoc.getDistrictId())) {
                 scheDoc.setDistrict(districtMap.get(scheDoc.getDistrictId()).getName());
-            }else{
+            } else {
                 scheDoc.setDistrict("");
             }
             // 将没有上下午挂号级别的医生,改为暂停挂号
@@ -273,18 +260,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
-     * 保存并返回医生无院区的的科室Id
-     * @param regDoctor
-     * @param tempRegList
-     * @return
+     * 保存并返回医生无院区的的科室Id.
+     *
+     * @param regDoctor   挂号医生.
+     * @param tempRegList 临时列表.
      */
-    private synchronized  void getDoctorDeptNonDistrictSet(RegDoctor regDoctor, List<Reg> tempRegList) {
+    private synchronized void getDoctorDeptNonDistrictSet(RegDoctor regDoctor, List<Reg> tempRegList) {
         Set<String> deptNonDistrictSet = new HashSet<>();
-        List<ScheduleMistakeLogDocument> misList = scheduleMistakeLogRepository
-                .findByDoctorIdAndMistakeCode(regDoctor.getDoctorId(),
-                        ScheduleMistakeCodeEnum.DEPT_NON_DISTRICT.toString());
+        List<ScheduleMistakeLogDocument> misList = scheduleMistakeLogRepository.findByDoctorIdAndMistakeCode(regDoctor.getDoctorId(), ScheduleMistakeCodeEnum.DEPT_NON_DISTRICT.toString());
         for (ScheduleMistakeLogDocument mistakeLogDocument : misList) {
-            deptNonDistrictSet.add(mistakeLogDocument.getDoctorId()+"_"+mistakeLogDocument.getDeptId());
+            deptNonDistrictSet.add(mistakeLogDocument.getDoctorId() + "_" + mistakeLogDocument.getDeptId());
         }
         for (Reg reg : tempRegList) {
             if (StringUtil.isEmpty(reg.getRegDistrict())) {
@@ -305,16 +290,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
-     * 保存并返回医生同一天出现多诊别的记录
-     * @param regDoctor
-     * @param tempRegList
-     * @return
+     * 保存并返回医生同一天出现多诊别的记录.
+     *
+     * @param regDoctor   挂号医生.
+     * @param tempRegList 临时列表.
+     * @return 多诊别记录.
      */
     private Set<String> getDoctorMistakeDate(RegDoctor regDoctor, List<Reg> tempRegList) {
-        Set<String> regDateSet = new HashSet<String>();
-        Set<String> regDateMoreSet = new HashSet<String>();
-        List<ScheduleMistakeLogDocument> misList = scheduleMistakeLogRepository.findByDoctorIdAndMistakeCode(
-                regDoctor.getDoctorId(), ScheduleMistakeCodeEnum.REGDATE_GT_ONE.toString());
+        Set<String> regDateSet = new HashSet<>();
+        Set<String> regDateMoreSet = new HashSet<>();
+        List<ScheduleMistakeLogDocument> misList = scheduleMistakeLogRepository.findByDoctorIdAndMistakeCode(regDoctor.getDoctorId(), ScheduleMistakeCodeEnum.REGDATE_GT_ONE.toString());
         Set<String> haveMistakeSet = new HashSet<>();
         for (ScheduleMistakeLogDocument mistakeLogDocument : misList) {
             haveMistakeSet.add(mistakeLogDocument.getRegDate());
@@ -338,11 +323,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
-     * 根据当日挂号规则及参数，判断医生是否需要从当日挂号医生列表中过滤掉
+     * 根据当日挂号规则及参数，判断医生是否需要从当日挂号医生列表中过滤掉.
      *
-     * @param  isAppointment 查询结束日期
-     * @param  doctor        医生信息
-     * @return true：需要过滤；false：不需要过滤
+     * @param isAppointment 查询结束日期.
+     * @param doctor        医生信息.
+     * @return true：需要过滤；false：不需要过滤.
      */
     private boolean needToFilter(boolean isAppointment, RegDoctor doctor) {
         Collection<RuleEntity> rules = ruleRepository.findByCatalogue("SAME_DAY_FILTER");
@@ -370,7 +355,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         Date apptDate = DateUtil.toDate(date, "yyyy-MM-dd HH:mm");
         Calendar cal = Calendar.getInstance();
         cal.setTime(apptDate);
-        int timeFlag = 1;
+        /*
+        int timeFlag;
         if (cal.get(Calendar.HOUR_OF_DAY) >= 18) {
             timeFlag = 3;
         } else if (cal.get(Calendar.HOUR_OF_DAY) >= 12) {
@@ -380,9 +366,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         } else {
             timeFlag = 3;
         }
+        */
         // 获得院区
-        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
-                .get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
+        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument().get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
         Map<String, SubjectDocument> districtMap = new HashMap<>();
         for (SubjectDocument dis : districtList) {
             districtMap.put(dis.getId(), dis);
@@ -390,9 +376,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         // String hosId = CenterFunctionUtils.getHosId();
         RegisterDoctorDocument regDoc = null;
         DecimalFormat df = new DecimalFormat("0.00");
-        ResModel<RegInfo> regInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(doctorId, DateUtil.toDateString(cal.getTime()),
-                DateUtil.toDateString(cal.getTime()));
-        Set<String> doctorIdSet = new HashSet<String>();
+        ResModel<RegInfo> regInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(doctorId, DateUtil.toDateString(cal.getTime()), DateUtil.toDateString(cal.getTime()));
+        Set<String> doctorIdSet = new HashSet<>();
         if (regInfo.getReturnCode() == ReturnCode.SUCCESS) {
             List<RegDoctor> regDocList = regInfo.getRes().getRegDoctorList();
             if (regDocList != null) {
@@ -406,8 +391,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                     BeanUtils.copyProperties(doc, regDoc);
                     regDoc.setDeptId(regInfo.getRes().getDeptId());
                     regDoc.setDept(regInfo.getRes().getDeptName());
-                    String disId = CenterFunctionUtils
-                            .convertHisDisId2SubjectId(regInfo.getRes().getDistrict());
+                    String disId = CenterFunctionUtils.convertHisDisId2SubjectId(regInfo.getRes().getDistrict());
 
                     if (StringUtil.isEmpty(disId)) {
                         continue;
@@ -420,15 +404,12 @@ public class ScheduleServiceImpl implements ScheduleService {
                     if (regList != null) {
                         for (Reg reg : regList) {
                             List<RegTime> regTimeList = reg.getRegTimeList();
-                            if (regTimeList != null) {
-                                for (RegTime regTime : regTimeList) {
-                                    regDoc.setClinicCategoryCode(regTime.getRegLevel());
-                                    regDoc.setAmount(df.format((regTime.getRegFee() + regTime.getTreatFee()) / 100));
-                                    break;
-                                }
+                            if (regTimeList != null && regTimeList.size() > 0) {
+                                RegTime regTime = regTimeList.get(0);
+                                regDoc.setClinicCategoryCode(regTime.getRegLevel());
+                                regDoc.setAmount(df.format((regTime.getRegFee() + regTime.getTreatFee()) / 100));
                                 StringBuilder title = new StringBuilder();
-                                title.append(
-                                        CenterFunctionUtils.getRegLevelNameMap().get(regDoc.getClinicCategoryCode()));
+                                title.append(CenterFunctionUtils.getRegLevelNameMap().get(regDoc.getClinicCategoryCode()));
                                 if (StringUtil.isNotEmpty(regDoctor.getJobTitle())) {
                                     title.append("(").append(regDoctor.getJobTitle()).append(")");
                                 }
@@ -448,17 +429,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<DoctorScheduleDocument> findDoctorScheduleByDate(String doctorId, String districtId, String subjectId, String date)
-            throws Exception {
+    public List<DoctorScheduleDocument> findDoctorScheduleByDate(String doctorId, String districtId, String subjectId, String date) throws Exception {
         // 获得院区
-        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
-                .get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
+        List<SubjectDocument> districtList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument().get(String.valueOf(DeptLevel.CHILD.getCode())).get(String.valueOf(0));
         Map<String, SubjectDocument> districtMap = new HashMap<>();
         for (SubjectDocument dis : districtList) {
             districtMap.put(dis.getId(), dis);
         }
-        Date sDate = null;
-        Date eDate = null;
+        Date sDate;
+        Date eDate;
         Calendar cal = Calendar.getInstance();
         if (StringUtil.isNotEmpty(date)) {
             sDate = DateUtil.toDate(date);
@@ -471,22 +450,21 @@ public class ScheduleServiceImpl implements ScheduleService {
             cal.add(Calendar.DAY_OF_MONTH, CenterFunctionUtils.SCHEDULING_MAXADD_DAY);
             eDate = cal.getTime();
         }
-        ResModel<RegInfo>  allRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(doctorId,
-                DateUtil.toDateString(sDate), DateUtil.toDateString(eDate));
+        ResModel<RegInfo> allRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorScheInfoRes(doctorId, DateUtil.toDateString(sDate), DateUtil.toDateString(eDate));
         if (allRegInfo.getReturnCode() != ReturnCode.SUCCESS) {
             throw new HisReturnException(allRegInfo.getReturnMsg());
         }
-        String disId = null;
-        List<Reg> regList = null;
-        DoctorDocument doc = null;
-        DoctorScheduleDocument docSche = null;
-        ResModel<TimeRegInfo> timeRegInfo = null;
-        List<TimeReg> timeRegList = null;
-        List<RegTime> regTimeList = null;
+        String disId;
+        List<Reg> regList;
+        DoctorDocument doc;
+        DoctorScheduleDocument docSche;
+        ResModel<TimeRegInfo> timeRegInfo;
+        List<TimeReg> timeRegList;
+        List<RegTime> regTimeList;
         DecimalFormat df = new DecimalFormat("0.00");
         List<DoctorScheduleDocument> docScheList = new ArrayList<>();
-        List<RegDoctor>  allRegDocList = allRegInfo.getRes().getRegDoctorList();
-        Set<String> regDateSet = null;
+        List<RegDoctor> allRegDocList = allRegInfo.getRes().getRegDoctorList();
+        //Set<String> regDateSet = null;
         for (RegDoctor regDoctor : allRegDocList) {
             regList = regDoctor.getRegList();
             if (regList == null) {
@@ -513,8 +491,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 docSche.setSexCode(doc.getSexCode());
                 docSche.setDeptId(reg.getRegDeptcode());
                 docSche.setDept(reg.getRegDeptname());
-                timeRegInfo = webService4HisInterfaceCacheUtil
-                        .getCacheDoctorTimeRegInfoRes(regDoctor.getDoctorId(), DateUtil.toDateString(reg.getRegDate()));
+                timeRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorTimeRegInfoRes(regDoctor.getDoctorId(), DateUtil.toDateString(reg.getRegDate()));
                 if (timeRegInfo == null) {
                     continue;
                 }
@@ -532,20 +509,18 @@ public class ScheduleServiceImpl implements ScheduleService {
                 if (docSche.getOverCount() > 99) {
                     docSche.setOverCount(99);
                 }
-                if(docSche.getOverCount()>docSche.getTotal()){
+                if (docSche.getOverCount() > docSche.getTotal()) {
                     docSche.setOverCount(docSche.getTotal());
                 }
                 regTimeList = reg.getRegTimeList();
-                if (regTimeList == null||regTimeList.size()==0) {
+                if (regTimeList == null || regTimeList.size() == 0) {
                     continue;
                 }
-                for (RegTime regTime : regTimeList) {
-                    docSche.setAmount(df.format((regTime.getRegFee() + regTime.getTreatFee()) / 100));
-                    docSche.setCategoryCode(regTime.getRegLevel());
-                    docSche.setCategory(
-                            CenterFunctionUtils.getRegLevelNameMap().get(regTime.getRegLevel()));
-                    break;
-                }
+                RegTime regTime = regTimeList.get(0);
+                docSche.setAmount(df.format((regTime.getRegFee() + regTime.getTreatFee()) / 100));
+                docSche.setCategoryCode(regTime.getRegLevel());
+                docSche.setCategory(CenterFunctionUtils.getRegLevelNameMap().get(regTime.getRegLevel()));
+
                 StringBuilder title = new StringBuilder();
                 title.append(CenterFunctionUtils.getRegLevelNameMap().get(docSche.getCategoryCode()));
                 if (StringUtil.isNotEmpty(regDoctor.getJobTitle())) {
@@ -560,21 +535,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<TimeRegDocument> findDoctorTimeRegList(String doctorId, Date date) throws Exception {
-        ResModel<TimeRegInfo> timeRegInfo = webService4HisInterfaceCacheUtil
-                .getCacheDoctorTimeRegInfoRes(doctorId, DateUtil.toDateString(date));
+        ResModel<TimeRegInfo> timeRegInfo = webService4HisInterfaceCacheUtil.getCacheDoctorTimeRegInfoRes(doctorId, DateUtil.toDateString(date));
         Calendar calT = Calendar.getInstance();
         Calendar calD = Calendar.getInstance();
         calT.setTime(new Date());
         calD.setTime(date);
         boolean flag = false;
         String hourMin = "";
-        if (calT.get(Calendar.YEAR) == calD.get(Calendar.YEAR) && calT.get(Calendar.MONTH) == calD.get(Calendar.MONTH)
-                && calT.get(Calendar.DAY_OF_MONTH) == calD.get(Calendar.DAY_OF_MONTH)) {
+        if (calT.get(Calendar.YEAR) == calD.get(Calendar.YEAR) && calT.get(Calendar.MONTH) == calD.get(Calendar.MONTH) && calT.get(Calendar.DAY_OF_MONTH) == calD.get(Calendar.DAY_OF_MONTH)) {
             flag = true;
             hourMin = DateUtil.toString(calT.getTime(), "HH:mm");
         }
         List<TimeRegDocument> timeRegDocumentList = new ArrayList<>();
-        TimeRegDocument timeReg = null;
+        TimeRegDocument timeReg;
         if (timeRegInfo.getReturnCode() == ReturnCode.SUCCESS) {
             List<TimeReg> timeRegList = timeRegInfo.getRes().getTimeRegList();
             if (timeRegList != null) {

@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * 历史退款.
  * Created by think on 2016/10/2 0002.
  */
 @XmlRootElement(name = "REFUNDLIST")

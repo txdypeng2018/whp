@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.user.model.enums;
 
 /**
+ * 性别枚举类型.
  * Created by think on 2016/9/2 0002.
  */
 public enum SexTypeEnum {

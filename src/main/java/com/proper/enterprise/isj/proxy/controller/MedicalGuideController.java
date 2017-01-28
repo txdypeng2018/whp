@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by think on 2016/8/15 0015. 就医指南信息
+ * 就医指南信息.
+ * Created by think on 2016/8/15 0015.
  */
 @RestController
 @RequestMapping(path = "/medicalGuide")
@@ -25,9 +26,8 @@ public class MedicalGuideController extends BaseController {
     BaseInfoRepository baseRepo;
 
     /**
-     * 取得就医指南信息
-     * 
-     * @return 就医指南信息
+     * 取得就医指南信息.
+     * @return 就医指南信息.
      */
     @AuthcIgnore
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)

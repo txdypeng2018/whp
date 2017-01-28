@@ -55,7 +55,7 @@ public class UnifiedOrderReq implements Serializable {
     /**
      * (选填)_商户需要银行在支付结果通知中转发的商户参数；
      * 注意：MerchantPara参数可为空，商户如果需要不止一个参数，
-     * 可以自行把参数组合、拼装，但组合后的结果不能带有’&’字符，总长不能超过128个字节。
+     * 可以自行把参数组合、拼装，但组合后的结果不能带有’&amp;’字符，总长不能超过128个字节。
      * 例如：
      * MerchantPara=Ref1=12345678|Ref2=ABCDEFG|Ref3=HIJKLM
      */
@@ -74,7 +74,7 @@ public class UnifiedOrderReq implements Serializable {
      * 则，点击“返回按钮”，客户浏览器将跳转到：
      * http://www.merchant.com/path/BacktoMerchant.aspx?Para1=abc|Para2=123
      * 注意：MerchantRetPara参数可为空，商户如果需要不止一个参数，
-     * 可以自行把参数组合、拼装，但组合后的结果不能带有’&’字符，总长不能超过128个字节
+     * 可以自行把参数组合、拼装，但组合后的结果不能带有’&amp;’字符，总长不能超过128个字节
      */
     private String merchantRetUrl;
 

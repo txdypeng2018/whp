@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 用户服务.
  * Created by think on 2016/9/16 0016.
  */
 @Service
@@ -55,7 +56,7 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
     UserInfoRepository userInfoRepository;
 
     @Autowired
-    private JWTService jwtService;
+    JWTService jwtService;
 
     @Autowired
     RuleRepository ruleRepository;
@@ -75,8 +76,7 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
 
     @Override
     public UserInfoDocument getUserInfoByUserId(String userId) {
-        UserInfoDocument userInfo = userInfoRepository.getByUserId(userId);
-        return userInfo;
+        return userInfoRepository.getByUserId(userId);
     }
 
     // @Override
@@ -177,12 +177,16 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
         req.setAddress("");
         req.setName(basicInfo.getName());
         String sex = IdcardUtils.getGenderByIdCard(basicInfo.getIdCard());
-        if (sex.equals("F")) {
-            req.setSex(Sex.FEMALE);
-        } else if (sex.equals("M")) {
-            req.setSex(Sex.MALE);
-        } else {
-            req.setSex(Sex.SECRET);
+        switch (sex) {
+            case "F":
+                req.setSex(Sex.FEMALE);
+                break;
+            case "M":
+                req.setSex(Sex.MALE);
+                break;
+            default:
+                req.setSex(Sex.SECRET);
+                break;
         }
         req.setMobile(basicInfo.getPhone());
         req.setBirthday(DateUtil
@@ -194,7 +198,7 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
     public int getFamilyAddLeftIntervalDays(int familyMemberSize, String lastCreateTime) {
         int leftIntervalDays = 0;
         Collection<RuleEntity> rules = ruleRepository.findByCatalogue("FAMILY_ADD_LIMIT");
-        Map<String, Object> vars = new HashMap<String, Object>();
+        Map<String, Object> vars = new HashMap<>();
         vars.put("familyMemberSize", familyMemberSize);
         vars.put("lastCreateTime", lastCreateTime);
         if (rules != null && rules.size() > 0) {

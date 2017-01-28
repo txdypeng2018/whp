@@ -3,9 +3,6 @@ package com.proper.enterprise.isj.webservices.model.req;
 import com.proper.enterprise.isj.webservices.model.enmus.IDCardType;
 import com.proper.enterprise.isj.webservices.model.enmus.Sex;
 
-/**
- * Created by think on 2016/9/14 0014.
- */
 public class PatReq {
 
 	/**

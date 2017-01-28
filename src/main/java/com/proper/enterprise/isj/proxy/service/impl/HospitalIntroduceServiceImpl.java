@@ -13,6 +13,7 @@ import com.proper.enterprise.isj.webservices.model.res.HosInfo;
 import com.proper.enterprise.isj.webservices.model.res.ResModel;
 
 /**
+ * 医院简介服务实现.
  * Created by think on 2016/8/29 0029.
  */
 @Service
@@ -24,7 +25,7 @@ public class HospitalIntroduceServiceImpl implements HospitalIntroduceService {
 
     @Override
     public HosInfo getHospitalInfoFromHis() throws Exception {
-        HosInfo info = null;
+        HosInfo info;
         ResModel<HosInfo> hosInfoRes = webServicesClient.getHosInfo(CenterFunctionUtils.getHosId());
         if (hosInfoRes.getReturnCode() == ReturnCode.SUCCESS) {
             info = hosInfoRes.getRes();

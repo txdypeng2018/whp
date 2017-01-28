@@ -16,7 +16,8 @@ import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.platform.core.controller.BaseController;
 
 /**
- * Created by think on 2016/8/15 0015. 取得登录用户的消息列表
+ * 取得登录用户的消息列表.
+ * Created by think on 2016/8/15 0015.
  */
 @RestController
 @RequestMapping(path = "/messages")
@@ -28,9 +29,9 @@ public class MessagesController extends BaseController {
     MessagesService messagesService;
 
     /**
-     * 取得登录用户的消息列表
+     * 取得登录用户的消息列表.
      * 
-     * @return 登录用户的消息列表
+     * @return 登录用户的消息列表.
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<MessagesDocument>> getMessages() throws Exception{

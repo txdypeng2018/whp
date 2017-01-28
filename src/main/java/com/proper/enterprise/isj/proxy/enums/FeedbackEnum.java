@@ -11,11 +11,15 @@ public enum FeedbackEnum {
     /**
      * 已反馈
      */
-    REPLAYED("1");
+    REPLAYED("1"),
+    /**
+     * 已关闭
+     */
+    CLOSED("2");
 
     private String value;
 
-    private FeedbackEnum(String value) {
+    FeedbackEnum(String value) {
         this.value = value;
     }
 

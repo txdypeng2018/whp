@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.enums;
 
 /**
+ * 挂号状态.
  * Created by think on 2016/9/11 0011.
  */
 public enum RegistrationStatusEnum {
@@ -43,7 +44,7 @@ public enum RegistrationStatusEnum {
 
     private String value;
 
-    private RegistrationStatusEnum(String value) {
+    RegistrationStatusEnum(String value) {
         this.value = value;
     }
 

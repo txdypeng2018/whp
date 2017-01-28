@@ -9,7 +9,7 @@ import com.proper.enterprise.isj.webservices.model.req.ReportListReq;
 import java.util.List;
 
 /**
- * 检验检测报告Service
+ * 检验检测报告Service.
  */
 public interface MedicalReportsService {
 

@@ -17,10 +17,10 @@ import java.io.IOException;
 public class IHosJWTAuthcServiceImpl implements JWTAuthcService {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @Autowired
-    private JWTService jwtService;
+    JWTService jwtService;
 
     public String getUserToken(String username) throws IOException {
         User user = userService.getByUsername(username);

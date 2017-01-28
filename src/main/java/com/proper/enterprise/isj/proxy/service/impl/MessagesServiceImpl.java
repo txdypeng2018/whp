@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 消息ServiceImpl
+ * 消息ServiceImpl.
  */
 @Service
 public class MessagesServiceImpl implements MessagesService {
@@ -34,10 +34,10 @@ public class MessagesServiceImpl implements MessagesService {
     MessagesRepository messagesRepo;
 
     /**
-     * 保存消息并进行推送(对一个人发送推送消息)
+     * 保存消息并进行推送(对一个人发送推送消息).
      *
-     * @param messageDocument
-     * @throws Exception
+     * @param messageDocument 消息报文.
+     * @throws Exception 异常.
      */
     @Override
     public void saveMessage(MessagesDocument messageDocument) throws Exception {
@@ -60,10 +60,10 @@ public class MessagesServiceImpl implements MessagesService {
     }
 
     /**
-     * 保存消息并进行推送(对多人推送同一消息)
+     * 保存消息并进行推送(对多人推送同一消息).
      *
-     * @param messageList
-     * @throws Exception
+     * @param messageList 消息列表.
+     * @throws Exception 异常.
      */
     @Override
     public void saveMessages(List<MessagesDocument> messageList) throws Exception {
@@ -94,10 +94,10 @@ public class MessagesServiceImpl implements MessagesService {
     }
 
     /**
-     * 根据用户获取消息列表
+     * 根据用户获取消息列表.
      *
-     * @param userId
-     * @return
+     * @param userId 用户ID.
+     * @return 消息列表.
      */
     @Override
     public List<MessagesDocument> findMessagesDocumentList(String userId) {

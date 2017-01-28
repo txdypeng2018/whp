@@ -116,7 +116,6 @@ public class CmbServiceImpl implements CmbService {
      *
      * @param userProtocolInfo
      *        用户协议信息
-     * @return 用户协议信息
      * @throws Exception
      */
     @Override

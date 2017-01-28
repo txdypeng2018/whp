@@ -11,7 +11,8 @@ import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.model.enums.CredentialsEnum;
 
 /**
- * Created by think on 2016/8/12 0012. 用户扩展信息
+ * 用户扩展信息.
+ * Created by think on 2016/8/12 0012.
  */
 @Document(collection = "user_info")
 public class UserInfoDocument extends BasicInfoDocument {

@@ -232,7 +232,6 @@ public class WeixinPayController extends BaseController {
      * 接收微信异步通知结果
      *
      * @param request
-     * @return
      * @throws Exception
      */
     @AuthcIgnore

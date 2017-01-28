@@ -1,11 +1,13 @@
 package com.proper.enterprise.isj.user.service.impl;
 
+import com.proper.enterprise.isj.log.service.WSLogService;
 import com.proper.enterprise.isj.user.service.SMSService;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.http.Callback;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class SMSServiceImpl implements SMSService {
@@ -26,6 +30,9 @@ public class SMSServiceImpl implements SMSService {
 
     @Value("${isj.sms.send}")
     private String template;
+
+    @Autowired
+    private WSLogService wsLogService;
 
     /**
      * 异步调用发送手机短信接口
@@ -39,6 +46,10 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public boolean sendSMS(final String phone, final String message) {
         boolean result = false;
+        final Map<String, Object> param = new HashMap<>(2);
+        param.put("phone", phone);
+        param.put("msg", message);
+        final long start = System.currentTimeMillis();
         try {
             final String data = MessageFormat.format(template, phone,
                     URLEncoder.encode(message, PEPConstants.DEFAULT_CHARSET.name()));
@@ -46,6 +57,7 @@ public class SMSServiceImpl implements SMSService {
                 @Override
                 public void onSuccess(ResponseEntity<byte[]> responseEntity) {
                     String resBody = new String(responseEntity.getBody(), PEPConstants.DEFAULT_CHARSET);
+                    wsLogService.persistLog("SMS", param, url + "?" + data, resBody, System.currentTimeMillis() - start);
                     if (resBody.startsWith("0:")) {
                         LOGGER.trace("Send sms ({}) successfully. Status code: {}, Response body: {}",
                                 data, responseEntity.getStatusCode(), resBody);
@@ -57,11 +69,13 @@ public class SMSServiceImpl implements SMSService {
 
                 @Override
                 public void onError(IOException ioe) {
-                    LOGGER.error("Exception occurs when composing POST data: phone({}), message({})", phone, message, ioe);
+                    wsLogService.persistLog("SMS", param, "Exception occurs when sending SMS", ioe, System.currentTimeMillis() - start);
+                    LOGGER.error("Exception occurs when sending SMS: phone({}), message({})", phone, message, ioe);
                 }
             });
             result = true;
         } catch (UnsupportedEncodingException ioe) {
+            wsLogService.persistLog("SMS", param, "Exception occurs when composing POST data", ioe, System.currentTimeMillis() - start);
             LOGGER.error("Exception occurs when composing POST data: phone({}), message({})", phone, message, ioe);
         }
         return result;

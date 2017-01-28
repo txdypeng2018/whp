@@ -22,7 +22,8 @@ import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
 import com.proper.enterprise.platform.core.controller.BaseController;
 
 /**
- * Created by think on 2016/8/16 0016. 指定科室详细
+ * 指定科室详细.
+ * Created by think on 2016/8/16 0016.
  */
 @RestController
 @RequestMapping(path = "/organization")
@@ -44,7 +45,7 @@ public class OrganizationController extends BaseController {
     @AuthcIgnore
     @RequestMapping(path = "/districts", method = RequestMethod.GET)
     public ResponseEntity<List<SubjectDocument>> getDistricts() throws Exception {
-        List<SubjectDocument> disList = null;
+        List<SubjectDocument> disList;
         try {
             disList = webServiceDataSecondCacheUtil.getCacheSubjectAndDoctorDocument()
                     .get(String.valueOf(DeptLevel.CHILD.getCode())).get("0");

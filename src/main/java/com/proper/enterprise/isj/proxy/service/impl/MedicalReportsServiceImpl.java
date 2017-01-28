@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * 检验检测报告ServiceImpl
+ * 检验检测报告ServiceImpl.
  */
 @Service
 public class MedicalReportsServiceImpl implements MedicalReportsService{
@@ -49,16 +49,16 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     WebService4FileCacheUtil webServiceFileCacheUtil;
 
     /**
-     * 取得检验检测报告列表
+     * 取得检验检测报告列表.
      *
      * @param req
-     *        请求对象
+     *        请求对象.
      * @param searchStatus
-     *        报告状态
+     *        报告状态.
      * @param basicInfo
-     *        基本信息
-     * @return List<MedicalReportsDocument>
-     * @throws Exception
+     *        基本信息.
+     * @return .
+     * @throws Exception 异常.
      */
     @Override
     public List<MedicalReportsDocument> getPacsReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws Exception {
@@ -125,16 +125,16 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     }
 
     /**
-     * 取得检验检测报告列表
+     * 取得检验检测报告列表.
      *
      * @param req
-     *        请求对象
+     *        请求对象.
      * @param searchStatus
-     *        报告状态
+     *        报告状态.
      * @param basicInfo
-     *        基本信息
-     * @return List<MedicalReportsDocument>
-     * @throws Exception
+     *        基本信息.
+     * @return .
+     * @throws Exception 异常.
      */
     @Override
     public List<MedicalReportsDocument> getReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws Exception {
@@ -190,11 +190,11 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     }
 
     /**
-     * 按照时间倒序排序
+     * 按照时间倒序排序.
      *
      * @param retList
-     *        报告列表
-     * @return retList
+     *        报告列表.
+     * @return retList.
      */
     private List<MedicalReportsDocument> getSortedReportList(List<MedicalReportsDocument> retList) {
         // 按照时间倒序
@@ -220,12 +220,12 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     }
 
     /**
-     * 取得pacs报告单详细信息
+     * 取得pacs报告单详细信息.
      *
      * @param reportId
-     *        报告单Id
-     * @return 图片信息
-     * @throws Exception
+     *        报告单Id.
+     * @return 图片信息.
+     * @throws Exception 异常.
      */
     public String getRepostsDetailsInfo(String reportId) throws Exception {
         try {
@@ -237,14 +237,14 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     }
 
     /**
-     * 获取检查结果详细
+     * 获取检查结果详细.
      *
      * @param reportId
-     *        检查报告Id
+     *        检查报告Id.
      * @param req
-     *        请求对象
-     * @return retDetailInfo
-     * @throws Exception
+     *        请求对象.
+     * @return retDetailInfo.
+     * @throws Exception 异常.
      */
     @Override
     public MedicalReportsDetailDocument getRepostsDetailsInfo(String reportId, ReportInfoReq req) throws Exception {
@@ -310,11 +310,11 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
 
 
     /**
-     * 构造报告列表请求对象
+     * 构造报告列表请求对象.
      *
      * @param basic
-     *        用户基本信息
-     * @return
+     *        用户基本信息.
+     * @return 返回值.
      */
     @Override
     public ReportListReq getReportListReq(BasicInfoDocument basic) {
@@ -376,11 +376,11 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
     }
 
     /**
-     * 获取检查单详细信息对象
+     * 获取检查单详细信息对象.
      *
      * @param reportId
-     *        报告单号
-     * @return
+     *        报告单号.
+     * @return 返回值.
      */
     @Override
     public ReportInfoReq getReportDetailReq(String reportId) {

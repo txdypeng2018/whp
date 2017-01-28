@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 挂号规则ServiceImpl
+ * 挂号规则ServiceImpl.
  */
 @Service
 public class RegistrationRulesServiceImpl implements RegistrationRulesService {
@@ -53,7 +53,7 @@ public class RegistrationRulesServiceImpl implements RegistrationRulesService {
      *        每页数量
      * @return retObj
      *         挂号规则信息
-     * @throws Exception
+     * @throws Exception 异常.
      */
     @Override
     public RegistrationRulesEntity getRulesInfo(String catalogue, String name, String rule, String pageNo, String pageSize)
@@ -99,8 +99,7 @@ public class RegistrationRulesServiceImpl implements RegistrationRulesService {
      * 创建分页请求.
      */
     private PageRequest buildPageRequest(int pageNo, int pageSize) {
-        Sort sort = null;
-        sort = new Sort(Sort.Direction.ASC, "catalogue");
-        return new PageRequest(pageNo - 1, pageSize, sort);
+        return new PageRequest(pageNo - 1, pageSize,
+                new Sort(Sort.Direction.ASC, "catalogue"));
     }
 }

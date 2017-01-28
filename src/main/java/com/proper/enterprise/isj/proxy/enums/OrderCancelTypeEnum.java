@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.enums;
 
 /**
+ * 订单取消种类枚举类型.
  * Created by think on 2016/10/1 0001.
  */
 public enum OrderCancelTypeEnum {

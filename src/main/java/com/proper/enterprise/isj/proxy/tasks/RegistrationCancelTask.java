@@ -16,6 +16,7 @@ import com.proper.enterprise.isj.proxy.service.RegistrationService;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 
 /**
+ * 取消挂号任务.
  * Created by think on 2016/9/29 0029.
  */
 @Component

@@ -20,6 +20,7 @@ import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 
 /**
+ * 定时任务工具.
  * Created by think on 2016/9/20 0020.
  */
 @Component

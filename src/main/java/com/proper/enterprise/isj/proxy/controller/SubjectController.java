@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
+ * 科室.
  * Created by think on 2016/8/16 0016. 学科列表
  */
 @RestController
@@ -31,11 +32,9 @@ public class SubjectController extends BaseController {
 
     /**
      * 取得学科列表
-     * 
-     * @param districtId
-     *            院区ID（没有时学科合并显示）
-     * @param type
-     *            挂号类别，2 为预约挂号，1 为当日挂号
+     *
+     * @param districtId 院区ID（没有时学科合并显示）
+     * @param type       挂号类别，2 为预约挂号，1 为当日挂号
      * @return 学科列表
      */
     @AuthcIgnore
@@ -46,10 +45,10 @@ public class SubjectController extends BaseController {
             list = subjectService.findSubjectDocumentListFromHis(districtId, "2".equals(type));
         } catch (UnmarshallingFailureException e) {
             LOGGER.debug("解析HIS接口返回参数错误", e);
-            throw new RuntimeException(CenterFunctionUtils.HIS_DATALINK_ERR);
+            throw new RuntimeException(CenterFunctionUtils.HIS_DATALINK_ERR, e);
         } catch (Exception e) {
             LOGGER.debug("系统错误", e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getMessage(), e);
         }
         return responseOfGet(list);
     }

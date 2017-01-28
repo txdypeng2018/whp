@@ -7,9 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by think on 2016/10/2 0002.
- */
 @XmlRootElement(name = "STOP_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StopReg implements Serializable {

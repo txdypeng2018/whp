@@ -25,6 +25,7 @@ import com.proper.enterprise.isj.webservices.model.res.refundbyhis.RefundByHis;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
+ * 退款请求任务.
  * Created by think on 2016/10/6 0006.
  */
 @Component
@@ -54,7 +55,7 @@ public class RefundFromHospitalTask implements Runnable {
         Date sDate = cal.getTime();
         cal.add(Calendar.DAY_OF_MONTH, 5);
         Date eDate = cal.getTime();
-        ResModel<RefundByHisInfo> res = null;
+        ResModel<RefundByHisInfo> res;
         try {
             res = webServicesClient.refundByHisToAPP(hosId, sDate, eDate);
         } catch (Exception e) {
@@ -66,7 +67,7 @@ public class RefundFromHospitalTask implements Runnable {
             LOGGER.debug("查询线下退费记录数:" + list.size());
             String orderNo = null;
             RegistrationDocument reg = null;
-            RecipeOrderDocument recipe = null;
+            RecipeOrderDocument recipe;
             for (RefundByHis refundByHis : list) {
                 if ("1".equals(refundByHis.getType())) {
                     try {

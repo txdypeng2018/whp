@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.enums;
 
 /**
+ * 院区枚举类型.
  * Created by think on 2016/9/21 0021.
  */
 public enum DistrictEnum {
@@ -21,7 +22,7 @@ public enum DistrictEnum {
 
 	private String value;
 
-	private DistrictEnum(String value) {
+	DistrictEnum(String value) {
 		this.value = value;
 	}
 

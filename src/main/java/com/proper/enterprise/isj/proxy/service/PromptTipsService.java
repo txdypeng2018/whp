@@ -6,7 +6,7 @@ import com.proper.enterprise.isj.proxy.entity.PromptTipsEntity;
 import java.util.List;
 
 /**
- * 温馨提示Service接口
+ * 温馨提示Service接口.
  */
 public interface PromptTipsService {
 

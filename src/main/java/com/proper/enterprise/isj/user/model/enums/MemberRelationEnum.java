@@ -56,7 +56,7 @@ public enum MemberRelationEnum {
 
     private String value;
 
-    private MemberRelationEnum(String value) {
+    MemberRelationEnum(String value) {
         this.value = value;
     }
 

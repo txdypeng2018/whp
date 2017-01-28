@@ -6,9 +6,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-/**
- * Created by think on 2016/9/1 0001.
- */
 @XmlRootElement(name = "TIME_REG_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeReg implements Serializable {

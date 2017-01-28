@@ -3,7 +3,8 @@ package com.proper.enterprise.isj.user.document.info;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * Created by think on 2016/8/12 0012. 家庭成员
+ * 家庭成员.
+ * Created by think on 2016/8/12 0012.
  */
 @Document
 public class FamilyMemberInfoDocument extends BasicInfoDocument {

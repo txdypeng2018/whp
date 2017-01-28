@@ -14,6 +14,7 @@ import com.proper.enterprise.isj.proxy.service.DoctorService;
 import com.proper.enterprise.isj.webservices.WebServicesClient;
 
 /**
+ * 医生信息服务实现.
  * Created by think on 2016/8/19 0019.
  */
 @Service
@@ -21,7 +22,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     @Lazy
-    private WebServicesClient webServicesClient;
+    WebServicesClient webServicesClient;
 
     @Autowired
     @Qualifier("oa2HisDataSource")
@@ -46,18 +47,11 @@ public class DoctorServiceImpl implements DoctorService {
         }
         querySql.append("))");
         /*-------------查询emr信息(主)----------*/
-        StringBuilder sql = new StringBuilder();
-        sql.append("select emr.zgh ZGH,emr.k0 KS,emr.jj JJ,emr.tc TC,h.oh_zp ZP,zc ZC ");
-        sql.append(" from oa2emr_doc emr left join OA2HIS h on h.oh_zgh = emr.zgh ");
-        sql.append(querySql);
-        List<Map<String, Object>> ermList = jdbcTemplateObject.queryForList(sql.toString());
+        String sql = "select emr.zgh ZGH,emr.k0 KS,emr.jj JJ,emr.tc TC,h.oh_zp ZP,zc ZC " + " from oa2emr_doc emr left join OA2HIS h on h.oh_zgh = emr.zgh " + querySql;
+        List<Map<String, Object>> ermList = jdbcTemplateObject.queryForList(sql);
         /*-------------查询his信息(次)----------*/
-        StringBuilder sql2 = new StringBuilder();
-        sql2.append(
-                "select h.oh_zgh  ZGH, h.oh_ks3  KS, emr.jj JJ, emr.tc TC, h.oh_zp  ZP, h.oh_zc ZC ");
-        sql2.append(" from OA2HIS h left join oa2emr_doc emr on h.oh_zgh = emr.zgh  ");
-        sql2.append(querySql);
-        List<Map<String, Object>> hisList = jdbcTemplateObject.queryForList(sql2.toString());
+        String sql2 = "select h.oh_zgh  ZGH, h.oh_ks3  KS, emr.jj JJ, emr.tc TC, h.oh_zp  ZP, h.oh_zc ZC " + " from OA2HIS h left join oa2emr_doc emr on h.oh_zgh = emr.zgh  " + querySql;
+        List<Map<String, Object>> hisList = jdbcTemplateObject.queryForList(sql2);
 
         List<Map<String, Object>> resList = new ArrayList<>();
         resList.addAll(ermList);
@@ -67,8 +61,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     private Map<String, Map<String, Object>> convertInfo2HisInfo(List<Map<String, Object>> resList) {
         Map<String, Map<String, Object>> resMap = new HashMap<>();
-        Map<String, Object> tempMap = null;
-        String hisJobNumber = "";
+        Map<String, Object> tempMap;
+        String hisJobNumber;
         for (Map<String, Object> map : resList) {
             hisJobNumber = ((String) map.get("ZGH")).substring(4);
             tempMap = resMap.get(hisJobNumber);
