@@ -1,10 +1,9 @@
 package com.proper.enterprise.isj.webservices;
 
-import com.proper.enterprise.isj.webservices.document.WSLogDocument;
+import com.proper.enterprise.isj.log.service.WSLogService;
 import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
 import com.proper.enterprise.isj.webservices.model.req.*;
 import com.proper.enterprise.isj.webservices.model.res.*;
-import com.proper.enterprise.isj.webservices.repository.WSLogRepository;
 import com.proper.enterprise.isj.webservices.service.RegSJService;
 import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.enums.IntEnum;
@@ -37,19 +36,23 @@ public class WebServicesClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebServicesClient.class);
 
     @Autowired
-    WebApplicationContext wac;
-    @Autowired
-    @Qualifier("hisAES")
-    AES aes;
-    @Autowired
-    RegSJService regSJService;
-    @Autowired
-    Marshaller marshaller;
-    @Autowired
-    Unmarshaller unmarshaller;
+    private WebApplicationContext wac;
 
     @Autowired
-    WSLogRepository repository;
+    @Qualifier("hisAES")
+    private AES aes;
+
+    @Autowired
+    private RegSJService regSJService;
+
+    @Autowired
+    private Marshaller marshaller;
+
+    @Autowired
+    private Unmarshaller unmarshaller;
+
+    @Autowired
+    private WSLogService wsLogService;
 
     /**
      * 在调用其它接口之前用于测试目标服务网络是否通畅，服务是否处于工作状态、数据库是否处于连接状态.
@@ -78,41 +81,12 @@ public class WebServicesClient {
         long start = System.currentTimeMillis();
         try {
             String result = (String) method.invoke(regSJService, reqStr);
-            persistLog(funCode, methodName, param, reqStr, result, System.currentTimeMillis() - start);
+            wsLogService.persistLog(funCode + ":" + methodName, param, reqStr, result, System.currentTimeMillis() - start);
             return result;
         } catch (Throwable e) {
-            persistLog(funCode, methodName, param, reqStr, e, System.currentTimeMillis() - start);
+            wsLogService.persistLog(funCode + ":" + methodName, param, reqStr, e, System.currentTimeMillis() - start);
             throw e;
         }
-    }
-
-    private void persistLog(String funCode, String methodName, Map<String, Object> param,
-                            String req, Object obj, long duration) {
-        try {
-            String res;
-            if (obj instanceof String) {
-                res = (String) obj;
-            } else if (obj instanceof Throwable) {
-                res = traceThrowable((Throwable) obj);
-            } else {
-                res = obj.toString();
-            }
-            repository.save(new WSLogDocument(funCode, methodName, param, req, res, duration));
-        } catch (Exception e) {
-            LOGGER.error("Error occurs when logging invoke {}: {}", methodName, e.getMessage());
-        }
-    }
-
-    private String traceThrowable(Throwable t) {
-        if (t == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder(t.toString());
-        for (StackTraceElement ste : t.getStackTrace()) {
-            sb.append("\r\n\tat ").append(ste);
-        }
-        sb.append("\r\n").append(traceThrowable(t.getCause()));
-        return sb.toString();
     }
 
     protected String envelopReq(String funCode, Map<String, Object> map) throws IOException {
@@ -131,7 +105,6 @@ public class WebServicesClient {
 
         return result;
     }
-
 
     @SuppressWarnings("unchecked")
     private <T> ResModel<T> parseEnvelop(String responseStr, Class<T> clz) throws Exception {

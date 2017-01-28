@@ -1,19 +1,17 @@
-package com.proper.enterprise.isj.webservices.document;
+package com.proper.enterprise.isj.log.document;
 
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
 
+/**
+ * 三方服务接口统一日志文档对象
+ */
 @Document(collection = "WS_LOG")
 public class WSLogDocument extends BaseDocument {
-
-    /**
-     * 接口 function code
-     */
-    @Field("C")
-    private String funCode;
 
     /**
      * 方法名称
@@ -45,22 +43,13 @@ public class WSLogDocument extends BaseDocument {
     @Field("D")
     private long duration;
 
-    public WSLogDocument(String funCode, String methodName, Map<String, Object> param,
+    public WSLogDocument(String methodName, Map<String, Object> param,
                          String req, String res, long duration) {
-        this.funCode = funCode;
         this.methodName = methodName;
         this.param = param;
         this.req = req;
         this.res = res;
         this.duration = duration;
-    }
-
-    public String getFunCode() {
-        return funCode;
-    }
-
-    public void setFunCode(String funCode) {
-        this.funCode = funCode;
     }
 
     public String getMethodName() {
@@ -102,4 +91,11 @@ public class WSLogDocument extends BaseDocument {
     public void setDuration(long duration) {
         this.duration = duration;
     }
+
+    @Transient
+    @Override
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
 }
