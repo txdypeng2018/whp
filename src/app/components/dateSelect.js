@@ -1,6 +1,6 @@
 'use strict';
 
-var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
+var dateSelectCtrl = function($scope, $ionicScrollDelegate, $element) {
   //初期化
   $scope.leftIconIsShow = false;
   $scope.rightIconIsShow = false;
@@ -36,6 +36,15 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
     $scope.width.right = '17px';
   }
 
+  var trPosition = [];
+  for(var i = 1, j = 0; i < $scope.dateSelectParam.selectDays.length; i++){
+    if($scope.dateSelectParam.selectDays[i].month !== $scope.dateSelectParam.selectDays[i-1].month){
+      $scope.dateSelectParam.selectDays[i].monthFlag = true;
+      trPosition[j] = tdWidth * (i-1);
+      j++;
+    }
+  }
+
   //滚动事件
   var delegate = $ionicScrollDelegate.$getByHandle('dateScroll');
   $scope.leftSlide = function() {
@@ -49,6 +58,16 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
     }
   };
   $scope.scroll = function () {
+    var monthDiv1 = $element[0].querySelector('.isj-date-select-month');
+    $scope.$watch('month',function(newData, oldData){
+      if(newData !== oldData){
+        monthDiv1.style.opacity = 0;
+      }
+      if(newData < oldData || (newData === 12 && oldData === 1)){
+        monthDiv1.style.opacity = 1;
+      }
+    });
+
     if (delegate.getScrollPosition().left > 1) {
       $scope.leftIconIsShow = true;
     }
@@ -64,6 +83,23 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate) {
     $scope.$apply($scope.leftIconIsShow);
     $scope.$apply($scope.rightIconIsShow);
     scrollMonth();
+    var monthDiv = $element[0].querySelectorAll('.isj-date-select-month');
+    for(var i = 0; i < monthDiv.length; i++){
+      if(!angular.isUndefined(trPosition[i])){
+        if(delegate.getScrollPosition().left < trPosition[i]){
+          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'none';
+          monthDiv[i].parentNode.parentNode.style.transform = 'none';
+        }
+        else if(delegate.getScrollPosition().left < (trPosition[i] + tdWidth) && delegate.getScrollPosition().left > trPosition[i]){
+          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'translate3d('+(delegate.getScrollPosition().left - trPosition[i])+'px,0,0)';
+          monthDiv[i].parentNode.parentNode.style.transform = 'translate3d('+(delegate.getScrollPosition().left - trPosition[i])+'px,0,0)';
+        }
+        else if(delegate.getScrollPosition().left >= (trPosition[i] +tdWidth)){
+          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'none';
+          monthDiv[i].parentNode.parentNode.style.transform = 'none';
+        }
+      }
+    }
   };
   var scrollMonth = function() {
     $scope.month = $scope.dateSelectParam.selectDays[parseInt((delegate.getScrollPosition().left+7)/tdWidth)].month;
