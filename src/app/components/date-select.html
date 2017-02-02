@@ -1,13 +1,18 @@
 <div class="isj-date-select">
-  <div class="month positive">
-    {{month}}月
-  </div>
   <div class="date-nav">
-    <span class="date-move date-move-left" style="width: {{width.left}}" ng-click="leftSlide()">
+    <div class="month positive" style="width: {{width.td}}; left : {{width.left}}">
+      {{month}}月
+    </div>
+    <span class="date-move date-move-left" style="width: {{width.left}};" ng-click="leftSlide()">
       <i class="icon ion-ios-arrow-left positive" ng-show="leftIconIsShow"></i>
     </span>
     <ion-scroll delegate-handle="dateScroll" has-bouncing="false" class="date-scroll" style="width: {{width.scroll}}" direction="x" scrollbar-y="false" on-scroll="scroll()">
       <table>
+        <tr style="height: 22px">
+          <td class="td-month"  ng-repeat="oneDay in dateSelectParam.selectDays">
+            <div ng-if="oneDay.monthFlag" class="isj-date-select-month">{{oneDay.month}}月</div>
+          </td>
+        </tr>
         <tr>
           <td ng-repeat="oneDay in dateSelectParam.selectDays" class="week" style="min-width: {{width.td}}" ng-click="dateClk(oneDay.date)">
             {{oneDay.week}}
@@ -20,7 +25,7 @@
         </tr>
       </table>
     </ion-scroll>
-    <span class="date-move date-move-right" style="width: {{width.right}}" ng-click="rightSlide()">
+    <span class="date-move date-move-right" style="width: {{width.right}};" ng-click="rightSlide()">
       <i class="icon ion-ios-arrow-right positive" ng-show="rightIconIsShow"></i>
     </span>
   </div>
