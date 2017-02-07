@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "name": "南湖院区",
+    "builds": [
+      {
+        "id": "1",
+        "name": "1号楼A座",
+        "function": "门诊楼"
+      },
+      {
+        "id": "2",
+        "name": "1号楼B座",
+        "function": "急诊楼"
+      },
+      {
+        "id": "3",
+        "name": "1号楼",
+        "function": "住院楼"
+      },
+      {
+        "id": "4",
+        "name": "4号楼",
+        "function": ""
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "滑翔院区",
+    "builds": [
+      {
+        "id": "1",
+        "name": "1号",
+        "function": ""
+      },
+      {
+        "id": "2",
+        "name": "2号楼",
+        "function": ""
+      },
+      {
+        "id": "3",
+        "name": "3号楼",
+        "function": ""
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "沈北院区",
+    "builds": [
+      {
+        "id": "1",
+        "name": "1号",
+        "function": ""
+      },
+      {
+        "id": "2",
+        "name": "2号楼",
+        "function": ""
+      }
+    ]
+  }
+]
