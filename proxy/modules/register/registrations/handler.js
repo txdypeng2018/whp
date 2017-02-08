@@ -1,18 +1,26 @@
 'use strict';
 
-var common = require('../../../common.js');
+var common = require('../../common.js');
 
 var handler = module.exports = {};
 
 handler.onGet = function(req, res) {
   var query = common.parseUrl(req).query;
-  if (query.id === '1') {
-    common.jsonRes(req, res, '/all_0');
-  } else if (query.id === '2') {
+  if (query.viewTypeId === '1') {
     common.jsonRes(req, res, '/all_1');
   }
-  else {
+  else if (query.viewTypeId === '2') {
     common.jsonRes(req, res, '/all_2');
+  }
+  else {
+    if (query.id === '1') {
+      common.jsonRes(req, res, '/all_0');
+    } else if (query.id === '2') {
+      common.jsonRes(req, res, '/all_1');
+    }
+    else {
+      common.jsonRes(req, res, '/all_2');
+    }
   }
 };
 

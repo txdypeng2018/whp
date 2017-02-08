@@ -12,12 +12,5 @@
     "examinationDate": "2016年07月18日 11:00",
     "reportCategory": "1",
     "status": "1"
-  },
-  {
-    "id": "1",
-    "name": "超声内镜",
-    "examinationDate": "2016年06月18日 09:00",
-    "reportCategory": "2",
-    "status": "1"
   }
 ]
