@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "name": "姓名1",
+    "sexCode": "1",
+    "title": "主任医师",
+    "districtId": "1",
+    "district": "南湖",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "skill": "骨关节、神经系统及其他专业影像诊断"
+  },
+  {
+    "id": "2",
+    "name": "姓名2",
+    "sexCode": "0",
+    "title": "副主任医师",
+    "districtId": "2",
+    "district": "滑翔",
+    "deptId": "2",
+    "dept": "第二内分泌科门诊",
+    "skill": "糖尿病等内分泌疾病"
+  }
+]
