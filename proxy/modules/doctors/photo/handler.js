@@ -9,17 +9,17 @@ handler.onGet = function(req, res) {
   if (query.doctorId === '3') {
     var Module = require('module');
     var fs = require('fs');
-    Module._extensions['.jpg'] = function(module, fn) {
+    Module._extensions['.png'] = function(module, fn) {
       var base64 = fs.readFileSync(fn).toString('base64');
-      module._compile('module.exports="data:image/jpg;base64,' + base64 + '"', fn);
+      module._compile('module.exports="data:image/png;base64,' + base64 + '"', fn);
     };
-    var image = require('./photo.jpg');
-    res.writeHead(200, {'Content-Type': 'image/jpg'});
+    var image = require('./photo.png');
+    res.writeHead(200, {'Content-Type': 'image/png'});
     res.write(image, 'binary');
     res.end();
   }
   else {
-    res.writeHead(200, {'Content-Type': 'image/jpg'});
+    res.writeHead(200, {'Content-Type': 'image/png'});
     res.write('', 'binary');
     res.end();
   }

@@ -2,16 +2,18 @@
   'use strict';
 
   var appAboutCtrl = function($scope, $http, $state, userService) {
-    cordova.getAppVersion.getVersionNumber(function (versionNumber) {
-      $scope.versionNumber = versionNumber;
-    });
-
-    cordova.getAppVersion.getVersionCode(function (versionCode) {
-      $scope.versionCode = versionCode;
-      $http.get('/app/versions/' + versionCode).success(function(data) {
-        $scope.description = data.note;
+    if (typeof cordova !== 'undefined') {
+      cordova.getAppVersion.getVersionNumber(function (versionNumber) {
+        $scope.versionNumber = versionNumber;
       });
-    });
+
+      cordova.getAppVersion.getVersionCode(function (versionCode) {
+        $scope.versionCode = versionCode;
+        $http.get('/app/versions/' + versionCode).success(function(data) {
+          $scope.description = data.note;
+        });
+      });
+    }
 
     //取得客服电话
     var getPhone = function() {
