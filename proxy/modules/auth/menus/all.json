@@ -145,15 +145,6 @@
     "sequenceNumber": 15
   },
   {
-    "id": "990201",
-    "name": "瀑布流",
-    "parentId": "9901",
-    "leaf": true,
-    "icon": "panorama_fish_eye",
-    "route": "/playground/waterfall/waterfallView",
-    "sequenceNumber": 16
-  },
-  {
     "id": "0101",
     "name": "组织规划",
     "parentId": null,
@@ -333,12 +324,13 @@
   },
   {
     "id": "000011",
-    "name": "意见反馈",
+    "name": "接口日志",
     "parentId": null,
     "leaf": true,
     "root": true,
-    "icon": "rate_review",
-    "route": "/feedback/operationView",
+    "icon": "event_note",
+    "route": "/interfaceView/interfaceLogs",
     "sequenceNumber": 6
+
   }
 ]
