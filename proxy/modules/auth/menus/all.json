@@ -323,14 +323,13 @@
 
   },
   {
-    "id": "000011",
-    "name": "接口日志",
+    "id": "000013",
+    "name": "短信接口日志",
     "parentId": null,
     "leaf": true,
     "root": true,
     "icon": "event_note",
-    "route": "/interfaceView/interfaceLogs",
+    "route": "/shortMessage/messageLogs",
     "sequenceNumber": 6
-
   }
 ]
