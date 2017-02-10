@@ -2,7 +2,9 @@
   .feedbackListNew-footer{
     .feedback-new-textarea{
       width: 80%;
-      line-height: 29px;
+      font-size: 14px;
+      line-height: 18px;
+      padding: 10px 0;
       resize: none;
       border-bottom: 1px solid #387ef5;
       margin-right: 3%;
@@ -12,6 +14,9 @@
     }
     .feedback-new-submit{
       width: 15%;
+      position: absolute;
+      right: 15px;
+      bottom: 8px;
     }
   }
   .feedbackListNew-content{
