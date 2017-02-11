@@ -1,0 +1,16 @@
+[
+  {
+    "id": "2",
+    "name": "血常规",
+    "examinationDate": "2016年07月20日 10:00",
+    "reportCategory": "1",
+    "status": "0"
+  },
+  {
+    "id": "1",
+    "name": "血常规",
+    "examinationDate": "2016年07月18日 11:00",
+    "reportCategory": "1",
+    "status": "1"
+  }
+]
