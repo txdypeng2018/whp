@@ -1,0 +1,32 @@
+{
+  "count": 23,
+  "data": [
+    {
+      "floorParentId": "120701",
+      "fid": "0121",
+      "floorId": "12070122",
+      "floorName": "21F",
+      "did": "0221",
+      "deptId": "1207010122",
+      "deptName": "小儿消化内科病房^小儿肾脏^风湿免疫内科病房"
+    },
+    {
+      "floorParentId": "120701",
+      "fid": "0122",
+      "floorId": "12070123",
+      "floorName": "22F",
+      "did": "0222",
+      "deptId": "1207010123",
+      "deptName": "干诊病房^老年病病房"
+    },
+    {
+      "floorParentId": "120701",
+      "fid": "0123",
+      "floorId": "12070124",
+      "floorName": "23F",
+      "did": "0223",
+      "deptId": "1207010124",
+      "deptName": "VIP病房"
+    }
+  ]
+}
