@@ -38,8 +38,6 @@ class WebServicesClientTest extends AbstractTest {
 
     @Test
     public void netTest() {
-        def beforeCount = repository.count()
-
         def resModel = client.netTest('11', '192.168.1.1')
         assert resModel.getReturnCode() != null
         assert StringUtil.isNotNull(resModel.returnMsg)
@@ -49,8 +47,11 @@ class WebServicesClientTest extends AbstractTest {
         assert resModel.getRes() != null
         assert resModel.getRes().sysDate != null
 
-        def afterCount = repository.count()
-        assert afterCount == beforeCount + 1
+        while(repository.count() != 1) {
+            println "sleep 100 milliseconds to wait until write log done"
+            sleep(100)
+        }
+        assert repository.count() == 1
     }
 
     @Test
