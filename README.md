@@ -10,10 +10,13 @@ iHospital App
 
 ```bash
 $ npm install -g cordova ionic
+$ npm install -g cordova-hot-code-push-cli
 $ npm install
 $ bower install
 # 编译静态资源并发布至 www 路径下
 $ grunt
+# 生成静态资源在线更新配置文件
+$ cordova-hcp build
 
 # 发布静态资源，通过浏览器访问，自动更新变化
 $ grunt serve

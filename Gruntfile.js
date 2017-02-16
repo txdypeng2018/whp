@@ -242,18 +242,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // Renames files for browser caching purposes
-    filerev: {
-      dist: {
-        src: [
-          '<%= app.dist %>/scripts/**/*.js',
-          '<%= app.dist %>/styles/**/*.css',
-          '<%= app.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= app.dist %>/styles/fonts/*'
-        ]
-      }
-    },
-
     injector: {
       options: {
         template: '<%= app.src %>/index.html'
@@ -524,7 +512,6 @@ module.exports = function(grunt) {
     'copy:dist',
     'cssmin',
     'uglify',
-    'filerev',
     'usemin',
     'htmlmin'
   ]);
