@@ -71,7 +71,7 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
-    <plugin name="cordova-plugin-crosswalk-webview" spec="2.1.0" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="2.3.0" />
     <plugin name="cordova-plugin-proper-qdc-wxpay" spec="~1.0.1">
         <variable name="WECHAT_APPID" value="wxc7825f86d99f3d90" />
     </plugin>
