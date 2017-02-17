@@ -114,13 +114,16 @@
         //push end
 
         $window.localStorage.serverContext = 'https://sjh.sj-hospital.org/isj';
+        console.debug('Initial serverContext: ' + $window.localStorage.serverContext);
         var switchContext = function() {
           $http.get('http://172.28.235.106/isj/app/latest', {timeout: 500})
             .success(function() {
               $window.localStorage.serverContext = 'http://172.28.235.106/isj';
+              console.debug('Swtich to internal context: ' + $window.localStorage.serverContext);
             })
             .error(function() {
               $window.localStorage.serverContext = 'https://sjh.sj-hospital.org/isj';
+              console.debug('Swtich to public context: ' + $window.localStorage.serverContext);
             });
         };
         switchContext();
