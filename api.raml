@@ -1807,7 +1807,7 @@ traits:
                   "note": { "type": "string", "description": "版本说明" }
                 }
               }
-/pay/ali/prepayInfo:
+/pay/ali/prepay:
   post:
     description: 获取支付宝预支付信息
     is: [secured, dataError, serverError]
@@ -1818,36 +1818,7 @@ traits:
           "type": "object",
           "properties": {
             "outTradeNo": { "type": "string", "description": "商户网站唯一订单号" },
-            "subject": { "type": "string", "description": "商品名称" },
             "body": { "type": "string", "description": "商品详情" },
-            "totalFee": { "type": "string", "description": "商品总金额（以元为单位）" }
-          }
-        }
-    responses:
-      200:
-        body:
-          schema: |
-            {
-              "$schema": "http://json-schema.org/schema",
-              "type": "object",
-              "properties": {
-                "payInfo": { "type": "string", "description": "支付信息" },
-                "privateKey": { "type": "string", "description": "秘钥" }
-              }
-            }
-/pay/weixin/prepayInfo:
-  post:
-    description: 获取微信预支付信息
-    is: [secured, dataError, serverError]
-    body:
-      schema: |
-        {
-          "$schema": "http://json-schema.org/schema",
-          "type": "object",
-          "properties": {
-            "outTradeNo": { "type": "string", "description": "商户网站唯一订单号" },
-            "body": { "type": "string", "description": "商品描述" },
-            "detail": { "type": "string", "description": "商品详情" },
             "totalFee": { "type": "string", "description": "商品总金额（以分为单位）" }
           }
         }
@@ -1859,6 +1830,37 @@ traits:
               "$schema": "http://json-schema.org/schema",
               "type": "object",
               "properties": {
+                "resultCode": { "type": "string", "description": "返回状态码" },
+                "resultMsg": { "type": "string", "description": "返回信息" },
+                "payInfo": { "type": "string", "description": "支付信息" },
+                "privateKey": { "type": "string", "description": "秘钥" }
+              }
+            }
+/pay/wechat/prepay:
+  post:
+    description: 获取微信预支付信息
+    is: [secured, dataError, serverError]
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/schema",
+          "type": "object",
+          "properties": {
+            "outTradeNo": { "type": "string", "description": "商户网站唯一订单号" },
+            "body": { "type": "string", "description": "商品详情" },
+            "totalFee": { "type": "string", "description": "商品总金额（以分为单位）" }
+          }
+        }
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "resultCode": { "type": "string", "description": "返回状态码" },
+                "resultMsg": { "type": "string", "description": "返回信息" },
                 "appid": { "type": "string", "description": "应用ID" },
                 "noncestr": { "type": "string", "description": "随机字符串" },
                 "package": { "type": "string", "description": "扩展字段" },
@@ -1880,7 +1882,8 @@ traits:
             "type": "object",
             "properties": {
               "billNo": { "type": "string", "description": "商户网站唯一订单号" },
-              "amount": { "type": "string", "description": "商品总金额（以元为单位）" }
+              "merchantPara": { "type": "string", "description": "商品详情" },
+              "amount": { "type": "string", "description": "商品总金额（以分为单位）" }
             }
           }
       responses:
@@ -1891,13 +1894,15 @@ traits:
                 "$schema": "http://json-schema.org/schema",
                 "type": "object",
                 "properties": {
+                  "resultCode": { "type": "string", "description": "返回状态码" },
+                  "resultMsg": { "type": "string", "description": "返回信息" },
                   "payInfo": { "type": "string", "description": "支付信息" },
-                  "billNo": { "type": "string", "description": "一网通交易订单号" },
-                  "date": { "type": "string", "description": "一网通交易日期" }
+                  "cmbBillNo": { "type": "string", "description": "一网通交易订单号" },
+                  "cmbDate": { "type": "string", "description": "一网通交易日期" }
                 }
               }
 
-  /querySinglePayInfo:
+  /queryCmbPay:
     post:
       description: 查询一网通支付信息
       is: [secured, dataError, serverError]
@@ -1919,9 +1924,35 @@ traits:
                 "$schema": "http://json-schema.org/schema",
                 "type": "object",
                 "properties": {
-                  "resultCode": { "type": "string", "description": "支付结果" }
+                  "resultCode": { "type": "string", "description": "返回状态码" },
+                  "resultMsg": { "type": "string", "description": "返回信息" }
                 }
               }
+/refundCmbPay:
+  post:
+    description: 一网通退款
+    is: [secured, dataError, serverError]
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/schema",
+          "type": "object",
+          "properties": {
+            "billNo": { "type": "string", "description": "订单号" }
+          }
+        }
+    responses:
+      200:
+        body:
+          schema: |
+            {
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "properties": {
+                "head": { "type": "Object", "description": "一网通返回head信息" },
+                "body": { "type": "Object", "description": "一网通返回body信息" }
+              }
+            }
 /prompt:
   /tips:
     get:
