@@ -5,8 +5,6 @@ versions.pep = '0.2.0-SNAPSHOT'
 libraries.groovy_xml = "org.codehaus.groovy:groovy-xml:${versions.groovy}"
 libraries.jsoup = 'org.jsoup:jsoup:1.9.2'
 libraries.thumbnailator = 'net.coobird:thumbnailator:0.4.8'
-libraries.cmb_pay = 'com.cmb.pay:cmb-pay:1.0.0'
-libraries.cmb_b2b = 'com.cmb.b2b:cmb-b2b:1.0.0'
 
 libraries.pep_auth_jwt = "com.proper.enterprise.platform:pep-auth-jwt:${versions.pep}"
 libraries.pep_cache_ehcache = "com.proper.enterprise.platform:pep-cache-ehcache:${versions.pep}"
@@ -14,6 +12,11 @@ libraries.pep_cache_redis = "com.proper.enterprise.platform:pep-cache-redis:${ve
 libraries.pep_configs = "com.proper.enterprise.platform:pep-configs:${versions.pep}"
 libraries.pep_core = "com.proper.enterprise.platform:pep-core:${versions.pep}"
 libraries.pep_core_mongo = "com.proper.enterprise.platform:pep-core-mongo:${versions.pep}"
+libraries.pep_pay_ali = "com.proper.enterprise.platform:pep-pay-ali:${versions.pep}"
+libraries.pep_pay_api = "com.proper.enterprise.platform:pep-pay-api:${versions.pep}"
+libraries.pep_pay_cmb = "com.proper.enterprise.platform:pep-pay-cmb:${versions.pep}"
+libraries.pep_pay_common = "com.proper.enterprise.platform:pep-pay-common:${versions.pep}"
+libraries.pep_pay_wechat = "com.proper.enterprise.platform:pep-pay-wechat:${versions.pep}"
 libraries.pep_test = "com.proper.enterprise.platform:pep-test:${versions.pep}"
 
 libraries.properpush_client = 'com.propersoft.mobile:properpush-client:1.2.0'

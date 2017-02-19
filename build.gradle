@@ -96,9 +96,10 @@ dependencies {
             libraries.pep_cache_redis,
             libraries.pep_core,
             libraries.pep_core_mongo,
-            libraries.properpush_client,
-            libraries.cmb_pay,
-            libraries.cmb_b2b
+            libraries.pep_pay_ali,
+            libraries.pep_pay_cmb,
+            libraries.pep_pay_wechat,
+            libraries.properpush_client
 
     runtime libraries.commons_fileupload,
             libraries.hibernate_hikaricp,

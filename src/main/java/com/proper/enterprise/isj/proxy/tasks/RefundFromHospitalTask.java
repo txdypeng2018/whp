@@ -51,8 +51,10 @@ public class RefundFromHospitalTask implements Runnable {
         String hosId = CenterFunctionUtils.getHosId();
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+        // 设定开始日期为5天前
         cal.add(Calendar.DAY_OF_MONTH, -5);
         Date sDate = cal.getTime();
+        // 设定种植日期为5天后
         cal.add(Calendar.DAY_OF_MONTH, 5);
         Date eDate = cal.getTime();
         ResModel<RefundByHisInfo> res;
@@ -64,11 +66,12 @@ public class RefundFromHospitalTask implements Runnable {
         }
         if (res != null) {
             List<RefundByHis> list = res.getRes().getRefundlist();
-            LOGGER.debug("查询线下退费记录数:" + list.size());
+            LOGGER.debug("查询线下退费记录数:{}", list.size());
             String orderNo = null;
             RegistrationDocument reg = null;
             RecipeOrderDocument recipe;
             for (RefundByHis refundByHis : list) {
+                // 挂号线下退款
                 if ("1".equals(refundByHis.getType())) {
                     try {
                         orderNo = refundByHis.getOrderId();
@@ -82,30 +85,31 @@ public class RefundFromHospitalTask implements Runnable {
                                 registrationService.saveRefundAndUpdateRegistrationDocument(reg);
                             }
                         } else {
-                            LOGGER.debug("挂号缴费退款异常,未找到挂号单,订单号:" + orderNo);
+                            LOGGER.debug("挂号缴费退款异常,未找到挂号单,订单号:{}", orderNo);
                         }
                     } catch (Exception e) {
                         if (reg != null) {
-                            LOGGER.debug("挂号缴费退款异常,挂号单号:" + reg.getNum() + ",订单号:" + orderNo, e);
+                            LOGGER.debug("挂号缴费退款异常,挂号单号:{},订单号:{}", reg.getNum(), orderNo, e);
                         } else {
-                            LOGGER.debug("挂号缴费退款异常,订单号:" + orderNo, e);
+                            LOGGER.debug("挂号缴费退款异常,订单号:{}", orderNo, e);
                         }
                     }
+                    // 缴费线下退款
                 } else if ("2".equals(refundByHis.getType())) {
-                    LOGGER.debug("门诊流水号:" + refundByHis.getClinicCode() + ",退费表id:" + refundByHis.getId());
+                    LOGGER.debug("门诊流水号:{},退费表id:{}", refundByHis.getClinicCode(), refundByHis.getId());
                     try {
                         recipe = recipeService.getRecipeOrderDocumentByClinicCode(refundByHis.getClinicCode());
                         if (recipe != null) {
                             recipeService.saveRefundAndUpdateRecipeOrderDocument(recipe, refundByHis);
                         } else {
-                            LOGGER.debug(
-                                    "没查到缴费记录,门诊流水号:" + refundByHis.getClinicCode() + ",退费表id:" + refundByHis.getId());
+                            LOGGER.debug("没查到缴费记录,门诊流水号:{},退费表id:{}",
+                                    refundByHis.getClinicCode(), refundByHis.getId());
                         }
                     } catch (Exception e) {
-                        LOGGER.debug("诊间缴费退款异常,门诊流水号:" + refundByHis.getClinicCode(), e);
+                        LOGGER.debug("诊间缴费退款异常,门诊流水号:{}", refundByHis.getClinicCode(), e);
                     }
                 } else {
-                    LOGGER.debug("不是线下退费类型,HIS退费ID号:" + refundByHis.getId());
+                    LOGGER.debug("不是线下退费类型,HIS退费ID号:{}", refundByHis.getId());
                 }
             }
         }
