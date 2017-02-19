@@ -16,13 +16,9 @@ import org.springframework.stereotype.Service;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
 import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
-import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
-import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeDetailAllDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
-import com.proper.enterprise.isj.proxy.enums.SendPushMsgEnum;
 import com.proper.enterprise.isj.proxy.repository.RecipeOrderRepository;
 import com.proper.enterprise.isj.proxy.service.MessagesService;
 import com.proper.enterprise.isj.user.document.UserInfoDocument;
@@ -64,31 +60,34 @@ public class RecipeServiceImpl {
     @Autowired
     MessagesService messagesService;
 
-    @Autowired
-    AliService aliService;
-
-    @Autowired
-    WeixinService weixinService;
-
+    /**
+     * 通过id获取缴费订单信息.
+     *
+     * @param id 缴费信息id.
+     * @return 缴费订单信息.
+     */
     public RecipeOrderDocument getRecipeOrderDocumentById(String id) {
         return recipeOrderRepository.findOne(id);
     }
 
+    /**
+     * 保存缴费订单信息.
+     *
+     * @param recipeOrder 缴费订单对象.
+     * @return 保存后的缴费订单信息.
+     */
     public RecipeOrderDocument saveRecipeOrderDocument(RecipeOrderDocument recipeOrder) {
         return recipeOrderRepository.save(recipeOrder);
     }
 
-    public void sendRecipePaidFailMsg(RecipeOrderDocument recipeOrder, SendPushMsgEnum msg)
-            throws Exception {
-        /*---------成功挂号提示-------*/
-        MessagesDocument regMsg = new MessagesDocument();
-        regMsg.setContent(CenterFunctionUtils.getPushMsgContent(msg, recipeOrder));
-        regMsg.setDate(DateUtil.toString(new Date(), "yyyy-MM-dd HH:mm"));
-        regMsg.setUserId(recipeOrder.getCreateUserId());
-        regMsg.setUserName(recipeOrder.getOperatorPhone());
-        messagesService.saveMessage(regMsg);
-    }
-
+    /**
+     * 保存订单以及缴费订单信息.
+     *
+     * @param memberId 家庭成员Id.
+     * @param clinicCode 门诊流水号.
+     * @return 缴费订单信息.
+     * @throws Exception 异常.
+     */
     public RecipeOrderDocument saveOrderAndRecipeOrderDocument(String memberId, String clinicCode) throws Exception {
         RecipeOrderDocument recipeOrder;
         User user = userService.getCurrentUser();
@@ -98,12 +97,12 @@ public class RecipeServiceImpl {
         listReq.setQueryType(QueryType.TO_PAY);
         ResModel<PayList> payListRes = webServicesClient.getPayDetailAll(listReq);
         if (payListRes.getReturnCode() != ReturnCode.SUCCESS) {
-            LOGGER.debug("校验缴费中的未缴费项目返回错误,HIS返回的消息:"+payListRes.getReturnMsg()+",门诊流水号:"+clinicCode);
+            LOGGER.debug("校验缴费中的未缴费项目返回错误,HIS返回的消息:{},门诊流水号:{}", payListRes.getReturnMsg(), clinicCode);
             throw new HisReturnException(payListRes.getReturnMsg());
         }
         List<Pay> payList = payListRes.getRes().getPayList();
         if(payList == null || payList.size() == 0){
-            LOGGER.debug("未找到需要:"+payListRes.getReturnMsg()+",门诊流水号:"+clinicCode);
+            LOGGER.debug("未找到需要:{},门诊流水号:{}", payListRes.getReturnMsg(), clinicCode);
             throw new RecipeException(CenterFunctionUtils.ORDER_NON_DATA_ERR);
         }
 
@@ -131,6 +130,16 @@ public class RecipeServiceImpl {
         return recipeOrder;
     }
 
+    /**
+     * 获取his请求对象.
+     *
+     * @param basic 用户基本信息对象.
+     * @param clinicCode 门诊流水号.
+     * @param payStatus 交易状态.
+     * @param sDate 开始时间.
+     * @param eDate 结束时间.
+     * @return 向HIS发送的请求对象.
+     */
     public PayListReq getPayListReq(BasicInfoDocument basic, String clinicCode, String payStatus, String sDate,
             String eDate) {
         String hosId = CenterFunctionUtils.getHosId();
@@ -200,6 +209,16 @@ public class RecipeServiceImpl {
         return listReq;
     }
 
+    /**
+     * 保存或更新缴费已支付信息.
+     *
+     * @param userInfo 用户信息.
+     * @param info 用户基本信息对象.
+     * @param clinicCode 门诊流水号.
+     * @param paidDetal 已支付信息.
+     * @return 缴费信息对象.
+     * @throws Exception 异常.
+     */
     public RecipeOrderDocument createRecipeOrder(UserInfoDocument userInfo,  BasicInfoDocument info, String clinicCode,
             RecipePaidDetailDocument paidDetal) throws Exception {
         RecipeOrderDocument recipeOrder = recipeOrderRepository.getByClinicCode(clinicCode);
@@ -215,9 +234,6 @@ public class RecipeServiceImpl {
                 boolean paidFlag = orderService.checkOrderIsPay(payWay, paid.getOrderNum());
                 if (paidFlag) {
                     throw new RecipeException(CenterFunctionUtils.ORDER_ALREADY_PAID_ERR);
-                    // Order order =
-                    // orderService.findByOrderNo(paid.getOrderNum());
-                    // orderService.deleteOrder(order);
                 }
             }
         }
@@ -227,8 +243,4 @@ public class RecipeServiceImpl {
         recipeOrder.setRecipeNonPaidDetail(paidDetal);
         return recipeOrderRepository.save(recipeOrder);
     }
-
-
-
-
 }

@@ -76,6 +76,9 @@ libraries.aspectjweaver = "org.aspectj:aspectjweaver:1.8.6"
 
 //libraries.commons_collections = 'commons-collections:commons-collections:3.2.1'
 
+libraries.cmb_b2b = 'com.cmb.b2b:cmb-b2b:1.0.0'
+libraries.cmb_pay = 'com.cmb.pay:cmb-pay:1.0.0'
+
 libraries.commons_codec = 'commons-codec:commons-codec:1.10'
 
 libraries.commons_fileupload = 'commons-fileupload:commons-fileupload:1.3.1'
@@ -95,7 +98,7 @@ libraries.groovy = "org.codehaus.groovy:groovy:${versions.groovy}"
 // libraries.groovy_groovydoc = "org.codehaus.groovy:groovy-groovydoc:${versions.groovy}"
 // libraries.groovy_groovysh = "org.codehaus.groovy:groovy-groovysh:${versions.groovy}"
 // libraries.groovy_jmx = "org.codehaus.groovy:groovy-jmx:${versions.groovy}"
-// libraries.groovy_json = "org.codehaus.groovy:groovy-json:${versions.groovy}"
+libraries.groovy_json = "org.codehaus.groovy:groovy-json:${versions.groovy}"
 // libraries.groovy_jsr223 = "org.codehaus.groovy:groovy-jsr223:${versions.groovy}"
 // libraries.groovy_servlet = "org.codehaus.groovy:groovy-servlet:${versions.groovy}"
 libraries.groovy_sql = "org.codehaus.groovy:groovy-sql:${versions.groovy}"
@@ -111,8 +114,8 @@ libraries.h2 = 'com.h2database:h2:1.3.176'
 //libraries.hibernate_c3p0 = "org.hibernate:hibernate-c3p0:${versions.hibernate}"
 //libraries.hibernate_core = "org.hibernate:hibernate-core:${versions.hibernate}"
 libraries.hibernate_ehcache = [
-        "org.hibernate:hibernate-ehcache:${versions.hibernate}",
-        libraries.ehcache
+    "org.hibernate:hibernate-ehcache:${versions.hibernate}",
+    libraries.ehcache
 ]
 libraries.hibernate_entitymanager = "org.hibernate:hibernate-entitymanager:${versions.hibernate}"
 //libraries.hibernate_envers = "org.hibernate:hibernate-envers:${versions.hibernate}"
@@ -122,10 +125,10 @@ libraries.hibernate_hikaricp = dependencies.module("org.hibernate:hibernate-hika
 //libraries.hibernate_infinispan = "org.hibernate:hibernate-infinispan:${versions.hibernate}"
 //libraries.hibernate_proxool = "org.hibernate:hibernate-proxool:${versions.hibernate}"
 libraries.hibernate_redis = [
-        'com.github.debop:hibernate-redis:2.3.1',
-        'org.redisson:redisson:2.3.0',
-        'de.ruedigermoeller:fst:2.48',
-        'org.xerial.snappy:snappy-java:1.1.2.6'
+    'com.github.debop:hibernate-redis:2.3.1',
+    'org.redisson:redisson:2.3.0',
+    'de.ruedigermoeller:fst:2.48',
+    'org.xerial.snappy:snappy-java:1.1.2.6'
 ]
 
 //libraries.jackson_annotations = "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson}"
@@ -163,8 +166,11 @@ libraries.logback_classic = dependencies.module("ch.qos.logback:logback-classic:
 libraries.mongodb_driver = "org.mongodb:mongodb-driver:${versions.mongo}"
 
 libraries.mysql_driver = 'org.mariadb.jdbc:mariadb-java-client:1.5.4'
+//libraries.mysql_driver = 'mysql:mysql-connector-java:5.1.38'
 
 libraries.okhttp = 'com.squareup.okhttp3:okhttp:3.4.1'
+
+libraries.pinyin4j = 'com.belerweb:pinyin4j:2.5.0'
 
 //libraries.poi = 'org.apache.poi:poi:3.7'
 
@@ -175,10 +181,10 @@ libraries.servlet_api = 'javax.servlet:javax.servlet-api:3.0.1'
 libraries.slf4j_api = "org.slf4j:slf4j-api:${versions.slf4j}"
 
 libraries.spock = [
-        'org.spockframework:spock-core:1.0-groovy-2.4@jar',
-        libraries.groovy,
-        'org.objenesis:objenesis:2.4',
-        'cglib:cglib-nodep:2.2.2'
+    'org.spockframework:spock-core:1.0-groovy-2.4@jar',
+    libraries.groovy,
+    'org.objenesis:objenesis:2.4',
+    'cglib:cglib-nodep:2.2.2'
 ]
 
 //libraries.spring_beans = "org.springframework:spring-beans:${versions.spring}"
@@ -186,8 +192,8 @@ libraries.spock = [
 libraries.spring_context_support = "org.springframework:spring-context-support:${versions.spring}"
 //libraries.spring_core = "org.springframework:spring-core:${versions.spring}"
 libraries.spring_orm = [
-        "org.springframework:spring-orm:${versions.spring}",
-        libraries.aspectjweaver
+    "org.springframework:spring-orm:${versions.spring}",
+    libraries.aspectjweaver
 ]
 libraries.spring_oxm = "org.springframework:spring-oxm:${versions.spring}"
 libraries.spring_test = "org.springframework:spring-test:${versions.spring}"
@@ -198,9 +204,9 @@ libraries.spring_webmvc = "org.springframework:spring-webmvc:${versions.spring}"
 libraries.spring_data_jpa = 'org.springframework.data:spring-data-jpa:1.9.4.RELEASE'
 libraries.spring_data_mongodb = 'org.springframework.data:spring-data-mongodb:1.8.4.RELEASE'
 libraries.spring_data_redis = [
-        'org.springframework.data:spring-data-redis:1.7.3.RELEASE',
-        'org.apache.commons:commons-pool2:2.2',
-        'redis.clients:jedis:2.8.1'
+    'org.springframework.data:spring-data-redis:1.7.3.RELEASE',
+    'org.apache.commons:commons-pool2:2.2',
+    'redis.clients:jedis:2.8.1'
 ]
 
 //libraries.spring_security_acl = "org.springframework.security:spring-security-acl:${versions.spring_security}"

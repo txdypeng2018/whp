@@ -4,20 +4,21 @@ import com.proper.enterprise.isj.order.entity.OrderEntity;
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.repository.OrderRepository;
 import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.model.AliPayTradeQueryRes;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
-import com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes;
-import com.proper.enterprise.isj.pay.cmb.service.CmbService;
-import com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes;
-import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.WebServicesClient;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
+import com.proper.enterprise.platform.api.pay.service.PayService;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import com.proper.enterprise.platform.pay.ali.model.AliPayTradeQueryRes;
+import com.proper.enterprise.platform.pay.ali.service.AliPayService;
+import com.proper.enterprise.platform.pay.cmb.model.CmbQuerySingleOrderRes;
+import com.proper.enterprise.platform.pay.cmb.service.CmbPayService;
+import com.proper.enterprise.platform.pay.wechat.model.WechatPayQueryRes;
+import com.proper.enterprise.platform.pay.wechat.service.WechatPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -31,17 +32,17 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepo;
 
     @Autowired
-    AliService aliService;
-
-    @Autowired
-    WeixinService weixinService;
-
-    @Autowired
-    CmbService cmbService;
-
-    @Autowired
     @Lazy
     WebServicesClient webServicesClient;
+
+    @Autowired
+    private AliPayService aliPayService;
+
+    @Autowired
+    private WechatPayService wechatPayService;
+
+    @Autowired
+    private CmbPayService cmbPayService;
 
     @Override
     public Order save(Order order) {
@@ -110,18 +111,21 @@ public class OrderServiceImpl implements OrderService {
         boolean paidFlag = false;
         if (StringUtil.isNotEmpty(payChannelId)) {
             if (payChannelId.equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
-                AliPayTradeQueryRes query = aliService.getAliPayTradeQueryRes(orderNum);
-                if (query != null && query.getCode().equals("10000") && query.getTradeStatus().equals("TRADE_SUCCESS")) {
+                PayService payService = (PayService) aliPayService;
+                AliPayTradeQueryRes res = payService.queryPay(orderNum);
+                if (res != null && "10000".equals(res.getCode()) && "TRADE_SUCCESS".equals(res.getTradeStatus())) {
                     paidFlag = true;
                 }
             } else if (payChannelId.equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
-                WeixinPayQueryRes wQuery = weixinService.getWeixinPayQueryRes(orderNum);
-                if (wQuery != null && wQuery.getResultCode().equals("SUCCESS") && wQuery.getTradeState().equals("SUCCESS")) {
+                PayService payService = (PayService) wechatPayService;
+                WechatPayQueryRes res = payService.queryPay(orderNum);
+                if (res != null && "SUCCESS".equals(res.getResultCode()) && "SUCCESS".equals(res.getTradeState())) {
                     paidFlag = true;
                 }
             } else if (payChannelId.equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
-                QuerySingleOrderRes cmbRes = cmbService.getCmbPayQueryRes(orderNum);
-                if (cmbRes != null && StringUtil.isNull(cmbRes.getHead().getCode())) {
+                PayService payService = (PayService) cmbPayService;
+                CmbQuerySingleOrderRes res = payService.queryPay(orderNum);
+                if (res != null && StringUtil.isNull(res.getHead().getCode())) {
                     paidFlag = true;
                 }
             }

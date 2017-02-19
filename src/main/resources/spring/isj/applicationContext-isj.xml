@@ -60,24 +60,8 @@
     <oxm:jaxb2-marshaller id="unmarshallPayReg">
         <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PayReg"/>
     </oxm:jaxb2-marshaller>
-    <oxm:jaxb2-marshaller id="unmarshallUnifiedOrder">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.UnifiedOrderRes"/>
-    </oxm:jaxb2-marshaller>
-    <oxm:jaxb2-marshaller id="unmarshallUnifiedNotice">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.UnifiedNoticeRes"/>
-    </oxm:jaxb2-marshaller>
-    <oxm:jaxb2-marshaller id="unmarshallAliRefundPre">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.ali.model.AliRefundPreRes"/>
-    </oxm:jaxb2-marshaller>
     <oxm:jaxb2-marshaller id="unmarshallTimeRegInfo">
         <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.TimeRegInfo"/>
-    </oxm:jaxb2-marshaller>
-    <oxm:jaxb2-marshaller id="unmarshallWeixinRefund">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.WeixinRefundRes"/>
-    </oxm:jaxb2-marshaller>
-
-    <oxm:jaxb2-marshaller id="unmarshallWeixinPayQueryRes">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.weixin.model.WeixinPayQueryRes"/>
     </oxm:jaxb2-marshaller>
 
     <oxm:jaxb2-marshaller id="unmarshallRefund">
@@ -102,22 +86,6 @@
 
     <oxm:jaxb2-marshaller id="unmarshallPatRes">
         <oxm:class-to-be-bound name="com.proper.enterprise.isj.webservices.model.res.PatRes"/>
-    </oxm:jaxb2-marshaller>
-
-    <oxm:jaxb2-marshaller id="unmarshallBusinessRes">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.BusinessRes"/>
-    </oxm:jaxb2-marshaller>
-
-    <oxm:jaxb2-marshaller id="unmarshallQuerySingleOrderRes">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.QuerySingleOrderRes"/>
-    </oxm:jaxb2-marshaller>
-
-    <oxm:jaxb2-marshaller id="unmarshallRefundNoDupRes">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.RefundNoDupRes"/>
-    </oxm:jaxb2-marshaller>
-
-    <oxm:jaxb2-marshaller id="unmarshallQueryRefundRes">
-        <oxm:class-to-be-bound name="com.proper.enterprise.isj.pay.cmb.model.QueryRefundRes"/>
     </oxm:jaxb2-marshaller>
 
     <!-- 推送工具类 -->

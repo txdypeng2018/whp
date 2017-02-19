@@ -1,8 +1,6 @@
 package com.proper.enterprise.isj.proxy.controller;
 
 import com.proper.enterprise.isj.order.service.OrderService;
-import com.proper.enterprise.isj.pay.ali.service.AliService;
-import com.proper.enterprise.isj.pay.weixin.service.WeixinService;
 import com.proper.enterprise.isj.proxy.document.RecipeDocument;
 import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
@@ -42,13 +40,7 @@ public class RecipeController extends BaseController {
     UserService userService;
 
     @Autowired
-    AliService aliService;
-
-    @Autowired
     OrderService orderService;
-
-    @Autowired
-    WeixinService weixinService;
 
     /**
      * 缴费记录查询.
@@ -73,26 +65,17 @@ public class RecipeController extends BaseController {
             }
             if (basicInfo != null) {
                 if (StringUtil.isEmpty(basicInfo.getMedicalNum())) {
+                    // 在线建档
                     userInfoService.saveOrUpdatePatientMedicalNum(user.getId(), basicInfo.getId(), null);
+                    // 没有有家庭成员ID,获取用户基本信息
                     if (StringUtil.isEmpty(memberId)) {
                         basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
+                        // 有家庭成员ID,获取用户基本信息
                     } else {
                         basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
                     }
                 }
-//                List<RecipeOrderDocument> orderList = recipeService.findPatientRecipeOrderList(basicInfo.getId());
-//
-//                for (RecipeOrderDocument recipeOrderDocument : orderList) {
-//                    if (StringUtil.isEmpty(recipeOrderDocument.getRecipeNonPaidDetail().getPayChannelId())) {
-//                        continue;
-//                    }
-//                    try {
-//                        recipeService.checkRecipeOrderIsPay(recipeOrderDocument);
-//                    } catch (Exception e) {
-//                        LOGGER.debug("缴费单初始化校验失败,门诊流水号:" + recipeOrderDocument.getClinicCode(), e);
-//                    }
-//
-//                }
+                // 获取用户缴费信息列表
                 recipeList = recipeService.findRecipeDocumentByUserAndDate(basicInfo, searchStatus, null, null);
                 if (recipeList.size() > 0) {
                     Collections.sort(recipeList, new Comparator<RecipeDocument>() {
