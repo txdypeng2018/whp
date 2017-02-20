@@ -145,15 +145,6 @@
     "sequenceNumber": 15
   },
   {
-    "id": "990201",
-    "name": "瀑布流",
-    "parentId": "9901",
-    "leaf": true,
-    "icon": "panorama_fish_eye",
-    "route": "/playground/waterfall/waterfallView",
-    "sequenceNumber": 16
-  },
-  {
     "id": "0101",
     "name": "组织规划",
     "parentId": null,
@@ -321,24 +312,43 @@
     "sequenceNumber": 5
   },
   {
-    "id": "000010",
-    "name": "Tomcat日志",
+    "id": "6601",
+    "name": "接口日志",
     "parentId": null,
-    "leaf": true,
+    "leaf": false,
     "root": true,
     "icon": "event_note",
+    "route": "/event",
+    "sequenceNumber": 7
+  }
+,
+  {
+    "id": "660101",
+    "name": "Tomcat日志",
+    "parentId": "6601",
+    "leaf": true,
+    "icon": "panorama_fish_eye",
     "route": "/logview/tomcatLogs",
-    "sequenceNumber": 6
+    "sequenceNumber": 7
 
   },
   {
-    "id": "000011",
-    "name": "意见反馈",
-    "parentId": null,
+    "id": "660102",
+    "name": "接口日志",
+    "parentId": "6601",
     "leaf": true,
-    "root": true,
-    "icon": "rate_review",
-    "route": "/feedback/operationView",
-    "sequenceNumber": 6
+    "icon": "panorama_fish_eye",
+    "route": "/logview/interfaceLogs",
+    "sequenceNumber": 7
+  }
+,
+  {
+    "id": "660103",
+    "name": "短信接口日志",
+    "parentId": "6601",
+    "leaf": true,
+    "icon": "panorama_fish_eye",
+    "route": "/logview/messageLogs",
+    "sequenceNumber": 7
   }
 ]
