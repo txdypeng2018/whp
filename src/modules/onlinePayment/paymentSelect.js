@@ -49,7 +49,7 @@
         $scope.$apply(updateTime);
       }, 1000);
 
-      // 总金额 必填 订单总金额，单位为"元"
+      // 总金额 必填
       $scope.amount = data.amount;
       // 商品名称
       $scope.subject = data.name;
@@ -60,36 +60,34 @@
     //支付方式选择事件
     $scope.paySelectValue = '';
     $scope.paymentSelect = function(value) {
-      //if (value === '1') {
-      //  toastService.show('一网通暂时不可用');
-      //}
-      //else {
-        $scope.paySelectValue = value;
-        angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
-        angular.element(document.querySelectorAll('.select-no')).removeClass('select-none');
-        angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
-        angular.element(document.getElementById('select_no_'+value)).addClass('select-none');
-      //}
+      $scope.paySelectValue = value;
+      angular.element(document.querySelectorAll('.select-yes')).addClass('select-none');
+      angular.element(document.querySelectorAll('.select-no')).removeClass('select-none');
+      angular.element(document.getElementById('select_yes_'+value)).removeClass('select-none');
+      angular.element(document.getElementById('select_no_'+value)).addClass('select-none');
     };
 
     $scope.pay = function() {
       if(angular.isUndefined($scope.amount)) {
         toastService.show('获取订单信息失败,请稍后重试!');
       } else {
+        // 订单总金额，将"元"转换为"分"
+        $scope.amount = Number($scope.amount) * 100;
         //一网通支付
         if ($scope.paySelectValue === '1') {
           var cmbprepay = {
             billNo: orderNum,
+            merchantPara: $scope.body,
             amount: $scope.amount
           };
-          $http.post('/pay/cmb/prepayInfo', cmbprepay).success(function (data) {
+          $http.post('/pay/cmb/prepay', cmbprepay).success(function (data) {
             console.debug('data:', data);
             var cmbquery = {
               billNo: data.cmbBillNo,
               date: data.cmbDate
             };
             // 如果请求结果正常
-            if (data.resultCode === '0') {
+            if (data.resultCode === 'SUCCESS') {
               // 调用一网通支付
               cmbpay.payment(
                 data,
@@ -97,19 +95,23 @@
                   console.debug('retData:' + retData);
                   var converseRet = angular.fromJson(retData);
                   console.debug('converseRet:' + converseRet);
-                  if(converseRet.resultCode === '0') {
-                    $http.post('/pay/cmb/querySinglePayInfo', cmbquery).success(function (queryData) {
-                      if(queryData.resultCode === '0') {
-                        $state.go('paymentResult', {resultImgSrc: './assets/images/choosen.png', resultText: '支付成功!', memberId: $stateParams.memberId});
+                  if (converseRet.resultCode === '0') {
+                    $http.post('/pay/cmb/queryCmbPay', cmbquery).success(function (queryData) {
+                      if (queryData.resultCode === 'SUCCESS') {
+                        $state.go('paymentResult', {
+                          resultImgSrc: './assets/images/choosen.png',
+                          resultText: '支付成功!',
+                          memberId: $stateParams.memberId
+                        });
                       } else {
                         var failPopup = $ionicPopup.show({
-                          template: '<div style="padding: 3px;font-size:15px; text-align:center;">'+'未能支付成功'+'</div>',
+                          template: '<div style="padding: 3px;font-size:15px; text-align:center;">' + '未能支付成功' + '</div>',
                           title: '温馨提示',
                           buttons: [
                             {
                               text: '我知道了',
                               type: 'positive',
-                              onTap: function(e) {
+                              onTap: function (e) {
                                 e.preventDefault();
                                 failPopup.close();
                               }
@@ -121,15 +123,15 @@
                       console.debug('data', data);
                       toastService.show(data);
                     });
-                  } else if(data.resultCode === '-1'){
+                  } else if (data.resultCode === 'SYSERROR') {
                     console.debug('data', data);
                     toastService.show(data.resultMsg);
                   }
                 }, function (retData) {
                   console.debug('retData', retData);
-                  toastService.show('内部错误!请联系管理员!');
+                  toastService.show(retData);
                 });
-            } else if(data.resultCode === '-1') {
+            } else if(data.resultCode === 'SYSERROR'){
               console.debug('data', data);
               toastService.show(data.resultMsg);
             }
@@ -143,14 +145,13 @@
         if ($scope.paySelectValue === '2') {
           var aliprepay = {
             outTradeNo: orderNum,
-            subject: $scope.subject,
             body: $scope.body,
             totalFee: $scope.amount
           };
-          $http.post('/pay/ali/prepayInfo', aliprepay).success(function (data) {
+          $http.post('/pay/ali/prepay', aliprepay).success(function (data) {
             console.debug('data:', data);
             // 如果请求结果正常
-            if (data.resultCode === '0') {
+            if (data.resultCode === 'SUCCESS') {
               // 调用支付宝支付
               alipay.payment(
                 data,
@@ -192,9 +193,9 @@
                   }
                 }, function (retData) {
                   console.debug('retData', retData);
-                  toastService.show('内部错误!请联系管理员!');
-              });
-            } else if(data.resultCode === '-1'){
+                  toastService.show(retData);
+                });
+            } else if(data.resultCode === 'SYSERROR'){
               console.debug('data', data);
               toastService.show(data.resultMsg);
             }
@@ -205,18 +206,15 @@
 
           //微信支付
         } else if ($scope.paySelectValue === '3') {
-          // 总金额 必填 订单总金额，单位为分
-          var totalFee = Number($scope.amount.replace('\.', ''));
           var weixinpay = {
             outTradeNo: orderNum,
             body: $scope.body,
-            detail: $scope.subject,
-            totalFee: totalFee
+            totalFee: $scope.amount
           };
-          $http.post('/pay/weixin/prepayInfo', weixinpay).success(function (data) {
+          $http.post('/pay/wechat/prepay', weixinpay).success(function (data) {
             console.debug('data:', data);
             // 如果请求结果正常
-            if (data.resultCode === '0') {
+            if (data.resultCode === 'SUCCESS') {
               var reqdata = {
                 appid: data.appid,
                 noncestr: data.noncestr,
@@ -270,18 +268,18 @@
                   // 支付异常
                 }, function (retData) {
                   console.debug('retData:', retData);
-                  toastService.show('内部错误!请联系管理员!');
-              }).error(function (data) {
-                console.debug('data', data);
-                toastService.show('请求服务端数据错误!请联系管理员!');
-              });
-            } else if (data.resultCode === '-1') {
+                  toastService.show(retData);
+                }).error(function (data) {
+                  console.debug('data', data);
+                  toastService.show(data);
+                });
+            } else if(data.resultCode === 'SYSERROR'){
               console.debug('data', data);
               toastService.show(data.resultMsg);
             }
           }).error(function (data) {
-              console.debug('data', data);
-              toastService.show(data);
+            console.debug('data', data);
+            toastService.show(data);
           });
         }
       }

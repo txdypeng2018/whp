@@ -9,6 +9,7 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate, $element) {
       $scope.rightIconIsShow = true;
     }
     $scope.month = $scope.dateSelectParam.selectDays[0].month;
+    $scope.fixMonth = true;
   });
 
   //设置控件宽度
@@ -37,9 +38,11 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate, $element) {
   }
 
   var trPosition = [];
+  var changeId = 0;
   for(var i = 1, j = 0; i < $scope.dateSelectParam.selectDays.length; i++){
     if($scope.dateSelectParam.selectDays[i].month !== $scope.dateSelectParam.selectDays[i-1].month){
       $scope.dateSelectParam.selectDays[i].monthFlag = true;
+      changeId = i;
       trPosition[j] = tdWidth * (i-1);
       j++;
     }
@@ -61,7 +64,7 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate, $element) {
     var monthDiv1 = $element[0].querySelector('.isj-date-select-month');
     $scope.$watch('month',function(newData, oldData){
       if(newData !== oldData){
-        monthDiv1.style.opacity = 0;
+        $scope.fixMonth = true;
       }
       if(newData < oldData || (newData === 12 && oldData === 1)){
         monthDiv1.style.opacity = 1;
@@ -87,16 +90,16 @@ var dateSelectCtrl = function($scope, $ionicScrollDelegate, $element) {
     for(var i = 0; i < monthDiv.length; i++){
       if(!angular.isUndefined(trPosition[i])){
         if(delegate.getScrollPosition().left < trPosition[i]){
-          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'none';
-          monthDiv[i].parentNode.parentNode.style.transform = 'none';
+          $scope.dateSelectParam.selectDays[changeId-1].monthFlag = false;
+          $scope.fixMonth = true;
         }
         else if(delegate.getScrollPosition().left < (trPosition[i] + tdWidth) && delegate.getScrollPosition().left > trPosition[i]){
-          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'translate3d('+(delegate.getScrollPosition().left - trPosition[i])+'px,0,0)';
-          monthDiv[i].parentNode.parentNode.style.transform = 'translate3d('+(delegate.getScrollPosition().left - trPosition[i])+'px,0,0)';
+          $scope.dateSelectParam.selectDays[changeId-1].monthFlag = true;
+          $scope.fixMonth = false;
         }
         else if(delegate.getScrollPosition().left >= (trPosition[i] +tdWidth)){
-          monthDiv[i].parentNode.parentNode.style.WebkitTransform = 'none';
-          monthDiv[i].parentNode.parentNode.style.transform = 'none';
+          $scope.dateSelectParam.selectDays[changeId-1].monthFlag = false;
+          $scope.fixMonth = true;
         }
       }
     }
