@@ -72,13 +72,13 @@
         toastService.show('获取订单信息失败,请稍后重试!');
       } else {
         // 订单总金额，将"元"转换为"分"
-        $scope.amount = Number($scope.amount) * 100;
+        var payamount = Number($scope.amount) * 100;
         //一网通支付
         if ($scope.paySelectValue === '1') {
           var cmbprepay = {
             billNo: orderNum,
             merchantPara: $scope.body,
-            amount: $scope.amount
+            amount: payamount
           };
           $http.post('/pay/cmb/prepay', cmbprepay).success(function (data) {
             console.debug('data:', data);
@@ -146,7 +146,7 @@
           var aliprepay = {
             outTradeNo: orderNum,
             body: $scope.body,
-            totalFee: $scope.amount
+            totalFee: payamount
           };
           $http.post('/pay/ali/prepay', aliprepay).success(function (data) {
             console.debug('data:', data);
@@ -209,7 +209,7 @@
           var weixinpay = {
             outTradeNo: orderNum,
             body: $scope.body,
-            totalFee: $scope.amount
+            totalFee: payamount
           };
           $http.post('/pay/wechat/prepay', weixinpay).success(function (data) {
             console.debug('data:', data);
