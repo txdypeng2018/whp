@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+    default-lazy-init="true">
+
+    <bean id="payLogDecoder"
+        class="com.proper.enterprise.isj.payment.logger.utils.codec.SimplePayLogDecoder">
+        <property name="factory" ref="defaultPayLogFactory" />
+    </bean>
+
+    <bean id="loggingEvent2PayLogConv"
+        class="com.proper.enterprise.isj.payment.converter.log.logback.LoggingEvent2PayLogConverter">
+        <property name="targetFactory" ref="defaultPayLogFactory" />
+        <property name="decoder" ref="payLogDecoder" />
+    </bean>
+
+    <bean id="payLog2LogContentConv"
+        class="com.proper.enterprise.isj.payment.converter.log.PayLog2LogContentConverter">
+        <property name="targetFactory" ref="defaultPayLogRecordFactory" />
+    </bean>
+
+    <bean id="payLog2PayStepConv"
+        class="com.proper.enterprise.isj.payment.converter.log.PayLog2PayStepConverter">
+        <property name="targetFactory" ref="defaultPayLogRecordFactory" />
+    </bean>
+
+    <bean id="loggingEvent2LogBase"
+        class="com.proper.enterprise.isj.payment.converter.log.logback.LoggingEvent2LogBaseConverter">
+        <property name="targetFactory" ref="defaultPayLogRecordFactory" />
+    </bean>
+
+    <bean id="loggingEvent2PayLogRecordConverter"
+        class="com.proper.enterprise.isj.payment.converter.MultiConverter"
+        scope="prototype">
+        <property name="convs">
+            <list>
+                <bean class="com.proper.enterprise.isj.payment.converter.GroupConverter"
+                    scope="prototype">
+                    <property name="convs">
+                        <list>
+                            <ref bean="loggingEvent2PayLogConv" />
+                            <bean
+                                class="com.proper.enterprise.isj.payment.converter.MultiConverter"
+                                scope="prototype">
+                                <property name="convs">
+                                    <list>
+                                        <ref bean="payLog2LogContentConv" />
+                                        <ref bean="payLog2PayStepConv" />
+                                        <bean
+                                            class="com.proper.enterprise.isj.payment.converter.GroupConverter"
+                                            scope="prototype">
+                                            <property name="convs">
+                                                <list>
+                                                    <bean
+                                                        class="com.proper.enterprise.isj.payment.converter.log.PayLog2BizObjConverter" />
+                                                    <bean
+                                                        class="com.proper.enterprise.isj.payment.converter.BizObjectConverter">
+                                                        <property name="manager" ref="convManager" />
+                                                    </bean>
+                                                </list>
+                                            </property>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+                <ref bean="loggingEvent2LogBase" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

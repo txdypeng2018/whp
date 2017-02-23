@@ -18,15 +18,15 @@ import com.proper.enterprise.isj.webservices.WebServicesClient;
 @Service
 public class DistrictsServiceImpl implements DistrictsService {
 
-	@Autowired
-	@Lazy
-	WebServicesClient webServicesClient;
+    @Autowired
+    @Lazy
+    WebServicesClient webServicesClient;
 
-	@Override
-	public List<DistrictDocument> getDistrict() {
-		List<DistrictDocument> districtList = new ArrayList<>();
+    @Override
+    public List<DistrictDocument> getDistrict() {
+        List<DistrictDocument> districtList = new ArrayList<>();
         DistrictDocument dis = new DistrictDocument();
-		districtList.add(dis);
-		return districtList;
-	}
+        districtList.add(dis);
+        return districtList;
+    }
 }

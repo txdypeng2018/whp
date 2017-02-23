@@ -26,7 +26,6 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,8 +42,7 @@ import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_SYSTE
 import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.HIS_DATALINK_ERR;
 
 /**
- * 挂号.
- * Created by think on 2016/8/16 0016.
+ * 挂号. Created by think on 2016/8/16 0016.
  */
 
 @RestController
@@ -197,7 +195,9 @@ public class RegisterController extends BaseController {
                     resultList.add(registrationDocument);
                 } else {
                     if (DateUtil.toDate(registrationDocument.getRegDate()).compareTo(today) >= 0) {
-                        if (registrationDocument.getStatusCode().equals(RegistrationStatusEnum.CANCEL.getValue()) || registrationDocument.getStatusCode().equals(RegistrationStatusEnum.EXCHANGE_CLOSED.getValue()) || registrationDocument.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
+                        if (registrationDocument.getStatusCode().equals(RegistrationStatusEnum.CANCEL.getValue())
+                                || registrationDocument.getStatusCode().equals(RegistrationStatusEnum.EXCHANGE_CLOSED.getValue())
+                                || registrationDocument.getStatusCode().equals(RegistrationStatusEnum.REFUND.getValue())) {
                             if ("2".equals(viewTypeId)) {
                                 resultList.add(registrationDocument);
                             }
@@ -313,7 +313,8 @@ public class RegisterController extends BaseController {
                 // 预约挂号过滤同一号点的并发
                 saveOrRemoveCacheRegKey(reg, String.valueOf(1));
                 // 预约挂号校验是否有未付款的订单
-                List<RegistrationDocument> regisList = registrationService.findRegistrationByCreateUserIdAndPayStatus(user.getId(), RegistrationStatusEnum.NOT_PAID.getValue(), reg.getIsAppointment());
+                List<RegistrationDocument> regisList = registrationService.findRegistrationByCreateUserIdAndPayStatus(user.getId(), RegistrationStatusEnum.NOT_PAID.getValue(),
+                        reg.getIsAppointment());
                 if (regisList != null && regisList.size() > 0) {
                     throw new RuntimeException(CenterFunctionUtils.ORDER_NON_PAY_ERR);
                 }
@@ -364,13 +365,15 @@ public class RegisterController extends BaseController {
         } catch (RegisterException e) {
             LOGGER.debug("接口内异常", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
-            throw new RegisterException(e.getMessage());
+            throw new RegisterException(e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.debug("系统错误", e);
             saveOrRemoveCacheRegKey(reg, String.valueOf(0));
             throw new RegisterException(APP_SYSTEM_ERR);
         }
     }
+
+    private final static Object REG_LOCK = new Object();
 
     /**
      * 将号点锁定,或释放,减少对his接口的访问
@@ -379,21 +382,9 @@ public class RegisterController extends BaseController {
      * @param cacheType 1:保存缓存,如果有则抛异常,0:清缓存
      * @throws RegisterException 异常.
      */
-    private synchronized void saveOrRemoveCacheRegKey(@RequestBody RegistrationDocument reg, String cacheType) throws RegisterException {
-        String cacheRegKey = "registration_" + reg.getDoctorId().concat("_").concat(reg.getRegisterDate());
-        Cache tempCache = cacheManager.getCache(CenterFunctionUtils.CACHE_NAME_PEP_TEMP_60);
-        Cache.ValueWrapper valueWrapper = tempCache.get(cacheRegKey);
-        if (valueWrapper != null && valueWrapper.get() != null) {
-            if (cacheType.equals("1")) {
-                String patientId = (String) valueWrapper.get();
-                if (StringUtil.isEmpty(patientId) || !reg.getPatientId().equals(patientId)) {
-                    throw new RegisterException(CenterFunctionUtils.REG_IS_ABSENCE_ERROR);
-                }
-            } else {
-                tempCache.evict(cacheRegKey);
-            }
-        } else {
-            tempCache.put(cacheRegKey, reg.getPatientId());
+    private void saveOrRemoveCacheRegKey(@RequestBody RegistrationDocument reg, String cacheType) throws RegisterException {
+        synchronized (REG_LOCK) {
+            registrationService.saveOrRemoveCacheRegKey(reg, cacheType);
         }
     }
 

@@ -7,42 +7,42 @@ import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
  */
 public class RecipeDetailItemDocument extends BaseDocument {
 
-	/**
-	 * 名称
-	 */
-	private String name;
+    /**
+     * 名称
+     */
+    private String name;
 
-	/**
-	 * 单价
-	 */
-	private String amount;
+    /**
+     * 单价
+     */
+    private String amount;
 
-	/**
-	 * 数量
-	 */
-	private String number;
+    /**
+     * 数量
+     */
+    private String number;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getAmount() {
-		return amount;
-	}
+    public String getAmount() {
+        return amount;
+    }
 
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
-	public String getNumber() {
-		return number;
-	}
+    public String getNumber() {
+        return number;
+    }
 
-	public void setNumber(String number) {
-		this.number = number;
-	}
+    public void setNumber(String number) {
+        this.number = number;
+    }
 }

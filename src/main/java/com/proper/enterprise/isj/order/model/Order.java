@@ -4,44 +4,44 @@ import com.proper.enterprise.platform.core.api.IBase;
 
 public interface Order extends IBase {
 
-	String getOrderNo();
+    String getOrderNo();
 
-	void setOrderNo(String orderNo);
+    void setOrderNo(String orderNo);
 
-	int getPaymentStatus();
+    int getPaymentStatus();
 
-	void setPaymentStatus(int paymentStatus);
+    void setPaymentStatus(int paymentStatus);
 
-	int getIsdel();
+    int getIsdel();
 
-	void setIsdel(int isdel);
+    void setIsdel(int isdel);
 
-	String getOrderStatus();
+    String getOrderStatus();
 
-	void setOrderStatus(String orderStatus);
+    void setOrderStatus(String orderStatus);
 
-	String getCancelRemark();
+    String getCancelRemark();
 
-	void setCancelRemark(String cancelRemark);
+    void setCancelRemark(String cancelRemark);
 
-	String getCancelDate();
+    String getCancelDate();
 
-	void setCancelDate(String cancelDate);
+    void setCancelDate(String cancelDate);
 
-	String getOrderAmount();
+    String getOrderAmount();
 
-	void setOrderAmount(String orderAmount);
+    void setOrderAmount(String orderAmount);
 
-	String getPayWay();
+    String getPayWay();
 
-	void setPayWay(String payWay);
+    void setPayWay(String payWay);
 
-	String getFormClassInstance();
+    String getFormClassInstance();
 
-	void setFormClassInstance(String formClassInstance);
+    void setFormClassInstance(String formClassInstance);
 
-	String getFormId();
+    String getFormId();
 
-	void setFormId(String formId);
+    void setFormId(String formId);
 
 }

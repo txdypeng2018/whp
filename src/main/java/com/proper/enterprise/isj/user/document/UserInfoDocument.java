@@ -17,83 +17,83 @@ import com.proper.enterprise.isj.user.model.enums.CredentialsEnum;
 @Document(collection = "user_info")
 public class UserInfoDocument extends BasicInfoDocument {
 
-	/**
-	 * 自定义登录名
-	 */
-	private String loginName;
+    /**
+     * 自定义登录名
+     */
+    private String loginName;
 
-	/**
-	 * 用户Id
-	 */
-	@Indexed(unique = true)
-	private String userId;
+    /**
+     * 用户Id
+     */
+    @Indexed(unique = true)
+    private String userId;
 
-	/**
-	 * 证件类型
-	 */
-	private CredentialsEnum credentialsType;
+    /**
+     * 证件类型
+     */
+    private CredentialsEnum credentialsType;
 
-	/**
-	 * 证件号码
-	 */
-	private String credentialsNo;
+    /**
+     * 证件号码
+     */
+    private String credentialsNo;
 
-	/**
-	 * 家庭成员
-	 */
+    /**
+     * 家庭成员
+     */
 
-	private List<FamilyMemberInfoDocument> familyMemberInfo = new ArrayList<>();
+    private List<FamilyMemberInfoDocument> familyMemberInfo = new ArrayList<>();
 
-	/**
-	 * 收藏的医生Id
-	 */
-	private List<String> doctors = new ArrayList<>();
+    /**
+     * 收藏的医生Id
+     */
+    private List<String> doctors = new ArrayList<>();
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public List<FamilyMemberInfoDocument> getFamilyMemberInfo() {
-		return familyMemberInfo;
-	}
+    public List<FamilyMemberInfoDocument> getFamilyMemberInfo() {
+        return familyMemberInfo;
+    }
 
-	public void setFamilyMemberInfo(List<FamilyMemberInfoDocument> familyMemberInfo) {
-		this.familyMemberInfo = familyMemberInfo;
-	}
+    public void setFamilyMemberInfo(List<FamilyMemberInfoDocument> familyMemberInfo) {
+        this.familyMemberInfo = familyMemberInfo;
+    }
 
-	public List<String> getDoctors() {
-		return doctors;
-	}
+    public List<String> getDoctors() {
+        return doctors;
+    }
 
-	public void setDoctors(List<String> doctors) {
-		this.doctors = doctors;
-	}
+    public void setDoctors(List<String> doctors) {
+        this.doctors = doctors;
+    }
 
-	public CredentialsEnum getCredentialsType() {
-		return credentialsType;
-	}
+    public CredentialsEnum getCredentialsType() {
+        return credentialsType;
+    }
 
-	public void setCredentialsType(CredentialsEnum credentialsType) {
-		this.credentialsType = credentialsType;
-	}
+    public void setCredentialsType(CredentialsEnum credentialsType) {
+        this.credentialsType = credentialsType;
+    }
 
-	public String getCredentialsNo() {
-		return credentialsNo;
-	}
+    public String getCredentialsNo() {
+        return credentialsNo;
+    }
 
-	public void setCredentialsNo(String credentialsNo) {
-		this.credentialsNo = credentialsNo;
-	}
+    public void setCredentialsNo(String credentialsNo) {
+        this.credentialsNo = credentialsNo;
+    }
 
-	public String getLoginName() {
-		return loginName;
-	}
+    public String getLoginName() {
+        return loginName;
+    }
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
-	}
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
 }

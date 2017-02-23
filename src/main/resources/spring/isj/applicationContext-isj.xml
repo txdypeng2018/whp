@@ -107,8 +107,13 @@
         <constructor-arg name="key" value="${isj.his.aes.key}"/>
     </bean>
 
-    <bean id="aliRSA" class="com.proper.enterprise.platform.core.utils.cipher.RSA">
-        <constructor-arg name="signAlgorithm" value="${isj.pay.ali.signAlgo}"/>
-    </bean>
+	<bean id="aliRSA" class="com.proper.enterprise.platform.core.utils.cipher.RSA">
+		<constructor-arg name="signAlgorithm" value="${isj.pay.ali.signAlgo}" />
+	</bean>
+
+	<bean id="convManager"
+		class="com.proper.enterprise.platform.utils.container.DefaultBeanContainer"></bean>
+	<bean id="prepayResFactoryManager"
+		class="com.proper.enterprise.platform.utils.container.DefaultBeanContainer"></bean>
 
 </beans>

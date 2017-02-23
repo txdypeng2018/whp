@@ -8,5 +8,5 @@ import com.proper.enterprise.isj.webservices.model.res.HosInfo;
  */
 public interface HospitalIntroduceService {
 
-	HosInfo getHospitalInfoFromHis() throws Exception;
+    HosInfo getHospitalInfoFromHis() throws Exception;
 }

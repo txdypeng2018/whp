@@ -119,4 +119,7 @@
         <property name="format" value="@Autowired\r?\n[\t ]*(private ?)?WebServicesClient"/>
         <property name="message" value="Needs @Lazy on WebServicesClient"/>
     </module>
+    <module name="FileTabCharacter">
+        <property name="severity" value="error"/>
+    </module>
 </module>

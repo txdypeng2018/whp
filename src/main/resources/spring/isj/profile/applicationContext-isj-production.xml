@@ -19,6 +19,7 @@
         <jdbc:script location="classpath*:sql/isj/rule/rules.sql" encoding="UTF-8"/>
         <jdbc:script location="classpath*:sql/isj/baseinfo/baseinfo.sql" encoding="UTF-8"/>
         <jdbc:script location="classpath*:sql/isj/navinfo/navinfo.sql" encoding="UTF-8"/>
+        <jdbc:script location="classpath*:sql/isj/delayrefund/delayrefund.sql" encoding="UTF-8"/>
     </jdbc:initialize-database>
 
 </beans>

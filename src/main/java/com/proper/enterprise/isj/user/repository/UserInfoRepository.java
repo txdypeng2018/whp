@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface UserInfoRepository extends MongoRepository<UserInfoDocument, String> {
 
-	UserInfoDocument getByUserId(String userId);
+    UserInfoDocument getByUserId(String userId);
 
-	UserInfoDocument getByPhone(String phone);
+    UserInfoDocument getByPhone(String phone);
 }

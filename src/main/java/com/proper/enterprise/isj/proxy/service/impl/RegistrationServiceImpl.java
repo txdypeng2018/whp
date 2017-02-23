@@ -1,28 +1,11 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.remoting.RemoteAccessException;
-import org.springframework.stereotype.Service;
-
+import com.proper.enterprise.isj.exception.DelayException;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RegisterException;
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
+import com.proper.enterprise.isj.payment.logger.utils.PayLogUtils;
 import com.proper.enterprise.isj.proxy.document.RegistrationConcession;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.registration.RegistrationOrderHisDocument;
@@ -60,6 +43,24 @@ import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.stereotype.Service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * 挂号服务.
@@ -148,7 +149,7 @@ public class RegistrationServiceImpl {
     /**
      * 保存挂号单信息.
      *
-     * @param saveReg 保存对象.
+     * @param saveReg       保存对象.
      * @param isAppointment 挂号单类型.
      * @return saveReg 保存处理后的带有号点信息的对象.
      * @throws Exception 异常.
@@ -156,7 +157,7 @@ public class RegistrationServiceImpl {
     public RegistrationDocument saveCreateRegistrationAndOrder(RegistrationDocument saveReg, String isAppointment) throws Exception {
         OrderRegReq orderReg = saveOrderAndUpdateReg(saveReg);
         // 预约挂号
-        if(isAppointment.equals("1")){
+        if (isAppointment.equals("1")) {
             // 调用HIS的接口将订单信息同步到HIS
             ResModel<OrderReg> ordrRegModel = webServicesClient.orderReg(orderReg);
             // 调用HIS订单同步失败
@@ -186,7 +187,7 @@ public class RegistrationServiceImpl {
 
     /**
      * 生成未缴费订单,更新挂号单.
-     * 
+     *
      * @param saveReg 挂号单.
      * @return 订单.
      */
@@ -203,7 +204,7 @@ public class RegistrationServiceImpl {
 
     /**
      * 生成挂号单
-     * 
+     *
      * @param reg 挂号请求.
      * @return 挂号单.
      * @throws Exception 异常.
@@ -244,22 +245,22 @@ public class RegistrationServiceImpl {
             saveReg.setRegType(RegType.OTHERS);
         }
         switch (Integer.parseInt(basicInfo.getSexCode())) {
-        case 0:
-            saveReg.setPatientSex(Sex.FEMALE);
-            break;
-        case 1:
-            saveReg.setPatientSex(Sex.MALE);
-            break;
+            case 0:
+                saveReg.setPatientSex(Sex.FEMALE);
+                break;
+            case 1:
+                saveReg.setPatientSex(Sex.MALE);
+                break;
 
-        case 2:
-            saveReg.setPatientSex(Sex.SECRET);
-            break;
-        case 3:
-            saveReg.setPatientSex(Sex.OTHERS);
-            break;
-        default:
-            saveReg.setPatientSex(Sex.OTHERS);
-            break;
+            case 2:
+                saveReg.setPatientSex(Sex.SECRET);
+                break;
+            case 3:
+                saveReg.setPatientSex(Sex.OTHERS);
+                break;
+            default:
+                saveReg.setPatientSex(Sex.OTHERS);
+                break;
         }
 
         String birth = IdcardUtils.getBirthByIdCard(basicInfo.getIdCard());
@@ -365,6 +366,10 @@ public class RegistrationServiceImpl {
         return saveReg;
     }
 
+    public static final int FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR = 0x00010000;
+    public static final int FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR_APPOINTMENT_NET_ERROR = FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR | PayLogUtils.CAUSE_TYPE_EXCEPTION | 0x1;
+    public static final int FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR_TODAY_NET_ERROR = FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR | PayLogUtils.CAUSE_TYPE_EXCEPTION | 0x2;
+
     /**
      * 更新挂号信息进行HIS支付.
      *
@@ -376,39 +381,39 @@ public class RegistrationServiceImpl {
         ResModel<PayReg> payRegRes = null;
         Order order;
         // 预约挂号
-        if(req instanceof PayRegReq){
-            PayRegReq payRegReq = (PayRegReq)req;
+        if (req instanceof PayRegReq) {
+            PayRegReq payRegReq = (PayRegReq) req;
             channelId = payRegReq.getPayChannelId();
-            synchronized (payRegReq.getOrderId()){
+            synchronized (payRegReq.getOrderId()) {
                 order = orderService.findByOrderNo(payRegReq.getOrderId());
             }
-            if(order != null){
+            if (order != null) {
                 LOGGER.debug("预约挂号缴费请求参数----------->>>:{}", JSONUtil.toJSON(payRegReq));
                 try {
                     payRegRes = webServicesClient.payReg(payRegReq);
                 } catch (InvocationTargetException ite) {
-                    if(ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
+                    if (ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
                         LOGGER.debug("预约挂号缴费网络连接异常", ite);
-                        return;
+                        throw new DelayException(FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR_APPOINTMENT_NET_ERROR);
                     }
                     throw ite;
                 }
             }
-        }else{
-            PayOrderRegReq payOrderRegReq = (PayOrderRegReq)req;
+        } else {
+            PayOrderRegReq payOrderRegReq = (PayOrderRegReq) req;
             channelId = payOrderRegReq.getPayChannelId();
-            synchronized (payOrderRegReq.getOrderId()){
+            synchronized (payOrderRegReq.getOrderId()) {
                 order = orderService.findByOrderNo(payOrderRegReq.getOrderId());
             }
-            if(order != null) {
+            if (order != null) {
                 LOGGER.debug("当日挂号缴费请求参数----------->>>");
                 LOGGER.debug(JSONUtil.toJSON(payOrderRegReq));
                 try {
                     payRegRes = webServicesClient.payOrderReg(payOrderRegReq);
                 } catch (InvocationTargetException ite) {
-                    if(ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
+                    if (ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
                         LOGGER.debug("当日挂号缴费网络连接异常", ite);
-                        return;
+                        throw new DelayException(FUNC_REGSVCIMPL_UPDATE_REG_AND_ODR_TODAY_NET_ERROR);
                     }
                     throw ite;
                 }
@@ -421,9 +426,10 @@ public class RegistrationServiceImpl {
 
     /**
      * 订单不为空,更新挂号单和订单状态.
+     *
      * @param channelId 渠道ID.
      * @param payRegRes 支取结果.
-     * @param order 订单.
+     * @param order     订单.
      * @throws HisReturnException 异常.
      */
     private void updateRegistrationAndOrderStatus(String channelId, ResModel<PayReg> payRegRes, Order order) throws HisReturnException {
@@ -486,7 +492,7 @@ public class RegistrationServiceImpl {
      * 退号.
      *
      * @param registrationId 挂号单ID.
-     * @param cancelType 取消号点累心.
+     * @param cancelType     取消号点累心.
      * @throws Exception 异常.
      */
     public void saveCancelRegistrationImpl(String registrationId, OrderCancelTypeEnum cancelType) throws Exception {
@@ -538,10 +544,10 @@ public class RegistrationServiceImpl {
      * 修改退号未支付的状态.
      *
      * @param registrationId 挂号ID.
-     * @param reg 挂号请求.
-     * @param cancelTime 取消时间.
-     * @param cancelRemark 取消标记.
-     * @param regStatusCode 挂号状态码.
+     * @param reg            挂号请求.
+     * @param cancelTime     取消时间.
+     * @param cancelRemark   取消标记.
+     * @param regStatusCode  挂号状态码.
      */
     private void saveNonPaidCancelRegistration(String registrationId, RegistrationDocument reg, String cancelTime,
                                                String cancelRemark, String regStatusCode) {

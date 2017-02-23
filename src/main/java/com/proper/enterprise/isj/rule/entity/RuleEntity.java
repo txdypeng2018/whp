@@ -14,11 +14,11 @@ import javax.persistence.Table;
 public class RuleEntity extends BaseEntity {
 
     /**
-	 * serialVersionUID.
-	 */
-	private static final long serialVersionUID = -7989449074557416016L;
+     * serialVersionUID.
+     */
+    private static final long serialVersionUID = -7989449074557416016L;
 
-	/**
+    /**
      * 规则描述，使用 Spring EL 表达式描述
      */
     @Column(nullable = false, length = 4000)
@@ -41,7 +41,6 @@ public class RuleEntity extends BaseEntity {
      */
     @Column(name = "RULE_HOWTOUSE", length = 4000)
     private String howToUse;
-
 
     /**
      * 规则分类
@@ -99,6 +98,5 @@ public class RuleEntity extends BaseEntity {
     public String getLastModifyTime() {
         return lastModifyTime;
     }
-
 
 }
