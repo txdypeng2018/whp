@@ -1,10 +1,13 @@
 package com.proper.enterprise.isj.proxy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.proxy.document.RecipeDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
+import com.proper.enterprise.isj.proxy.enums.SendPushMsgEnum;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.isj.webservices.model.req.PayOrderReq;
@@ -112,4 +115,46 @@ public interface RecipeService {
      * @throws Exception 异常.
      */
     boolean checkRecipeAmount(String orderNum, String orderAmount, PayChannel payWay) throws Exception;
+
+    /**
+     * 推送挂号相关信息
+     *
+     * @param recipeInfo 缴费信息.
+     * @param pushMsgType 推送消息类别.
+     * @param pushObj 推送消息对象.
+     * @throws Exception
+     */
+    void sendRecipeMsg(RecipeOrderDocument recipeInfo, SendPushMsgEnum pushMsgType, Object pushObj) throws Exception;
+
+    Map<String, String> getRecipeRequestOrderNoMap(RecipeOrderDocument regBack);
+
+    boolean refundMoney2User(Order order, String refundNo, boolean refundFlag) throws Exception;
+
+    /**
+     * 通知HIS缴费成功,HIS返回失败后,校验支付平台与HIS已缴费的金额是否相等,相等的条件在将多余的金额进行退款.
+     *
+     * @param order 订单.
+     * @param regBack 挂号退款信息.
+     * @param requestOrderNoMap 订单请求.
+     * @param basicInfo 基本信息.
+     * @param detail 详细信息.
+     * @return 结果.
+     * @throws Exception 异常.
+     */
+    boolean checkRecipeFailCanRefund(Order order, RecipeOrderDocument regBack, Map<String, String> requestOrderNoMap,
+            BasicInfoDocument basicInfo, RecipePaidDetailDocument detail) throws Exception;
+
+    /**
+     * 支付平台返回结果后,更新表中的字段,并推送消息.
+     *
+     * @param order 订单.
+     * @param channelId 渠道编号.
+     * @param regBack 退款报文.
+     * @param refundNo 退款编号.
+     * @param detail 详细信息.
+     * @param refundFlag 退款标识(1:退款成功,0:退款失败).
+     * @throws Exception 异常.
+     */
+    Order saveOrUpdateOrderFailInfo(Order order, String channelId, RecipeOrderDocument regBack, String refundNo,
+            RecipePaidDetailDocument detail, boolean refundFlag) throws Exception;
 }

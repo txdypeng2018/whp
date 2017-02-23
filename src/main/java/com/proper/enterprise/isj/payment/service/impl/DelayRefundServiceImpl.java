@@ -1,6 +1,17 @@
 package com.proper.enterprise.isj.payment.service.impl;
 
-import com.proper.enterprise.isj.exception.RegisterException;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.repository.OrderRepository;
 import com.proper.enterprise.isj.order.service.OrderService;
@@ -10,31 +21,23 @@ import com.proper.enterprise.isj.payment.logger.repository.PayLogRecordRepositor
 import com.proper.enterprise.isj.payment.logger.utils.PayLogUtils;
 import com.proper.enterprise.isj.payment.service.DelayRefundService;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
-import com.proper.enterprise.isj.proxy.document.registration.RegistrationOrderHisDocument;
-import com.proper.enterprise.isj.proxy.enums.OrderCancelTypeEnum;
-import com.proper.enterprise.isj.proxy.enums.RegistrationStatusEnum;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
+import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
 import com.proper.enterprise.isj.proxy.enums.SendPushMsgEnum;
 import com.proper.enterprise.isj.proxy.repository.RegistrationRepository;
+import com.proper.enterprise.isj.proxy.service.RecipeService;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
+import com.proper.enterprise.isj.proxy.service.impl.RecipeServiceImpl;
 import com.proper.enterprise.isj.proxy.service.impl.RegistrationServiceImpl;
 import com.proper.enterprise.isj.proxy.utils.cache.WebService4HisInterfaceCacheUtil;
-import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
+import com.proper.enterprise.isj.user.service.UserInfoService;
 import com.proper.enterprise.isj.webservices.WebServicesClient;
+import com.proper.enterprise.isj.webservices.model.enmus.PayChannel;
 import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.JSONUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class DelayRefundServiceImpl implements DelayRefundService {
@@ -45,6 +48,12 @@ public class DelayRefundServiceImpl implements DelayRefundService {
 
     @Autowired
     RegistrationRepository registrationRepository;
+
+    @Autowired
+    RecipeService recipeService;
+
+    @Autowired
+    RecipeServiceImpl recipeServiceImpl;
 
     @Autowired
     PayLogRecordRepository repo;
@@ -64,13 +73,17 @@ public class DelayRefundServiceImpl implements DelayRefundService {
 
     @Autowired
     OrderService orderService;
+    
+    @Autowired
+    UserInfoService userInfoService;
 
     @Autowired
     WebService4HisInterfaceCacheUtil webService4HisInterfaceCacheUtil;
 
     @Override
     public void doDelayRefund(long delayTime) {
-        List<DefaultPayLogRecordEntity> list = repo.findByStepAndStepStatus(PayLogConstrants.STEP_MASK_UNKNOWN_AND_RETRY, PayLogConstrants.STATUS_DEFAULT);
+        List<DefaultPayLogRecordEntity> list = repo
+                .findByStepAndStepStatus(PayLogConstrants.STEP_MASK_UNKNOWN_AND_RETRY, PayLogConstrants.STATUS_DEFAULT);
 
         for (DefaultPayLogRecordEntity record : list) {
             if (validateCanBeHandle(record, delayTime)) {
@@ -79,30 +92,19 @@ public class DelayRefundServiceImpl implements DelayRefundService {
         }
     }
 
-    public static final int FUNC_HANDLERECORD = 0xA0020000;
-    public static final int FUNC_HANDLERECORD_NULL_OBJ = FUNC_HANDLERECORD | PayLogUtils.CAUSE_TYPE_FAIL | 0x1;
-    public static final int FUNC_HANDLERECORD_WRONG_TYPE = FUNC_HANDLERECORD | PayLogUtils.CAUSE_TYPE_FAIL | 0x2;
-    public static final int FUNC_HANDLERECORD_NOT_OBTIAN_REG_TIME = FUNC_HANDLERECORD | PayLogUtils.CAUSE_TYPE_FAIL | 0x3;
+    private static final int FUNC_HANDLERECORD = 0xA0020000;
+    private static final int FUNC_HANDLERECORD_NULL_OBJ = FUNC_HANDLERECORD | PayLogUtils.CAUSE_TYPE_FAIL | 0x1;
+    private static final int FUNC_HANDLERECORD_WRONG_TYPE = FUNC_HANDLERECORD | PayLogUtils.CAUSE_TYPE_FAIL | 0x2;
 
     protected void handleRecord(DefaultPayLogRecordEntity record) {
+        LOGGER.trace("Delay Rufund Task start.");
         try {
             Object obj = fetchRecordObject(record);
             if (obj != null) {
                 if (obj instanceof PayRegReq) {
-                    PayRegReq req = (PayRegReq) obj;
-                    Order order = orderService.findByOrderNo(req.getOrderId());
-                    RegistrationDocument doc = getRegistrationDocumentById(order.getFormId());
-                    try {
-                        registrationService.saveOrRemoveCacheRegKey(doc, "1"); // 占号点
-                        registrationService.saveUpdateRegistrationAndOrder(req);
-                    } catch (RegisterException e) {
-                        // 占不上号点的时候会捕获此异常
-                        LOGGER.error("延时退款是无法获得号点：" + JSONUtil.toJSON(record));
-                        updateStatusAsFail(record, FUNC_HANDLERECORD_NOT_OBTIAN_REG_TIME);
-                        // 调用退费，如果仍然抛出异常则到本方法最后Throwable的捕获处理中，恢复处理标记，等待下次执行
-                        refund(order, doc);
-                    }
-                    success(record);
+                    handleRegristration(record, (PayRegReq) obj);
+                } else if (obj instanceof Order) {
+                    handleRecipe(record, (Order) obj);
                 } else {
                     LOGGER.error("延时退款日志中业务对象类型异常：" + JSONUtil.toJSON(record));
                     updateStatusAsFail(record, FUNC_HANDLERECORD_WRONG_TYPE);
@@ -114,51 +116,83 @@ public class DelayRefundServiceImpl implements DelayRefundService {
         } catch (Throwable t) {
             restoreStatus(record);
             LOGGER.error(t.getMessage(), t);
+        }finally{
+            LOGGER.trace("Delay Rufund Task is finished.");
         }
     }
 
-    private void refund(Order order, RegistrationDocument regBack) throws Exception {
-
-        RegistrationOrderHisDocument his = regBack.getRegistrationOrderHis();
-        regBack.setRegistrationOrderHis(his);
-        registrationRepository.save(regBack);
-        webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
+    private static final int FUNC_HANDLERECIPE = 0xA0030000;
+    private static final int FUNC_HANDLERECIPE_DUPLICATE_ORDER = FUNC_HANDLERECIPE | PayLogUtils.CAUSE_TYPE_FAIL | 0x1;
+    private static final int FUNC_HANDLERECIPE_WRONG_AMOUNT = FUNC_HANDLERECIPE | PayLogUtils.CAUSE_TYPE_FAIL | 0x2;
+    
+    private void handleRecipe(DefaultPayLogRecordEntity record, Order order) throws Exception {
+        String refundNo = order.getOrderNo() + "001";
+        if (order.getPayWay().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+            refundNo = order.getOrderNo().substring(0, 18).concat("01");
+        }
+        RecipeOrderDocument regBack = recipeService.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+        RecipePaidDetailDocument detail = regBack.getRecipeNonPaidDetail();
+        if (detail == null) {
+            detail = new RecipePaidDetailDocument();
+        }
+        BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(regBack.getCreateUserId(),
+                regBack.getPatientId());
+        Map<String, String> requestOrderNoMap = recipeService.getRecipeRequestOrderNoMap(regBack);
+        if (requestOrderNoMap.containsKey(order.getOrderNo())) {
+            LOGGER.trace("延时退款，订单号重复调用缴费接口,直接返回,不对HIS接口进行调用,门诊流水号:{}", regBack.getClinicCode());
+            this.updateStatusAsFail(record, FUNC_HANDLERECIPE_DUPLICATE_ORDER);
+            return;
+        }
+        detail.setRefundNum(refundNo);
+        LOGGER.trace("延时退款，退款单号:{}", refundNo);
+        if (StringUtil.isEmpty(detail.getDescription())) {
+            detail.setDescription("");
+        }
+        LOGGER.trace("延时退款，保存异常消息前,退款单号:{}", refundNo);
+        detail.setDescription(detail.getDescription().concat(",").concat("延时退款"));
+        LOGGER.trace("延时退款，保存异常消息后,退款单号:{}", refundNo);
+        
+        requestOrderNoMap.put(order.getOrderNo(), String.valueOf(order.getPayWay()));
+        LOGGER.trace("延时退款，将订单号添加到计算平台缴费情况的Map中,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
+        if (!recipeService.checkRecipeFailCanRefund(order, regBack, requestOrderNoMap, basicInfo, detail)) {
+            LOGGER.trace("延时退款，诊间缴费失败后,核对平台与HIS已缴金额不一致,不能进行退款,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
+            this.updateStatusAsFail(record, FUNC_HANDLERECIPE_WRONG_AMOUNT);
+        }
         try {
-            if (regBack.getRegistrationOrderHis() != null && StringUtil.isNotEmpty(regBack.getRegistrationOrderHis().getHospPayId())) {
-                registrationService.saveCancelRegistration(regBack.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
-            } else {
-                registrationServiceImpl.saveCancelRegistrationImpl(regBack.getId(), OrderCancelTypeEnum.CANCEL_PLATFORM_ERR);
-                try {
-                    registrationService.saveRegRefund(regBack.getId());
-                } catch (Exception e3) {
-                    LOGGER.debug("com.proper.enterprise.isj.payment.service.impl.DelayRefundServiceImpl.refund(Order, RegistrationDocument)[Exception]:", e3);
-                    LOGGER.debug("延时退款,退费发生异常,订单号:" + order.getOrderNo());
-                    throw e3;
-                }
-                try {
-                    regBack.setStatusCode(RegistrationStatusEnum.REFUND.getValue());
-                    regBack.setStatus(CenterFunctionUtils.getRegistrationStatusName(RegistrationStatusEnum.REFUND.getValue()));
-                    registrationService.saveRegistrationDocument(regBack);
-                    order.setPayWay(regBack.getPayChannelId());
-                    // 订单状态 3:退费成功
-                    order.setOrderStatus("3");
-                    order.setCancelRemark(CenterFunctionUtils.ORDER_CANCEL_PLATFORM_MSG);
-                    order.setCancelDate(DateUtil.toTimestamp(new Date()));
-                    // 更新订单状态
-                    order.setPaymentStatus(ConfCenter.getInt("isj.pay.paystatus.refund"));
-                    orderService.save(order);
-                    registrationService.sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_REFUND_SUCCESS);
-                } catch (Exception e3) {
-                    LOGGER.debug("com.proper.enterprise.isj.payment.service.impl.DelayRefundServiceImpl.refund(Order, RegistrationDocument)[Exception]:", e3);
-                    LOGGER.debug("延时退款预约挂号发生异常情况,订单号:{}", order.getOrderNo());
-                    throw e3;
-                }
-            }
+            boolean refundFlag = recipeService.refundMoney2User(order, refundNo, false);
+            order = recipeService.saveOrUpdateOrderFailInfo(order, order.getPayWay(), regBack, refundNo, detail, refundFlag);
+            regBack.getRecipePaidFailDetailList().add(detail);
+            RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
+            regBack.setRecipeNonPaidDetail(nonPaid);
+            recipeServiceImpl.saveRecipeOrderDocument(regBack);
+            success(record);
         } catch (Exception e2) {
-            LOGGER.debug("com.proper.enterprise.isj.payment.service.impl.DelayRefundServiceImpl.refund(Order, RegistrationDocument)[Exception]:", e2);
-            throw e2;
+            LOGGER.debug("延时退款，RecipeServiceNotxImpl.saveUpdateRecipeAndOrder[Exception]:", e2);
+            LOGGER.trace("延时退款，诊间缴费HIS抛异常,调用支付平台退费失败,订单号:{},退费单号:{}", order.getOrderNo(), refundNo);
+            detail.setDescription(detail.getDescription().concat(
+                    ",诊间缴费HIS抛异常,调用支付平台退费失败,订单号:".concat(order.getOrderNo()).concat(",退费单号:").concat(refundNo)));
+            regBack.getRecipePaidFailDetailList().add(detail);
+            RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
+            regBack.setRecipeNonPaidDetail(nonPaid);
+            recipeServiceImpl.saveRecipeOrderDocument(regBack);
+            recipeService.sendRecipeMsg(regBack, SendPushMsgEnum.RECIPE_PAID_REFUND_FAIL, regBack);
+            restoreStatus(record);
         }
 
+    }
+
+    private static final int FUNC_HANDLEREG = 0xA0030000;
+    private static final int FUNC_HANDLEREG_NOT_FOUND_ORDER = FUNC_HANDLEREG | PayLogUtils.CAUSE_TYPE_FAIL | 0x1;
+    private void handleRegristration(DefaultPayLogRecordEntity record, PayRegReq req) throws Exception, IOException {
+        Order order = orderService.findByOrderNo(req.getOrderId());
+        if (order != null) {
+            RegistrationDocument reg = this.getRegistrationDocumentById(order.getFormId());
+            registrationService.saveRefundAndUpdateRegistrationDocument(reg);
+            success(record);
+        } else {
+            LOGGER.error("延时退款日志中业务对象为空：" + JSONUtil.toJSON(record));
+            updateStatusAsFail(record, FUNC_HANDLEREG_NOT_FOUND_ORDER);
+        }
     }
 
     private void success(DefaultPayLogRecordEntity record) {
@@ -171,7 +205,7 @@ public class DelayRefundServiceImpl implements DelayRefundService {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Object fetchRecordObject(DefaultPayLogRecordEntity record) {
         Object res = null;
         String className = record.getJavaType();
@@ -227,7 +261,8 @@ public class DelayRefundServiceImpl implements DelayRefundService {
         if (res) {
             synchronized (UPDATE_STATUS_LOCK) {
                 DefaultPayLogRecordEntity cur = repo.findOne(record.getId());
-                res = cur.getStep() == PayLogConstrants.STEP_MASK_UNKNOWN_AND_RETRY && cur.getStepStatus() == PayLogConstrants.STATUS_DEFAULT;
+                res = cur.getStep() == PayLogConstrants.STEP_MASK_UNKNOWN_AND_RETRY
+                        && cur.getStepStatus() == PayLogConstrants.STATUS_DEFAULT;
                 if (res) {
                     cur.setStepStatus(PayLogConstrants.STATUS_MASK_START);
                     repo.save(cur);

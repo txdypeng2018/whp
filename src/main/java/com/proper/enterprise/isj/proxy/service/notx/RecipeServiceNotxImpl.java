@@ -1,11 +1,14 @@
 package com.proper.enterprise.isj.proxy.service.notx;
 
+import com.proper.enterprise.isj.exception.DelayException;
 import com.proper.enterprise.isj.exception.HisLinkException;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.exception.RecipeException;
 import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.order.service.OrderService;
 import com.proper.enterprise.isj.payment.constants.BusinessPayConstants;
+import com.proper.enterprise.isj.payment.logger.PayStepEnum;
+import com.proper.enterprise.isj.payment.logger.utils.PayLogUtils;
 import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.isj.proxy.document.RecipeDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.*;
@@ -146,7 +149,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @param pushObj 推送消息对象.
      * @throws Exception
      */
-    private void sendRecipeMsg(RecipeOrderDocument recipeInfo, SendPushMsgEnum pushMsgType, Object pushObj) throws Exception {
+    @Override
+    public void sendRecipeMsg(RecipeOrderDocument recipeInfo, SendPushMsgEnum pushMsgType, Object pushObj)
+            throws Exception {
         MessagesDocument regMsg = new MessagesDocument();
         regMsg.setContent(CenterFunctionUtils.getPushMsgContent(pushMsgType, pushObj));
         regMsg.setDate(DateUtil.toString(new Date(), "yyyy-MM-dd HH:mm"));
@@ -167,7 +172,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @throws Exception 异常.
      */
     @Override
-    public List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate, String eDate) throws Exception {
+    public List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate,
+            String eDate) throws Exception {
         DecimalFormat df = new DecimalFormat("0.00");
         List<RecipeDocument> recipeList = new ArrayList<>();
         try {
@@ -215,7 +221,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                         recipeMap.put(pay.getClinicCode(), recipe);
                     }
                     recipe.setOutpatientNum(pay.getClinicCode());
-                    recipe.setOutpatientDate(DateUtil.toString(DateUtil.toDate(pay.getRegDate().split(" ")[0]), "yyyy年MM月dd日"));
+                    recipe.setOutpatientDate(
+                            DateUtil.toString(DateUtil.toDate(pay.getRegDate().split(" ")[0]), "yyyy年MM月dd日"));
                     detailList = recipe.getRecipes();
                     // 以单条项目总价是否为负数作为区分,以处方号以及执行科室名称作为键值
                     if (pay.getOwnCost().contains("-")) {
@@ -243,16 +250,19 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     itemList = detail.getItems();
                     item = new RecipeDetailItemDocument();
                     item.setName(pay.getItemName());
-                    String num = new BigDecimal(pay.getQty()).divide(new BigDecimal(pay.getPackQty()), BigDecimal.ROUND_HALF_UP).toString();
+                    String num = new BigDecimal(pay.getQty())
+                            .divide(new BigDecimal(pay.getPackQty()), BigDecimal.ROUND_HALF_UP).toString();
                     item.setNumber(num);
-                    item.setAmount(df.format(new BigDecimal(String.valueOf(pay.getUnitPrice())).divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY)));
+                    item.setAmount(df.format(new BigDecimal(String.valueOf(pay.getUnitPrice()))
+                            .divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY)));
                     itemList.add(item);
                     if (StringUtil.isEmpty(detail.getTotal())) {
                         totalBig = new BigDecimal("0");
                     } else {
                         totalBig = new BigDecimal(detail.getTotal());
                     }
-                    totalBig = totalBig.add(new BigDecimal(pay.getOwnCost()).divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY));
+                    totalBig = totalBig.add(new BigDecimal(pay.getOwnCost()).divide(new BigDecimal("100"), 2,
+                            RoundingMode.UNNECESSARY));
                     detail.setTotal(totalBig.toString());
                 }
                 // 拼接返回对象
@@ -285,10 +295,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
         RecipeOrderDocument recipeOrder;
         try {
             recipeOrder = recipeServiceImpl.saveOrderAndRecipeOrderDocument(memberId, clinicCode);
-            BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(recipeOrder.getCreateUserId(), memberId);
+            BasicInfoDocument basicInfo = userInfoService
+                    .getFamilyMemberByUserIdAndMemberId(recipeOrder.getCreateUserId(), memberId);
             if (basicInfo != null) {
                 for (QueryType queryType : QueryType.values()) {
-                    webService4HisInterfaceCacheUtil.evictCachePayListRes(recipeOrder.getPatientId(), queryType.name(), basicInfo.getMedicalNum());
+                    webService4HisInterfaceCacheUtil.evictCachePayListRes(recipeOrder.getPatientId(), queryType.name(),
+                            basicInfo.getMedicalNum());
                 }
             }
         } catch (Exception e) {
@@ -313,98 +325,108 @@ public class RecipeServiceNotxImpl implements RecipeService {
      */
     @Override
     public Order saveUpdateRecipeAndOrder(String orderNo, String channelId, Object infoObj) throws Exception {
-            Order order = orderService.findByOrderNo(orderNo);
-            if (order == null) {
-                LOGGER.debug("未查到缴费订单,调用缴费前校验,订单号:{}", orderNo);
-                return null;
+        Order order = orderService.findByOrderNo(orderNo);
+        if (order == null) {
+            LOGGER.debug("未查到缴费订单,调用缴费前校验,订单号:{}", orderNo);
+            return null;
+        }
+        RecipeOrderDocument regBack = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
+        if (regBack == null) {
+            LOGGER.debug("未查到缴费单,调用缴费前校验,订单号:{}", orderNo);
+            return null;
+        }
+        BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(regBack.getCreateUserId(),
+                regBack.getPatientId());
+        if (basicInfo == null) {
+            LOGGER.debug("未查到患者信息,调用缴费前校验,门诊流水号:{}", regBack.getClinicCode());
+            return null;
+        }
+        if (StringUtil.isEmpty(basicInfo.getMedicalNum())) {
+            LOGGER.debug("患者信息的病历号为空,不能进行调用,调用缴费前校验,门诊流水号:{},患者Id:", regBack.getClinicCode(), basicInfo.getId());
+            return null;
+        }
+        // 手动清空患者缴费缓存
+        for (QueryType queryType : QueryType.values()) {
+            webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(),
+                    basicInfo.getMedicalNum());
+        }
+        Map<String, String> requestOrderNoMap = getRecipeRequestOrderNoMap(regBack);
+        if (requestOrderNoMap.containsKey(order.getOrderNo())) {
+            LOGGER.debug("订单号重复调用缴费接口,直接返回,不对HIS接口进行调用,门诊流水号:{}", regBack.getClinicCode());
+            return null;
+        }
+        try {
+            PayOrderReq payOrderReq = this.convertAppInfo2PayOrder(order, infoObj);
+            
+            if (payOrderReq == null) {
+                LOGGER.debug("诊间缴费请求参数转换异常,订单号:{}", order.getOrderNo());
+                throw new RecipeException("诊间缴费请求参数转换异常,订单号:".concat(order.getOrderNo()));
             }
-            RecipeOrderDocument regBack = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
-            if (regBack == null) {
-                LOGGER.debug("未查到缴费单,调用缴费前校验,订单号:{}", orderNo);
-                return null;
+            RecipeOrderReqDocument payReq = new RecipeOrderReqDocument();
+            BeanUtils.copyProperties(payOrderReq, payReq);
+            Map<String, RecipeOrderReqDocument> reqMap = regBack.getRecipeOrderReqMap();
+            reqMap.put(payOrderReq.getOrderId(), payReq);
+            regBack.setRecipeOrderReqMap(reqMap);
+            regBack = recipeServiceImpl.saveRecipeOrderDocument(regBack);
+            order = this.updateRegistrationAndOrder(order, payOrderReq, regBack, channelId);
+        } catch (DelayException e) {
+            PayLogUtils.log(PayStepEnum.UNKNOWN, order, e.getPosition());
+        } catch (Exception e) {
+            LOGGER.info("诊间缴费出现异常", e);
+            String refundNo = order.getOrderNo() + "001";
+            if (order.getPayWay().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                refundNo = order.getOrderNo().substring(0, 18).concat("01");
             }
-            BasicInfoDocument basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(regBack.getCreateUserId(), regBack.getPatientId());
-            if (basicInfo == null) {
-                LOGGER.debug("未查到患者信息,调用缴费前校验,门诊流水号:{}", regBack.getClinicCode());
-                return null;
+            RecipePaidDetailDocument detail = regBack.getRecipeNonPaidDetail();
+            if (detail == null) {
+                detail = new RecipePaidDetailDocument();
             }
-            if (StringUtil.isEmpty(basicInfo.getMedicalNum())) {
-                LOGGER.debug("患者信息的病历号为空,不能进行调用,调用缴费前校验,门诊流水号:{},患者Id:", regBack.getClinicCode(), basicInfo.getId());
-                return null;
+            detail.setRefundNum(refundNo);
+            LOGGER.debug("退款单号:{}{}", refundNo, e);
+            if (StringUtil.isEmpty(detail.getDescription())) {
+                detail.setDescription("");
             }
-            // 手动清空患者缴费缓存
-            for (QueryType queryType : QueryType.values()) {
-                webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(), basicInfo.getMedicalNum());
+            LOGGER.debug("保存异常消息前,退款单号:{}", refundNo);
+            if (StringUtil.isNotEmpty(e.getMessage())) {
+                detail.setDescription(detail.getDescription().concat(",").concat(e.getMessage()));
             }
-            Map<String, String> requestOrderNoMap = getRecipeRequestOrderNoMap(regBack);
-            if (requestOrderNoMap.containsKey(order.getOrderNo())) {
-                LOGGER.debug("订单号重复调用缴费接口,直接返回,不对HIS接口进行调用,门诊流水号:{}", regBack.getClinicCode());
+            LOGGER.debug("保存异常消息后,退款单号:{}", refundNo);
+            requestOrderNoMap.put(order.getOrderNo(), String.valueOf(order.getPayWay()));
+            LOGGER.debug("将订单号添加到计算平台缴费情况的Map中,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
+            if (!checkRecipeFailCanRefund(order, regBack, requestOrderNoMap, basicInfo, detail)) {
+                LOGGER.debug("诊间缴费失败后,核对平台与HIS已缴金额不一致,不能进行退款,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
                 return null;
             }
             try {
-                PayOrderReq payOrderReq = this.convertAppInfo2PayOrder(order, infoObj);
-                if (payOrderReq == null) {
-                    LOGGER.debug("诊间缴费请求参数转换异常,订单号:{}", order.getOrderNo());
-                    throw new RecipeException("诊间缴费请求参数转换异常,订单号:".concat(order.getOrderNo()));
-                }
-                RecipeOrderReqDocument payReq = new RecipeOrderReqDocument();
-                BeanUtils.copyProperties(payOrderReq, payReq);
-                Map<String, RecipeOrderReqDocument> reqMap = regBack.getRecipeOrderReqMap();
-                reqMap.put(payOrderReq.getOrderId(), payReq);
-                regBack.setRecipeOrderReqMap(reqMap);
-                regBack = recipeServiceImpl.saveRecipeOrderDocument(regBack);
-                order = this.updateRegistrationAndOrder(order, payOrderReq, regBack, channelId);
-            } catch (Exception e) {
-                LOGGER.info("诊间缴费出现异常", e);
-                String refundNo = order.getOrderNo() + "001";
-                if (order.getPayWay().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
-                    refundNo = order.getOrderNo().substring(0, 18).concat("01");
-                }
-                RecipePaidDetailDocument detail = regBack.getRecipeNonPaidDetail();
-                if (detail == null) {
-                    detail = new RecipePaidDetailDocument();
-                }
-                detail.setRefundNum(refundNo);
-                LOGGER.debug("退款单号:{}{}", refundNo, e);
-                if (StringUtil.isEmpty(detail.getDescription())) {
-                    detail.setDescription("");
-                }
-                LOGGER.debug("保存异常消息前,退款单号:{}", refundNo);
-                if (StringUtil.isNotEmpty(e.getMessage())) {
-                    detail.setDescription(detail.getDescription().concat(",").concat(e.getMessage()));
-                }
-                LOGGER.debug("保存异常消息后,退款单号:{}", refundNo);
-                requestOrderNoMap.put(order.getOrderNo(), String.valueOf(order.getPayWay()));
-                LOGGER.debug("将订单号添加到计算平台缴费情况的Map中,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
-                if (!checkRecipeFailCanRefund(order, regBack, requestOrderNoMap, basicInfo, detail)) {
-                    LOGGER.debug("诊间缴费失败后,核对平台与HIS已缴金额不一致,不能进行退款,退款单号:{},订单号:{}", refundNo, order.getOrderNo());
-                    return null;
-                }
-                try {
-                    boolean refundFlag = refundMoney2User(order, refundNo, false);
-                    order = saveOrUpdateOrderFailInfo(order, channelId, regBack, refundNo, detail, refundFlag);
-                    regBack.getRecipePaidFailDetailList().add(detail);
-                    RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
-                    regBack.setRecipeNonPaidDetail(nonPaid);
-                    recipeServiceImpl.saveRecipeOrderDocument(regBack);
-                } catch (Exception e2) {
-                    LOGGER.debug("RecipeServiceNotxImpl.saveUpdateRecipeAndOrder[Exception]:", e2);
-                    LOGGER.debug("诊间缴费HIS抛异常,调用支付平台退费失败,订单号:{},退费单号:{}", order.getOrderNo(), refundNo);
-                    detail.setDescription(detail.getDescription().concat(",诊间缴费HIS抛异常,调用支付平台退费失败,订单号:"
-                            .concat(order.getOrderNo()).concat(",退费单号:").concat(refundNo)));
-                    regBack.getRecipePaidFailDetailList().add(detail);
-                    RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
-                    regBack.setRecipeNonPaidDetail(nonPaid);
-                    recipeServiceImpl.saveRecipeOrderDocument(regBack);
-                    sendRecipeMsg(regBack, SendPushMsgEnum.RECIPE_PAID_REFUND_FAIL, regBack);
-                }
+                boolean refundFlag = refundMoney2User(order, refundNo, false);
+                order = saveOrUpdateOrderFailInfo(order, channelId, regBack, refundNo, detail, refundFlag);
+                regBack.getRecipePaidFailDetailList().add(detail);
+                RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
+                regBack.setRecipeNonPaidDetail(nonPaid);
+                recipeServiceImpl.saveRecipeOrderDocument(regBack);
+            } catch (Exception e2) {
+                LOGGER.debug("RecipeServiceNotxImpl.saveUpdateRecipeAndOrder[Exception]:", e2);
+                LOGGER.debug("诊间缴费HIS抛异常,调用支付平台退费失败,订单号:{},退费单号:{}", order.getOrderNo(), refundNo);
+                detail.setDescription(detail.getDescription().concat(
+                        ",诊间缴费HIS抛异常,调用支付平台退费失败,订单号:".concat(order.getOrderNo()).concat(",退费单号:").concat(refundNo)));
+                regBack.getRecipePaidFailDetailList().add(detail);
+                RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
+                regBack.setRecipeNonPaidDetail(nonPaid);
+                recipeServiceImpl.saveRecipeOrderDocument(regBack);
+                sendRecipeMsg(regBack, SendPushMsgEnum.RECIPE_PAID_REFUND_FAIL, regBack);
             }
-            // 手动清空患者缴费缓存
-            for (QueryType queryType : QueryType.values()) {
-                webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(), basicInfo.getMedicalNum());
-            }
-            return order;
+        }
+        // 手动清空患者缴费缓存
+        for (QueryType queryType : QueryType.values()) {
+            webService4HisInterfaceCacheUtil.evictCachePayListRes(regBack.getPatientId(), queryType.name(),
+                    basicInfo.getMedicalNum());
+        }
+        return order;
     }
+
+    public static final int FUNC_RCPSVCIMPL_UPDATE_REG_AND_ODR = 0x00020000;
+    public static final int FUNC_RCPSVCIMPL_UPDATE_REG_AND_ODR_ACCESS_HIS_ERROR = FUNC_RCPSVCIMPL_UPDATE_REG_AND_ODR
+            | PayLogUtils.CAUSE_TYPE_EXCEPTION | 0x1;
 
     /**
      * 更新缴费及订单信息.
@@ -416,14 +438,15 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @return order 订单信息.
      * @throws Exception
      */
-    private Order updateRegistrationAndOrder(Order order, PayOrderReq payOrderReq, RecipeOrderDocument recipeOrder, String channelId) throws Exception {
+    private Order updateRegistrationAndOrder(Order order, PayOrderReq payOrderReq, RecipeOrderDocument recipeOrder,
+            String channelId) throws Exception {
         ResModel<PayOrder> payOrderResModel;
         try {
             payOrderResModel = webServicesClient.payOrder(payOrderReq);
         } catch (InvocationTargetException ite) {
             if (ite.getCause() != null && ite.getCause() instanceof RemoteAccessException) {
                 LOGGER.debug("缴费网络连接异常:{}", ite);
-                return null;
+                throw new DelayException(FUNC_RCPSVCIMPL_UPDATE_REG_AND_ODR_ACCESS_HIS_ERROR);
             }
             throw ite;
         }
@@ -439,7 +462,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
         }
         RecipeOrderHisDocument payHis = new RecipeOrderHisDocument();
         Map<String, RecipeOrderHisDocument> hisMap = recipeOrder.getRecipeOrderHisMap();
-        payHis.setClientReturnMsg(payOrderResModel.getReturnMsg().concat("(").concat(String.valueOf(payOrderResModel.getReturnCode())).concat(")"));
+        payHis.setClientReturnMsg(payOrderResModel.getReturnMsg().concat("(")
+                .concat(String.valueOf(payOrderResModel.getReturnCode())).concat(")"));
         if (payOrderResModel.getReturnCode() == ReturnCode.SUCCESS) {
             BeanUtils.copyProperties(payOrderResModel.getRes(), payHis);
             hisMap.put(payOrderReq.getOrderId(), payHis);
@@ -452,7 +476,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
             order.setPaymentStatus(ConfCenter.getInt("isj.pay.paystatus.payed"));
             order.setPayWay(String.valueOf(channelId));
             RecipeOrderDocument recipeInfo = this.getRecipeOrderDocumentById(order.getFormId().split("_")[0]);
-            BasicInfoDocument info = userInfoService.getFamilyMemberByUserIdAndMemberId(recipeInfo.getCreateUserId(), recipeInfo.getPatientId());
+            BasicInfoDocument info = userInfoService.getFamilyMemberByUserIdAndMemberId(recipeInfo.getCreateUserId(),
+                    recipeInfo.getPatientId());
             if (info != null) {
                 recipeInfo.setPatientName(info.getName());
             }
@@ -477,7 +502,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @throws Exception 异常.
      */
     @SuppressWarnings("SameParameterValue")
-    private boolean refundMoney2User(Order order, String refundNo, boolean refundFlag) throws Exception {
+    @Override
+    public boolean refundMoney2User(Order order, String refundNo, boolean refundFlag) throws Exception {
         if (order.getPayWay().equals(String.valueOf(PayChannel.ALIPAY.getCode()))) {
             // 退款请求对象
             RefundReq refundInfo = new RefundReq();
@@ -549,8 +575,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @param refundFlag 退款标识(1:退款成功,0:退款失败).
      * @throws Exception 异常.
      */
-    private Order saveOrUpdateOrderFailInfo(Order order, String channelId, RecipeOrderDocument regBack, String refundNo,
-                                            RecipePaidDetailDocument detail, boolean refundFlag) throws Exception {
+    @Override
+    public Order saveOrUpdateOrderFailInfo(Order order, String channelId, RecipeOrderDocument regBack, String refundNo,
+            RecipePaidDetailDocument detail, boolean refundFlag) throws Exception {
         if (refundFlag) {
             LOGGER.debug("诊间缴费HIS抛异常,对缴费进行退费,退费成功,订单号:{},退费单号:{}", order.getOrderNo(), refundNo);
             order.setOrderStatus("3");
@@ -584,7 +611,10 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @return 结果.
      * @throws Exception 异常.
      */
-    private boolean checkRecipeFailCanRefund(Order order, RecipeOrderDocument regBack, Map<String, String> requestOrderNoMap, BasicInfoDocument basicInfo, RecipePaidDetailDocument detail) throws Exception {
+    @Override
+    public boolean checkRecipeFailCanRefund(Order order, RecipeOrderDocument regBack,
+            Map<String, String> requestOrderNoMap, BasicInfoDocument basicInfo, RecipePaidDetailDocument detail)
+            throws Exception {
         if (regBack == null || StringUtil.isEmpty(regBack.getClinicCode())) {
             LOGGER.debug("缴费项目为空,或者是缴费流水号为空,订单号:{}", order.getOrderNo());
             return false;
@@ -602,7 +632,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
             refundPayList = paidRes.getRes().getPayList();
         } else {
             LOGGER.debug("HIS查询已缴费信息出现异常,HIS返回信息:{}", paidRes.getReturnMsg());
-            detail.setDescription("门诊流水号:".concat(regBack.getClinicCode()).concat("HIS查询已缴费信息出现异常,不进行自动退费,HIS返回信息:").concat(paidRes.getReturnMsg()));
+            detail.setDescription("门诊流水号:".concat(regBack.getClinicCode()).concat("HIS查询已缴费信息出现异常,不进行自动退费,HIS返回信息:")
+                    .concat(paidRes.getReturnMsg()));
             regBack.getRecipePaidFailDetailList().add(detail);
             RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
             regBack.setRecipeNonPaidDetail(nonPaid);
@@ -638,7 +669,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     }
                     AliRefundTradeQueryRes refundQuery = payService.queryRefund(orderNo, orderNo.concat("001"));
                     if (refundQuery != null && StringUtil.isNotEmpty(refundQuery.getRefundAmount())) {
-                        queryBig = queryBig.subtract(new BigDecimal(refundQuery.getRefundAmount()).multiply(new BigDecimal("100")));
+                        queryBig = queryBig.subtract(
+                                new BigDecimal(refundQuery.getRefundAmount()).multiply(new BigDecimal("100")));
                     }
                 } else if (paramEntry.getValue().equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
                     PayService payService = payFactory.newPayService(BusinessPayConstants.ISJ_PAY_WAY_WECHAT);
@@ -658,7 +690,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     CmbQuerySingleOrderRes query = payService.queryPay(orderNo);
                     // 查询支付成功
                     if (query != null && StringUtil.isEmpty(query.getHead().getCode())) {
-                        queryBig = queryBig.add(new BigDecimal(query.getBody().getBillAmount()).multiply(new BigDecimal("100")));
+                        queryBig = queryBig
+                                .add(new BigDecimal(query.getBody().getBillAmount()).multiply(new BigDecimal("100")));
                     } else {
                         LOGGER.debug("未查到一网通支付信息,订单号:{}", orderNo);
                     }
@@ -666,7 +699,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     CmbQueryRefundRes refund = payService.queryRefund(orderNo, orderNo.concat("01"));
                     if (refund != null && refund.getBody().getBillRecord() != null
                             && StringUtil.isNotEmpty(refund.getBody().getBillRecord().get(0).getAmount())) {
-                        queryBig = queryBig.subtract(new BigDecimal(refund.getBody().getBillRecord().get(0).getAmount()).multiply(new BigDecimal("100")));
+                        queryBig = queryBig.subtract(new BigDecimal(refund.getBody().getBillRecord().get(0).getAmount())
+                                .multiply(new BigDecimal("100")));
                     }
                 }
             }
@@ -677,9 +711,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
         }
 
         LOGGER.debug("支付平台结余金额:{},当前缴费金额:{},HIS已缴费金额:{}", queryBig, order.getOrderAmount(), hisPaidBig);
-        detail.setDescription(detail.getDescription().concat(",支付平台结余金额:".concat(String.valueOf(queryBig)).concat(",当前缴费金额:").concat(order.getOrderAmount()).concat(",HIS已缴费金额:").concat(String.valueOf(hisPaidBig))));
+        detail.setDescription(
+                detail.getDescription().concat(",支付平台结余金额:".concat(String.valueOf(queryBig)).concat(",当前缴费金额:")
+                        .concat(order.getOrderAmount()).concat(",HIS已缴费金额:").concat(String.valueOf(hisPaidBig))));
         if (queryBig.subtract(new BigDecimal(order.getOrderAmount())).compareTo(hisPaidBig) != 0) {
-            LOGGER.debug("缴费失败后,HIS已缴费金额与支付平台的金额不相等,不能进行退款,门诊流水号:{},订单号:{}", regBack.getClinicCode(), order.getOrderNo());
+            LOGGER.debug("缴费失败后,HIS已缴费金额与支付平台的金额不相等,不能进行退款,门诊流水号:{},订单号:{}", regBack.getClinicCode(),
+                    order.getOrderNo());
             regBack.getRecipePaidFailDetailList().add(detail);
             RecipePaidDetailDocument nonPaid = new RecipePaidDetailDocument();
             regBack.setRecipeNonPaidDetail(nonPaid);
@@ -696,15 +733,18 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @param regBack 缴费信息.
      * @return 已经缴费的Map信息.
      */
-    private Map<String, String> getRecipeRequestOrderNoMap(RecipeOrderDocument regBack) {
+    @Override
+    public Map<String, String> getRecipeRequestOrderNoMap(RecipeOrderDocument regBack) {
         Map<String, String> requestOrderNoMap = new HashMap<>();
         List<RecipePaidDetailDocument> paidList = regBack.getRecipePaidDetailList();
         for (RecipePaidDetailDocument recipePaidDetailDocument : paidList) {
             requestOrderNoMap.put(recipePaidDetailDocument.getOrderNum(), recipePaidDetailDocument.getPayChannelId());
         }
         if (regBack.getRecipeOrderReqMap() != null) {
-            for (Map.Entry<String, RecipeOrderReqDocument> stringRecipeOrderReqDocumentEntry : regBack.getRecipeOrderReqMap().entrySet()) {
-                requestOrderNoMap.put(stringRecipeOrderReqDocumentEntry.getKey(), String.valueOf(stringRecipeOrderReqDocumentEntry.getValue().getPayChannelId().getCode()));
+            for (Map.Entry<String, RecipeOrderReqDocument> stringRecipeOrderReqDocumentEntry : regBack
+                    .getRecipeOrderReqMap().entrySet()) {
+                requestOrderNoMap.put(stringRecipeOrderReqDocumentEntry.getKey(),
+                        String.valueOf(stringRecipeOrderReqDocumentEntry.getValue().getPayChannelId().getCode()));
             }
         }
         return requestOrderNoMap;
@@ -799,9 +839,11 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 payOrderReq.setOrderId(order.getOrderNo());
                 payOrderReq.setSerialNum(cmbPayQuery.getBody().getBankSeqNo());
                 // 日期
-                String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"), "yyyy-MM-dd");
+                String date = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptDate(), "yyyyMMdd"),
+                        "yyyy-MM-dd");
                 // 时间
-                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptTime(), "HHmmss"), "HH:mm:ss");
+                String time = DateUtil.toString(DateUtil.toDate(cmbPayQuery.getBody().getAcceptTime(), "HHmmss"),
+                        "HH:mm:ss");
                 payOrderReq.setPayDate(date);
                 payOrderReq.setPayTime(time);
                 payOrderReq.setPayChannelId(PayChannel.WEB_UNION);
@@ -838,7 +880,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @throws Exception 异常.
      */
     @Override
-    public ResModel<PayList> findPayListModel(BasicInfoDocument basic, String clinicCode, String payStatus, String sDate, String eDate, boolean userCache) throws Exception {
+    public ResModel<PayList> findPayListModel(BasicInfoDocument basic, String clinicCode, String payStatus,
+            String sDate, String eDate, boolean userCache) throws Exception {
         PayListReq listReq = recipeServiceImpl.getPayListReq(basic, clinicCode, payStatus, sDate, eDate);
         if (userCache) {
             return webService4HisInterfaceCacheUtil.getCachePayListRes(listReq);
@@ -854,13 +897,15 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @throws Exception 异常.
      */
     @Override
-    public synchronized void saveRefundAndUpdateRecipeOrderDocument(RecipeOrderDocument recipe, RefundByHis refund) throws Exception {
+    public synchronized void saveRefundAndUpdateRecipeOrderDocument(RecipeOrderDocument recipe, RefundByHis refund)
+            throws Exception {
         recipe = recipeServiceImpl.getRecipeOrderDocumentById(recipe.getId());
         if (recipe != null) {
             boolean canRefundFlag = true;
             Map<String, RecipeRefundDetailDocument> refundMap = recipe.getRecipeRefundDetailDocumentMap();
             RecipeRefundDetailDocument detail;
-            for (Map.Entry<String, RecipeRefundDetailDocument> stringRecipeRefundDetailDocumentEntry : refundMap.entrySet()) {
+            for (Map.Entry<String, RecipeRefundDetailDocument> stringRecipeRefundDetailDocumentEntry : refundMap
+                    .entrySet()) {
                 if (stringRecipeRefundDetailDocumentEntry.getKey().split("_")[0].equals(refund.getId())) {
                     LOGGER.debug("线下退费已经将此记录退回,不再重复退费,退费Id:{}", refund.getId());
                     canRefundFlag = false;
@@ -871,8 +916,10 @@ public class RecipeServiceNotxImpl implements RecipeService {
                     if (StringUtil.isEmpty(detail.getRecipeNo()) || StringUtil.isEmpty(detail.getSequenceNo())) {
                         continue;
                     }
-                    if (detail.getRecipeNo().equals(refund.getRecipeNo()) && detail.getSequenceNo().equals(refund.getSequenceNo())) {
-                        LOGGER.debug("线下退费已经将此处方号下的序号进行了退费,不再重复退费,退费Id:{},处方号:{},序号:{}", refund.getId(), refund.getRecipeNo(), refund.getSequenceNo());
+                    if (detail.getRecipeNo().equals(refund.getRecipeNo())
+                            && detail.getSequenceNo().equals(refund.getSequenceNo())) {
+                        LOGGER.debug("线下退费已经将此处方号下的序号进行了退费,不再重复退费,退费Id:{},处方号:{},序号:{}", refund.getId(),
+                                refund.getRecipeNo(), refund.getSequenceNo());
                         canRefundFlag = false;
                         break;
                     }
@@ -883,7 +930,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 LOGGER.debug("根据退款记录准备获得已缴费的对象,退款Id:{}", refund.getId());
                 RecipePaidDetailDocument recipePaidOrder = getRecipePaidOrder(recipe, refund);
                 if (recipePaidOrder != null) {
-                    LOGGER.debug("获得已缴费对象成功,订单号:{},支付平台:{}", recipePaidOrder.getOrderNum(), recipePaidOrder.getPayChannelId());
+                    LOGGER.debug("获得已缴费对象成功,订单号:{},支付平台:{}", recipePaidOrder.getOrderNum(),
+                            recipePaidOrder.getPayChannelId());
                     String refundNo = checkRecipeAndRefundIsEqual(recipe, recipePaidOrder, refund);
                     if (StringUtil.isNotEmpty(refundNo)) {
                         // 请求退款对象
@@ -902,23 +950,28 @@ public class RecipeServiceNotxImpl implements RecipeService {
                             AliRefundRes refundRes = payService.refundPay(refundInfo);
                             // 支付宝退款结果
                             refunReturnMsg = refundRes.getMsg();
-                        } else if (recipePaidOrder.getPayChannelId().equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
+                        } else if (recipePaidOrder.getPayChannelId()
+                                .equals(String.valueOf(PayChannel.WECHATPAY.getCode()))) {
                             PayService payService = payFactory.newPayService(BusinessPayConstants.ISJ_PAY_WAY_WECHAT);
                             WechatRefundRes refundRes = payService.refundPay(refundInfo);
                             // 微信退款结果
-                            refunReturnMsg = refundRes.getResultCode().equals("SUCCESS") ? "SUCCESS" : refundRes.getReturnMsg();
-                        } else if (recipePaidOrder.getPayChannelId().equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
+                            refunReturnMsg = refundRes.getResultCode().equals("SUCCESS") ? "SUCCESS"
+                                    : refundRes.getReturnMsg();
+                        } else if (recipePaidOrder.getPayChannelId()
+                                .equals(String.valueOf(PayChannel.WEB_UNION.getCode()))) {
                             PayService payService = payFactory.newPayService(BusinessPayConstants.ISJ_PAY_WAY_CMB);
                             CmbRefundNoDupRes refundRes = payService.refundPay(refundInfo);
                             // 一网通退款结果
-                            refunReturnMsg = StringUtil.isNull(refundRes.getHead().getCode()) ? "SUCESS" : refundRes.getHead().getErrMsg();
+                            refunReturnMsg = StringUtil.isNull(refundRes.getHead().getCode()) ? "SUCESS"
+                                    : refundRes.getHead().getErrMsg();
                         }
                         saveRecipeRefundResult(recipe, refund, refundMap, refundNo, refunReturnMsg);
                     }
                 }
             }
         } else {
-            LOGGER.debug("平台退费Id:{},门诊流水号:{},处方号:{},未找到缴费单", refund.getId(), refund.getClinicCode(), refund.getRecipeNo());
+            LOGGER.debug("平台退费Id:{},门诊流水号:{},处方号:{},未找到缴费单", refund.getId(), refund.getClinicCode(),
+                    refund.getRecipeNo());
         }
     }
 
@@ -932,13 +985,17 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @param refunReturnMsg 退款返回的信息.
      * @throws Exception 异常.
      */
-    private void saveRecipeRefundResult(RecipeOrderDocument recipe, RefundByHis refund, Map<String, RecipeRefundDetailDocument> refundMap, String refundNo, String refunReturnMsg) throws Exception {
+    private void saveRecipeRefundResult(RecipeOrderDocument recipe, RefundByHis refund,
+            Map<String, RecipeRefundDetailDocument> refundMap, String refundNo, String refunReturnMsg)
+            throws Exception {
         RecipeRefundDetailDocument refundDetail = new RecipeRefundDetailDocument();
         BeanUtils.copyProperties(refund, refundDetail);
         refundDetail.setClinicCode(recipe.getClinicCode());
         refundDetail.setRefundNo(refundNo);
         refundDetail.setRefundReturnMsg(refunReturnMsg);
-        refundMap.put(refund.getId().concat("_").concat(DateUtil.toString(new Date(), PEPConstants.DEFAULT_DATETIME_FORMAT)), refundDetail);
+        refundMap.put(
+                refund.getId().concat("_").concat(DateUtil.toString(new Date(), PEPConstants.DEFAULT_DATETIME_FORMAT)),
+                refundDetail);
         recipe.setRecipeRefundDetailDocumentMap(refundMap);
         recipeServiceImpl.saveRecipeOrderDocument(recipe);
         if (refunReturnMsg.equalsIgnoreCase("Success")) {
@@ -980,11 +1037,14 @@ public class RecipeServiceNotxImpl implements RecipeService {
      * @return 退款总数.
      * @throws Exception 异常.
      */
-    private String checkRecipeAndRefundIsEqual(RecipeOrderDocument recipe, RecipePaidDetailDocument recipePaidOrder, RefundByHis refund) throws Exception {
-        BasicInfoDocument basic = userInfoService.getFamilyMemberByUserIdAndMemberId(recipe.getCreateUserId(), recipe.getPatientId());
+    private String checkRecipeAndRefundIsEqual(RecipeOrderDocument recipe, RecipePaidDetailDocument recipePaidOrder,
+            RefundByHis refund) throws Exception {
+        BasicInfoDocument basic = userInfoService.getFamilyMemberByUserIdAndMemberId(recipe.getCreateUserId(),
+                recipe.getPatientId());
         ResModel<PayList> refundPayRes = this.findPayListModel(basic, recipe.getClinicCode(), "2", null, null, false);
         List<Pay> refundPayList = refundPayRes.getRes().getPayList();
-        LOGGER.debug("HIS查询记录的退费集合数:{},退款Id:{},订单号:{}", refundPayList.size(), refund.getId(), recipePaidOrder.getOrderNum(), recipe.getClinicCode());
+        LOGGER.debug("HIS查询记录的退费集合数:{},退款Id:{},订单号:{}", refundPayList.size(), refund.getId(),
+                recipePaidOrder.getOrderNum(), recipe.getClinicCode());
         BigDecimal hisRefundBig = new BigDecimal("0");
         for (Pay pay : refundPayList) {
             LOGGER.debug("HIS查询记录的退费项目:{},退费金额:{}", pay.getItemCode(), pay.getOwnCost());
@@ -1007,12 +1067,14 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 if (refundQuery != null) {
                     if (refundQuery.getCode().equals("10000")) {
                         if (StringUtil.isNotEmpty(refundQuery.getRefundAmount())) {
-                            finishBig = finishBig.add(new BigDecimal(refundQuery.getRefundAmount()).multiply(new BigDecimal("100")));
+                            finishBig = finishBig
+                                    .add(new BigDecimal(refundQuery.getRefundAmount()).multiply(new BigDecimal("100")));
                         } else {
                             break;
                         }
                     } else {
-                        LOGGER.debug("支付宝缴费查询失败,订单号:{},退费单号:{},失败消息:{}", recipePaidOrder.getOrderNum(), refundNo, refundQuery.getMsg());
+                        LOGGER.debug("支付宝缴费查询失败,订单号:{},退费单号:{},失败消息:{}", recipePaidOrder.getOrderNum(), refundNo,
+                                refundQuery.getMsg());
                         return null;
                     }
                 } else {
@@ -1028,9 +1090,9 @@ public class RecipeServiceNotxImpl implements RecipeService {
                 // 微信退款查询
                 PayService payService = payFactory.newPayService(BusinessPayConstants.ISJ_PAY_WAY_WECHAT);
                 WechatRefundQueryRes refundQuery = payService.queryRefund(recipePaidOrder.getOrderNum(), refundNo);
-                if(refundQuery != null) {
-                    if(refundQuery.getReturnCode().equals("SUCCESS")) {
-                        if(StringUtil.isNotEmpty(refundQuery.getRefundFee())) {
+                if (refundQuery != null) {
+                    if (refundQuery.getReturnCode().equals("SUCCESS")) {
+                        if (StringUtil.isNotEmpty(refundQuery.getRefundFee())) {
                             finishBig = finishBig.add(new BigDecimal(refundQuery.getRefundFee()));
                         } else {
                             break;
@@ -1059,12 +1121,14 @@ public class RecipeServiceNotxImpl implements RecipeService {
                         // 如果订单已经直接退款成功
                         if (billRecord.getBillState().equals("210")) {
                             if (StringUtil.isNotEmpty(billRecord.getAmount())) {
-                                finishBig = finishBig.add(new BigDecimal(billRecord.getAmount()).multiply(new BigDecimal("100")));
+                                finishBig = finishBig
+                                        .add(new BigDecimal(billRecord.getAmount()).multiply(new BigDecimal("100")));
                             } else {
                                 break;
                             }
                         } else {
-                            LOGGER.debug("一网通缴费查询失败,订单号:{},退费单号:{},失败消息:{}", recipePaidOrder.getOrderNum(), refundNo, refundQuery.getHead().getErrMsg());
+                            LOGGER.debug("一网通缴费查询失败,订单号:{},退费单号:{},失败消息:{}", recipePaidOrder.getOrderNum(), refundNo,
+                                    refundQuery.getHead().getErrMsg());
                             return null;
                         }
                     } else {
@@ -1079,8 +1143,10 @@ public class RecipeServiceNotxImpl implements RecipeService {
         }
         LOGGER.debug("查询支付平台结束,获得对应的退款钱数:{}", finishBig.toString());
         if (finishBig.add(new BigDecimal(refund.getCost()).abs()).compareTo(hisRefundBig) > 0) {
-            LOGGER.debug("已退金额:{},待退金额:{},退款总额:{}", finishBig.intValue(), new BigDecimal(refund.getCost()).abs().intValue(), hisRefundBig.intValue());
-            LOGGER.debug("平台退费Id:{},门诊流水号:{},处方号:{},退款金额大于总退款金额", refund.getId(), refund.getClinicCode(), refund.getRecipeNo());
+            LOGGER.debug("已退金额:{},待退金额:{},退款总额:{}", finishBig.intValue(),
+                    new BigDecimal(refund.getCost()).abs().intValue(), hisRefundBig.intValue());
+            LOGGER.debug("平台退费Id:{},门诊流水号:{},处方号:{},退款金额大于总退款金额", refund.getId(), refund.getClinicCode(),
+                    refund.getRecipeNo());
             return null;
         } else {
             LOGGER.debug("退费金额校验成功后,返回的支付平台的退款单号:{}", refundNo);
@@ -1139,7 +1205,8 @@ public class RecipeServiceNotxImpl implements RecipeService {
      */
     private boolean getFlagByRecipeAmount(String orderAmount, User user, RecipeOrderDocument recipe) throws Exception {
         boolean flag = false;
-        BasicInfoDocument basic = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), recipe.getPatientId());
+        BasicInfoDocument basic = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(),
+                recipe.getPatientId());
         ResModel<PayList> payList = this.findPayListModel(basic, recipe.getClinicCode(), "0", null, null, false);
         if (payList.getReturnCode() == ReturnCode.SUCCESS) {
             if (payList.getRes().getPayList() != null) {
@@ -1150,10 +1217,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
                         total = total.add(new BigDecimal(pay.getOwnCost()));
                     }
                 }
-                if (total.compareTo(new BigDecimal(recipe.getRecipeNonPaidDetail().getAmount())) == 0 && total.compareTo(new BigDecimal(orderAmount)) == 0) {
+                if (total.compareTo(new BigDecimal(recipe.getRecipeNonPaidDetail().getAmount())) == 0
+                        && total.compareTo(new BigDecimal(orderAmount)) == 0) {
                     flag = true;
                 }
-                LOGGER.debug("预支付前对金额金额进行校验,门诊流水号:{},支付金额:{},HIS端待缴金额:{}", recipe.getClinicCode(), orderAmount, total.toString());
+                LOGGER.debug("预支付前对金额金额进行校验,门诊流水号:{},支付金额:{},HIS端待缴金额:{}", recipe.getClinicCode(), orderAmount,
+                        total.toString());
             }
         } else {
             LOGGER.debug("预支付前校验,获得HIS的待缴费接口返回值有问题,返回消息:{}", payList.getReturnMsg());

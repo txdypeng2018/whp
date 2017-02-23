@@ -30,6 +30,18 @@
 		</property>
 		<property name="manager" ref="convManager" />
 	</bean>
+	<bean id="order2PayLogRecordConverter"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.order.entity.OrderEntity"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.delay.Order2PayLogRecordConverter">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
 
 	<bean id="AliOrderReq2PrepayReqConv"
 		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
