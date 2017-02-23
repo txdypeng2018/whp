@@ -1,13 +1,15 @@
 package com.proper.enterprise.isj.proxy.service;
 
-import java.util.List;
-import java.util.Map;
-
+import com.proper.enterprise.isj.exception.RegisterException;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.RegistrationRefundLogDocument;
 import com.proper.enterprise.isj.proxy.enums.OrderCancelTypeEnum;
+import com.proper.enterprise.isj.proxy.enums.SendPushMsgEnum;
 import com.proper.enterprise.isj.webservices.model.req.PayRegReq;
 import com.proper.enterprise.isj.webservices.model.req.RefundReq;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 挂号服务.
@@ -35,8 +37,8 @@ public interface RegistrationService {
     /**
      * 通过用户ID以及支付状态获取挂号单信息.
      *
-     * @param userId 患者ID.
-     * @param status 支付状态.
+     * @param userId        患者ID.
+     * @param status        支付状态.
      * @param isAppointment 挂号类别.
      * @return 挂号单信息.
      */
@@ -88,7 +90,7 @@ public interface RegistrationService {
     /**
      * 通过创建挂号单用户ID以及患者身份证号查询挂号信息.
      *
-     * @param createUserId 创建挂号单用户ID.
+     * @param createUserId  创建挂号单用户ID.
      * @param patientIdCard 患者身份证号.
      * @return 查询结果.
      */
@@ -99,7 +101,7 @@ public interface RegistrationService {
      * 将支付平台异步通知对象转换为HIS请求对象.
      *
      * @param infoObj 支付平台异步通知对象
-     * @param regId 挂号信息ID
+     * @param regId   挂号信息ID
      * @return 转换后的请求对象
      */
     PayRegReq convertAppInfo2PayReg(Object infoObj, String regId);
@@ -116,9 +118,8 @@ public interface RegistrationService {
 
     /**
      * 生成挂号单和订单.
-     * 
-     * @param reg
-     *            挂号单信息.
+     *
+     * @param reg 挂号单信息.
      * @return 订单.
      * @throws Exception 异常.
      */
@@ -144,8 +145,8 @@ public interface RegistrationService {
     /**
      * 将支付平台异步通知对象转换为HIS请求对象.
      *
-     * @param infoObj 支付平台异步通知对象.
-     * @param orderNo 订单号.
+     * @param infoObj  支付平台异步通知对象.
+     * @param orderNo  订单号.
      * @param refundId 退款ID.
      * @return 转换后的请求对象.
      */
@@ -153,7 +154,7 @@ public interface RegistrationService {
 
     /**
      * 查询未付款订单,更新状态.
-     * 
+     *
      * @param registrationDocument 挂号报文.
      */
     RegistrationDocument saveQueryPayTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)
@@ -161,7 +162,7 @@ public interface RegistrationService {
 
     /**
      * 查询已退款订单,更新状态.
-     * 
+     *
      * @param registrationDocument 挂号报文.
      * @return 挂号报文.
      * @throws Exception 异常.
@@ -171,16 +172,16 @@ public interface RegistrationService {
 
     /**
      * 退号.
-     * 
+     *
      * @param registrationId 挂号单.
-     * @param cancelType 取消方式 1:手动,2:超时自动.
+     * @param cancelType     取消方式 1:手动,2:超时自动.
      * @throws Exception 异常.
      */
     void saveCancelRegistration(String registrationId, OrderCancelTypeEnum cancelType) throws Exception;
 
     /**
      * 线下申请退费,根据支付平台返还支付费用,修改相应的数据为已退费.
-     * 
+     *
      * @param reg 挂号单.
      */
     void saveRefundAndUpdateRegistrationDocument(RegistrationDocument reg) throws Exception;
@@ -188,14 +189,14 @@ public interface RegistrationService {
     /**
      * 更新挂号退款日志
      *
-     * @param regBack 挂号记录.
+     * @param regBack           挂号记录.
      * @param refundLogDocument 退款日志信息.
-     * @param cancelRegStatus 取消挂号单状态.
-     * @param refundStatus 退款状态.
-     * @param refundHisStatus his退款状态.
+     * @param cancelRegStatus   取消挂号单状态.
+     * @param refundStatus      退款状态.
+     * @param refundHisStatus   his退款状态.
      */
     void saveOrUpdateRegRefundLog(RegistrationDocument regBack, RegistrationRefundLogDocument refundLogDocument,
-            String cancelRegStatus, String refundStatus, String refundHisStatus);
+                                  String cancelRegStatus, String refundStatus, String refundHisStatus);
 
     /**
      * 设置挂号单订单流程
@@ -203,4 +204,21 @@ public interface RegistrationService {
      * @param registration 挂号单信息.
      */
     void setOrderProcess2Registration(RegistrationDocument registration);
+
+    /**
+     * 将号点锁定,或释放,减少对his接口的访问
+     *
+     * @param reg       挂号单信息, 保存的Key值:registion_医生Id_挂号日期+时间点
+     * @param cacheType 1:保存缓存,如果有则抛异常,0:清缓存
+     * @throws RegisterException 异常.
+     */
+    void saveOrRemoveCacheRegKey(RegistrationDocument reg, String cacheType) throws RegisterException;
+
+    /**
+     * 付款成功后,发送挂号成功短信
+     *
+     * @param registrationId 挂号ID.
+     * @throws Exception 异常.
+     */
+    void sendRegistrationMsg(String registrationId, SendPushMsgEnum pushType) throws Exception;
 }

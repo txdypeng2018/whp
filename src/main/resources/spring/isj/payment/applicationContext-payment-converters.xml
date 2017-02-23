@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+
+
+	<bean id="payRegReq2PayLogRecordConverter"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.webservices.model.req.PayRegReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.delay.PayRegReq2PayLogRecordConverter">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
+	<bean id="payOrderRegReq2PayLogRecordConverter"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.webservices.model.req.PayOrderRegReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.delay.PayOrderRegReq2PayLogRecordConverter">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
+
+	<bean id="AliOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosAliOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.prepayreq.AliOrderReq2PrepayReqConv">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
+	<bean id="CmbOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosCmbOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.prepayreq.CmbOrderReq2PrepayReqConv">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
+	<bean id="wechatOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosWechatOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.prepayreq.WechatOrderReq2PrepayReqConv">
+			</bean>
+		</property>
+		<property name="manager" ref="convManager" />
+	</bean>
+
+	<bean id="iHosAliOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosAliOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.payresultres.IHosAliOrderReq2PayResultResConv">
+			</bean>
+		</property>
+		<property name="manager" ref="prepayResFactoryManager" />
+	</bean>
+	<bean id="iHosCmbOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosCmbOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.payresultres.IHosCmbOrderReq2PayResultResConv">
+			</bean>
+		</property>
+		<property name="manager" ref="prepayResFactoryManager" />
+	</bean>
+	<bean id="iHosWechatOrderReq2PrepayReqConv"
+		class="com.proper.enterprise.isj.payment.converter.ClassKeyMConvWrap"
+		lazy-init="false">
+		<property name="keyClassName"
+			value="com.proper.enterprise.isj.payment.model.IHosWechatOrderReq"></property>
+		<property name="wrappered">
+			<bean
+				class="com.proper.enterprise.isj.payment.converter.payresultres.IHosWechatOrderReq2PayResultResConv">
+			</bean>
+		</property>
+		<property name="manager" ref="prepayResFactoryManager" />
+	</bean>
+</beans>

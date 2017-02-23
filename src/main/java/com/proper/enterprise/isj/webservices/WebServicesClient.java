@@ -57,10 +57,8 @@ public class WebServicesClient {
     /**
      * 在调用其它接口之前用于测试目标服务网络是否通畅，服务是否处于工作状态、数据库是否处于连接状态.
      *
-     * @param hosId
-     *            医院ID.
-     * @param ip
-     *            请求IP.
+     * @param hosId 医院ID.
+     * @param ip    请求IP.
      * @return 响应模型及网络测试结果对象.
      * @throws Exception 异常.
      */
@@ -107,11 +105,11 @@ public class WebServicesClient {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> ResModel<T> parseEnvelop(String responseStr, Class<T> clz) throws Exception {
+    <T> ResModel<T> parseEnvelop(String responseStr, Class<T> clz) throws Exception {
         ResModel<T> resModel = (ResModel<T>) unmarshaller
                 .unmarshal(new StreamSource(new StringReader(responseStr)));
         if (signValid(resModel)) {
-            if(resModel.getReturnCode()!= ReturnCode.ERROR){
+            if (resModel.getReturnCode() != ReturnCode.ERROR) {
                 byte[] res = aes.decrypt(resModel.getResEncrypted().getBytes(PEPConstants.DEFAULT_CHARSET));
                 if (res != null && res.length > 0) {
                     Unmarshaller u = wac.getBean("unmarshall" + clz.getSimpleName(), Unmarshaller.class);
@@ -140,8 +138,7 @@ public class WebServicesClient {
      * 查询医院列表及单个医院的详细信息.
      * <p>需要获取医院基本信息时调用，平台可通过该接口获取医院的信息更新。</p>
      *
-     * @param hosId
-     *            医院ID.
+     * @param hosId 医院ID.
      * @return 响应模型及医院信息.
      * @throws Exception 异常.
      */
@@ -153,18 +150,16 @@ public class WebServicesClient {
     }
 
 
-
     /**
      * 平台可通过该接口获取医院科室信息.
      * <p>
      * 当父级 ID（Parent_ID）为 0 时查询所有院区;
      * 通过返回 ID 作为父级 ID 进行递归查询.
      * </p>
-     * @param hosId
-     *            医院ID.
-     * @param parentId
-     *            科室ID.
-     *            <p>为 0 时查询所有院区，通过院区 ID 查询所有一级科室信息，通过本科室 ID 查询所有子科室及科室医生</p>
+     *
+     * @param hosId    医院ID.
+     * @param parentId 科室ID.
+     *                 <p>为 0 时查询所有院区，通过院区 ID 查询所有一级科室信息，通过本科室 ID 查询所有子科室及科室医生</p>
      * @return 响应模型及科室信息
      * @throws Exception 异常.
      */
@@ -181,21 +176,16 @@ public class WebServicesClient {
      * 平台通过调用HIS的该接口获取某医生具体的排班信息.
      * <p>医生ID（DOCTOR_ID）为-1时查询科室ID下所有医生排班。</p>
      *
-     * @param hosId
-     *            医院ID.
-     * @param deptId
-     *            科室ID，HIS系统中科室唯一ID.
-     * @param doctorId
-     *            医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
-     * @param startDate
-     *            排班开始日期，格式：YYYY-MM-DD.
-     * @param endDate
-     *            排班结束日期，格式：YYYY-MM-DD.
+     * @param hosId     医院ID.
+     * @param deptId    科室ID，HIS系统中科室唯一ID.
+     * @param doctorId  医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
+     * @param startDate 排班开始日期，格式：YYYY-MM-DD.
+     * @param endDate   排班结束日期，格式：YYYY-MM-DD.
      * @return 响应模型及排班信息对象.
      * @throws Exception 异常.
      */
     public ResModel<RegInfo> getRegInfo(String hosId, String deptId, String doctorId,
-            Date startDate, Date endDate) throws Exception {
+                                        Date startDate, Date endDate) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
         map.put("DEPT_ID", deptId);
@@ -220,8 +210,8 @@ public class WebServicesClient {
      * 挂号接口增加传入医院内部用户ID号， 如果平台方传空，则表示医院在挂号成功后，必须返回此医院内部用户ID号（没有查到用户的需要注册用户后返回）；
      * 如果平台方不为空，则医院根据传入的用户ID去挂号。
      * </p>
-     * @param orderRegReq
-     *            预约挂号请求对象.
+     *
+     * @param orderRegReq 预约挂号请求对象.
      * @return 响应对象及预约挂号信息.
      * @throws Exception 异常.
      */
@@ -234,9 +224,9 @@ public class WebServicesClient {
      * 把一个包含 getter 方法的 bean 对象转换为一个 Map.
      * <p>
      * 其中 key 为对象的属性名，value 为属性值。
-     *  <br/>
+     * <br/>
      * 当属性值：
-     *  <ol>
+     * <ol>
      * <li>为原始数据类型时，直接转换成字符串;</li>
      * <li>为日期类型时，转换成默认格式日期或时间戳;</li>
      * <li>为数值枚举型时，转换成枚举数值字符串;</li>
@@ -245,7 +235,7 @@ public class WebServicesClient {
      * <ol>
      * </p>
      *
-     * @param  bean 容器对象.
+     * @param bean 容器对象.
      * @return 容器对象的 key-value 形式表示。若传入的非容器对象则直接返回 null.
      */
     protected Map<String, Object> toKVStyle(Object bean) {
@@ -279,7 +269,7 @@ public class WebServicesClient {
                     for (Object obj : collection) {
                         if (obj instanceof Map) {
                             //noinspection unchecked
-                            list.add(plainMap((Map)obj));
+                            list.add(plainMap((Map) obj));
                         } else {
                             list.add(toKVStyle(obj));
                         }
@@ -327,16 +317,14 @@ public class WebServicesClient {
     /**
      * 平台可通过该接口获取医生信息更新，查询排班的医生.
      * <ul>
-     *     <li>当科室ID（DEPT_ID）为-1时查询所有科室下的医生；</li>
-     *     <li>当医生ID（DOCTOR_ID）为-1，科室ID（DEPT_ID）不为-1时查询该科室下所有医生；</li>
-     *     <li>当医生ID（DOCTOR_ID）不为-1时，查询该医生详细信息。</li>
+     * <li>当科室ID（DEPT_ID）为-1时查询所有科室下的医生；</li>
+     * <li>当医生ID（DOCTOR_ID）为-1，科室ID（DEPT_ID）不为-1时查询该科室下所有医生；</li>
+     * <li>当医生ID（DOCTOR_ID）不为-1时，查询该医生详细信息。</li>
      * </ul>
-     * @param hosId
-     *            医院ID.
-     * @param deptId
-     *            科室ID，HIS系统中科室唯一ID，为-1时查所有科室医生.
-     * @param doctorId
-     *            医生ID，HIS系统中医生唯一ID，为-1时查询该科室下所有医生，否则查指定某个医生信息.
+     *
+     * @param hosId    医院ID.
+     * @param deptId   科室ID，HIS系统中科室唯一ID，为-1时查所有科室医生.
+     * @param doctorId 医生ID，HIS系统中医生唯一ID，为-1时查询该科室下所有医生，否则查指定某个医生信息.
      * @return 结果.
      * @throws Exception 异常.
      */
@@ -356,6 +344,7 @@ public class WebServicesClient {
      * <p>
      * 证件号码或卡号必填其中一项，如果用证件号码查询，医院有多个账户，医院需要根据传入的用户信息刷选出最适合的用户返回。
      * </p>
+     *
      * @param req 缴费记录查询请求对象.
      * @return 响应对象及缴费记录列表信息.
      * @throws Exception 异常.
@@ -368,9 +357,9 @@ public class WebServicesClient {
     /**
      * 平台调用医院接口获取用户缴费明细记录，包括待缴费和已缴费的信息，涉及医保部分由医院和医保部门结算后返回相应的医保和个人自付金额.
      *
-     * @param hosId             医院ID，必填.
-     * @param hospPatientId     用户院内ID.
-     * @param hospSequence      HIS就诊登记号，必填.
+     * @param hosId         医院ID，必填.
+     * @param hospPatientId 用户院内ID.
+     * @param hospSequence  HIS就诊登记号，必填.
      * @return 响应对象及缴费明细列表信息.
      * @throws Exception 异常.
      */
@@ -389,7 +378,8 @@ public class WebServicesClient {
      * <p>
      * 用户在支付时，转发服务将支付结果同步到中间服务（支付仅限30分钟内提交的订单）。
      * </p>
-     * @param req   请求对象.
+     *
+     * @param req 请求对象.
      * @return 响应对象及支付信息.
      * @throws Exception 异常.
      */
@@ -402,23 +392,19 @@ public class WebServicesClient {
      * 可以按医院、科室、医生、出诊日期和时段，查询某医生的分时排班信息.
      * <p>
      * 如果TIME_FLAG为具体值时，则查当前传入分时的分时排班；如果TIME_FLAG为-1时查询全天的分时排班。
-     *</p>
-     * @param hosId
-     *            医院ID.
-     * @param deptId
-     *            科室ID，HIS系统中科室唯一ID.
-     * @param doctorId
-     *            医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
-     * @param regDate
-     *            出诊日期，格式：YYYY-MM-DD
-     * @param timeFlag
-     *            时段.
-     *            <p>详见 “时段”，为-1时查询当天所有的分时排班</p>
+     * </p>
+     *
+     * @param hosId    医院ID.
+     * @param deptId   科室ID，HIS系统中科室唯一ID.
+     * @param doctorId 医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
+     * @param regDate  出诊日期，格式：YYYY-MM-DD
+     * @param timeFlag 时段.
+     *                 <p>详见 “时段”，为-1时查询当天所有的分时排班</p>
      * @return 医生排班分时信息集合.
      * @throws Exception 异常.
      */
     public ResModel<TimeRegInfo> getTimeRegInfo(String hosId, String deptId, String doctorId, Date regDate,
-            int timeFlag) throws Exception {
+                                                int timeFlag) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
         map.put("DEPT_ID", deptId);
@@ -434,14 +420,10 @@ public class WebServicesClient {
     /**
      * 医院方发起未支付的挂号订单的取消操作.
      *
-     * @param hosId
-     *            医院ID.
-     * @param orderId
-     *            订单号.
-     * @param cancelDate
-     *            取消时间，格式：YYYY-MM-DD HI24:MI:SS.
-     * @param cancelRemark
-     *            取消原因.
+     * @param hosId        医院ID.
+     * @param orderId      订单号.
+     * @param cancelDate   取消时间，格式：YYYY-MM-DD HI24:MI:SS.
+     * @param cancelRemark 取消原因.
      * @throws Exception 异常.
      */
     public ResModel cancelReg(String hosId, String orderId, String cancelDate, String cancelRemark) throws Exception {
@@ -460,6 +442,7 @@ public class WebServicesClient {
      * <p>
      * 用户在支付时，平台将支付结果同步到平台（支付仅限30分钟内提交的订单）。
      * </p>
+     *
      * @param req 挂号支付请求.
      * @return 操作结果.
      * @throws Exception 异常.
@@ -471,7 +454,6 @@ public class WebServicesClient {
 
     /**
      * 用户挂号并支付成功后需要取消挂号并退款时，调用该接口 如果在平台调用医院退款接口，医院订单已经退款成功的情况下，医院应该直接返回退款成功。
-     *
      *
      * @param req 退款请求.
      * @return 操作结果.
@@ -496,13 +478,10 @@ public class WebServicesClient {
 
     /**
      * 查询线下退款记录.
-     * 
-     * @param hosId
-     *            医院Id.
-     * @param startDate
-     *            开始时间,格式:yyyy-MM-dd HH24:mm:ss.
-     * @param endDate
-     *            结束时间(不包括),格式:yyyy-MM-dd HH24:mm:ss.
+     *
+     * @param hosId     医院Id.
+     * @param startDate 开始时间,格式:yyyy-MM-dd HH24:mm:ss.
+     * @param endDate   结束时间(不包括),格式:yyyy-MM-dd HH24:mm:ss.
      * @return 操作结果.
      * @throws Exception 异常.
      */
@@ -517,6 +496,7 @@ public class WebServicesClient {
 
     /**
      * 当日挂号,将预约挂号和预约的支付参数整合传入
+     *
      * @param req 支付请求.
      * @return 操作结果.
      * @throws Exception 异常.

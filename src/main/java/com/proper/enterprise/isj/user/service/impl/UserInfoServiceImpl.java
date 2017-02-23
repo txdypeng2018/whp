@@ -16,16 +16,16 @@ import com.proper.enterprise.platform.auth.common.entity.UserEntity;
 @Service
 public class UserInfoServiceImpl {
 
-	@Autowired
-	UserInfoRepository userInfoRepository;
+    @Autowired
+    UserInfoRepository userInfoRepository;
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	public UserInfoDocument saveUserAndUserInfo(UserEntity user, UserInfoDocument userInfo) throws Exception {
-		User us = userService.save(user);
-		userInfo.setUserId(us.getId());
-		return userInfoRepository.save(userInfo);
-	}
+    public UserInfoDocument saveUserAndUserInfo(UserEntity user, UserInfoDocument userInfo) throws Exception {
+        User us = userService.save(user);
+        userInfo.setUserId(us.getId());
+        return userInfoRepository.save(userInfo);
+    }
 
 }

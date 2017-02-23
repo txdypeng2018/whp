@@ -13,42 +13,42 @@ import java.util.List;
  */
 public class RecipeDocument extends BaseDocument {
 
-	/**
-	 * 门诊登记号
-	 */
-	private String outpatientNum;
+    /**
+     * 门诊登记号
+     */
+    private String outpatientNum;
 
-	/**
-	 * 挂号日期
-	 */
-	private String outpatientDate;
+    /**
+     * 挂号日期
+     */
+    private String outpatientDate;
 
-	/**
-	 * 缴费明细
-	 */
-	private List<RecipeDetailDocument> recipes = new ArrayList<>();
+    /**
+     * 缴费明细
+     */
+    private List<RecipeDetailDocument> recipes = new ArrayList<>();
 
-	public String getOutpatientNum() {
-		return outpatientNum;
-	}
+    public String getOutpatientNum() {
+        return outpatientNum;
+    }
 
-	public void setOutpatientNum(String outpatientNum) {
-		this.outpatientNum = outpatientNum;
-	}
+    public void setOutpatientNum(String outpatientNum) {
+        this.outpatientNum = outpatientNum;
+    }
 
-	public String getOutpatientDate() {
-		return outpatientDate;
-	}
+    public String getOutpatientDate() {
+        return outpatientDate;
+    }
 
-	public void setOutpatientDate(String outpatientDate) {
-		this.outpatientDate = outpatientDate;
-	}
+    public void setOutpatientDate(String outpatientDate) {
+        this.outpatientDate = outpatientDate;
+    }
 
-	public List<RecipeDetailDocument> getRecipes() {
-		return recipes;
-	}
+    public List<RecipeDetailDocument> getRecipes() {
+        return recipes;
+    }
 
-	public void setRecipes(List<RecipeDetailDocument> recipes) {
-		this.recipes = recipes;
-	}
+    public void setRecipes(List<RecipeDetailDocument> recipes) {
+        this.recipes = recipes;
+    }
 }

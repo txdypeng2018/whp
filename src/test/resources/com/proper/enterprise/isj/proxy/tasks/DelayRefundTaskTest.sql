@@ -1,0 +1,3 @@
+INSERT INTO isj_pay_delay_conf (id, create_time, create_user_id, last_modify_time, last_modify_user_id, text, description, howto) VALUES ('PK_CRON_EXPRESSION', '2016-10-19 16:32:25.537', 'PEP_SYS', '2016-10-19 16:32:25.537', 'PEP_SYS', '15 0/10 1,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22 * * ?', '延时退款的延定时任务触发时间。', '默认全天除8,9,10,23,0点意外每10分钟的第15秒。');
+INSERT INTO isj_pay_delay_conf (id, create_time, create_user_id, last_modify_time, last_modify_user_id, text, description, howto) VALUES ('PK_DELAY_TIME', '2016-10-19 16:32:25.537', 'PEP_SYS', '2016-10-19 16:32:25.537', 'PEP_SYS', '14400', '最小值：5秒。', '延时退款的延长时间,单位：秒。');
+COMMIT;

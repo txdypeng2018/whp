@@ -19,31 +19,31 @@ import com.proper.enterprise.isj.webservices.model.res.doctorinfo.Doctor;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DoctorInfo implements Serializable {
 
-	/**
-	 * 医院ID
-	 */
-	@XmlElement(name = "HOS_ID")
-	private String hosId;
+    /**
+     * 医院ID
+     */
+    @XmlElement(name = "HOS_ID")
+    private String hosId;
 
-	/**
-	 * 医生信息集合
-	 */
-	@XmlElement(name = "DOCTOR_LIST")
-	private List<Doctor> doctorList = new ArrayList<>();
+    /**
+     * 医生信息集合
+     */
+    @XmlElement(name = "DOCTOR_LIST")
+    private List<Doctor> doctorList = new ArrayList<>();
 
-	public String getHosId() {
-		return hosId;
-	}
+    public String getHosId() {
+        return hosId;
+    }
 
-	public void setHosId(String hosId) {
-		this.hosId = hosId;
-	}
+    public void setHosId(String hosId) {
+        this.hosId = hosId;
+    }
 
-	public List<Doctor> getDoctorList() {
-		return doctorList;
-	}
+    public List<Doctor> getDoctorList() {
+        return doctorList;
+    }
 
-	public void setDoctorList(List<Doctor> doctorList) {
-		this.doctorList = doctorList;
-	}
+    public void setDoctorList(List<Doctor> doctorList) {
+        this.doctorList = doctorList;
+    }
 }

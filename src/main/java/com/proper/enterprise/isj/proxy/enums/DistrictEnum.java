@@ -6,27 +6,27 @@ package com.proper.enterprise.isj.proxy.enums;
  */
 public enum DistrictEnum {
 
-	/**
-	 * 南湖
-	 */
-	NANHU("1"),
-	/**
-	 * 滑翔
-	 */
-	HUAXIANG("2"),
+    /**
+     * 南湖
+     */
+    NANHU("1"),
+    /**
+     * 滑翔
+     */
+    HUAXIANG("2"),
 
-	/**
-	 * 沈北
-	 */
-	SHENBEI("9");
+    /**
+     * 沈北
+     */
+    SHENBEI("9");
 
-	private String value;
+    private String value;
 
-	DistrictEnum(String value) {
-		this.value = value;
-	}
+    DistrictEnum(String value) {
+        this.value = value;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 }
