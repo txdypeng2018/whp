@@ -1,6 +1,23 @@
 package com.proper.enterprise.isj.user.utils;
 
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
@@ -15,15 +32,6 @@ import com.proper.enterprise.isj.webservices.model.enmus.RegLevel;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * 工具类.
@@ -47,17 +55,17 @@ public class CenterFunctionUtils {
 
     public final static String IDCARD_ERROR = "身份证号输入有误";
 
-    //public final static String IDCARD_X_ERROR = "身份证号中的x请输入大写";
+    public final static String IDCARD_X_ERROR = "身份证号中的x请输入大写";
 
     public final static String IDCARD_SEX_ERROR = "身份证号与性别不符";
 
     public final static String IDCARD_EXIST = "该身份证已添加";
 
-    //public final static String VERIFICATIONCODE_VOID = "验证码无效";
+    public final static String VERIFICATIONCODE_VOID = "验证码无效";
 
     public final static String VERIFICATIONCODE_ERROR = "请输入正确的验证码";
 
-    //public final static String VERIFICATIONCODE_SEND_ERROR = "发送失败";
+    public final static String VERIFICATIONCODE_SEND_ERROR = "发送失败";
 
     public final static String VERIFICATIONCODE_NULL = "请输入验证码";
 
@@ -87,9 +95,9 @@ public class CenterFunctionUtils {
 
     public final static String SEX_FEMALE = "女";
 
-    //public final static String SEX_SECRET = "保密";
+    public final static String SEX_SECRET = "保密";
 
-    //public final static String SEX_OTHERS = "其他";
+    public final static String SEX_OTHERS = "其他";
 
     public final static String MEMBER_FATHER = "爸爸";
 
@@ -115,7 +123,7 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_NON_PAY_ERR = "有未付款的挂号单,不能进行挂号";
 
-    //public final static String MEDICALNUM_NON_ERR = "患者没有门诊号";
+    public final static String MEDICALNUM_NON_ERR = "患者没有门诊号";
 
     public final static String ORDER_SAVE_ERR = "生成订单失败";
 
@@ -139,7 +147,7 @@ public class CenterFunctionUtils {
 
     public final static String ORDER_CANCEL_PLATFORM_MSG = "平台退号";
 
-    //public final static String ORDER_CANCEL_STOPREG_MSG = "该医生已经停诊";
+    public final static String ORDER_CANCEL_STOPREG_MSG = "该医生已经停诊";
 
     public final static String ORDER_CANCEL_SYS_MSG = "系统异常,平台发起退号";
 
@@ -189,13 +197,13 @@ public class CenterFunctionUtils {
 
     public final static String REG_STATUS_REFUND_FAIL = "退费失败";
 
-    //public final static String MSG_REGISTRATION_SUCCESS = "你已成功挂号";
+    public final static String MSG_REGISTRATION_SUCCESS = "你已成功挂号";
 
     public final static String MSG_REGISTRATION_ORDER_SUCCESS = "挂号成功！";
 
     public final static String MSG_REFUND_SUCCESS = "费用已退还至相应的支付平台";
 
-    //public final static String MSG_RECIPE_SUCCESS = "缴费成功";
+    public final static String MSG_RECIPE_SUCCESS = "缴费成功";
 
     public final static String FORM_DATA_ERR = "信息填写错误";
 
@@ -217,41 +225,41 @@ public class CenterFunctionUtils {
 
     public final static String SCHEDULE_MISTAKE_DEPT_NON_DISTRICT = "排班科室没有院区信息";
 
-//    public final static String REGLEVEL_1 = "普通";
-//    public final static String REGLEVEL_2 = "副教授";
-//    public final static String REGLEVEL_3 = "教授";
-//    public final static String REGLEVEL_4 = "名专家15";
-//    public final static String REGLEVEL_5 = "名专家30";
-//    public final static String REGLEVEL_6 = "名专家50";
-//    public final static String REGLEVEL_7 = "急诊";
-//    public final static String REGLEVEL_8 = "开药";
-//    public final static String REGLEVEL_9 = "老年证普通";
-//    public final static String REGLEVEL_A = "副教授咨询";
-//    public final static String REGLEVEL_B = "教授咨询";
-//    public final static String REGLEVEL_C = "老年证副教";
-//    public final static String REGLEVEL_D = "干诊(老年证)";
-//    public final static String REGLEVEL_E = "疗程内挂号";
-//    public final static String REGLEVEL_F = "透析医保";
-//    public final static String REGLEVEL_G = "老年证正教";
-//    public final static String REGLEVEL_H = "普通(特困减)";
-//    public final static String REGLEVEL_I = "副教(特困减)";
-//    public final static String REGLEVEL_J = "教授(特困减)";
-//    public final static String REGLEVEL_K = "急诊(特困减)";
-//    public final static String REGLEVEL_L = "婴儿结石";
-//    public final static String REGLEVEL_M = "VIP特需服务";
-//    public final static String REGLEVEL_N = "VIP特需复诊";
-//    public final static String REGLEVEL_O = "省级干诊";
-//    public final static String REGLEVEL_P = "婴儿结石正";
-//    public final static String REGLEVEL_Q = "婴儿结石副";
-//    public final static String REGLEVEL_R = "奶粉(咨询)";
-//    public final static String REGLEVEL_S = "奶粉副(咨询)";
-//    public final static String REGLEVEL_T = "奶粉正(咨询)";
-//    public final static String REGLEVEL_U = "老年证名专家";
-//    public final static String REGLEVEL_V = "老年证VIP";
-//    public final static String REGLEVEL_W = "院工离休";
-//    public final static String REGLEVEL_X = "老年正教咨询";
-//    public final static String REGLEVEL_Y = "老年副教咨询";
-//    public final static String REGLEVEL_Z = "特需服务";
+    public final static String REGLEVEL_1 = "普通";
+    public final static String REGLEVEL_2 = "副教授";
+    public final static String REGLEVEL_3 = "教授";
+    public final static String REGLEVEL_4 = "名专家15";
+    public final static String REGLEVEL_5 = "名专家30";
+    public final static String REGLEVEL_6 = "名专家50";
+    public final static String REGLEVEL_7 = "急诊";
+    public final static String REGLEVEL_8 = "开药";
+    public final static String REGLEVEL_9 = "老年证普通";
+    public final static String REGLEVEL_A = "副教授咨询";
+    public final static String REGLEVEL_B = "教授咨询";
+    public final static String REGLEVEL_C = "老年证副教";
+    public final static String REGLEVEL_D = "干诊(老年证)";
+    public final static String REGLEVEL_E = "疗程内挂号";
+    public final static String REGLEVEL_F = "透析医保";
+    public final static String REGLEVEL_G = "老年证正教";
+    public final static String REGLEVEL_H = "普通(特困减)";
+    public final static String REGLEVEL_I = "副教(特困减)";
+    public final static String REGLEVEL_J = "教授(特困减)";
+    public final static String REGLEVEL_K = "急诊(特困减)";
+    public final static String REGLEVEL_L = "婴儿结石";
+    public final static String REGLEVEL_M = "VIP特需服务";
+    public final static String REGLEVEL_N = "VIP特需复诊";
+    public final static String REGLEVEL_O = "省级干诊";
+    public final static String REGLEVEL_P = "婴儿结石正";
+    public final static String REGLEVEL_Q = "婴儿结石副";
+    public final static String REGLEVEL_R = "奶粉(咨询)";
+    public final static String REGLEVEL_S = "奶粉副(咨询)";
+    public final static String REGLEVEL_T = "奶粉正(咨询)";
+    public final static String REGLEVEL_U = "老年证名专家";
+    public final static String REGLEVEL_V = "老年证VIP";
+    public final static String REGLEVEL_W = "院工离休";
+    public final static String REGLEVEL_X = "老年正教咨询";
+    public final static String REGLEVEL_Y = "老年副教咨询";
+    public final static String REGLEVEL_Z = "特需服务";
 
 
 
@@ -269,43 +277,43 @@ public class CenterFunctionUtils {
     public final static String CACHE_NAME_PEP_TEMP_2592000 = "pep-temp_2592000";
     /*-----------------缓存的KEY值---------------*/
     //验证码
-    //public final static String CACHE_KEY_PHONE_VERIFICATIONCODE = "cache_key_phone_verificationcode";
+    public final static String CACHE_KEY_PHONE_VERIFICATIONCODE = "cache_key_phone_verificationcode";
     //超时挂号
     public final static String CACHE_KEY_REGITRATION_SCHEDULER_TASK = "cache_key_regitration_scheduler_task";
     //挂号订单
-    //public final static String CACHE_KEY_REG_ORDERID_SET = "cache_key_reg_orderid_set";
+    public final static String CACHE_KEY_REG_ORDERID_SET = "cache_key_reg_orderid_set";
     //缴费订单
-    //public final static String CACHE_KEY_RECIPE_ORDERID_SET = "cache_key_recipe_orderid_set";
+    public final static String CACHE_KEY_RECIPE_ORDERID_SET = "cache_key_recipe_orderid_set";
     //医生分时排班信息
-    //public final static String CACHE_KEY_DOCTOR_TIME_REG_SET = "cache_key_doctor_time_reg";
+    public final static String CACHE_KEY_DOCTOR_TIME_REG_SET = "cache_key_doctor_time_reg";
     //停诊
-    //public final static String CACHE_KEY_STOP_REG_SET = "cache_key_stop_reg_set";
+    public final static String CACHE_KEY_STOP_REG_SET = "cache_key_stop_reg_set";
 
     //医生排班信息
-    //public final static String CACHE_KEY_DOCTOR_SCHEDULING_SET = "cache_key_doctor_scheduling_set";
+    public final static String CACHE_KEY_DOCTOR_SCHEDULING_SET = "cache_key_doctor_scheduling_set";
 
     //医生信息
-    //public final static String CACHE_KEY_DOCTOR_PHOTO_MAP = "cache_key_doctor_photo_map";
+    public final static String CACHE_KEY_DOCTOR_PHOTO_MAP = "cache_key_doctor_photo_map";
 
     //pacs报告信息
-    //public final static String CACHE_KEY_REPORT_PHOTO_MAP = "cache_key_report_photo_map";
+    public final static String CACHE_KEY_REPORT_PHOTO_MAP = "cache_key_report_photo_map";
 
     //检验报告列表报告信息
-    //public final static String CACHE_KEY_REPORT_LIST_MAP = "cache_key_report_list_map";
+    public final static String CACHE_KEY_REPORT_LIST_MAP = "cache_key_report_list_map";
 
     //检验报告列表报告详细信息
-    //public final static String CACHE_KEY_REPORT_INFO_MAP = "cache_key_report_info_map";
+    public final static String CACHE_KEY_REPORT_INFO_MAP = "cache_key_report_info_map";
 
     //pacs报告列表信息
-    //public final static String CACHE_KEY_REPORT_PACS_LIST_MAP = "cache_key_report_pacs_list_map";
+    public final static String CACHE_KEY_REPORT_PACS_LIST_MAP = "cache_key_report_pacs_list_map";
 
     //缴费
-    //public final static String CACHE_KEY_PATIENT_RECIPE_SET = "cache_key_patient_recipe_set";
+    public final static String CACHE_KEY_PATIENT_RECIPE_SET = "cache_key_patient_recipe_set";
 
-    /*
+    /**
      * 验证码倒计时分钟
      */
-    //public final static Integer VERIFICATIONCODE_COUNTDOWN = 15;
+    public final static Integer VERIFICATIONCODE_COUNTDOWN = 15;
 
     /**
      * 分页每页条数
@@ -322,10 +330,10 @@ public class CenterFunctionUtils {
      */
     public final static Integer SCHEDULING_MAXADD_DAY = 30;
 
-    /*
+    /**
      * 排班最大天数
      */
-    //public final static Integer PAYMENT_MAX_DAY = 30;
+    public final static Integer PAYMENT_MAX_DAY = 30;
 
     /**
      * 允许退号提前天数(大于)
@@ -598,7 +606,6 @@ public class CenterFunctionUtils {
      * 生成挂号单号或(订单号/退单号).
      * @param category 1:挂号单,2:订单.
      */
-    @SuppressWarnings("SameParameterValue")
     public synchronized static String createRegOrOrderNo(int category) {
         String num;
         switch (category) {

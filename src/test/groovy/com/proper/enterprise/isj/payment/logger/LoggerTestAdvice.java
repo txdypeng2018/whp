@@ -13,6 +13,10 @@ public class LoggerTestAdvice {
     public static void setActive(boolean active) {
         LoggerTestAdvice.active = active;
     }
+    
+    public static boolean getActive(){
+        return active;
+    }
 
     public Object forTest(ProceedingJoinPoint pjp) throws Throwable {
         if (active) {
