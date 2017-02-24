@@ -65,7 +65,7 @@ public class DefaultPayLogRecordEntity extends BaseEntity implements PayLogRecor
      */
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "CLOB", nullable = true)
+    @Column(columnDefinition = "text", nullable = true)
     private String content;
     @Column(length = 25)
     private String logCtxBirthTm;
