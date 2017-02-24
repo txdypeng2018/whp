@@ -175,7 +175,7 @@
           }else{
             setBackBtn();
           }
-        }else if($location.path() === '/tab/personal' || $location.path() === '/tab/registration/' || $location.path() === '/tab/message'){
+        }else if($location.path() === '/tab/personal' || $location.path().indexOf('/tab/registration/') >= 0 || $location.path() === '/tab/message'){
           $state.go('tab.main');
         }else if($ionicHistory.backView()){
           $ionicHistory.goBack();
