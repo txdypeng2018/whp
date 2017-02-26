@@ -1,0 +1,179 @@
+
+{
+  "count": 4,
+  "data": [
+    {
+      "num": "170216000000931",
+      "orderNum" : "2017021612340090812068",
+      "apptDate": "2017年02月17日 10:10",
+      "clinicNum": "M006317360",
+      "amount": "700",
+      "registerDate": "2017年02月16日 10:36",
+      "statusCode": "0",
+      "status": "未支付",
+      "operatorName": "喂喂",
+      "operatorPhone": "15941786699",
+      "patientId": "58a50fb9d60180000107725b",
+      "patientName": "喂喂",
+      "patientSex": "MALE",
+      "patientIdCard": "8ki+aQO5gr+JX1nOJRSz4582U7Ja0uCuztOIGJrMAME=",
+      "patientCardNo": "M006317360",
+      "patientPhone": "v6rXl7ASoSRFj3vzhkbtfg==",
+      "payChannelId": "1",
+      "hospital": "中国医科大学附属盛京医院",
+      "district": "南湖院区",
+      "dept": "第一感染肝病门诊",
+      "doctor": "冯国和",
+      "createTime": "2017-02-16 10:36:46.817",
+      "registrationOrderReq": {
+        "orderId" : "2017021612340090812068",
+        "payTotalFee" : 0,
+        "CT" : "2017-02-16 10:25:16.405"
+      },
+      "registrationOrderHis": {
+
+      },
+      "registrationRefundReq":{
+
+      },
+      "registrationRefundHis":{
+
+      },
+      "cancelRegToHisTime" : "",
+      "cancelHisReturnMsg" : ""
+    },
+    {
+      "num" : "170216000001111",
+      "orderNum" : "2017021610251200788600",
+      "apptDate" : "2017年02月28日 10:00",
+      "clinicNum" : "M005888841",
+      "amount" : "500",
+      "registerDate" : "2017年02月16日 12:12",
+      "statusCode" : "1",
+      "status" : "已支付",
+      "operatorName" : "姓名1",
+      "operatorPhone" : "18940252433",
+      "patientId" : "5822ed5f868aaae9f73292a0",
+      "patientName" : "姓名1",
+      "patientSex" : "FEMALE",
+      "patientIdCard" : "姓名1",
+      "patientCardNo" : "M004938291",
+      "patientPhone" : "1Bb/sCAy+pKAruB1h2lpag==",
+      "payChannelId" : "1",
+      "hospital" : "中国医科大学附属盛京医院",
+      "district" : "南湖院区",
+      "dept" : "疼痛门诊",
+      "doctor" : "兰培丽",
+      "createTime" : "2017-02-16 10:25:12.004",
+      "registrationOrderReq": {
+        "orderId" : "2017021610251200788600",
+        "payDate" : "2017-02-16",
+        "payTime" : "10:26:02",
+        "payTotalFee" : 500,
+        "payResCode" : "SUCCESS",
+        "payAccount" : "wxc7825f86d99f3d90",
+        "CT" : "2017-02-16 10:25:16.405"
+      },
+      "registrationOrderHis": {
+        "clientReturnMsg" : "交易成功[M004938291 18670244 211481196406097242](SUCCESS)",
+        "CT" : "2017-02-16 10:25:06.008"
+      },
+      "registrationRefundReq":{
+
+      },
+      "registrationRefundHis":{
+
+      },
+      "cancelRegToHisTime" : "",
+      "cancelHisReturnMsg" : ""
+    },
+    {
+      "num" : "170216000000915",
+      "orderNum" : "2017021612294338358894",
+      "apptDate" : "2017年02月16日 10:40",
+      "clinicNum" : "M005395737",
+      "amount" : "500",
+      "registerDate" : "2017年02月16日 10:27",
+      "statusCode" : "6",
+      "status" : "已退费",
+      "operatorName" : "姓名1",
+      "operatorPhone" : "15141929090",
+      "patientId" : "583ab068c9e77c0001ca367b",
+      "patientName" : "姓名12",
+      "patientSex" : "FEMALE",
+      "patientIdCard" : "Iyiui7ZfGTRaZadDauDNqwU6wZOZLdcOIYL5h6gMy6c=",
+      "patientCardNo" : "M005395737",
+      "patientPhone" : "C4htNi60XrWJ73Ym/WqvLA==",
+      "payChannelId" : "1",
+      "hospital" : "中国医科大学附属盛京医院",
+      "district" : "滑翔院区",
+      "dept" : "第七普通外科第一乳腺外科门诊",
+      "doctor" : "宋国庆",
+      "createTime" : "2017-02-16 10:27:17.500",
+      "registrationOrderReq" : {
+        "orderId" : "2017021612294338358894",
+        "payDate" : "2017-02-16",
+        "payTime" : "10:26:02",
+        "payTotalFee" : 500,
+        "payResCode" : "SUCCESS",
+        "payAccount" : "wxc7825f86d99f3d90",
+        "CT" : "2017-02-16 10:25:16.405"
+      },
+      "registrationOrderHis" : {
+        "clientReturnMsg" : "交易成功(SUCCESS)",
+        "CT" : "2017-02-16 10:25:06.008"
+      },
+      "registrationRefundReq" : {
+        "orderId" : "2017021612294338358894",
+        "refundId": "2017021612294338358894001",
+        "totalFee" : 500,
+        "refundFee" : 500,
+        "refundDate" : "2017-02-16",
+        "refundTime" : "12:33:17",
+        "refundResCode" : "0"
+      },
+      "registrationRefundHis" : {
+        "refundFlag" : "1",
+        "CT" : "2017-02-16 12:33:17.821"
+      },
+      "cancelRegToHisTime" : "2017-02-16 12:33:15",
+      "cancelHisReturnMsg" : "交易成功(SUCCESS)"
+    },
+    {
+      "num" : "170216000001117",
+      "orderNum" : "2017021612162100874897",
+      "apptDate" : "2017年02月23日 10:30",
+      "clinicNum" : "M005795335",
+      "amount" : "500",
+      "registerDate" : "2017年02月16日 12:16",
+      "statusCode" : "8",
+      "status" : "已取消",
+      "operatorName" : "姓名22",
+      "operatorPhone" : "15141513200",
+      "patientId" : "34169047-66c9-43f5-9a7b-fa374732",
+      "patientName" : "姓名11",
+      "patientSex" : "FEMALE",
+      "patientIdCard" : "6MNHPhcrPnj/UCak+rFjLh82FqSHIvc7h0D1o6HEme0=",
+      "patientCardNo" : "M005795335",
+      "patientPhone" : "wWt1HRtx5ivjcG0aMH2vLQ==",
+      "hospital" : "中国医科大学附属盛京医院",
+      "district" : "滑翔院区",
+      "dept" : "生殖医学中心男科门诊",
+      "doctor" : "杜强",
+      "createTime" : "2017-02-16 12:16:21.005",
+      "registrationOrderReq" : {
+        "orderId" : "2017021612162100874897",
+        "payTotalFee" : 0,
+        "CT" : "2017-02-16 12:16:25.404"
+      },
+      "registrationOrderHis" : {
+      },
+      "registrationRefundReq" : {
+      },
+      "registrationRefundHis" : {
+      },
+      "cancelRegToHisTime" : "2017-02-16 12:17:19",
+      "cancelHisReturnMsg" : "交易成功(SUCCESS)"
+    }
+  ]
+}
