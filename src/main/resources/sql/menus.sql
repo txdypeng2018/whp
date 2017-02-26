@@ -5,8 +5,10 @@ INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) V
 INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-wxts', '温馨提示', '/prompt/tips', 'info_black', 'app-apppz', '1');
 INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-yydh', '医院导航', '/hospitalnavigation/build', 'place_black', 'app-apppz', '2');
 INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-lbtp', '轮播图片', '/photo/carousel', 'image_black', 'app-apppz', '3');
-INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-tomcat-log', 'Tomcat日志', '/logview/tomcatLogs', 'event_note', 'app-logs', '0');
 INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-logs', '日志集中营', '/logview', 'assignment', null, '3');
+INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-tomcat-log', 'Tomcat日志', '/logview/tomcatLogs', 'event_note', 'app-logs', '0');
+INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-his-log', 'HIS日志', '/logview/interfaceLogs', 'panorama_fish_eye', 'app-logs', '1');
+INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-sms-log', '短信日志', '/logview/messageLogs', 'panorama_fish_eye', 'app-logs', '2');
 INSERT INTO pep_auth_menus (id, name, route, icon, parent_id, sequence_number) VALUES ('app-kfcx', '客服查询', '/customerQuery/customer', 'search_black', null, '5');
 
 COMMIT;
