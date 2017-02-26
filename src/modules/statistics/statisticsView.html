@@ -1,6 +1,6 @@
 <div layout="column" class="statistics-body">
-    <md-card class="chart-piece pea-card pea-grid" style="margin-top: 15px;">
-    <p style="font-size: 19px;color:rgba(0, 0, 0, 0.7);;margin-top: 0;margin-left: 5px;font-weight: bold;">前一日数据统计</p>
+    <md-card class="chart-piece pea-card pea-grid chart-piece-large" style="margin-top: 15px;">
+    <div class="title">前一日数据统计</div>
     <div class="statistics-today" style="color: #333;">
         <div class="statistics-today-content">
             <div class="today-content-font">
@@ -34,38 +34,349 @@
         </div>
         <div style="clear: both;"></div>
     </div>
-    <div>
-        <div class="today-content-font">
-            <div class="statistics-today-content">
-                <div class="today-content-font">
-                    <p style="margin-left: 23px;"><span>总人数</span> <b class="today-font-bold">{{sumPeopleNum}}</b></p>
-                </div>
-            </div>
-        </div>
+    <div class="title" style="font-size: 13px;padding-top: 2px;">
+       <span>总人数</span> <b class="today-font-bold">{{sumPeopleNum}}</b>
     </div>
     </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="sumCount" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="reg" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="req" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="feedback" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="alipayc" style="height: 300px;"></div>
-        <div e-chart e-data="alipaya" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="wxpayc" style="height: 300px;"></div>
-        <div e-chart e-data="wxpaya" style="height: 300px;"></div>
-    </md-card>
-    <md-card class="chart-piece pea-card pea-grid">
-        <div e-chart e-data="cmbpayc" style="height: 300px;"></div>
-        <div e-chart e-data="cmbpaya" style="height: 300px;"></div>
-    </md-card>
+    <div class="statistics-content">
+        <div>
+            <md-card class="chart-piece pea-card pea-grid chart-piece-large">
+                <div class="title title-position">
+                    <div class="content-title">每月新增用户数</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="sumPeopleCountData()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+                <div e-chart e-data="sumCount" style="height: 300px;" ng-if="sumPeopleCountFlag"></div>
+                <div ng-if="!sumPeopleCountFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>人数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in sumForCountData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="statistics-content">
+        <div class="statistics-content-left">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-left">
+                <div class="title title-position">
+                    <div class="content-title">app访客数</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActiveReq1}" ng-click="dayActiveReq1Clk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActiveReq1}" ng-click="monthActiveReq1Clk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="visiterData()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="req1day" style="height: 300px;" ng-if="visiterDataFlag && dayActiveReq1"></div>
+                <div e-chart e-data="req1month" style="height: 300px;" ng-if="visiterDataFlag && monthActiveReq1"></div>
+                <div ng-if="!visiterDataFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>访客数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in req1Data">
+                                <td>{{s.time}}</td>
+                                <td>{{s.value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div class="statistics-content-right">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-right">
+                <div class="title title-position">
+                    <div class="content-title">app访问次数</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActiveReq2}" ng-click="dayActiveReq2Clk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActiveReq2}" ng-click="monthActiveReq2Clk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="reqData()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="req2day" style="height: 300px;" ng-if="reqDataFlag && dayActiveReq2"></div>
+                <div e-chart e-data="req2month" style="height: 300px;" ng-if="reqDataFlag && monthActiveReq2"></div>
+                <div ng-if="!reqDataFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>访客数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in req2Data">
+                                <td>{{s.time}}</td>
+                                <td>{{s.value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="statistics-content">
+        <div class="statistics-content-left">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-left">
+                <div class="title title-position">
+                    <div class="content-title">意见反馈数量</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActiveFeedback}" ng-click="dayActiveFeedbackClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActiveFeedback}" ng-click="monthActiveFeedbackClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="feedbackDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="feedbackDay" style="height: 300px;" ng-if="feedbackFlag && dayActiveFeedback"></div>
+                <div e-chart e-data="feedbackMonth" style="height: 300px;" ng-if="feedbackFlag && monthActiveFeedback"></div>
+                <div ng-if="!feedbackFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>意见数量</th>
+                                <th>反馈数量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in feedbackData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div class="statistics-content-right">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-right">
+                <div class="title title-position">
+                    <div class="content-title">挂号数量</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActiveReg}" ng-click="dayActiveRegClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActiveReg}" ng-click="monthActiveRegClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="regDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+                <div e-chart e-data="regDay" style="height: 300px;" ng-if="regFlag && dayActiveReg"></div>
+                <div e-chart e-data="regMonth" style="height: 300px;" ng-if="regFlag && monthActiveReg"></div>
+                <div ng-if="!regFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>预约挂号数量</th>
+                                <th>当日挂号数量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in regData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="statistics-content">
+        <div class="statistics-content-left">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-left">
+                <div class="title title-position">
+                    <div class="content-title">支付数量对比</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActivePayCount}" ng-click="dayActivePayCountClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActivePayCount}" ng-click="monthActivePayCountClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="payCountDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="payCountDay" style="height: 300px;" ng-if="payCountFlag && dayActivePayCount"></div>
+                <div e-chart e-data="payCountMonth" style="height: 300px;" ng-if="payCountFlag && monthActivePayCount"></div>
+                <div ng-if="!payCountFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>支付宝支付数量</th>
+                                <th>微信支付数量</th>
+                                <th>一网通支付数量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in payCountData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                                <td>{{s.data3}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div class="statistics-content-right">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-right">
+                <div class="title title-position">
+                    <div class="content-title">退费数量对比</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActivePayRCount}" ng-click="dayActivePayRCountClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActivePayRCount}" ng-click="monthActivePayRCountClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="payRCountDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="payRCountDay" style="height: 300px;" ng-if="payRCountFlag && dayActivePayRCount"></div>
+                <div e-chart e-data="payRCountMonth" style="height: 300px;" ng-if="payRCountFlag && monthActivePayRCount"></div>
+                <div ng-if="!payRCountFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>支付宝退费数量</th>
+                                <th>微信退费数量</th>
+                                <th>一网通退费数量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in payRCountData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                                <td>{{s.data3}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="statistics-content">
+        <div class="statistics-content-left">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-left chart-piece-down">
+                <div class="title title-position">
+                    <div class="content-title">支付金额对比</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActivePayAmount}" ng-click="dayActivePayAmountClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActivePayAmount}" ng-click="monthActivePayAmountClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="payAmountDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="payAmountDay" style="height: 300px;" ng-if="payAmountFlag && dayActivePayAmount"></div>
+                <div e-chart e-data="payAmountMonth" style="height: 300px;" ng-if="payAmountFlag && monthActivePayAmount"></div>
+                <div ng-if="!payAmountFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>支付宝支付金额</th>
+                                <th>微信支付金额</th>
+                                <th>一网通支付金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in payAmountData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                                <td>{{s.data3}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div class="statistics-content-right">
+            <md-card class="chart-piece pea-card pea-grid chart-piece-right chart-piece-down">
+                <div class="title title-position">
+                    <div class="content-title">退费金额对比</div>
+                    <div class="content-title-btn">
+                        <md-button class="md-raised content-title-btn-day" ng-class="{'content-title-btn-active' : dayActivePayRAmount}" ng-click="dayActivePayRAmountClk()">日</md-button><md-button class="md-raised content-title-btn-month" ng-class="{'content-title-btn-active' : monthActivePayRAmount}" ng-click="monthActivePayRAmountClk()">月</md-button>
+                        <md-button class="md-icon-button content-title-btn-data" type="button" ng-click="payRAmountDataClk()" aria-label="数据">
+                            <md-tooltip md-direction="bottom">数据</md-tooltip>
+                            <md-icon class="icon">description_black</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div e-chart e-data="payRAmountDay" style="height: 300px;" ng-if="payRAmountFlag && dayActivePayRAmount"></div>
+                <div e-chart e-data="payRAmountMonth" style="height: 300px;" ng-if="payRAmountFlag && monthActivePayRAmount"></div>
+                <div ng-if="!payRAmountFlag" style="height: 259px;margin-top: 41px;">
+                    <div style="height: 259px;overflow-y: auto;">
+                        <table cellpadding="0" cellspacing="0" class="statistic-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>支付宝退费金额</th>
+                                <th>微信退费金额</th>
+                                <th>一网通退费金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in payRAmountData">
+                                <td>{{s.time}}</td>
+                                <td>{{s.data1}}</td>
+                                <td>{{s.data2}}</td>
+                                <td>{{s.data3}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
 </div>
