@@ -1,0 +1,18 @@
+.playground-waterfall {
+  md-card {
+    &:hover {
+      cursor: pointer;
+    }
+
+    .title {
+      padding: 8px 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .content {
+      padding: 8px 16px;
+      height: 100%;
+      width: 100%;
+      font-size: 13px;
+    }
+  }
+}

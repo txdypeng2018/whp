@@ -1,38 +1,41 @@
-<md-dialog ng-cloak style="width:500px;">
-    <div class="operation-header">
-        <span ng-model="opinion.userTel">电话:{{opinion.userTel}}</span>
-        <h4 class="md-title" ng-model="opinion.userName">{{opinion.userName}}</h4>
-        <div class="header-mark" ng-class="{'operationDialogNew-piece-red':opinion.statusCode=='0','operationDialogNew-piece-green':opinion.statusCode=='1','operationDialogNew-piece-blue':opinion.statusCode=='2'}">{{opinion.status}}</div>
+<md-dialog ng-cloak style="width:400px;">
+    <div class="operation-header header-border" ng-class="{'header-border-null': opinion.statusCode =='0'}">
+        <h4>意见反馈</h4>
+        <md-button class="md-icon-button operationDialogNew-shutdown-answer" type="button" ng-click="closeDialog()" aria-label="关闭问题">
+            <md-tooltip md-direction="bottom">关闭此问题</md-tooltip>
+            <md-icon class="icon">power_settings_new_black</md-icon>
+        </md-button>
+        <md-button class="md-icon-button operationDialogNew-shutdown" type="button" ng-click="cancel()" aria-label="关闭">
+            <md-tooltip md-direction="bottom">关闭</md-tooltip>
+            <md-icon class="icon">clear_black</md-icon>
+        </md-button>
     </div>
-    <form name="opinionForm">
-        <md-dialog-content class="md-dialog-content">
+    <form name="opinionForm" class="my-opinion-form">
+        <md-dialog-content class="md-dialog-content" style="height: 500px">
             <div ng-repeat="ophis in opinionHistory" pea-repeat-finish="scrollToEnd()" id="newOpDialog">
+                <div class="content-opinion">
+                    <div class="content-opinion-name">{{ophis.userName}}</div>
+                    <div class="content-opinion-time">{{ophis.opinionTime}}</div>
+                    <div style="clear:both;"></div>
+                </div>
                 <div class="send"><div class="arrow"></div><div class="arrow-cover"></div>{{ophis.opinion}}</div>
-                <div class="content-opinion-time">{{ophis.opinionTime}}</div>
 
-                <div ng-if="ophis.feedback !== undefined" class="replay" ng-class="{'operationDialogNew-content-red':opinion.statusCode=='0','operationDialogNew-content-green':opinion.statusCode=='1','operationDialogNew-content-blue':opinion.statusCode=='2'}"><div class="arrow" ng-class="{'operationDialogNew-arrow-red':opinion.statusCode=='0','operationDialogNew-arrow-green':opinion.statusCode=='1','operationDialogNew-arrow-blue':opinion.statusCode=='2'}"></div>{{ophis.feedback}}</div>
-                <div ng-if="ophis.feedback !== undefined" class="content-feedback-time">{{ophis.feedbackTime}}</div>
+                <div class="content-opinion">
+                    <div ng-if="ophis.feedbackTime !== undefined && ophis.feedbackTime !== '' && ophis.feedbackTime !== null" class="content-feedback-time">{{ophis.feedbackTime}}</div>
+                    <div ng-if="ophis.feedback !== undefined && ophis.feedback !== '' && ophis.feedback !== null" class="content-feedback-name">管理员</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div ng-if="ophis.feedback !== undefined && ophis.feedback !== '' && ophis.feedback !== null" class="replay dialog-content" ng-class="{'dialog-content-null':opinion.statusCode=='0'}"><div class="arrow dialog-content-arrow" ng-class="{'dialog-content-arrow-null':opinion.statusCode=='0'}"></div>{{ophis.feedback}}</div>
             </div>
         </md-dialog-content>
         <md-dialog-actions class="operation-footer">
-            <div style="width: 100%;height: 80px;">
-                <div style="width: 50%;height: 100%;float: left;">
-                    <textarea name="feedback" ng-model="feedbackText" required></textarea>
-                </div>
-                <div style="width: 50%;height: 100%;float: right;">
-                    <md-select ng-model="selectedfeedbackType.code" class="operation-footer-select">
-                        <md-option ng-repeat="feedbackType in thefeedbackTypes" value="{{feedbackType.code}}" ng-selected="selectedfeedbackType.code==feedbackType.code">
-                        {{feedbackType.name}}
-                        </md-option>
-                    </md-select>
-                    <md-button class="operation-footer-btn" ng-disabled="isSubmit" ng-click="cancel()">
-                    关闭
-                    </md-button>
-                    <md-button class="operation-footer-btn" type="submit" class="md-primary" ng-disabled="isSubmit" ng-click="submit()">
+            <textarea class="operation-footer-textarea" name="feedback" ng-model="feedbackText" required textarea-auto-height></textarea>
+            <div style="width: 108px;">
+                <md-button class="md-raised md-primary btn-advanced-search operation-footer-btn footer-btn-bgcolor" aria-label="提交" ng-click="submit()" ng-class="{'footer-btn-bgcolor-null':opinion.statusCode=='0'}">
                     提交
-                    </md-button>
-                </div>
+                </md-button>
             </div>
+
         </md-dialog-actions>
     </form>
 </md-dialog>

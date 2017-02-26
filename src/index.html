@@ -35,7 +35,7 @@
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body md-theme="{{peaMaterialTheme}}" md-theme-watch>
+<body md-theme="{{peaMaterialTheme}}" md-theme-watch class="{{peaMaterialTheme}}">
   <!--[if lte IE 8]>
   <p class="browsehappy">
     You are using an <strong>outdated</strong> browser.
@@ -68,7 +68,6 @@
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
   <!-- injector:js -->
   <script src="/app/app.js"></script>
-  <script src="/app/components/angular-waterfall.js"></script>
   <script src="/app/components/buttonToggle/button-toggle.js"></script>
   <script src="/app/components/components.js"></script>
   <script src="/app/components/events/pea-dblclick.js"></script>
@@ -76,6 +75,7 @@
   <script src="/app/components/grid/grid.js"></script>
   <script src="/app/components/tree/boot.js"></script>
   <script src="/app/components/tree/directives.js"></script>
+  <script src="/app/components/waterfall/waterfall.js"></script>
   <script src="/app/configs/configs.js"></script>
   <script src="/app/constants/constants.js"></script>
   <script src="/app/directives/auto-focus.js"></script>
@@ -112,6 +112,7 @@
   <script src="/modules/playground/grid/total.js"></script>
   <script src="/modules/playground/iframe/iframe.js"></script>
   <script src="/modules/playground/test/test.js"></script>
+  <script src="/modules/playground/waterfall/waterfallView.js"></script>
   <script src="/modules/prompt/tips.js"></script>
   <script src="/modules/registration/rules.js"></script>
   <script src="/modules/statistics/statisticsView.js"></script>

@@ -16,7 +16,7 @@
     'ngAnimate',
     'as.sortable',
     'fixed.table.header',
-    'ngWaterfall'
+    'pea.waterfall'
   ];
   angular.module('pea', deps);
 })();

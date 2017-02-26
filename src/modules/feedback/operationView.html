@@ -1,62 +1,51 @@
-<md-card layout="column" class="operationview-content pea-card pea-grid">
-    <md-content style="overflow-x:hidden;">
-        <div layout="column" style="background-color: #fff;">
-            <div class="operationview-title">
-                <h3>意见反馈信息</h3>
-                <md-button class="md-icon-button operationview-icon" type="button" ng-click="gotoList()" aria-label="切换">
-                    <md-icon class="icon">view_list</md-icon>
-                </md-button>
+<div class="operationview operationview-flex operationview-flex-v">
+    <div class="content-padding playground-waterfall flex-1">
+        <pea-waterfall mini-width="300">
+            <pea-waterfall-repeat class="feedback-card" ng-repeat="feedBackData in feedBackDatasAll" ng-dblclick="gotoDialog(feedBackData.userId,feedBackData._id.$oid)">
+                <md-card class="pea-card feedback-card" ng-class="{'0': 'pea-accent'}[feedBackData.statusCode]">
+                    <div class="title">
+                        {{feedBackData.userName}}
+                        <span>{{feedBackData.userTel}}</span>
+                    </div>
+                    <div class="content">
+                        <p>{{feedBackData.opinion}}</p>
+                        <p class="content-time">{{feedBackData.opinionTime}}</p>
+                    </div>
+                </md-card>
+            </pea-waterfall-repeat>
+            <div class="operationview-content">
+                <md-card class="operationview-content-card pea-card pea-grid">
+                    <div class="operationview-title">
+                        <div class="search-bar">
+                            <div class="level">
+                                <md-select ng-model="selectedopStatusCode">
+                                    <md-option ng-repeat="item in opStatus" value="{{item.code}}">
+                                        {{item.name}}
+                                    </md-option>
+                                </md-select>
+                            </div>
+                            <div class="search">
+                                <md-input-container md-no-float>
+                                    <input ng-model="search" type="text" ng-keyup="searchKeyup($event)" placeholder="请输入查询内容" >
+                                </md-input-container>
+                            </div>
+                            <div class="more">
+                                <md-button class="md-icon-button operationview-icon operationview-icon-1" type="button" ng-click="gotoList()" aria-label="切换">
+                                    <md-tooltip md-direction="bottom">切换</md-tooltip>
+                                    <md-icon class="icon">view_list</md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button operationview-icon operationview-icon-3" type="button" ng-click="gotoRefresh()" aria-label="刷新">
+                                    <md-tooltip md-direction="bottom">刷新</md-tooltip>
+                                    <md-icon class="icon">refresh_black</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+                </md-card>
             </div>
-        </div>
-        <div layout="column" class="operationview-bar">
-            <md-dialog-content class="md-dialog-content">
-                <h2 class="operationview-bar-title">查询条件</h2>
-                <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>姓名</label>
-                        <input name="userName" ng-model="filterName">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>电话</label>
-                        <input name="userTel" ng-model="filterTel">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>反馈状态</label>
-                        <md-select ng-model="selectedopStatusCode">
-                            <md-option ng-repeat="feedbackType in opStatus" value="{{feedbackType.code}}">
-                                {{feedbackType.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>用户意见</label>
-                        <textarea name="opinion" ng-model="filterUserOp"></textarea>
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>反馈意见</label>
-                        <textarea name="feedback" ng-model="filterFeedOp"></textarea>
-                    </md-input-container>
-                </div>
-                <md-button aria-label="查询" class="btn-margin-left md-primary btn-advanced-search" ng-click="operationViewSearch()">查询</md-button>
-                <md-button aria-label="重置" ng-click="operationViewReset()">重置</md-button>
-            </md-dialog-content>
-        </div>
-        <div class="operationview-piece-title">意见反馈信息列表(双击可回复)</div>
-        <ul class="waterfall-list" ng-waterfall cols="3">
-            <li ng-init="showLoadMore()" ng-repeat="feedBackData in feedBackDatasAll" ng-dblclick="gotoDialog(feedBackData.userId,feedBackData._id.$oid)" repeat-finished class="single-member effect-1">
-            <md-card>
-                <div class="member-info data-block" >
-                    <h3 ng-class="{'operationview-piece-red':feedBackData.statusCode=='0','operationview-piece-green':feedBackData.statusCode=='1','operationview-piece-blue':feedBackData.statusCode=='2'}">
-                        <div class="ul-li-h3-div-left">{{feedBackData.userName}}</div>
-                        <div class="ul-li-h3-div-right"><b>电话: </b>{{feedBackData.userTel}}</div>
-                    </h3>
-                    <p><b>意见提出时间: </b>{{feedBackData.opinionTime}}</p>
-                    <p><b>用户意见: </b>{{feedBackData.opinion}}</p>
-                </div>
-            </md-card>
-            </li>
-            <div class="loadMore" ng-if="loadMore" ng-infinite-scroll ng-click="loadMoreData()">{{text}}</div>
-        </ul>
-    </md-content>
-</md-card>
+            <pea-waterfall-infinite has-more="waterfall.hasMore" load-more="waterfall.loadMore()"></pea-waterfall-infinite>
+        </pea-waterfall>
+    </div>
+</div>
+
 

@@ -1,4 +1,4 @@
-@mixin skin-template($main-dark, $main, $dark) {
+@mixin skin-template($main-dark, $main, $main-accent, $dark) {
 
   $sidebar-dark:         #222d32;
   $sidebar-light:        #f9fafc;
@@ -131,40 +131,81 @@
   md-card.pea-card {
     border-top: 3px solid $main !important;
   }
+
+  md-card.pea-card.pea-accent {
+    border-top: 3px solid $main-accent !important;
+  }
+
+  md-dialog{
+    .header-border{
+      border-top: 3px solid $main !important;
+    }
+    .header-border-null{
+      border-top: 3px solid $main-accent !important;
+    }
+    md-dialog-content{
+      .dialog-content{
+        background-color: $main !important;
+      }
+      .dialog-content-null{
+        background-color: $main-accent !important;
+      }
+      .dialog-content-arrow{
+        border-color:transparent transparent transparent $main !important;
+      }
+      .dialog-content-arrow-null{
+        border-color:transparent transparent transparent $main-accent !important;
+      }
+    }
+    md-dialog-actions{
+      .footer-btn-bgcolor{
+        background-color: $main !important;
+      }
+      .footer-btn-bgcolor-null{
+        background-color: $main-accent !important;
+      }
+    }
+  }
 }
 
 .skin-blue-dark {
   $main-dark:          #367fa9;
   $main:               #3c8dbc;
-  @include skin-template($main-dark, $main, true);
+  $main-accent:        #ff4081;
+  @include skin-template($main-dark, $main, $main-accent, true);
 }
 
 .skin-blue-light {
   $main-dark:          #367fa9;
   $main:               #3c8dbc;
-  @include skin-template($main-dark, $main, false);
+  $main-accent:        #ff4081;
+  @include skin-template($main-dark, $main, $main-accent, false);
 }
 
 .skin-green-dark {
   $main-dark:          #008d4c;
   $main:               #00a65a;
-  @include skin-template($main-dark, $main, true);
+  $main-accent:        #ff4081;
+  @include skin-template($main-dark, $main, $main-accent, true);
 }
 
 .skin-green-light {
   $main-dark:          #008d4c;
   $main:               #00a65a;
-  @include skin-template($main-dark, $main, false);
+  $main-accent:        #ff4081;
+  @include skin-template($main-dark, $main, $main-accent, false);
 }
 
 .skin-yellow-dark {
   $main-dark:          #e08e0b;
   $main:               #f39c12;
-  @include skin-template($main-dark, $main, true);
+  $main-accent:        #3c8dbc;
+  @include skin-template($main-dark, $main, $main-accent, true);
 }
 
 .skin-yellow-light {
   $main-dark:          #e08e0b;
   $main:               #f39c12;
-  @include skin-template($main-dark, $main, false);
+  $main-accent:        #3c8dbc;
+  @include skin-template($main-dark, $main, $main-accent, false);
 }

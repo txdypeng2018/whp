@@ -1,0 +1,35 @@
+pea-waterfall {
+  position: relative;
+  overflow: hidden;
+  display: block;
+
+  pea-waterfall-repeat {
+    position: absolute;
+    display: block;
+  }
+
+  pea-waterfall-infinite {
+    position: absolute;
+    display: block;
+    left: 0;
+    bottom: 0;
+    height: 45px;
+    width: 100%;
+
+    .prompt {
+      text-align: center;
+
+      md-progress-circular {
+        display: inline-block;
+      }
+
+      .no-more {
+        display: inline-block;
+        width: 450px;
+        color: #999999;
+        line-height: 45px;
+        font-size: 13pt;
+      }
+    }
+  }
+}

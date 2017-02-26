@@ -1,0 +1,15 @@
+<div class="content-padding playground-waterfall">
+  <pea-waterfall mini-width="300">
+    <pea-waterfall-repeat ng-repeat="data in datas">
+      <md-card class="pea-card" ng-class="{'0': 'pea-accent'}[data.status]">
+        <div class="title">
+          {{data.title}}
+        </div>
+        <div class="content">
+          {{data.content}}
+        </div>
+      </md-card>
+    </pea-waterfall-repeat>
+    <pea-waterfall-infinite has-more="waterfall.hasMore" load-more="waterfall.loadMore()"></pea-waterfall-infinite>
+  </pea-waterfall>
+</div>

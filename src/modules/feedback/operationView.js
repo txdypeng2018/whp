@@ -5,6 +5,15 @@
     'use strict';
 
     var viewOperationCtrl = function($scope, $http, $mdDialog, $mdToast, $state, $timeout, $window, $rootScope) {
+        $rootScope.refreshFlag = 0;
+
+        $scope.$watch('refreshFlag',function (newValue) {
+            if(newValue === 1){
+                $scope.gotoRefresh();
+                $rootScope.refreshFlag = 0;
+            }
+        });
+
         $scope.gotoList=function(){
             $state.go('main.feedbackGridOperation');
         };
@@ -37,7 +46,6 @@
                             }
                         }
                     });
-
                     var userdataToJson = [];
                     $http.get('/msc/service_user_opinion',{params: {query:'{ "_id":ObjectId("'+ useroID +'")}'}}).success(function(data) {
                         for(var n = 0; n < data.data.length; n++){
@@ -59,6 +67,23 @@
                     $scope.cancel = function() {
                         $mdDialog.cancel();
                     };
+                    $scope.closeDialog = function(){
+                        $scope.opinion.status = '已关闭';
+                        $scope.opinion.statusCode = '2';
+                        for(var j = 0; j < $rootScope.feedBackDatasAll.length; j++){
+                            if($rootScope.feedBackDatasAll[j]._id.$oid === useroID){
+                                $rootScope.feedBackDatasAll[j].statusCode = '2';
+                            }
+                        }
+                        $scope.opinion.id = useroID;
+                        $scope.isSubmit = true;
+                        $http.put('/service/feedbackOpinion', $scope.opinion).success(function() {
+                            $timeout(function(){
+                                $mdDialog.hide();
+                                $rootScope.refreshFlag = 1;
+                            },1000);
+                        });
+                    };
 
                     $scope.submit = function() {
                         if ($scope.opinionForm.$valid && $scope.selectedfeedbackType.code==='1') {
@@ -75,9 +100,8 @@
                             $http.put('/service/feedbackOpinion', $scope.opinion).success(function(data) {
                                 if (angular.isUndefined(data.errMsg)) {
                                     $scope.opinionHistory[$scope.opinionHistory.length-1].feedback = $scope.feedbackText;
-                                    $timeout(function(){
-                                        $mdDialog.hide();
-                                    },2000);
+                                    $mdDialog.hide();
+                                    $rootScope.refreshFlag = 1;
                                 }
                                 else {
                                     $scope.isSubmit = false;
@@ -99,7 +123,8 @@
                             $http.put('/service/feedbackOpinion', $scope.opinion).success(function() {
                                 $timeout(function(){
                                     $mdDialog.hide();
-                                },2000);
+                                    $rootScope.refreshFlag = 1;
+                                },1000);
                             });
                         }
                     };
@@ -112,6 +137,11 @@
                 parent: angular.element(document.body),
                 fullscreen: true
             });
+        };
+
+        //刷新
+        $scope.gotoRefresh = function(){
+            $scope.operationViewSearch();
         };
 
         //重置
@@ -145,28 +175,27 @@
         };
         //返回要过滤的条件
         var filterQuery = function () {
-            var myQueryArray = [];
-            if(!angular.isUndefined($scope.filterName) && $scope.filterName !== ''){
-                myQueryArray.push('"userName" : /'+ $scope.filterName + '/');
+            var myQuery = '';
+            if(!angular.isUndefined($scope.search) && $scope.search !== ''){
+                if(!angular.isUndefined($scope.selectedopStatusCode) && $scope.selectedopStatusCode !== '') {
+                    myQuery = '$or: [{"userName": /' + $scope.search + '/}, {"userTel": /' + $scope.search + '/}, {"opinion": /' + $scope.search + '/}, {"feedback": /' + $scope.search + '/}], "statusCode": "' + $scope.selectedopStatusCode + '"';
+                }else{
+                    myQuery = '$or: [{"userName": /' + $scope.search + '/}, {"userTel": /' + $scope.search + '/}, {"opinion": /' + $scope.search + '/}, {"feedback": /' + $scope.search + '/}]';
+                }
+            }else{
+                if(!angular.isUndefined($scope.selectedopStatusCode) && $scope.selectedopStatusCode !== ''){
+                    myQuery = '"statusCode":"'+$scope.selectedopStatusCode+'"';
+                }else{
+                    myQuery = '';
+                }
             }
-            if(!angular.isUndefined($scope.filterTel) && $scope.filterTel !== ''){
-                myQueryArray.push('"userTel" :"'+ $scope.filterTel + '"');
-            }
-            if(!angular.isUndefined($scope.filterUserOp) && $scope.filterUserOp !== ''){
-                myQueryArray.push('"opinion": /'+ $scope.filterUserOp + '/');
-            }
-            if(!angular.isUndefined($scope.filterFeedOp) && $scope.filterFeedOp !== ''){
-                myQueryArray.push('"feedback": /'+ $scope.filterFeedOp + '/');
-            }
-            if(!angular.isUndefined($scope.selectedopStatusCode) && $scope.selectedopStatusCode !== ''){
-                myQueryArray.push('"statusCode" :"'+ $scope.selectedopStatusCode + '"');
-            }
-            var myQuery = myQueryArray.join(',');
             return myQuery;
         };
         //查询
         $scope.operationViewSearch = function(){
             var dataToJson = [];
+            var pageS = 1;
+            var dataLengthS = 0;
             $rootScope.feedBackDatasAll = [];
             $http.get('/msc/service_user_opinion',{params: {query:'{' + filterQuery() + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
                 for(var n = 0; n < data.data.length; n++){
@@ -184,56 +213,46 @@
                         }
                     }
                 }
-                $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,pageSize);
+                dataLengthS = $rootScope.feedBackDatasAll.length/pageSize;
+                $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,pageS*pageSize);
+                pageS++;
+                if(pageS<dataLengthS){
+                    $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,pageS*pageSize);
+                    $scope.waterfall.hasMore = true;
+                }else{
+                    $scope.waterfall.hasMore = false;
+                }
+            }).finally(function() {
+                $scope.$broadcast('peaWaterfall.loadFinished');
             });
+        };
+        //查询事件
+        $scope.$watch('selectedopStatusCode', function(newValue, oldValue) {
+            if(newValue !== oldValue){
+                $scope.operationViewSearch();
+            }
+        });
+        $scope.searchKeyup = function(e) {
+            var keyCode = window.event?e.keyCode:e.which;
+            if(keyCode === 13){
+                $scope.operationViewSearch();
+            }
         };
 
         $rootScope.feedBackDatasAll = [];
         var page = 1;
         var pageSize = 20;
         var dataLength = 0;
-        var dataToJson = [];
-        $scope.selectedopStatusCode = '0';
-        $http.get('/msc/service_user_opinion',{params: {query:'{"statusCode":"0"}',sort:'{opinionTime:-1}'}}).success(function(data) {
-            for(var n = 0; n < data.data.length; n++){
-                dataToJson.push(JSON.parse(data.data[n]));
-            }
-            for (var i = 0; i < dataToJson.length; i++) {
-                $rootScope.feedBackDatasAll.push(dataToJson[i]);
-            }
-            //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
-            for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
-                for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
-                    if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
-                        $rootScope.feedBackDatasAll.splice(j,1);
-                        j--;
-                    }
-                }
-            }
-            $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,page*pageSize);
-        });
-
-        $scope.showLoadMore = function(){
-            $scope.loadMore = true;
-        };
-        $scope.text = '点击加载';
-        $scope.loadMoreData = function(){
-            $scope.text = '加载中，请稍后···';
+        var getDate = function(param) {
             var dataToJson = [];
-            var queryStr = '';
-            if(!angular.isUndefined(filterQuery()) && filterQuery() !== ''){
-                queryStr = filterQuery();
-            }else{
-                queryStr = '"statusCode":"0"' ;
-            }
-            $http.get('/msc/service_user_opinion',{params: {query:'{' + queryStr + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
+            $http.get('/msc/service_user_opinion',{params: {query:'{' + param + '}',sort:'{opinionTime:-1}'}}).success(function(data) {
                 for(var n = 0; n < data.data.length; n++){
                     dataToJson.push(JSON.parse(data.data[n]));
                 }
-                $rootScope.feedBackDatasAll = [];
                 for (var i = 0; i < dataToJson.length; i++) {
                     $rootScope.feedBackDatasAll.push(dataToJson[i]);
                 }
+                //删除数据中，相同id的数据，保证一个id只显示在一张卡片上
                 for(var m = 0; m < $rootScope.feedBackDatasAll.length; m++){
                     for(var j = m + 1; j < $rootScope.feedBackDatasAll.length; j++){
                         if($rootScope.feedBackDatasAll[m].userId === $rootScope.feedBackDatasAll[j].userId){
@@ -243,18 +262,44 @@
                     }
                 }
                 dataLength = $rootScope.feedBackDatasAll.length/pageSize;
+                $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,page*pageSize);
                 page++;
                 if(page<dataLength){
                     $rootScope.feedBackDatasAll = $rootScope.feedBackDatasAll.slice(0,page*pageSize);
-                    $scope.text = '点击加载更多';
+                    $scope.waterfall.hasMore = true;
                 }else{
-                    $scope.text = '全部数据加载完成';
+                    $scope.waterfall.hasMore = false;
                 }
+            }).finally(function() {
+                $scope.$broadcast('peaWaterfall.loadFinished');
             });
         };
-        $scope.$on('waterfall:loadMore',function(){
-            $scope.loadMoreData();
-        });
+
+        $scope.waterfall = {
+            pageNo: 1,
+            hasMore: true,
+            init: function () {
+                var queryStr = '"statusCode":"0"' ;
+                $scope.selectedopStatusCode = '0';
+                $scope.waterfall.hasMore = true;
+                getDate(queryStr);
+            },
+            loadMore: function () {
+                var queryStr = '';
+                if(!angular.isUndefined(filterQuery()) && filterQuery() !== ''){
+                    queryStr = filterQuery();
+                }else{
+                    if(angular.isUndefined($scope.selectedopStatusCode) || $scope.selectedopStatusCode === ''){
+                        queryStr = '';
+                    }else{
+                        queryStr = '"statusCode":"0"' ;
+                    }
+                }
+                getDate(queryStr);
+            }
+        };
+
+        $scope.waterfall.init();
     };
 
     var mainRouter = function($stateProvider) {
