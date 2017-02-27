@@ -8,6 +8,7 @@
       "description":null,
       "howToUse":null,
       "lastModifyUserId":"pep",
+      "lastModifyUserName":"李一",
       "lastModifyTime":"2016-10-11 09:38:00",
       "rule": "!#isAppointment && @commonRule.in(#subjectId, '921', '1265', '1924', '1925', '1959')"
     }
