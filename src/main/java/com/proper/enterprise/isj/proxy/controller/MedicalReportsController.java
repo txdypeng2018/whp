@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.controller;
 
+import com.proper.enterprise.isj.core.controller.IHosController;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDetailDocument;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDocument;
@@ -14,12 +15,13 @@ import com.proper.enterprise.isj.webservices.model.req.ReportListReq;
 import com.proper.enterprise.platform.api.auth.annotation.AuthcIgnore;
 import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.exception.ErrMsgException;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.UnmarshallingFailureException;
@@ -39,7 +41,7 @@ import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.*;
  */
 @RestController
 @RequestMapping(path = "/medicalReports")
-public class MedicalReportsController extends BaseController {
+public class MedicalReportsController extends IHosController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicalReportsController.class);
 
@@ -133,38 +135,22 @@ public class MedicalReportsController extends BaseController {
      * @return 返回给调用方的应答.
      */
     @RequestMapping(path = "/{category}/{reportId}", method = RequestMethod.GET)
-    public ResponseEntity getReportDetailInfo(@PathVariable String category, @PathVariable String reportId) {
-        try {
-            if(StringUtil.isNotEmpty(category) && StringUtil.isNotEmpty(reportId)) {
-                // 检验报告
-                if("1".equals(category)) {
-                    ReportInfoReq detaiReq = reportsService.getReportDetailReq(reportId);
-                    // 取得返回结果
-                    MedicalReportsDetailDocument retObj = reportsService.getRepostsDetailsInfo(reportId, detaiReq);
-                    return responseOfGet(retObj);
-                    // 检查报告
-                } else if("2".equals(category)) {
-                    try {
-                        String retValue = reportsService.getRepostsDetailsInfo(reportId);
-                        return responseOfGet(retValue);
-                    } catch (IOException ie) {
-                        LOGGER.debug("HospitalNavigationController.getReportDetailInfo[Exception]:", ie);
-                        throw new RuntimeException(APP_PACS_REPORT_ERR, ie);
-                    }
-
-                }
-            }
-        } catch (UnmarshallingFailureException e) {
-            LOGGER.debug("MedicalReportsController.getReportDetailInfo[UnmarshallingFailureException]:", e);
-            throw new RuntimeException(HIS_DATALINK_ERR, e);
-        } catch (HisReturnException e) {
-            LOGGER.debug("MedicalReportsController.getReportDetailInfo[HisReturnException]:", e);
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (Exception e) {
-            LOGGER.debug("MedicalReportsController.getReportDetailInfo[Exception]:", e);
-            throw new RuntimeException(APP_SYSTEM_ERR, e);
+    public ResponseEntity getReportDetailInfo(@PathVariable String category, @PathVariable String reportId) throws Exception {
+        // 检验报告
+        if("1".equals(category)) {
+            ReportInfoReq detailReq = reportsService.getReportDetailReq(reportId);
+            // 取得返回结果
+            MedicalReportsDetailDocument retObj = reportsService.getRepostsDetailsInfo(reportId, detailReq);
+            return responseOfGet(retObj);
+            // 检查报告
+        } else if("2".equals(category)) {
+            String retValue = reportsService.getRepostsDetailsInfo(reportId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return responseOfGet(retValue, headers);
+        } else {
+            throw new ErrMsgException(HIS_DATALINK_ERR);
         }
-        throw new RuntimeException(HIS_DATALINK_ERR);
     }
 
     /**
