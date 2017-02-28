@@ -12,21 +12,21 @@ var addDatas = [];
 handler.onGet = function(req, res) {
     var query = common.parseUrl(req).query;
     if(query.search === undefined && query.startDate === undefined && query.endDate === undefined){
-        if (query.pageNo === '1' && query.pageSize === '20' && query.M === 'SMS') {
+        if (query.pageNo === '1' && query.pageSize === '20' && query.methodName === 'SMS') {
             common.jsonRes(req, res, '/page_3');
         }
-        if (query.pageNo === '2' && query.pageSize === '20' && query.M === 'SMS') {
+        if (query.pageNo === '2' && query.pageSize === '20' && query.methodName === 'SMS') {
             common.jsonRes(req, res, '/page_4');
         }
-        if (query.pageNo === '1' && query.pageSize === '20' && query.M === undefined) {
+        if (query.pageNo === '1' && query.pageSize === '20' && query.methodName === undefined) {
             common.jsonRes(req, res, '/page_1');
         }
-        if (query.pageNo === '2' && query.pageSize === '20' && query.M === undefined) {
+        if (query.pageNo === '2' && query.pageSize === '20' && query.methodName === undefined) {
             common.jsonRes(req, res, '/page_2');
         }
     }else{
         var prefix = '/all';
-        if(query.M === 'SMS'){
+        if(query.methodName === 'SMS'){
             prefix = '/all_1';
         }else{
             prefix = '/all';
@@ -50,7 +50,7 @@ handler.onGet = function(req, res) {
                 if(search !== undefined && (startDate === undefined && endDate === undefined || startDate === '' && endDate === '')){
                     var newBodyJson1 = {'data':[]};
                     for (var a = 0 ; a < resBodyJson.count ; a++) {
-                        if(resBodyJson.data[a].Q.indexOf(search) >= 0 || resBodyJson.data[a].S.indexOf(search) >= 0 || resBodyJson.data[a].M.indexOf(search) >= 0){
+                        if(resBodyJson.data[a].req.indexOf(search) >= 0 || resBodyJson.data[a].res.indexOf(search) >= 0 || resBodyJson.data[a].methodName.indexOf(search) >= 0){
                             newBodyJson1.data.push(resBodyJson.data[a]);
                         }
                     }
@@ -62,7 +62,7 @@ handler.onGet = function(req, res) {
                     endDate = endDate.replace(/-/g,'/');
                     var endDate1 = new Date(endDate).getTime();
                     for (var b = 0 ; b < resBodyJson.count ; b++) {
-                        var dateTime = resBodyJson.data[b].CT;
+                        var dateTime = resBodyJson.data[b].createTime;
                         dateTime = new Date(dateTime.replace(/-/g,'/')).getTime();
                         if(startDate1 < dateTime && dateTime < endDate1){
                             newBodyJson2.data.push(resBodyJson.data[b]);
@@ -76,9 +76,9 @@ handler.onGet = function(req, res) {
                     endDate = endDate.replace(/-/g,'/');
                     var endDate2 = new Date(endDate).getTime();
                     for (var j = 0 ; j < resBodyJson.count ; j++) {
-                        var dateTime1 = resBodyJson.data[j].CT;
+                        var dateTime1 = resBodyJson.data[j].createTime;
                         dateTime1 = new Date(dateTime1.replace(/-/g,'/')).getTime();
-                        if((startDate2 < dateTime1) && (dateTime1 < endDate2) && (resBodyJson.data[j].Q.indexOf(search) >= 0 || resBodyJson.data[j].S.indexOf(search) >= 0 || resBodyJson.data[j].M.indexOf(search) >= 0)){
+                        if((startDate2 < dateTime1) && (dateTime1 < endDate2) && (resBodyJson.data[j].req.indexOf(search) >= 0 || resBodyJson.data[j].res.indexOf(search) >= 0 || resBodyJson.data[j].methodName.indexOf(search) >= 0)){
                             newBodyJson3.data.push(resBodyJson.data[j]);
                         }
                     }
