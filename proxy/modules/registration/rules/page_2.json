@@ -1,0 +1,16 @@
+{
+  "count": 11,
+  "data": [
+    {
+      "id": "11",
+      "catalogue": "SAME_DAY_FILTER_TEST_5",
+      "name": "测试约束_5",
+      "description":null,
+      "howToUse":null,
+      "lastModifyUserId":"pep",
+      "lastModifyUserName":"李一",
+      "lastModifyTime":"2016-10-11 09:38:00",
+      "rule": "!#isAppointment && @commonRule.in(#subjectId, '921', '1265', '1924', '1925', '1959')"
+    }
+  ]
+}
