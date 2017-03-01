@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
 import com.proper.enterprise.isj.exception.HisReturnException;
+import com.proper.enterprise.isj.exception.IHosException;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDetailDocument;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDocument;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsItemDocument;
@@ -227,13 +228,8 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
      * @return 图片信息.
      * @throws Exception 异常.
      */
-    public String getRepostsDetailsInfo(String reportId) throws Exception {
-        try {
-            return webServiceFileCacheUtil.getCacheReportPhoto(reportId);
-        } catch (IOException ie) {
-            LOGGER.debug("MedicalReportsServiceImpl.getRepostsDetailsInfo[Exception]:", ie);
-            throw ie;
-        }
+    public String getRepostsDetailsInfo(String reportId) throws IHosException {
+        return webServiceFileCacheUtil.getCacheReportPhoto(reportId);
     }
 
     /**
