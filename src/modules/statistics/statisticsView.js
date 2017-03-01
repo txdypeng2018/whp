@@ -41,7 +41,7 @@
             if(!angular.isUndefined(data.data[0]) && data.data[0] !== null && data.data[0] !== ''){
                 dataToJson = JSON.parse(data.data[0]);
                 var str = dataToJson.CT;
-                $scope.sumForCount[str.slice(0,7)] = data.total;
+                $scope.sumForCount[str.slice(0,7)] = data.count;
             }
         };
         //判断数据是否为null或isundefinded,并赋值
@@ -147,7 +147,7 @@
                 $scope.sumForCount[$scope.timeForCount[x]] = 0;
             }
             $http.get('/msc/user_info',{params: {query:'{}',limit:1}}).success(function(data){
-                $scope.sumPeopleNum = data.total;
+                $scope.sumPeopleNum = data.count;
             });
             $scope.flag = 0;
 
