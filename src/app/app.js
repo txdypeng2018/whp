@@ -85,7 +85,7 @@
                     onTap: function (e) {
                       e.preventDefault();
                       feedbackPopup.close();
-                      $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
+                      $state.go('settingFeedbackListNew');
                     }
                   }
                 ]
@@ -99,7 +99,7 @@
             }
             //接收意见反馈推送消息
             else if ('feedback' === event.properCustoms.pageUrl) {
-              $state.go('settingFeedbackView', {opinionId: event.properCustoms.opinionId});
+              $state.go('settingFeedbackListNew');
             }
           }
           //event.properCustoms ，推送时自定义的键值对
