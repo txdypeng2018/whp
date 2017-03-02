@@ -1,132 +1,29 @@
-<md-card layout="column" class="operationview-content pea-card pea-grid">
-    <md-content style="overflow-x:hidden;background-color: #fff;">
-        <div layout="column" style="background-color: #fff;">
-            <div class="operationview-title"><h3>客服查询</h3></div>
-        </div>
-        <div layout="column" class="operationview-bar" style="box-shadow:none;">
-            <md-dialog-content class="md-dialog-content">
-                <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>姓名</label>
-                        <input name="userName" ng-model="filterName">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>电话</label>
-                        <input name="userTel" ng-model="filterTel">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>身份证</label>
-                        <input name="userTel" ng-model="filterIdcard">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>查询项目</label>
-                        <md-select ng-model="selectedStatusCode">
-                            <md-option ng-repeat="customerType in cusStatus" value="{{customerType.code}}">
-                                {{customerType.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-button aria-label="查询" class="btn-margin-left md-primary btn-advanced-search" style="margin-left: 5%;" ng-click="customerSearch()">查询</md-button>
-                    <md-button aria-label="重置" ng-click="operationViewReset()">重置</md-button>
-                </div>
-            </md-dialog-content>
-        </div>
-
-        <table class="customer-table" ng-if="userInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">详细信息</td></tr>
-            <tr class="customer-tr"><td>姓名:</td><td>性别:</td><td>电话:</td><td>身份证号:</td><td>病历号:</td><td>注册时间:</td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerDatasAll"><td>{{customer.name}}</td><td>{{customer.sex}}</td><td>{{customer.phone}}</td><td>{{customer.idCard}}</td><td>{{customer.medicalNum}}</td><td>{{customer.CT}}</td></tr>
-        </table>
-
-        <table class="customer-table" ng-if="registrationInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">挂号单详细信息</td></tr>
-            <tr class="customer-tr"><td>单号:</td><td>挂号时间:</td><td>就诊时间:</td><td>医院名称:</td><td>院区名称:</td><td>科室名称:</td><td>医生名称:</td><td>挂号金额:</td><td>交易单号:</td><td>支付平台:</td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerRegDatasAll"><td>{{customer.num}}</td><td>{{customer.registerDate}}</td><td>{{customer.apptDate}}</td><td>{{customer.hospital}}</td><td>{{customer.district}}</td><td>{{customer.dept}}</td><td>{{customer.doctor}}</td><td>{{customer.amount}}</td><td>{{customer.orderNum}}</td><td>{{customer.payChannelId}}</td></tr>
-        </table>
-        <table class="customer-table" ng-if="registrationRefundInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">挂号单退费信息</td></tr>
-            <tr class="customer-tr"><td>单号:</td><td>退费时间:</td><td>退款状态:</td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerRegRefundDatasAll"><td>{{customer.num}}</td><td>{{customer.createTime}}</td><td>{{customer.refundStatus}}</td></tr>
-        </table>
-
-        <table class="customer-table" ng-if="recipeorderInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">已支付处方信息</td></tr>
-            <tr class="customer-tr"><td>交易单号:</td><td>金额:</td><td>支付平台:</td><td>详细信息</td><td></td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerDatasAll[0].recipePaidDetailList">
-                <td>{{customer.orderNum}}</td><td>{{customer.amount}}</td><td>{{customer.payChannelId}}</td>
-                <td>
-                    <div>
-                        <table style="width: 100%">
-                            <tr><td>时间</td><td>门诊号</td><td>流水号</td><td>病历号</td><td>项目名称</td><td>单价</td><td>数量</td><td>总价</td></tr>
-                            <tr ng-repeat="cus in customer.detailList">
-                                <td>{{cus.regDate}}</td>
-                                <td>{{cus.clinicCode}}</td>
-                                <td>{{cus.recipeNo}}</td>
-                                <td>{{cus.cardNo}}</td>
-                                <td>{{cus.itemName}}</td>
-                                <td>{{cus.unitPrice}}</td>
-                                <td>{{cus.qty}}</td>
-                                <td>{{cus.ownCost}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table class="customer-table" ng-if="recipeorderInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">未支付处方信息</td></tr>
-            <tr class="customer-tr"><td>交易单号:</td><td>金额:</td><td>详细信息</td><td></td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerDatasAll[0].recipeNonPaidDetail">
-                <td>{{customer.orderNum}}</td><td>{{customer.amount}}</td>
-                <td>
-                    <div >
-                        <table style="width: 100%">
-                            <tr><td>时间</td><td>门诊号</td><td>流水号</td><td>病历号</td><td>项目名称</td><td>单价</td><td>数量</td><td>总价</td></tr>
-                            <tr ng-repeat="cus in customer.detailList">
-                                <td>{{cus.regDate}}</td>
-                                <td>{{cus.clinicCode}}</td>
-                                <td>{{cus.recipeNo}}</td>
-                                <td>{{cus.cardNo}}</td>
-                                <td>{{cus.itemName}}</td>
-                                <td>{{cus.unitPrice}}</td>
-                                <td>{{cus.qty}}</td>
-                                <td>{{cus.ownCost}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table class="customer-table" ng-if="recipeorderInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">支付失败处方信息</td></tr>
-            <tr class="customer-tr"><td>交易单号:</td><td>金额:</td><td>支付平台:</td><td>详细信息</td><td></td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerDatasAll[0].recipePaidFailDetailList">
-                <td>{{customer.orderNum}}</td><td>{{customer.amount}}</td><td>{{customer.payChannelId}}</td>
-                <td>
-                    <div >
-                        <table style="width: 100%">
-                            <tr><td>时间</td><td>门诊号</td><td>流水号</td><td>病历号</td><td>项目名称</td><td>单价</td><td>数量</td><td>总价</td></tr>
-                            <tr ng-repeat="cus in customer.detailList">
-                                <td>{{cus.regDate}}</td>
-                                <td>{{cus.clinicCode}}</td>
-                                <td>{{cus.recipeNo}}</td>
-                                <td>{{cus.cardNo}}</td>
-                                <td>{{cus.itemName}}</td>
-                                <td>{{cus.unitPrice}}</td>
-                                <td>{{cus.qty}}</td>
-                                <td>{{cus.ownCost}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-        <table class="customer-table" ng-if="messageInfo">
-            <tr class="customer-tr customer-title"><td class="title-td">详细信息</td></tr>
-            <tr class="customer-tr"><td>推送时间:</td><td>推送消息:</td></tr>
-            <tr class="customer-tr" ng-repeat="customer in customerDatasAll"><td>{{customer.date}}</td><td>{{customer.content}}</td></tr>
-        </table>
-    </md-content>
-</md-card>
-
+<pea-grid grid-param="gridParam"></pea-grid>
+<div class="search-sheet-custom">
+    <div layout-gt-sm="row" style="height: 70px;">
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>姓名</label>
+            <input ng-model="name" required>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>病历号</label>
+            <input ng-model="medicalNum" required>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>请输入手机号或身份证</label>
+            <input ng-model="phoneOridCard" required>
+        </md-input-container>
+    </div>
+    <div class="search-sheet-actions">
+        <md-button class="md-primary btn-advanced-search" aria-label="查询" ng-click="customSearch()">
+            查询
+        </md-button>
+        <md-button aria-label="重置" ng-click="customReset()">
+            重置
+        </md-button>
+        <md-button aria-label="关闭" ng-click="closeSearch()">
+            关闭
+        </md-button>
+    </div>
+</div>
+<div class="search-backdrop-custom" ng-click="closeSearch()"></div>

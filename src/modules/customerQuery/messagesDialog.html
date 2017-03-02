@@ -1,0 +1,25 @@
+<md-dialog ng-cloak style="width:800px;">
+    <form name="opinionForm">
+        <md-dialog-content class="md-dialog-content">
+            <h2 class="md-title">推送信息</h2>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>推送时间</label>
+                    <input required name="userName" ng-model="messagesData.date" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>推送内容</label>
+                    <textarea name="opinion" ng-model="messagesData.content" readonly="true"></textarea>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <span flex></span>
+            <md-button ng-disabled="isSubmit" ng-click="cancel()">
+                关闭
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

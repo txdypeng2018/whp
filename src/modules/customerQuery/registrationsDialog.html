@@ -1,0 +1,189 @@
+<md-dialog ng-cloak style="width:1000px;">
+    <form name="opinionForm">
+        <md-dialog-content class="md-dialog-content">
+            <h2 class="md-title">挂号单详细信息</h2>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>患者姓名</label>
+                    <input required name="userName" ng-model="registrationsData.patientName" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>患者病历号</label>
+                    <input name="userTel" ng-model="registrationsData.patientCardNo" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号单单号</label>
+                    <input name="opinionTime" ng-model="registrationsData.num" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>交易单号</label>
+                    <input name="feedbackTime" ng-model="registrationsData.orderNum" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>交易状态</label>
+                    <input name="userTel" ng-model="registrationsData.status" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号时间</label>
+                    <textarea name="opinion" ng-model="registrationsData.registerDate" readonly="true"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>就诊时间</label>
+                    <textarea name="opinion" ng-model="registrationsData.apptDate" readonly="true"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号单创建时间</label>
+                    <input name="userTel" ng-model="registrationsData.createTime" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>医院名称</label>
+                    <textarea name="opinion" ng-model="registrationsData.hospital" readonly="true"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>院区名称</label>
+                    <textarea name="opinion" ng-model="registrationsData.district" readonly="true"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>科室名称</label>
+                    <textarea name="opinion" ng-model="registrationsData.dept" readonly="true"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>医生名称</label>
+                    <textarea name="opinion" ng-model="registrationsData.doctor" readonly="true"></textarea>
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '0'">
+                挂号单未支付信息
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '0'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号费用</label>
+                    <input name="feedbackTime" ng-model="registrationsData.amount" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付金额</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payTotalFee" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '1'">
+                挂号单已支付信息
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '1'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号费用</label>
+                    <input name="feedbackTime" ng-model="registrationsData.amount" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付金额</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payTotalFee" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payDate" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付平台</label>
+                    <input name="feedbackTime" ng-model="registrationsData.payChannelId" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '1'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应状态</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderHis.clientReturnMsg" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderHis.CT" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '6'">
+                挂号单已退费信息
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '6'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号费用</label>
+                    <input name="feedbackTime" ng-model="registrationsData.amount" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付金额</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payTotalFee" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payDate" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付平台</label>
+                    <input name="feedbackTime" ng-model="registrationsData.payChannelId" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '6'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应状态</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderHis.clientReturnMsg" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderHis.CT" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '6'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>退费单号</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationRefundReq.refundId" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>退费金额</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationRefundReq.refundFee" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>退费时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationRefundReq.refundDate" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '6'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his退费标记</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationRefundHis.refundFlag" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his退费响应时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationRefundHis.CT" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '8'">
+                挂号单已取消信息
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '8'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>挂号费用</label>
+                    <input name="feedbackTime" ng-model="registrationsData.amount" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>支付金额</label>
+                    <input name="feedbackTime" ng-model="registrationsData.registrationOrderReq.payTotalFee" readonly="true">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" ng-if="registrationsData.statusCode === '8'">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应取消的时间</label>
+                    <input name="feedbackTime" ng-model="registrationsData.cancelRegToHisTime" readonly="true">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>his响应取消的信息</label>
+                    <input name="feedbackTime" ng-model="registrationsData.cancelHisReturnMsg" readonly="true">
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <span flex></span>
+            <md-button ng-disabled="isSubmit" ng-click="cancel()">
+                关闭
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
