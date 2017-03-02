@@ -372,6 +372,10 @@ public class RecipeServiceNotxImpl implements RecipeService {
             order = this.updateRegistrationAndOrder(order, payOrderReq, regBack, channelId);
         } catch (DelayException e) {
             PayLogUtils.log(PayStepEnum.UNKNOWN, order, e.getPosition());
+            Map<String, Object> tmp = new HashMap<String, Object>();
+            tmp.put("doc", regBack);
+            tmp.put("order", order);
+            sendRecipeMsg(regBack, SendPushMsgEnum.RECIPE_REFUND_FAIL_CAUSE_BY_NET, tmp);
         } catch (Exception e) {
             LOGGER.info("诊间缴费出现异常", e);
             String refundNo = order.getOrderNo() + "001";

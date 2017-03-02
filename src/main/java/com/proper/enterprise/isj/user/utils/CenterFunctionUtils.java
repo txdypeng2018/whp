@@ -18,6 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.proper.enterprise.isj.order.model.Order;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipePaidDetailDocument;
@@ -539,6 +540,19 @@ public class CenterFunctionUtils {
                                 new BigDecimal(refundDetail.getCost().replace("-", "")).divide(new BigDecimal("100"), 2, RoundingMode.UNNECESSARY))).append(" 元")
                         .append("\n");
                 content.append("您的诊间缴费我们会尽快核对,预计3-5个工作日内返回支付平台");
+                break;
+            case RECIPE_REFUND_FAIL_CAUSE_BY_NET:
+                if(pushObj instanceof Map){
+                    Map<String, Object> map = (Map<String, Object>) pushObj;
+                RecipeOrderDocument tmpDoc = (RecipeOrderDocument) map.get("doc");
+                Order tmpOrder = (Order)map.get("order");
+                content.append("诊间缴费失败！").append("\n")
+                    .append("门诊流水号：").append(tmpDoc.getClinicCode()).append("\n")
+                    .append("请到收费窗口缴费。本次缴费将在三个工作日之内原路退回。\n(如果超过期限仍未退款请将如下信息提交到\"意见反馈\"中:\n门诊流水号:").append(tmpDoc.getClinicCode())
+                    .append(",订单号:").append(tmpOrder.getOrderNo())
+                    .append(",订单金额:").append(df.format(new BigDecimal(tmpOrder.getOrderAmount()).divide(new BigDecimal("100"))))
+                    .append("元。)");
+                }
                 break;
             case REG_PAY_HIS_RETURNMSG:
                 reg = (RegistrationDocument) pushObj;

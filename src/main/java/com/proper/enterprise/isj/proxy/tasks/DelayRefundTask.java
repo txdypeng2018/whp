@@ -33,7 +33,9 @@ public class DelayRefundTask implements Runnable {
     @Override
     public void run() {
         try {
+            LOGGER.debug("delay refund task start.");
             service.doDelayRefund(this.fetchDelayTime());
+            LOGGER.debug("delay refund task finished.");
         } catch (Throwable e) {
             LOGGER.error(e.getMessage(), e);
         }
