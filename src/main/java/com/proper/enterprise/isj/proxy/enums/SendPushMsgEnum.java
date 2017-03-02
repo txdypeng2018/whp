@@ -43,6 +43,11 @@ public enum SendPushMsgEnum {
      * 缴费退费失败
      */
     RECIPE_REFUND_FAIL,
+    
+    /**
+     * 与his接口网络异常引起的缴费退费失败.
+     */
+    RECIPE_REFUND_FAIL_CAUSE_BY_NET,
 
     /**
      * 缴费退费失败

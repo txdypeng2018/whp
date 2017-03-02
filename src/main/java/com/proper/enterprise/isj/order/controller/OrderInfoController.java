@@ -111,7 +111,7 @@ public class OrderInfoController extends BaseController {
             if (nonPaid != null && StringUtil.isNotEmpty(nonPaid.getOrderNum())) {
                 if (tempRecipeOrder.getRecipeOrderReqMap().containsKey(nonPaid.getOrderNum())) {
                     throw new RecipeException(
-                            "门诊流水号:" + clinicCode + ",缴费订单未得到处理,请在意见反馈中进行反馈," + CenterFunctionUtils.ORDER_SAVE_ERR);
+                            "门诊流水号:" + clinicCode + ",缴费订单未得到处理,请到收费窗口缴费," + CenterFunctionUtils.ORDER_SAVE_ERR);
                 }
                 String payWay = nonPaid.getPayChannelId();
                 boolean paidFlag = orderService.checkOrderIsPay(payWay, nonPaid.getOrderNum());

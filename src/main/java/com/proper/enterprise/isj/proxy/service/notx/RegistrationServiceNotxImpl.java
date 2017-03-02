@@ -352,6 +352,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_PAY_SUCCESS);
             saveOrRemoveRegCache("0", order.getFormId(), null);
             webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
+        } catch (DelayException e) {
+            throw e;
         } catch (Exception e) {
             RegistrationOrderHisDocument his = regBack.getRegistrationOrderHis();
             his.setClientReturnMsg(e.getMessage());
@@ -385,6 +387,8 @@ public class RegistrationServiceNotxImpl implements RegistrationService {
             sendRegistrationMsg(order.getFormId(), SendPushMsgEnum.REG_PAY_SUCCESS);
             saveOrRemoveRegCache("0", order.getFormId(), null);
             webService4HisInterfaceCacheUtil.evictCacheDoctorTimeRegInfoRes(regBack.getDoctorId(), regBack.getRegDate());
+        } catch (DelayException e) {
+            throw e;
         } catch (Exception e) {
             RegistrationOrderHisDocument his = regBack.getRegistrationOrderHis();
             his.setClientReturnMsg(e.getMessage());
