@@ -279,7 +279,7 @@
 
   var mainRouter = function($stateProvider) {
     $stateProvider.state('main.buildGridLayoutLr', {
-      url: '^/hospitalnavigation/build',
+      url: '^/hospitalNavigation/build',
       templateUrl: 'modules/hospitalNavigation/build/build.html',
       controller: buildGridLayoutLrCtrl
     });
