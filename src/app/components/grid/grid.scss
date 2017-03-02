@@ -147,6 +147,21 @@ $peaGridRowHeight: 42px;
   .pea-table-total {
     overflow: hidden;
   }
+
+  .pea-grid-mouse-enter {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 21;
+    color: rgba(255,255,255,0.87);
+    background-color: rgb(97,97,97);
+    opacity: 0.9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
 }
 
 md-edit-dialog > .md-content md-input-container .md-errors-spacer {

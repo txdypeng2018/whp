@@ -21,13 +21,13 @@
           $scope.submit = function() {
             if ($scope.userForm.$valid) {
               $scope.isSubmit = true;
-              $http.post('/playground/grid/basic/data', $scope.user).success(function(data) {
-                if (angular.isUndefined(data.errMsg)) {
+              $http.post('/playground/grid/basic/data', $scope.user).then(function(response) {
+                if (angular.isUndefined(response.data.errMsg)) {
                   $mdDialog.hide();
                 }
                 else {
                   $scope.isSubmit = false;
-                  $mdToast.show($mdToast.simple().textContent(data.errMsg));
+                  $mdToast.show($mdToast.simple().textContent(response.data.errMsg));
                 }
               });
             }
@@ -44,8 +44,8 @@
     var editData = function(rowDatas) {
       $mdDialog.show({
         controller: function($scope) {
-          $http.get('/playground/grid/basic/data', {params: {id: rowDatas[0].id}}).success(function(data) {
-            $scope.user = data;
+          $http.get('/playground/grid/basic/data', {params: {id: rowDatas[0].id}}).then(function(response) {
+            $scope.user = response.data;
           });
 
           $scope.isSubmit = false;
@@ -58,13 +58,13 @@
           $scope.submit = function() {
             if ($scope.userForm.$valid) {
               $scope.isSubmit = true;
-              $http.put('/playground/grid/basic/data', $scope.user).success(function(data) {
-                if (angular.isUndefined(data.errMsg)) {
+              $http.put('/playground/grid/basic/data', $scope.user).then(function(response) {
+                if (angular.isUndefined(response.data.errMsg)) {
                   $mdDialog.hide();
                 }
                 else {
                   $scope.isSubmit = false;
-                  $mdToast.show($mdToast.simple().textContent(data.errMsg));
+                  $mdToast.show($mdToast.simple().textContent(response.data.errMsg));
                 }
               });
             }
@@ -84,12 +84,12 @@
         for(var i in rowDatas) {
           ids.push(rowDatas[i].id);
         }
-        $http.delete('/playground/grid/basic/data', {params: {ids: ids.join(',')}}).success(function(data) {
-          if (angular.isUndefined(data.errMsg)) {
+        $http.delete('/playground/grid/basic/data', {params: {ids: ids.join(',')}}).then(function(response) {
+          if (angular.isUndefined(response.data.errMsg)) {
             $scope.gridParam.loadData();
           }
           else {
-            $mdToast.show($mdToast.simple().textContent(data.errMsg));
+            $mdToast.show($mdToast.simple().textContent(response.data.errMsg));
           }
         });
       });
@@ -115,6 +115,7 @@
       title: '职工信息',
       multiSelect: true,
       isAllDataLoad: false,
+      mouseEnterDisplayAll: true,
       searchTemplate: 'modules/playground/grid/operationSearch.html',
       searchInitData: {
         educations: educations

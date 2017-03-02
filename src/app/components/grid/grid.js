@@ -102,6 +102,12 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
   $scope.gridParam.searchData = $scope.gridParam.searchData || {};
   $scope.innerParam.searchData = angular.copy($scope.gridParam.searchData);
   $scope.gridParam.rowEditData = $scope.gridParam.rowEditData || {};
+  if (angular.isUndefined($scope.gridParam.hasRefreshBtn)) {
+    $scope.gridParam.hasRefreshBtn = true;
+  }
+  if (angular.isUndefined($scope.gridParam.mouseEnterDisplayAll)) {
+    $scope.gridParam.mouseEnterDisplayAll = false;
+  }
 
   //列显示
   var columnCustomLocal = $window.localStorage[$scope.gridParam.columnCustom];
@@ -148,8 +154,18 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
     if (!angular.isUndefined($scope.gridParam.onBeforeLoad)) {
       $scope.gridParam.onBeforeLoad(param);
     }
-    $http.get($scope.gridParam.url, {params: param}).success(function(data) {
-      $scope.gridParam.desserts = data;
+    $http.get($scope.gridParam.url, {params: param}).then(function(response) {
+      if ($scope.gridParam.isAllDataLoad) {
+        var loadDesserts = {};
+        if (angular.isUndefined(response.data) || response.data === null) {
+          response.data = [];
+        }
+        loadDesserts.count = response.data.length;
+        loadDesserts.data = response.data;
+        $scope.gridParam.desserts = loadDesserts;
+      } else {
+        $scope.gridParam.desserts = response.data;
+      }
       $scope.gridParam.selected = [];
     });
   };
@@ -279,6 +295,22 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
       $scope.gridParam.columns[m].isHide = columnCustomArray.indexOf($scope.gridParam.columns[m].field) >= 0;
     }
     $window.localStorage[columnCustom] = columnCustomArray.join(',');
+  };
+
+  //超长鼠标移入显示全部内容
+  $scope.innerParam.tdMouseEnter = function(event) {
+    if ($scope.gridParam.mouseEnterDisplayAll && event.srcElement.scrollWidth > event.srcElement.offsetWidth) {
+      $element[0].querySelector('.pea-grid-mouse-enter').textContent = event.srcElement.textContent;
+      $element[0].querySelector('.pea-grid-mouse-enter').style.display = 'inline-block';
+      $element[0].querySelector('.pea-grid-mouse-enter').style.maxWidth = event.srcElement.offsetWidth+'px';
+      $element[0].querySelector('.pea-grid-mouse-enter').style.top = event.srcElement.getBoundingClientRect().top+42+'px';
+      $element[0].querySelector('.pea-grid-mouse-enter').style.left = event.srcElement.getBoundingClientRect().left+'px';
+    }
+  };
+  $scope.innerParam.tdMouseLeave = function() {
+    if ($scope.gridParam.mouseEnterDisplayAll) {
+      $element[0].querySelector('.pea-grid-mouse-enter').style.display = 'none';
+    }
   };
 
   //从后台取得数据
@@ -412,6 +444,8 @@ var perGridCtrl = function($scope, $element, $window, $timeout, $http, screenSiz
  *   rowEditData：{},                                  //类型：Object  说明：行内编辑模板放置值的位置，模板内参数位置必须与此一致  默认值：空
  *   rowEditSubmit: function() {...},                  //类型：Object  说明：行内编辑提交方法  默认值：null
  *   columnCustom: '唯一ID'                            //类型：String  说明：用户是否可以自定义显示哪些列（不能和多层表头混合使用），用户设置保存在本地缓存传入唯一ID名下  默认值：null
+ *   hasRefreshBtn: true,                              //类型：Boolean  说明：是否有刷新按钮  默认值：true
+ *   mouseEnterDisplayAll: false                       //类型：Boolean  说明：显示不全的内容鼠标移入显示全部  默认值：false
  * }
  *
  * //column参数示例

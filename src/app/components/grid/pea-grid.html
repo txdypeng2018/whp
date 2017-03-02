@@ -27,7 +27,7 @@
             <md-tooltip md-direction="bottom">{{btn.text}}</md-tooltip>
             <md-icon>{{btn.iconClass}}</md-icon>
           </md-button>
-          <md-button class="md-icon-button" aria-label="刷新"
+          <md-button ng-if="gridParam.hasRefreshBtn" class="md-icon-button" aria-label="刷新"
                      ng-click="gridParam.loadData()">
             <md-tooltip md-direction="bottom">刷新</md-tooltip>
             <md-icon>refresh_black</md-icon>
@@ -148,9 +148,9 @@
             <td md-cell ng-repeat="column in gridParam.columns" ng-if="!column.isHide"
                 ng-class="{'fixed-column': column.isFixed, 'no-line-wrap': !column.isLineWrap, 'md-placeholder': !dessert[column.field], 'no-click': !column.edit}"
                 ng-click="column.edit(dessert, column.field, $event)"
+                ng-mouseenter="innerParam.tdMouseEnter($event)" ng-mouseleave="innerParam.tdMouseLeave()"
                 style="width: {{column.width+'px'}};min-width: {{column.width+'px'}};max-width: {{column.width+'px'}};color: {{column.styler==null?'':column.styler(dessert[column.field], dessert)}};">
               {{dessert[column.field] ? (column.formatter==null?dessert[column.field]:column.formatter(dessert[column.field], dessert)) : column.editComment}}
-            </td>
             <td style="width:100%" md-cell></td>
           </tr>
           </tbody>
@@ -183,4 +183,5 @@
       </md-table-pagination>
     </div>
   </form>
+  <div class="pea-grid-mouse-enter"></div>
 </md-card>
