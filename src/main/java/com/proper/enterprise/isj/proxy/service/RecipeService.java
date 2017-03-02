@@ -157,4 +157,9 @@ public interface RecipeService {
      */
     Order saveOrUpdateOrderFailInfo(Order order, String channelId, RecipeOrderDocument regBack, String refundNo,
             RecipePaidDetailDocument detail, boolean refundFlag) throws Exception;
+
+    /**
+     * 通过患者ID查询缴费信息.
+     */
+    List<RecipeOrderDocument> findRecipeOrderDocumentList(String patientId);
 }

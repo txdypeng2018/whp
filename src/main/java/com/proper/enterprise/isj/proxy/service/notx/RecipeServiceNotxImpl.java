@@ -1234,4 +1234,12 @@ public class RecipeServiceNotxImpl implements RecipeService {
         }
         return flag;
     }
+
+    /**
+     * 通过患者ID查询缴费信息
+     */
+    @Override
+    public List<RecipeOrderDocument> findRecipeOrderDocumentList(String patientId) {
+        return recipeOrderRepository.findByPatientIdOrderByCreateTimeDesc(patientId);
+    }
 }

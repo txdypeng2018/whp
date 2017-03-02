@@ -22,13 +22,18 @@ import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
+import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.SpELParser;
 import com.proper.enterprise.platform.core.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +50,9 @@ import java.util.Map;
 public class UserInfoServiceNotxImpl implements UserInfoService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoServiceNotxImpl.class);
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @Autowired
     UserInfoServiceImpl userInfoServiceImpl;
@@ -210,5 +218,35 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
             }
         }
         return leftIntervalDays;
+    }
+
+    @Override
+    public List<UserInfoDocument> getUserInfoList(String name, String medicalNum, String phone, String idCard) {
+        AESStringConverter converter = new AESStringConverter();
+        String nameEn = converter.convertToDatabaseColumn(name);
+        String phoneEn = converter.convertToDatabaseColumn(phone);
+        String idCardEn = converter.convertToDatabaseColumn(idCard);
+        if (StringUtils.isNotEmpty(phone)) {
+            return userInfoRepository.findByNameAndMedicalNumAndPhone(nameEn, medicalNum, phoneEn);
+        } else {
+            return userInfoRepository.findByNameAndMedicalNumAndIdCard(nameEn, medicalNum, idCardEn);
+        }
+    }
+
+    @Override
+    public List<UserInfoDocument> getFamilyUserInfoList(String name, String medicalNum, String phone, String idCard) {
+        AESStringConverter converter = new AESStringConverter();
+        String nameEn = converter.convertToDatabaseColumn(name);
+        String phoneEn = converter.convertToDatabaseColumn(phone);
+        String idCardEn = converter.convertToDatabaseColumn(idCard);
+        Query query = new Query();
+        if (StringUtils.isNotEmpty(phone)) {
+            query.addCriteria(Criteria.where("familyMemberInfo").elemMatch(
+                    Criteria.where("name").is(nameEn).and("medicalNum").is(medicalNum).and("phone").is(phoneEn)));
+        } else {
+            query.addCriteria(Criteria.where("familyMemberInfo").elemMatch(
+                    Criteria.where("name").is(nameEn).and("medicalNum").is(medicalNum).and("idCard").is(idCardEn)));
+        }
+        return mongoTemplate.find(query, UserInfoDocument.class);
     }
 }

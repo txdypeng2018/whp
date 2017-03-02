@@ -4,6 +4,8 @@ import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.platform.auth.common.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * 用户扩展信息接口.
  * Created by think on 2016/8/15 0015.
@@ -42,7 +44,17 @@ public interface UserInfoService {
     UserInfoDocument saveOrUpdatePatientMedicalNum(String userId, String memberId, String medicalNum) throws Exception;
 
     /**
-     * 获取家庭成员添加限制天数.
+     * 获取家庭成员添加限制天数
      */
     int getFamilyAddLeftIntervalDays(int familyMemberSize, String lastCreateTime);
+
+    /**
+     * 通过姓名、卡号、手机号或身份证号取得用户信息
+     */
+    List<UserInfoDocument> getUserInfoList(String name, String medicalNum, String phone, String idCard);
+
+    /**
+     * 通过姓名、卡号、手机号或身份证号取得家庭成员信息
+     */
+    List<UserInfoDocument> getFamilyUserInfoList(String name, String medicalNum, String phone, String idCard);
 }
