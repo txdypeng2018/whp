@@ -1,7 +1,10 @@
 package com.proper.enterprise.isj.proxy.utils.cache;
 
-import java.util.*;
-
+import com.proper.enterprise.isj.proxy.document.SubjectDocument;
+import com.proper.enterprise.isj.proxy.service.DoctorService;
+import com.proper.enterprise.isj.webservices.WebServicesClient;
+import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
+import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -9,11 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.proper.enterprise.isj.proxy.document.SubjectDocument;
-import com.proper.enterprise.isj.proxy.service.DoctorService;
-import com.proper.enterprise.isj.webservices.WebServicesClient;
-import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
-import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
+import java.util.*;
 
 /**
  * Web Service数据二级缓存.
@@ -27,7 +26,7 @@ public class WebServiceDataSecondCacheUtil {
 
     private static final String SUBJECT_MAP_KEY = "'subjectMap'";
 
-    private static final String SUBJECTDOCUMENT_KEY = "'subjectDocument'";
+    private static final String SUBJECTDOCUMENT_KEY = "'subjectDocumentCache'";
 
     private static final String OA2HISDOCINFO_KEY = "'oa2hisdocInfo'";
 
