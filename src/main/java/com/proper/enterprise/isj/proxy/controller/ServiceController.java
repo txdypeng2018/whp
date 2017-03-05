@@ -101,21 +101,21 @@ public class ServiceController extends BaseController {
             LOGGER.debug("request_id:" + opinionDocment.getId());
             LOGGER.debug("request_feedback:" + opinionDocment.getFeedback());
             opinionDocment.setFeedbackTime(DateUtil.toString(new Date(), "yyyy-MM-dd HH:mm"));
-            opinionDocment.setStatus(CenterFunctionUtils.REPLAYED);
-            opinionDocment.setStatusCode(FeedbackEnum.REPLAYED.getValue());
             serviceService.saveOpinion(opinionDocment);
 
-            List<String> userNameList = new ArrayList<>();
-            userNameList.add(opinionDocment.getUserTel());
-            String pushContent = "您有一条意见反馈消息!";
-            String pushType = "feedback";
-            List<Map<String, String>> paramMapList = new ArrayList<>();
-            Map<String, String> paramMap = new HashMap<>();
-            paramMap.put("opinionId", opinionDocment.getId());
-            paramMapList.add(paramMap);
-            pushService.pushInfo(pushContent, pushType, userNameList, paramMapList);
-            LOGGER.debug("推送反馈意见信息!");
-            LOGGER.debug("反馈意见ID:" + opinionDocment.getId());
+            if (FeedbackEnum.REPLAYED.getValue().equals(opinionDocment.getStatusCode())) {
+                List<String> userNameList = new ArrayList<>();
+                userNameList.add(opinionDocment.getUserTel());
+                String pushContent = "您有一条意见反馈消息!";
+                String pushType = "feedback";
+                List<Map<String, String>> paramMapList = new ArrayList<>();
+                Map<String, String> paramMap = new HashMap<>();
+                paramMap.put("opinionId", opinionDocment.getId());
+                paramMapList.add(paramMap);
+                pushService.pushInfo(pushContent, pushType, userNameList, paramMapList);
+                LOGGER.debug("推送反馈意见信息!");
+                LOGGER.debug("反馈意见ID:" + opinionDocment.getId());
+            }
         }
         return responseOfPut(retValue);
     }
