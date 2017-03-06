@@ -26,7 +26,7 @@ public class WebServiceDataSecondCacheUtil {
 
     private static final String SUBJECT_MAP_KEY = "'subjectMap'";
 
-    private static final String SUBJECTDOCUMENT_KEY = "'subjectDocumentCache'";
+    private static final String SUBJECTDOCUMENT_KEY = "'subjectDocument'";
 
     private static final String OA2HISDOCINFO_KEY = "'oa2hisdocInfo'";
 
