@@ -18,7 +18,7 @@
   };
 
   // Config JWT in http header and prefix of url
-  var CONTEXT = './api';
+  var CONTEXT = 'https://server.propersoft.cn/ihos/api';
   app.factory('authInterceptor', function($q, $window, $rootScope, userService) {
     $rootScope.requestIndex = 0;
     var requestIndexMinus = function() {
