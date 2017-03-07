@@ -1,5 +1,9 @@
 # 掌上盛京服务器部署情况 #
 
+## 部署结构
+
+![Network](./network.jpg)
+
 ## 服务器一览 ##
 
 ![Deployment](./掌声盛京医院服务器部署图.png)
@@ -15,7 +19,7 @@
 - 用户：root 密码：oaABC123!
 - 掌上盛京 [反向代理](./服务器106/opt/docker/isj_official/nginx/nginx.conf) 服务器（容器：isjofficial_isj-nginx_official_1）
 - [APP 热部署服务](./服务器106/opt/docker/isj_official/nginx/hc)
-- 掌上盛京后台管理端，执行./opt/docker/isj_official/nginx/isjadm/update.sh更新（需 github 访问权限）
+- 掌上盛京后台管理端，执行 [./opt/docker/isj_official/nginx/isjadm/update.sh](./服务器106/opt/docker/isj_official/nginx/isjadm/update.sh) 更新（需 github 访问权限）
 - 掌上盛京kettle统计定时任务，自动统计掌上盛京业务数据
 - 掌上盛京反向代理nginx定时任务，日志按天分割，及日志保留天数策略
 
