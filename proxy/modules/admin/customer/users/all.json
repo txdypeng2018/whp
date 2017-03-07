@@ -1,0 +1,47 @@
+{
+  "count": 3,
+  "data":[
+    {
+      "userId": "1",
+      "accountUserId": "1",
+      "name": "李毅",
+      "sex": "男",
+      "medicalNum":"M005962162",
+      "idCard":"420908199003120989",
+      "createTime": "2016-11-09 17:30",
+      "phone": "13123456546",
+      "type": 1,
+      "typeName": "帐号本人",
+      "accountName": "李毅",
+      "accountPhone": "13123456546"
+    },
+    {
+      "userId": "2",
+      "accountUserId": "222",
+      "name": "李毅",
+      "sex": "男",
+      "medicalNum":"M005962162",
+      "idCard":"420908199003120989",
+      "createTime": "2016-11-09 17:30",
+      "phone": "13123456546",
+      "type": 2,
+      "typeName": "非帐号本人",
+      "accountName": "李一",
+      "accountPhone": "13111111111"
+    },
+    {
+      "userId": "3",
+      "accountUserId": "3",
+      "name": "李毅",
+      "sex": "男",
+      "medicalNum":"M005962162",
+      "idCard":"420908199003120911",
+      "createTime": "2016-11-09 17:30",
+      "phone": "13123456511",
+      "type": 1,
+      "typeName": "帐号本人",
+      "accountName": "李毅",
+      "accountPhone": "13123456546"
+    }
+  ]
+}
