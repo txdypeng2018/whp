@@ -237,6 +237,7 @@
         districtCode: $scope.district
       },
       multiSelect: false,
+      isAllDataLoad: false,
       onSelect: function() {
         //$scope.gridParamItem.searchData.buildId = $scope.gridParamType.selected[0].buildingCode;
         $scope.gridParamItem.loadData();
@@ -265,6 +266,7 @@
       title: '楼层科室信息',
       searchTemplate: 'modules/hospitalNavigation/build/rightSearch.html',
       multiSelect: false,
+      isAllDataLoad: false,
       onBeforeLoad: function(param){
         if ($scope.gridParamType.selected.length === 1) {
           param.floorParentId = $scope.gridParamType.selected[0].buildingCode;
