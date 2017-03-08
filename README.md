@@ -1,5 +1,7 @@
 # 掌上盛京服务器部署情况 #
 
+![QR code](./zssj-qrcode.jpeg)
+
 ## 部署结构
 
 ![Network](./network.jpg)
