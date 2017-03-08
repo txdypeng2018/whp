@@ -873,7 +873,8 @@
                         type: 'value'
                     }
                 ],
-                series: [
+              color: ['#1296DB', '#51B525','#CA1328'],
+              series: [
                     {
                         name: dataTile1,
                         type: chartType1,
