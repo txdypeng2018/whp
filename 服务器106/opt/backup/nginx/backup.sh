@@ -6,8 +6,8 @@ export RENAME_TIME=`date -d "1 days ago" +%Y-%m-%d`
 export REQ_DELTIME=`date -d "7 days ago" +%Y-%m-%d`
 export SLOW_DELTIME=`date -d "30 days ago" +%Y-%m-%d`
 
-sed -i -e "s|req_stat_$RENAME_TIME.log|req_stat_$TODAY_TIME.log|" $NGINX_DIR/nginx.conf
-sed -i -e "s|req_slow_$RENAME_TIME.log|req_slow_$TODAY_TIME.log|" $NGINX_DIR/nginx.conf
+sed -i -e "s|req_stat_....-..-...log|req_stat_$TODAY_TIME.log|" $NGINX_DIR/nginx.conf
+sed -i -e "s|req_slow_....-..-...log|req_slow_$TODAY_TIME.log|" $NGINX_DIR/nginx.conf
 /opt/docker/docker/docker restart isjofficial_isj-nginx_official_1
 
 echo "Delete the nginx log..."
