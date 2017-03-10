@@ -1,8 +1,8 @@
 # 掌上盛京服务器更新流程 #
 
 ## 当前服务器工程commit标识 ##
-- server：`0bad1de58d8be68fbb273d135eeea5fa669eec50`
-- server-release：`0dd6b5dd08771a1e6936358fe849d7654e82c2c6`
+- server：0bad1de58d8be68fbb273d135eeea5fa669eec50
+- server-release：0dd6b5dd08771a1e6936358fe849d7654e82c2c6
 
 ## 更新流程 ##
 - 登录172.28.235.113服务器
