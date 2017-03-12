@@ -22,9 +22,9 @@ public class AdminWsLogController extends BaseController {
      */
     @GetMapping(path = "/wsLog")
     public ResponseEntity<DataTrunk<WSLogDocument>> wsLog(int pageNo, int pageSize,
-            String search, String startDate, String endDate) throws Exception {
+            String search, String startDate, String endDate, String methodName) throws Exception {
         DataTrunk<WSLogDocument> dataTrunk = wSLogService.getWsLogList(pageNo, pageSize, search,
-                startDate, endDate);
+                startDate, endDate, methodName);
         return responseOfGet(dataTrunk);
     }
 }

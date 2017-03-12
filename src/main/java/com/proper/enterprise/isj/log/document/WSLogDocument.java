@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.log.document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -98,4 +99,8 @@ public class WSLogDocument extends BaseDocument {
         this.valid = valid;
     }
 
+    @JsonProperty
+    public String getCreateTime() {
+        return createTime;
+    }
 }
