@@ -56,6 +56,15 @@
            memoryStoreEvictionPolicy="LFU">
     </cache>
 
+    <!-- Cache region for platform users, eternal storage -->
+    <cache name="users"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+
     <!-- Memory area 带有特定的缓存失效时间,后缀为缓存的有效时间,单位为秒 -->
     <cache name="pep-temp_60"
            maxEntriesLocalHeap="10000"
@@ -82,10 +91,10 @@
         <persistence strategy="localTempSwap"/>
     </cache>
     <!-- 一个月 -->
-     <cache name="pep-temp_2592000"
-            maxEntriesLocalHeap="10000"
-            timeToIdleSeconds="2592000"
-            timeToLiveSeconds="2592000">
-         <persistence strategy="localTempSwap"/>
-     </cache>
- </ehcache>
+    <cache name="pep-temp_2592000"
+           maxEntriesLocalHeap="10000"
+           timeToIdleSeconds="2592000"
+           timeToLiveSeconds="2592000">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+</ehcache>

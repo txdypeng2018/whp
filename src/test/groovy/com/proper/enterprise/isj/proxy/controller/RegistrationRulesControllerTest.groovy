@@ -70,9 +70,8 @@ class RegistrationRulesControllerTest extends AbstractTest {
         Map<String, Object> doc2 = JSONUtil.parse(retObj2, Object.class);
         int count2 = Integer.parseInt(String.valueOf(doc2.get("count")));
         assert count2 == 1
-        List<Map<String, String>> retList2 = (List<Map<String, Object>>) doc2.get("data");
-        String value3 = retList2.get(0).get("rule");
-        assert value3 == "this is test value!"
+        assert doc2["data"][0]["lastModifyUserName"] == "name"
+        assert doc2["data"][0]["rule"] == "this is test value!"
     }
 
     static String ruleDescription = "This is a description."
@@ -101,6 +100,7 @@ class RegistrationRulesControllerTest extends AbstractTest {
         def modifyTime = rule.get("lastModifyTime")
         def how2use = rule.get("howToUse")
         assert ruleDescription == desc //确认描述与输入信息一致
+        assert rule.lastModifyUserName == "name"
         def modifyTm = DateUtil.toDate(modifyTime, DEFAULT_TIMESTAMP_FORMAT) //获得记录的修改时间
         assert endTm.minus(modifyTm) >= 0 && modifyTm.minus(startTm) >= 0
         //确认记录修改时间在结束时间之前，开始时间之后
@@ -128,6 +128,7 @@ class RegistrationRulesControllerTest extends AbstractTest {
         def how2use = rule.get("howToUse")
         assert ruleDescription == desc //确认描述与输入信息一致
         def modifyTm = DateUtil.toDate(modifyTime, DEFAULT_TIMESTAMP_FORMAT) //获得记录的修改时间
+        assert rule.lastModifyUserName == "name"
         assert endTm.minus(modifyTm) >= 0 && modifyTm.minus(startTm) >= 0
         //确认记录修改时间在结束时间之前，开始时间之后
         assert "id" == modifier //确认最后修改人与操作人一致

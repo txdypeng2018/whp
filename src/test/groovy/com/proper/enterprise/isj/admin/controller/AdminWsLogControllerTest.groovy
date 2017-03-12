@@ -36,6 +36,7 @@ public class AdminWsLogControllerTest extends AbstractTest {
 
     @Before
     public void saveTestData() throws Exception {
+        repository.deleteAll();
         WSLogDocument wSLogDocument = new WSLogDocument("getRegInfo", null, "aaa", "bbb", 500);
         wSLogDocument.setId("586862a00000000000000000");
         repository.save(wSLogDocument);
