@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var tomcatLogsCtrl = function($scope, $http, $sce, $mdToast) {
+  var tomcatLogsCtrl = function($scope, $http, $sce, $mdToast, $interval) {
     var lvIn = {
       'ERROR': '["ERROR"]',
       'WARN': '["WARN", "ERROR"]',
@@ -161,13 +161,16 @@
 
     //定时取日志
     getLogs();
-    setInterval(function(){
+    var promise = $interval(function(){
       tmStart = tmEnd;
       tmEnd = new Date(tmStart.getTime() + intervalTime);
       if ($scope.autoUpdate && startDate === '' && endDate === '') {
         getLogs();
       }
     }, intervalTime);
+    $scope.$on('$destroy', function(){
+      $interval.cancel(promise);
+    });
   };
 
   var mainRouter = function($stateProvider) {
