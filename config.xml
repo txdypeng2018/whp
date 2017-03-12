@@ -79,4 +79,5 @@
     </plugin>
     <plugin name="cordova-plugin-proper-update-version" spec="~1.0.1" />
     <plugin name="cordova-plugin-proper-properpush" spec="~1.0.1" />
+    <plugin name="cordova-plugin-proper-qdc-cmbpay" spec="~1.1.0" />
 </widget>
