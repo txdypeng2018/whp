@@ -1,6 +1,4 @@
-{
-  "count": 3,
-  "data": [
+[
     {
       "patientId": "72cd5828-2446-4ee7-a7e7-8ddd5500",
       "patientName": "李毅毅",
@@ -85,4 +83,3 @@
       }
     }
   ]
-}

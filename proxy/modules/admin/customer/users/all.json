@@ -1,6 +1,4 @@
-{
-  "count": 3,
-  "data":[
+[
     {
       "userId": "1",
       "accountUserId": "1",
@@ -44,4 +42,4 @@
       "accountPhone": "13123456546"
     }
   ]
-}
+

@@ -9,10 +9,17 @@
             var sParams = {
                 name: $stateParams.transFromInfo.name,
                 medicalNum: $stateParams.transFromInfo.medicalNum,
-                phoneOridCard: $stateParams.transFromInfo.phone
+                phoneOrIdcard: $stateParams.transFromInfo.phone
             };
             $http.get('/admin/customer/users',{params:sParams}).success(function(data) {
-                $scope.gridParam.desserts = data;
+              if (angular.isUndefined(data.data) || data.data === null) {
+                var loadDesserts = {};
+                loadDesserts.count = data.length;
+                loadDesserts.data = data;
+                $scope.gridParam.desserts = loadDesserts;
+              } else {
+                $scope.gridParam.desserts = data.data;
+              }
             });
         }
         //查询
@@ -37,7 +44,7 @@
         };
         $scope.customSearch = function(){
             $scope.gridParam.selected = [];
-            if((angular.isUndefined($scope.name) || $scope.name === ''|| $scope.name === null) || (angular.isUndefined($scope.medicalNum) || $scope.medicalNum === ''|| $scope.medicalNum === null) || (angular.isUndefined($scope.phoneOridCard) || $scope.phoneOridCard === ''|| $scope.phoneOridCard === null)){
+            if((angular.isUndefined($scope.name) || $scope.name === ''|| $scope.name === null) || (angular.isUndefined($scope.medicalNum) || $scope.medicalNum === ''|| $scope.medicalNum === null) || (angular.isUndefined($scope.phoneOrIdcard) || $scope.phoneOrIdcard === ''|| $scope.phoneOrIdcard === null)){
                 $mdToast.show($mdToast.simple().textContent('姓名，病历号，手机号或身份证必填!'));
             }else{
                 customSearchData();
@@ -48,10 +55,17 @@
             var params = {
                 name: $scope.name,
                 medicalNum: $scope.medicalNum,
-                phoneOridCard: $scope.phoneOridCard
+                phoneOrIdcard: $scope.phoneOrIdcard
             };
             $http.get('/admin/customer/users',{params:params}).success(function(data) {
-                $scope.gridParam.desserts = data;
+              if (angular.isUndefined(data.data) || data.data === null) {
+                var loadDesserts = {};
+                loadDesserts.count = data.length;
+                loadDesserts.data = data;
+                $scope.gridParam.desserts = loadDesserts;
+              } else {
+                $scope.gridParam.desserts = data.data;
+              }
             });
         };
 
@@ -59,7 +73,7 @@
         $scope.customReset = function () {
             $scope.name = '';
             $scope.medicalNum = '';
-            $scope.phoneOridCard = '';
+            $scope.phoneOrIdcard = '';
         };
         //关闭搜索页面
         $scope.closeSearch =function () {
