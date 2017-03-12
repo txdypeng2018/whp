@@ -22,13 +22,18 @@ class SMSServiceImplTest extends AbstractTest {
 
     @Test
     public void sendSMS() {
-        def result = service.sendSMS('15640567780', "测试短信 - ${DateUtil.timestamp}")
+        def phone = '15640567780'
+        def result = service.sendSMS(phone, "测试短信 - ${DateUtil.timestamp}")
         assert result
         while(repository.count() != 1) {
             println "sleep 100 milliseconds to wait until write log done"
             sleep(100)
         }
-        assert repository.count() == 1
+        def logged = false
+        repository.findAll().each {
+            logged = logged || it.param['phone'] == phone
+        }
+        assert logged
     }
 
 }

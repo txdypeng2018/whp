@@ -48,7 +48,7 @@ public class WSLogService {
     }
 
     public DataTrunk<WSLogDocument> getWsLogList(int pageNo, int pageSize, String search,
-            String startDate, String endDate) throws Exception {
+            String startDate, String endDate, String methodName) throws Exception {
         String startObjectId = convertTimeToObjectId(startDate);
         String endObjectId = convertTimeToObjectId(endDate);
         Query query = new Query();
@@ -63,6 +63,11 @@ public class WSLogService {
             query.addCriteria(Criteria.where("id").gte(new ObjectId(startObjectId)));
         } else if (StringUtil.isEmpty(startDate) && StringUtil.isNotEmpty(endDate)) {
             query.addCriteria(Criteria.where("id").lte(new ObjectId(endObjectId)));
+        }
+        if (StringUtil.isNotEmpty(methodName)) {
+            query.addCriteria(Criteria.where("methodName").is(methodName));
+        } else {
+            query.addCriteria(Criteria.where("methodName").ne("SMS"));
         }
         long count = mongoTemplate.count(query, WSLogDocument.class);
         query.skip((pageNo - 1) * pageSize);
