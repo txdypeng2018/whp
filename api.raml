@@ -695,7 +695,8 @@ traits:
                     "skill": { "type": "string", "description": "擅长" },
                     "total": { "type": "integer", "description": "可挂号总数" },
                     "overCount": { "type": "integer", "description": "剩余挂号数" },
-                    "unallowed": { "type": "string", "description": "医生不能挂号异常情况说明" }
+                    "unallowed": { "type": "string", "description": "医生不能挂号异常情况说明" },
+                    "serialNum": { "type": "string", "description": "剩余流水号数" }
                   }
                 ]
               }
@@ -2211,5 +2212,261 @@ traits:
                       "catalogue": { "type": "string", "description": "挂号规则分类" },
                       "name": { "type": "string", "description": "挂号规则名称" },
                       "rule": { "type": "string", "description": "挂号规则内容" }
+                    }
+                  }
+/logview:
+  /wsLog:
+    get:
+        description: 取得接口访问日志
+        is: [secured, serverError]
+        queryParameters:
+          search:
+            description: 用户想要查询的内容
+            type: string
+            required: false
+          startDate:
+            description: 开始的时间
+            type: string
+            required: false
+          endDate:
+            description: 结束的时间
+            type: string
+            required: false
+          methodName:
+            description: 接口名称
+            type: string
+            required: false
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema",
+                  "type": "Object",
+                  "properties":
+                    {
+                      "count": { "type": "long", "description": "接口访问日志总数" },
+                      "data" :
+                      [
+                        {
+                          "methodName": { "type": "string", "description": "接口方法" },
+                          "duration": { "type": "string", "description": "耗时" },
+                          "createTime": { "type": "string", "description": "创建时间" },
+                          "req": { "type": "string", "description": "请求" },
+                          "res": { "type": "string", "description": "响应" }
+                        }
+                      ]
+                   }
+                }
+/admin:
+  /customer:
+    /users:
+        get:
+          description: 取得客服查询用户个人信息
+          is: [secured, serverError]
+          queryParameters:
+            name:
+              description: 用户姓名
+              type: string
+              required: true
+            medicalNum:
+              description: 用户病历号
+              type: string
+              required: true
+            phoneOrIdcard:
+              description: 用户手机号或身份证
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "Object",
+                    "properties":
+                    {
+                      "count": { "type": "long", "description": "符合条件的用户人数" },
+                      "data" :
+                      [
+                        {
+                          "userId": { "type": "string", "description": "用户的id" },
+                          "accountUserId": { "type": "string", "description": "帐号本人ID" },
+                          "name": { "type": "string", "description": "用户的姓名" },
+                          "sex": { "type": "string", "description": "用户的性别" },
+                          "medicalNum": { "type": "string", "description": "用户的病历号" },
+                          "idCard": { "type": "string", "description": "用户的身份证" },
+                          "createTime": { "type": "string", "description": "用户创建时间" },
+                          "phone": { "type": "string", "description": "用户手机号" },
+                          "type": { "type": "string", "description": "用户类型码" },
+                          "typeName": { "type": "string", "description": "用户类型：帐号本人或非帐号本人" },
+                          "accountName": { "type": "string", "description": "帐号本人姓名" },
+                          "accountPhone": { "type": "string", "description": "帐号本人电话" }
+                        }
+                      ]
+                    }
+                  }
+    /registrations:
+        get:
+          description: 取得客服查询挂号信息
+          is: [secured, serverError]
+          queryParameters:
+            userId:
+              description: 用户id
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "Object",
+                    "properties":
+                      {
+                        "count": { "type": "long", "description": "挂号信息个数" },
+                        "data" :
+                          [
+                            {
+                              "num": { "type": "string", "description": "挂号单" },
+                              "orderNum": { "type": "string", "description": "交易单号" },
+                              "apptDate": { "type": "string", "description": "就诊时间" },
+                              "clinicNum": { "type": "string", "description": "病历号" },
+                              "amount": { "type": "string", "description": "挂号费用" },
+                              "registerDate": { "type": "string", "description": "挂号时间" },
+                              "statusCode": { "type": "string", "description": "交易状态码" },
+                              "status": { "type": "string", "description": "交易状态" },
+                              "operatorName": { "type": "string", "description": "操作人姓名" },
+                              "operatorPhone": { "type": "string", "description": "操作人电话" },
+                              "patientId": { "type": "string", "description": "患者id" },
+                              "patientName": { "type": "string", "description": "患者姓名" },
+                              "patientSex": { "type": "string", "description": "患者性别" },
+                              "patientIdCard": { "type": "string", "description": "患者身份证" },
+                              "patientCardNo": { "type": "string", "description": "患者病历号" },
+                              "patientPhone": { "type": "string", "description": "患者电话" },
+                              "payChannelId": { "type": "string", "description": "支付渠道" },
+                              "hospital": { "type": "string", "description": "医院名称" },
+                              "district": { "type": "string", "description": "院区名称" },
+                              "dept": { "type": "string", "description": "科室名称" },
+                              "doctor": { "type": "string", "description": "医生名称" },
+                              "createTime": { "type": "string", "description": "挂号单创建时间" },
+                              "registrationOrderReq": { "type": "object", "description": "支付信息","properties": {
+                                "orderId": { "type": "string", "description": "交易单号" },
+                                "payDate": { "type": "string", "description": "支付日期" },
+                                "payTime": { "type": "string", "description": "支付时间" },
+                                "payTotalFee": { "type": "string", "description": "支付总金额" },
+                                "payResCode": { "type": "string", "description": "支付响应状态" },
+                                "payAccount": { "type": "string", "description": "支付账户" },
+                                "CT": { "type": "string", "description": "支付响应时间" }
+                              }},
+                              "registrationOrderHis": { "type": "object", "description": "his支付信息" ,"properties": {
+                                "clientReturnMsg": { "type": "string", "description": "his响应状态" },
+                                "CT": { "type": "string", "description": "his响应时间" }
+                              }},
+                              "registrationRefundReq": { "type": "object", "description": "退费信息" ,"properties": {
+                                "orderId": { "type": "string", "description": "交易单号" },
+                                "refundId": { "type": "string", "description": "退费单号" },
+                                "totalFee": { "type": "string", "description": "总费用" },
+                                "refundFee": { "type": "string", "description": "退费金额" },
+                                "refundDate": { "type": "string", "description": "退费日期" },
+                                "refundTime": { "type": "string", "description": "退费时间" },
+                                "refundResCode": { "type": "string", "description": "退费响应码" }
+                              }},
+                              "registrationRefundHis": { "type": "object", "description": "his退费信息" ,"properties": {
+                                "refundFlag": { "type": "string", "description": "his退费标记" },
+                                "CT": { "type": "string", "description": "his退费响应时间" }
+                              }},
+                              "cancelRegToHisTime": { "type": "string", "description": "取消时请求his时间" },
+                              "cancelHisReturnMsg": { "type": "string", "description": "取消时his返回信息" }
+                            }
+                          ]
+                        }
+                    }
+    /recipeorders:
+          get:
+            description: 取得客服查询门诊流水号信息
+            is: [secured, serverError]
+            queryParameters:
+              userId:
+                description: 用户id
+                type: string
+                required: true
+            responses:
+              200:
+                body:
+                  schema: |
+                    {
+                      "$schema": "http://json-schema.org/schema",
+                      "type": "Object",
+                      "properties":
+                        {
+                          "count": { "type": "long", "description": "门诊流水号信息个数" },
+                          "data" :
+                          [
+                            {
+                              "patientId": { "type": "string", "description": "患者id" },
+                              "patientName": { "type": "string", "description": "患者姓名" },
+                              "clinicCode": { "type": "string", "description": "门诊流水号" },
+                              "operatorId": { "type": "string", "description": "操作者id" },
+                              "operatorName": { "type": "string", "description": "操作者姓名" },
+                              "operatorPhone": { "type": "string", "description": "操作者电话" },
+                              "createTime": { "type": "string", "description": "门诊流水号创建时间" },
+                              "status": { "type": "string", "description": "交易状态" },
+                              "statusCode": { "type": "string", "description": "交易状态码" },
+                              "recipeNonPaidDetail": { "type": "object", "description": "未支付信息","properties": {
+                                "orderNum": { "type": "string", "description": "未支付单号" },
+                                "amount": { "type": "string", "description": "未支付金额" }
+                              }},
+                              "recipePaidFailDetailList": { "type": "object", "description": "支付失败信息" ,"properties": {
+                                "orderNum": { "type": "string", "description": "支付失败单号" },
+                                "refundNum": { "type": "string", "description": "退费单号" },
+                                "description": { "type": "string", "description": "支付失败信息" },
+                                "amount": { "type": "string", "description": "支付失败金额" }
+                              }},
+                              "recipeOrderReqMap": { "type": "object", "description": "交易信息" ,"properties": {
+                                "orderId": { "type": "string", "description": "交易单号" },
+                                "payDate": { "type": "string", "description": "交易日期" },
+                                "payTime": { "type": "string", "description": "交易时间" },
+                                "payChannelId": { "type": "string", "description": "交易渠道" },
+                                "payTotalFee": { "type": "string", "description": "交易金额" },
+                                "payResCode": { "type": "string", "description": "交易响应状态" },
+                                "payAccount": { "type": "string", "description": "交易账户" },
+                                "CT": { "type": "string", "description": "交易创建时间" }
+                              }},
+                              "recipeOrderHisMap": { "type": "object", "description": "his响应信息" ,"properties": {
+                                "clientReturnMsg": { "type": "string", "description": "his响应信息" },
+                                "CT": { "type": "string", "description": "his信息创建时间" }
+                              }}
+                            }
+                          ]
+                      }
+                    }
+    /messages:
+        get:
+          description: 取得客服查询推送信息
+          is: [secured, serverError]
+          queryParameters:
+            userId:
+              description: 账户id
+              type: string
+              required: true
+          responses:
+            200:
+              body:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema",
+                    "type": "Object",
+                    "properties":
+                    {
+                      "count": { "type": "long", "description": "推送信息个数" },
+                      "data" :
+                      [
+                        {
+                          "accountUserId": { "type": "string", "description": "账户id" },
+                          "date": { "type": "string", "description": "推送信息的时间" },
+                          "content": { "type": "string", "description": "推送信息的内容" }
+                        }
+                      ]
                     }
                   }
