@@ -7,6 +7,7 @@ import com.proper.enterprise.platform.core.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ISJ_RULES")
@@ -41,6 +42,9 @@ public class RuleEntity extends BaseEntity {
      */
     @Column(name = "RULE_HOWTOUSE", length = 4000)
     private String howToUse;
+    
+    @Transient
+    private String lastModifyUserName;
 
     /**
      * 规则分类
@@ -97,6 +101,14 @@ public class RuleEntity extends BaseEntity {
     @Override
     public String getLastModifyTime() {
         return lastModifyTime;
+    }
+
+    public String getLastModifyUserName() {
+        return lastModifyUserName;
+    }
+
+    public void setLastModifyUserName(String lastModifyUserName) {
+        this.lastModifyUserName = lastModifyUserName;
     }
 
 }
