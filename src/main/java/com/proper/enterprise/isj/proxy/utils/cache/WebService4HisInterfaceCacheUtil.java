@@ -1,17 +1,5 @@
 package com.proper.enterprise.isj.proxy.utils.cache;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-
 import com.proper.enterprise.isj.proxy.utils.scheduler.TaskSchedulerUtil;
 import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.isj.webservices.WebServicesClient;
@@ -26,6 +14,17 @@ import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.utils.ConfCenter;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import com.proper.enterprise.platform.core.utils.http.HttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * His Web Service服务接口.
@@ -184,7 +183,7 @@ public class WebService4HisInterfaceCacheUtil {
         return new String(HttpClient.get(reportListUrl).getBody(), PEPConstants.DEFAULT_CHARSET);
     }
     @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
-    public String getCachePacsListInfo(String patientId) throws Exception {
+    public String getCachePacsListInfo(String patientId) throws IOException {
         return this.cachePacsListInfo(patientId);
     }
 

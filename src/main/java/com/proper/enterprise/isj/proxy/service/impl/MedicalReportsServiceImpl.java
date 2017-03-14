@@ -35,6 +35,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_PACS_REPORT_ERR;
+
 /**
  * 检验检测报告ServiceImpl.
  */
@@ -62,7 +64,7 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
      * @throws Exception 异常.
      */
     @Override
-    public List<MedicalReportsDocument> getPacsReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws Exception {
+    public List<MedicalReportsDocument> getPacsReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws IHosException {
 
         // 需要返回的数据
         List<MedicalReportsDocument> retList = new ArrayList<>();
@@ -118,8 +120,8 @@ public class MedicalReportsServiceImpl implements MedicalReportsService{
                 }
             }
         }catch (IOException ie) {
-            LOGGER.debug("MedicalReportsServiceImpl.getPacsReportsList[Exception]:", ie);
-            throw ie;
+            LOGGER.error("Error occurs when getting PACS reports!", ie);
+            throw new IHosException(APP_PACS_REPORT_ERR);
         }
         // 按照时间倒序
         return getSortedReportList(retList);
