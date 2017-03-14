@@ -146,6 +146,15 @@ handler.service = {
           GetHosInfoResult: resXml(res)
         }
       },
+      CreatePat: function(args) {
+        commonStep(args);
+        var data = {
+          CARD_NO: 1234
+        };
+        return {
+          CreatePatResult: resXml(obj2xml(data))
+        };
+      },
       GetDeptInfoByParentID: function(args) {
         commonStep(args);
         var data = {

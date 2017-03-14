@@ -18,4 +18,7 @@ public interface UserInfoRepository extends MongoRepository<UserInfoDocument, St
     List<UserInfoDocument> findByNameAndMedicalNumAndPhone(String name, String medicalNum, String phone);
 
     List<UserInfoDocument> findByNameAndMedicalNumAndIdCard(String name, String medicalNum, String idCard);
+
+    void deleteByUserId(String userId);
+
 }

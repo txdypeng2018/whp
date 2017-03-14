@@ -25,7 +25,7 @@ class SMSServiceImplTest extends AbstractTest {
         def phone = '15640567780'
         def result = service.sendSMS(phone, "测试短信 - ${DateUtil.timestamp}")
         assert result
-        while(repository.count() != 1) {
+        while(repository.count() == 0) {
             println "sleep 100 milliseconds to wait until write log done"
             sleep(100)
         }

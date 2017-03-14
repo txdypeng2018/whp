@@ -78,20 +78,13 @@ public class UserInfoServiceNotxImpl implements UserInfoService {
 
     @Override
     public UserInfoDocument saveOrUpdateUserInfo(UserInfoDocument userInfo) {
-        userInfo = userInfoRepository.save(userInfo);
-        return userInfo;
+        return userInfoRepository.save(userInfo);
     }
 
     @Override
     public UserInfoDocument getUserInfoByUserId(String userId) {
         return userInfoRepository.getByUserId(userId);
     }
-
-    // @Override
-    // public UserInfoDocument getUserInfoByPhone(String telephone) {
-    // UserInfoDocument userInfo = userInfoRepository.getByPhone(telephone);
-    // return userInfo;
-    // }
 
     @Override
     public UserInfoDocument saveUserAndUserInfo(UserEntity user, UserInfoDocument userInfo) throws Exception {

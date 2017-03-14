@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface MedicalReportsService {
 
-    List<MedicalReportsDocument> getPacsReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws Exception;
+    List<MedicalReportsDocument> getPacsReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws IHosException;
 
     List<MedicalReportsDocument> getReportsList(ReportListReq req, String searchStatus, BasicInfoDocument basicInfo, String searchTime) throws Exception;
 

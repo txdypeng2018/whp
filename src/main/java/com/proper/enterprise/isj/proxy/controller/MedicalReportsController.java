@@ -1,7 +1,6 @@
 package com.proper.enterprise.isj.proxy.controller;
 
 import com.proper.enterprise.isj.core.controller.IHosController;
-import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDetailDocument;
 import com.proper.enterprise.isj.proxy.document.medicalreports.MedicalReportsDocument;
 import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
@@ -24,17 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.oxm.UnmarshallingFailureException;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.*;
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.HIS_DATALINK_ERR;
 
 /**
  * 检验检查报告接口.
@@ -72,55 +69,44 @@ public class MedicalReportsController extends IHosController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<MedicalReportsDocument>> getReportsList(String memberId, String searchTime, String searchStatus, String category) throws Exception {
-        LOGGER.debug("\nmemberId:" + memberId + "\nsearchTime:" + searchTime + "\nsearchStatus:" + searchStatus + "\ncategory:" + category);
-        List<MedicalReportsDocument> result = new ArrayList<>();
-        try {
-            User user = userService.getCurrentUser();
-            if (user != null) {
-                BasicInfoDocument basicInfo;
-                if (StringUtil.isEmpty(memberId)) {
-                    basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
-                } else {
-                    basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
-                }
-                if(basicInfo != null) {
-                    if(StringUtil.isEmpty(basicInfo.getMedicalNum())){
-                        userInfoService.saveOrUpdatePatientMedicalNum(user.getId(), memberId, null);
-                        if (StringUtil.isEmpty(memberId)) {
-                            basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
-                        } else {
-                            basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
-                        }
-                    }
-                    if(StringUtil.isNotEmpty(basicInfo.getMedicalNum())) {
-                        // 检验报告
-                        if("1".equals(category)) {
-                            // 取得请求对象
-                            ReportListReq reportReq = reportsService.getReportListReq(basicInfo);
-                            // 获取返回报告列表
-                            result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
-                            // 检查报告
-                        } else if ("2".equals(category)) {
-                            // 获取返回报告列表
-                            result = reportsService.getPacsReportsList(null, searchStatus, basicInfo, searchTime);
-                        }
-                    } else {
-                        throw new RuntimeException(CenterFunctionUtils.PATIENTINFO_MEDICALNUM_NULL_ERR);
-                    }
-                }
+        LOGGER.debug("\nmemberId: {}\nsearchTime: {}\nsearchStatus: {}\ncategory: {}", memberId, searchTime, searchStatus, category);
+
+        User user = userService.getCurrentUser();
+        Assert.notNull(user, "User should NOT null when getting reports list!");
+
+        BasicInfoDocument basicInfo;
+        if (StringUtil.isEmpty(memberId)) {
+            basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
+        } else {
+            basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
+        }
+        Assert.notNull(basicInfo, "Basic info should NOT null when getting reports list!");
+
+        if(StringUtil.isEmpty(basicInfo.getMedicalNum())){
+            userInfoService.saveOrUpdatePatientMedicalNum(user.getId(), memberId, null);
+            if (StringUtil.isEmpty(memberId)) {
+                basicInfo = userInfoService.getDefaultPatientVisitsUserInfo(user.getId());
+            } else {
+                basicInfo = userInfoService.getFamilyMemberByUserIdAndMemberId(user.getId(), memberId);
             }
-        } catch (UnmarshallingFailureException e) {
-            LOGGER.debug("MedicalReportsController.getReportsList[UnmarshallingFailureException]:", e);
-            throw new RuntimeException(HIS_DATALINK_ERR, e);
-        } catch (HisReturnException e) {
-            LOGGER.debug("MedicalReportsController.getReportsList[HisReturnException]:", e);
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (IOException ie) {
-            LOGGER.debug("MedicalReportsController.getReportsList[IOException]:", ie);
-            throw new RuntimeException(APP_PACS_REPORT_ERR, ie);
-        } catch (Exception e) {
-            LOGGER.debug("MedicalReportsController.getReportsList[Exception]:", e);
-            throw new RuntimeException(APP_SYSTEM_ERR, e);
+        }
+        if (StringUtil.isNull(basicInfo.getMedicalNum())) {
+            throw new ErrMsgException(CenterFunctionUtils.PATIENTINFO_MEDICALNUM_NULL_ERR);
+        }
+
+        List<MedicalReportsDocument> result;
+        // 检验报告
+        if("1".equals(category)) {
+            // 取得请求对象
+            ReportListReq reportReq = reportsService.getReportListReq(basicInfo);
+            // 获取返回报告列表
+            result = reportsService.getReportsList(reportReq, searchStatus, basicInfo, searchTime);
+            // 检查报告
+        } else if ("2".equals(category)) {
+            // 获取返回报告列表
+            result = reportsService.getPacsReportsList(null, searchStatus, basicInfo, searchTime);
+        } else {
+            throw new ErrMsgException(HIS_DATALINK_ERR);
         }
         return responseOfGet(result);
     }
