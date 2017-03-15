@@ -920,7 +920,8 @@ traits:
                   "$schema": "http://json-schema.org/schema",
                   "type": "object",
                   "properties": {
-                    "orderNum": { "type": "string", "description": "订单号" }
+                    "orderNum": { "type": "string", "description": "订单号" },
+                    "registrationId": { "type": "string", "description": "挂号单ID" }
                   }
                 }
       /back:
@@ -2100,6 +2101,10 @@ traits:
             required: false
         rule:
           description: 挂号规则内容
+          type: string
+          required: false
+        description:
+          description: 挂号备注
           type: string
           required: false
         pageNo:
