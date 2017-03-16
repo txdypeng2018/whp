@@ -45,8 +45,9 @@ class MedicalReportsControllerTest extends AbstractTest {
         UserInfoDocument user = new UserInfoDocument()
         user.setPatientVisits('1')
         user.setUserId(userId)
-        user.setIdCard('510115196806189103')
-        user.setName('name')
+        def idCard = '510115196806189103'
+        user.setIdCard(idCard)
+        user.setName(idCard)
         user.setPhone('123456')
         userInfoService.saveOrUpdateUserInfo(user)
         assert resOfGet('/medicalReports', HttpStatus.BAD_REQUEST) == CenterFunctionUtils.PATIENTINFO_MEDICALNUM_NULL_ERR

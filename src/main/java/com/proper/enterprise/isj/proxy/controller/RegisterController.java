@@ -353,6 +353,7 @@ public class RegisterController extends BaseController {
             }
             Map<String, String> map = new HashMap<>();
             map.put("orderNum", saveReg.getOrderNum());
+            map.put("registrationId", saveReg.getId());
             return new ResponseEntity<>(map, HttpStatus.CREATED);
         } catch (UnmarshallingFailureException e) {
             LOGGER.debug("解析HIS接口返回参数错误", e);

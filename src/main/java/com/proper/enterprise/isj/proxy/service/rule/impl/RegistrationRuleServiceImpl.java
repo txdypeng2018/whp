@@ -35,16 +35,21 @@ public class RegistrationRuleServiceImpl implements RegistrationRuleService {
         vars.put("deptId", deptId);
         vars.put("idCard", idCard);
         String msg = "";
-        Collection<RuleEntity> rules = repository.findByCatalogue("REG_RES");
-        for (RuleEntity rule : rules) {
-            try {
-                msg = parser.parse(rule.getRule(), vars, false);
-                if (StringUtil.isNotNull(msg)) {
-                    break;
+
+        try {
+            Collection<RuleEntity> rules = repository.findByCatalogue("REG_RES");
+            for (RuleEntity rule : rules) {
+                try {
+                    msg = parser.parse(rule.getRule(), vars, false);
+                    if (StringUtil.isNotNull(msg)) {
+                        break;
+                    }
+                } catch (ExpressionException ee) {
+                    LOGGER.debug("Parse {} with {} throw exception:", rule.getRule(), vars, ee);
                 }
-            } catch (ExpressionException ee) {
-                LOGGER.debug("Parse {} with {} throw exception:", rule.getRule(), vars, ee);
             }
+        } catch (RuntimeException re) {
+            LOGGER.error("Exception occurs when finding rules by catalogue 'REG_RES'", re);
         }
         return msg;
     }
