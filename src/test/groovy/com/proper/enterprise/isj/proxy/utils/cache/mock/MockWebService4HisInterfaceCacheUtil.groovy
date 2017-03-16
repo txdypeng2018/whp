@@ -47,6 +47,7 @@ class MockWebService4HisInterfaceCacheUtil extends WebService4HisInterfaceCacheU
         reg.setRegDistrict("1")
         def regTime = new RegTime()
         regTime.setRegLevel(regLv)
+        regTime.setTimeFlag(1)
         reg.setRegTimeList([regTime])
         reg.setRegDate(date.format('yyyy-MM-dd'))
         [reg]
@@ -59,6 +60,7 @@ class MockWebService4HisInterfaceCacheUtil extends WebService4HisInterfaceCacheU
         timeReg.setBeginTime("08:00");
         timeReg.setTotal(1);
         timeReg.setOverCount(1);
+        timeReg.setTimeFlag("1");
         timeRegList.add(timeReg);
         TimeRegInfo info = new TimeRegInfo();
         info.setTimeRegList(timeRegList);
