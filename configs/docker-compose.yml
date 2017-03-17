@@ -19,7 +19,7 @@ isj-redis:
   image: redis
   command: redis-server --appendonly yes
 isj-pep:
-  image: propersoft/pep-isj
+  image: propersoft/ihos:7-jre8
   volumes:
     - ./tomcat/webapps:/usr/local/tomcat/webapps
     - ./tomcat/logs:/usr/local/tomcat/logs

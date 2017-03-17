@@ -1,12 +1,10 @@
-FROM tomcat:7-jre7
+FROM tomcat:7-jre8
 MAINTAINER Alpha Hinex <AlphaHinex@gmail.com>
 
-RUN apk add --no-cache tzdata
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo "Asia/Shanghai" > /etc/timezone
-RUN apk del tzdata
 
+COPY tomcat/conf/server.xml /usr/local/tomcat/conf/server.xml
+COPY tomcat/conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 
-COPY tomcat/server.xml /usr/local/tomcat/conf/server.xml
-
-EXPOSE 9090
+EXPOSE 8080
