@@ -154,7 +154,7 @@ public interface RegistrationService {
 
     /**
      * 查询未付款订单,更新状态.
-     *
+     * 
      * @param registrationDocument 挂号报文.
      */
     RegistrationDocument saveQueryPayTradeStatusAndUpdateReg(RegistrationDocument registrationDocument)

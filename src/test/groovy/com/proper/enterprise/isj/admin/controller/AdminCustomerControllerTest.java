@@ -52,6 +52,7 @@ public class AdminCustomerControllerTest extends AbstractTest {
     @Autowired
     MessagesRepository messagesRepository;
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testUsers() throws Exception {
         MvcResult result = get("/admin/customer/users?name=姓名&medicalNum=M000000000&phoneOrIdcard=13600000000", HttpStatus.OK);
@@ -64,6 +65,7 @@ public class AdminCustomerControllerTest extends AbstractTest {
         assert list.size() == 2;
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testRegistrations() throws Exception {
         MvcResult result = get("/admin/customer/registrations?userId=6eda5afd-6c5f-42c0-91de-653fb04f990b", HttpStatus.OK);
@@ -72,6 +74,7 @@ public class AdminCustomerControllerTest extends AbstractTest {
         assert list.size() == 1;
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testRecipeorders() throws Exception {
         MvcResult result = get("/admin/customer/recipeorders?userId=6eda5afd-6c5f-42c0-91de-653fb04f990b", HttpStatus.OK);
@@ -80,6 +83,7 @@ public class AdminCustomerControllerTest extends AbstractTest {
         assert list.size() == 1;
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testMessages() throws Exception {
         MvcResult result = get("/admin/customer/messages?userId=6eda5afd-6c5f-42c0-91de-653fb04f990b", HttpStatus.OK);

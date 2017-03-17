@@ -2,10 +2,17 @@ package com.proper.enterprise.isj.webservices.model.req.payorder;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/10/6 0006.
  */
 public class PayOrderDetailReq implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 挂号流程号

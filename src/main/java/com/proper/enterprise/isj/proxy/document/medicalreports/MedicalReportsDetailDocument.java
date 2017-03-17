@@ -3,10 +3,16 @@ package com.proper.enterprise.isj.proxy.document.medicalreports;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * 检验/检查报告详细
  */
 public class MedicalReportsDetailDocument extends MedicalReportsDocument {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 患者姓名
      */

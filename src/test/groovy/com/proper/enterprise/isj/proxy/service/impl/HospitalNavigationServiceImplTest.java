@@ -1,14 +1,10 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
-import com.proper.enterprise.isj.proxy.document.SubjectDocument;
-import com.proper.enterprise.isj.proxy.entity.*;
-import com.proper.enterprise.isj.proxy.repository.NavInfoRepository;
-import com.proper.enterprise.isj.proxy.service.HospitalNavigationService;
-import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -16,10 +12,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.proper.enterprise.isj.proxy.document.SubjectDocument;
+import com.proper.enterprise.isj.proxy.entity.NavInfoEntity;
+import com.proper.enterprise.isj.proxy.entity.NavigationBuildDetailEntity;
+import com.proper.enterprise.isj.proxy.entity.NavigationBuildEntity;
+import com.proper.enterprise.isj.proxy.entity.NavigationFloorDetailEntity;
+import com.proper.enterprise.isj.proxy.entity.NavigationFloorEntity;
+import com.proper.enterprise.isj.proxy.repository.NavInfoRepository;
+import com.proper.enterprise.isj.proxy.service.HospitalNavigationService;
+import com.proper.enterprise.isj.proxy.utils.cache.WebServiceDataSecondCacheUtil;
+import com.proper.enterprise.platform.core.utils.ConfCenter;
+import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
  * 医院导航测试ServiceImpl
@@ -27,8 +30,6 @@ import java.util.Map;
 @Service
 @Primary
 public class HospitalNavigationServiceImplTest implements HospitalNavigationService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HospitalNavigationServiceImpl.class);
 
     @Autowired
     NavInfoRepository navRepo;

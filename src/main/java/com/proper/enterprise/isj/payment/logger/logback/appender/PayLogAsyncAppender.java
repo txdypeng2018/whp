@@ -83,6 +83,7 @@ public class PayLogAsyncAppender extends AsyncAppender {
     @Override
     protected boolean isDiscardable(ILoggingEvent event) {
         Level level = event.getLevel();
+        this.setMaxFlushTime(500);
         return level.toInt() < Level.INFO_INT;
     }
 

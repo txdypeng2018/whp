@@ -399,6 +399,7 @@ public class CenterFunctionUtils {
         return titleSet;
     }
 
+    @SuppressWarnings("unchecked")
     public static String getPushMsgContent(SendPushMsgEnum pushType, Object pushObj) throws Exception {
         StringBuilder content = new StringBuilder();
         RegistrationDocument reg;

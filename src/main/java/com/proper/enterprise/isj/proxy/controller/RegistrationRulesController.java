@@ -1,126 +1,116 @@
 package com.proper.enterprise.isj.proxy.controller;
 
-import com.proper.enterprise.isj.proxy.entity.RegistrationRulesEntity;
-import com.proper.enterprise.isj.proxy.service.RegistrationRulesService;
-import com.proper.enterprise.isj.rule.entity.RuleEntity;
-import com.proper.enterprise.platform.core.controller.BaseController;
-import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_SYSTEM_ERR;
+import com.proper.enterprise.isj.context.CatalogueContext;
+import com.proper.enterprise.isj.context.IdContext;
+import com.proper.enterprise.isj.context.IdsContext;
+import com.proper.enterprise.isj.context.NameContext;
+import com.proper.enterprise.isj.context.PageNoContext;
+import com.proper.enterprise.isj.context.PageSizeContext;
+import com.proper.enterprise.isj.context.RuleContext;
+import com.proper.enterprise.isj.context.RuleEntityContext;
+import com.proper.enterprise.isj.controller.IHosBaseController;
+import com.proper.enterprise.isj.proxy.business.registration.RegistrationRulesDeleteRuleInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.registration.RegistrationRulesGetRuleInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.registration.RegistrationRulesGetRulesInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.registration.RegistrationRulesSaveRuleInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.registration.RegistrationRulesUpdateRuleInfoBusiness;
+import com.proper.enterprise.isj.proxy.entity.RegistrationRulesEntity;
+import com.proper.enterprise.isj.rule.entity.RuleEntity;
 
 /**
  * 挂号规则Controller.
  */
 @RestController
 @RequestMapping(path = "/registration")
-public class RegistrationRulesController extends BaseController{
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PromptTipsController.class);
-
-    @Autowired
-    RegistrationRulesService rulesService;
+public class RegistrationRulesController extends IHosBaseController {
 
     /**
      * 取得挂号规则列表.
      *
      * @param catalogue
-     *        挂号规则分类.
+     *            挂号规则分类.
      * @param name
-     *        挂号规则名称.
+     *            挂号规则名称.
      * @param rule
-     *        挂号规则内容.
+     *            挂号规则内容.
      * @param pageNo
-     *        当前页码.
+     *            当前页码.
      * @param pageSize
-     *        每页数量.
+     *            每页数量.
      * @return 意见列表.
      * @throws Exception
-     *         异常.
+     *             异常.
      */
     @GetMapping(path = "/rules")
     public ResponseEntity<RegistrationRulesEntity> getrulesInfo(@RequestParam(required = false) String catalogue,
             @RequestParam(required = false) String name, @RequestParam(required = false) String rule,
             @RequestParam String pageNo, @RequestParam String pageSize) throws Exception {
+        return responseOfGet(toolkit.execute(RegistrationRulesGetRulesInfoBusiness.class, (c) -> {
+            ((CatalogueContext<?>) c).setCatalogue(catalogue);
+            ((NameContext<?>) c).setName(name);
+            ((RuleContext<?>) c).setRule(rule);
+            ((PageNoContext<?>) c).setPageNo(Integer.parseInt(pageNo));
+            ((PageSizeContext<?>) c).setPageSize(Integer.parseInt(pageSize));
+        }));
 
-        // 取得挂号规则列表
-        RegistrationRulesEntity rulesInfo = rulesService.getRulesInfo(catalogue, name, rule, pageNo, pageSize);
-        return responseOfGet(rulesInfo);
     }
 
     /**
      * 新增挂号规则信息.
      *
      * @param ruleInfo
-     *        挂号规则对象.
+     *            挂号规则对象.
      * @return 返回给调用方的应答.
      * @throws Exception 异常.
      */
     @PostMapping(path = "/rules", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> saveRuleInfo(@RequestBody RuleEntity ruleInfo) throws Exception {
-        try {
-            rulesService.saveRuleInfo(ruleInfo);
-            return responseOfPost("");
-        } catch (Exception e) {
-            LOGGER.debug("RegistrationRulesController.saveRuleInfo[Exception]:", e);
-            throw new RuntimeException(APP_SYSTEM_ERR, e);
-        }
+        return responseOfPost(toolkit.execute(RegistrationRulesSaveRuleInfoBusiness.class, (c) -> {
+            ((RuleEntityContext<?>) c).setRuleEntity(ruleInfo);
+        }));
     }
 
     /**
      * 更新挂号规则信息.
      *
      * @param ruleInfo
-     *        挂号规则对象.
+     *            挂号规则对象.
      * @return 返回给调用方的应答.
      * @throws Exception 异常.
      */
     @PutMapping(path = "/rules", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> updateRuleInfo(@RequestBody RuleEntity ruleInfo) throws Exception {
-        if(StringUtil.isNotNull(ruleInfo.getId())) {
-            try {
-                rulesService.saveRuleInfo(ruleInfo);
-            } catch (Exception e) {
-                LOGGER.debug("RegistrationRulesController.updateRuleInfo[Exception]:", e);
-                throw new RuntimeException(APP_SYSTEM_ERR, e);
-            }
-        }
-        return responseOfPut("");
+        return responseOfPut(toolkit.execute(RegistrationRulesUpdateRuleInfoBusiness.class, (c) -> {
+            ((RuleEntityContext<?>) c).setRuleEntity(ruleInfo);
+        }));
     }
 
     /**
      * 删除挂号规则信息.
      *
      * @param ids
-     *        id列表.
+     *            id列表.
      * @return 返回给调用方的应答.
      * @throws Exception 异常.
      */
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(path = "/rules")
     public ResponseEntity deleteRuleInfo(@RequestParam String ids) throws Exception {
-        boolean retValue = false;
-        if(StringUtil.isNotNull(ids)) {
-            try {
-                String[] idArr = ids.split(",");
-                List<String> idList = new ArrayList<>();
-                Collections.addAll(idList, idArr);
-                rulesService.deleteRuleInfo(idList);
-                retValue = true;
-            } catch (Exception e) {
-                LOGGER.debug("RegistrationRulesController.deleteRuleInfo[Exception]:", e);
-                throw new RuntimeException(APP_SYSTEM_ERR, e);
-            }
-        }
-        return responseOfDelete(retValue);
+        return responseOfDelete(toolkit.execute(RegistrationRulesDeleteRuleInfoBusiness.class, (c) -> {
+            ((IdsContext<?>) c).setIds(ids);
+        }));
     }
 
     /**
@@ -131,6 +121,8 @@ public class RegistrationRulesController extends BaseController{
      */
     @GetMapping(path = "/rules/{id}")
     public ResponseEntity<RuleEntity> getRuleInfo(@PathVariable String id) throws Exception {
-        return responseOfGet(StringUtil.isNotEmpty(id)?rulesService.getRuleInfoById(id):new RuleEntity());
+        return responseOfGet(toolkit.execute(RegistrationRulesGetRuleInfoBusiness.class, (c) -> {
+            ((IdContext<?>) c).setId(id);
+        }));
     }
 }

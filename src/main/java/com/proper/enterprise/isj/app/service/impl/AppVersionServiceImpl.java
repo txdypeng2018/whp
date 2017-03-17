@@ -3,6 +3,8 @@ package com.proper.enterprise.isj.app.service.impl;
 import com.proper.enterprise.isj.app.document.AppVersionDocument;
 import com.proper.enterprise.isj.app.repository.AppVersionRepository;
 import com.proper.enterprise.isj.app.service.AppVersionService;
+import com.proper.enterprise.isj.support.service.AbstractService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = "pep")
-public class AppVersionServiceImpl implements AppVersionService {
+public class AppVersionServiceImpl extends AbstractService implements AppVersionService {
 
     private static final String CACHE_KEY = "'latestVer'";
 
@@ -21,12 +23,13 @@ public class AppVersionServiceImpl implements AppVersionService {
     @Override
     @CacheEvict(key = CACHE_KEY)
     public AppVersionDocument save(AppVersionDocument appVersion) {
-        return repository.save(appVersion);
+        
+        return toolkit.executeRepositoryFunction(AppVersionRepository.class, "save", appVersion);
     }
 
     @Override
     public AppVersionDocument getLatestVersionInfo() {
-        return repository.findTopByOrderByVerDesc();
+        return toolkit.executeRepositoryFunction(AppVersionRepository.class, "findTopByOrderByVerDesc");
     }
 
     @Override
@@ -38,7 +41,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Override
     public AppVersionDocument getCertainVersion(int version){
-        return repository.findByVer(version);
+        return toolkit.executeRepositoryFunction(AppVersionRepository.class, "findByVer", version);
     }
 
 }

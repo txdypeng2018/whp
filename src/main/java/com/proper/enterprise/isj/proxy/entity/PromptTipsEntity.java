@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * 温馨提示对象
  */
 public class PromptTipsEntity implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 总数

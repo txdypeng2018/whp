@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.proper.enterprise.isj.order.model.Order;
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.annotation.CacheEntity;
 import com.proper.enterprise.platform.core.entity.BaseEntity;
 
@@ -12,6 +13,11 @@ import com.proper.enterprise.platform.core.entity.BaseEntity;
 @Table(name = "ISJ_ORDERINFO")
 @CacheEntity
 public class OrderEntity extends BaseEntity implements Order {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     public OrderEntity() {
     }

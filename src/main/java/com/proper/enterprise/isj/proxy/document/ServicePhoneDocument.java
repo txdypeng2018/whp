@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,6 +9,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "service_phone")
 public class ServicePhoneDocument extends BaseDocument {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 电话类别
      */

@@ -7,9 +7,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 @XmlRootElement(name = "PAY_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Pay implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 挂号流程号

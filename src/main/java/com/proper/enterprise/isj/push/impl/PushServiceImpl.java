@@ -1,23 +1,24 @@
 package com.proper.enterprise.isj.push.impl;
 
-import com.proper.enterprise.isj.push.PushService;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-import com.proper.mobile.pushtools.PushMessage;
-import com.proper.mobile.pushtools.PusherApp;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.proper.enterprise.isj.function.message.PushInfoFunction;
+import com.proper.enterprise.isj.push.PushService;
+import com.proper.enterprise.isj.support.service.AbstractService;
+import com.proper.enterprise.platform.core.api.ILoggable;
+import com.proper.enterprise.platform.core.utils.ConfCenter;
+import com.proper.mobile.pushtools.PushMessage;
+import com.proper.mobile.pushtools.PusherApp;
 
 /**
  * 推送ServiceImpl
  */
 @Service
-public class PushServiceImpl implements PushService {
-
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PushServiceImpl.class);
+public class PushServiceImpl extends AbstractService implements PushService, ILoggable {
 
     /**
      * 推送反馈意见消息
@@ -34,7 +35,7 @@ public class PushServiceImpl implements PushService {
      */
     @Override
     public void pushInfo(String pushContent, String pushType, List<String> userNameList, List<Map<String, String>> paramList) throws Exception {
-        LOGGER.debug("Push info: {}, {}, {}, {}", pushContent, pushType, userNameList, paramList);
+        debug("Push info: {}, {}, {}, {}", pushContent, pushType, userNameList, paramList);
 
         // 获取推送相关参数
         String appkey= ConfCenter.get("isj.push.properpushAppkey");
@@ -60,8 +61,14 @@ public class PushServiceImpl implements PushService {
             }
         }
 
-        LOGGER.debug("Invoke PusherAPP to push {} to {}", msg, userNameList);
+        debug("Invoke PusherAPP to push {} to {}", msg, userNameList);
         // 推送消息
         app.pushMessageToUsers(msg, userNameList);
+
+
+
+        toolkit.executeFunction(PushInfoFunction.class, pushContent, pushType, userNameList, paramList);
+
+
     }
 }

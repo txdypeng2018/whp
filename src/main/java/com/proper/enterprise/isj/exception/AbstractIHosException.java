@@ -1,11 +1,13 @@
 package com.proper.enterprise.isj.exception;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 public class AbstractIHosException extends Exception {
 
     /**
      * serialVersionUID : long.
      */
-    private static final long serialVersionUID = -1;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     public AbstractIHosException() {
         super();

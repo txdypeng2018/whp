@@ -1,16 +1,11 @@
 package com.proper.enterprise.isj.user.controller;
 
-import com.proper.enterprise.isj.user.document.UserInfoDocument;
-import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
-import com.proper.enterprise.isj.user.repository.UserInfoRepository;
-import com.proper.enterprise.isj.user.service.UserInfoPublicServiceTest;
-import com.proper.enterprise.isj.user.service.impl.custom.UserInfoWebServiceClientCustom;
-import com.proper.enterprise.isj.user.service.impl.notx.UserInfoServiceNotxImpl;
-import com.proper.enterprise.platform.api.auth.model.User;
-import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
-import com.proper.enterprise.platform.core.utils.DateUtil;
-import com.proper.enterprise.platform.core.utils.JSONUtil;
-import com.proper.enterprise.platform.test.AbstractTest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +15,20 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.*;
+import com.proper.enterprise.isj.payment.logger.LoggerTestAdvice;
+import com.proper.enterprise.isj.user.document.UserInfoDocument;
+import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
+import com.proper.enterprise.isj.user.repository.UserInfoRepository;
+import com.proper.enterprise.isj.user.service.UserInfoPublicServiceTest;
+import com.proper.enterprise.isj.user.service.impl.notx.UserInfoServiceNotxImpl;
+import com.proper.enterprise.platform.api.auth.model.User;
+import com.proper.enterprise.platform.auth.jwt.service.JWTAuthcService;
+import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.JSONUtil;
+import com.proper.enterprise.platform.test.AbstractTest;
 
 /**
  * Created by think on 2016/8/15 0015.
- *
  */
 
 public class UserInfoControllerTest extends AbstractTest {
@@ -60,7 +64,7 @@ public class UserInfoControllerTest extends AbstractTest {
     public void testAddMedicalNum() throws Exception {
         /*-----------新注册用户-------------*/
         UserInfoDocument userInfo = this.saveTestUserInfo();
-        userInfoServiceNotx.webServicesClient = new UserInfoWebServiceClientCustom();
+        LoggerTestAdvice.setAsUserInfoWebServiceClientCustom(true);
         userInfoServiceNotx.saveOrUpdatePatientMedicalNum(userInfo.getUserId(), userInfo.getId(), null);
         /*----------------添加家庭成员(身份证号为错误)-------------*/
         boolean errFlag = false;
@@ -112,7 +116,7 @@ public class UserInfoControllerTest extends AbstractTest {
 
         /*----------删除测试数据----------*/
         userInfoRepository.delete(userInfo.getId());
-
+        LoggerTestAdvice.setAsUserInfoWebServiceClientCustom(false);
     }
 
     @Test
@@ -131,8 +135,8 @@ public class UserInfoControllerTest extends AbstractTest {
         jsonMap.put("memberCode", "10");
         jsonMap.put("member", "其他");
         jsonMap.put("patientVisits", "0");
-        post("/user/familyMembers/familyMember", MediaType.TEXT_PLAIN,
-                JSONUtil.toJSON(jsonMap), HttpStatus.BAD_REQUEST);
+        post("/user/familyMembers/familyMember", MediaType.TEXT_PLAIN, JSONUtil.toJSON(jsonMap),
+                HttpStatus.BAD_REQUEST);
         /*----------删除测试数据----------*/
         userInfoRepository.delete(userInfo.getId());
     }

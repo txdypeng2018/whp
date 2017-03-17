@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.payment.logger.entity;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.entity.BaseEntity;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class DefaultPayLogRecordEntity extends BaseEntity implements PayLogRecor
     /**
      * 序列化版本编号.
      */
-    private static final long serialVersionUID = -4260678113508073118L;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     @Column(length = 63)
     private String orderId;

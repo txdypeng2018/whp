@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+
+	<bean id="THE_TRUE" class="java.lang.Boolean">
+		<constructor-arg>
+			<value>true</value>
+		</constructor-arg>
+	</bean>
+	<bean id="THE_FALSE" class="java.lang.Boolean">
+		<constructor-arg>
+			<value>false</value>
+		</constructor-arg>
+	</bean>
+
+
+
+	<bean id="AliNoticePayOrRegisterBusiness"
+		class="com.proper.enterprise.isj.support.business.DefaultGroupBusiness">
+		<property name="handlers">
+			<list>
+				<ref bean="fetchOutTradeNoFromParamsBusiness" />
+				<ref bean="fetchAliEntityByParamsBusiness" />
+				<ref bean="fetchOrderByOutTradeNoBusiness" />
+				<bean
+					class="com.proper.enterprise.isj.support.business.DefaultGroupBusiness">
+					<property name="strategy">
+						<bean
+							class="com.proper.enterprise.isj.support.strategy.ConditionDecideFilterProcessStrategy">
+							<property name="decide" ref="OrderContextStatusLtUncomfirmDecide" />
+						</bean>
+					</property>
+					<property name="handlers">
+						<list>
+							<bean
+								class="com.proper.enterprise.isj.business.KeyBusinessWrap.KeyBusinessWrap">
+								<constructor-arg ref="THE_TRUE" />
+								<constructor-arg ref="aliNoticeRegisterBusiness" />
+							</bean>
+							<bean
+								class="com.proper.enterprise.isj.business.KeyBusinessWrap.KeyBusinessWrap">
+								<constructor-arg ref="THE_FALSE" />
+								<constructor-arg ref="aliNoticePayBusiness" />
+							</bean>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>

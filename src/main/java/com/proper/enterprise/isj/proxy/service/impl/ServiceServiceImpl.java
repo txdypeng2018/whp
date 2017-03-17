@@ -1,128 +1,108 @@
 package com.proper.enterprise.isj.proxy.service.impl;
 
-import com.proper.enterprise.isj.proxy.document.ServiceFeedbackDocument;
-import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
-import com.proper.enterprise.isj.proxy.document.ServiceUserOpinionDocument;
-import com.proper.enterprise.isj.proxy.repository.BaseInfoRepository;
-import com.proper.enterprise.isj.proxy.repository.ServiceUserOpinionRepository;
-import com.proper.enterprise.isj.proxy.service.ServiceService;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.regex.Pattern;
+import com.proper.enterprise.isj.context.BaseInfoEntityContext;
+import com.proper.enterprise.isj.context.FeedbackContext;
+import com.proper.enterprise.isj.context.FeedbackStatusContext;
+import com.proper.enterprise.isj.context.OpinionContext;
+import com.proper.enterprise.isj.context.OpinionIdContext;
+import com.proper.enterprise.isj.context.PageNoContext;
+import com.proper.enterprise.isj.context.PageSizeContext;
+import com.proper.enterprise.isj.context.ServiceUserOpinionDocumentContext;
+import com.proper.enterprise.isj.context.StatusCodeContext;
+import com.proper.enterprise.isj.context.UserIdContext;
+import com.proper.enterprise.isj.context.UserNameContext;
+import com.proper.enterprise.isj.context.UserTelContext;
+import com.proper.enterprise.isj.function.opinion.FindByUserIdAndFeedbackStatusFunction;
+import com.proper.enterprise.isj.proxy.business.customerservice.FetchFeedBackInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.customerservice.FetchServicePhoneNumBusiness;
+import com.proper.enterprise.isj.proxy.business.customerservice.SaveBaseinfoBusiness;
+import com.proper.enterprise.isj.proxy.business.opinion.FetchAllOpinionsBusiness;
+import com.proper.enterprise.isj.proxy.business.opinion.FetchByIdBusiness;
+import com.proper.enterprise.isj.proxy.business.opinion.FetchByUserIdBusiness;
+import com.proper.enterprise.isj.proxy.business.opinion.FindUserOpinionByFeedbackStatusBusiness;
+import com.proper.enterprise.isj.proxy.business.opinion.SaveOpinionBusiness;
+import com.proper.enterprise.isj.proxy.document.ServiceFeedbackDocument;
+import com.proper.enterprise.isj.proxy.document.ServiceUserOpinionDocument;
+import com.proper.enterprise.isj.proxy.entity.BaseInfoEntity;
+import com.proper.enterprise.isj.proxy.service.ServiceService;
+import com.proper.enterprise.isj.support.service.AbstractService;
 
 @Service
-public class ServiceServiceImpl implements ServiceService {
+public class ServiceServiceImpl extends AbstractService implements ServiceService {
 
-    private static final Logger LOGGER  = org.slf4j.LoggerFactory.getLogger(ServiceServiceImpl.class);
-
-    @Autowired
-    BaseInfoRepository baseRepo;
-
-    @Autowired
-    ServiceUserOpinionRepository opinionRepo;
-
-    @Autowired
-    MongoTemplate mongoTemplate;
 
     @Override
     public String getPhoneNum() {
-        String phoneType = ConfCenter.get("isj.info.phone");
-        List<BaseInfoEntity> retDoc = baseRepo.findByInfoType(phoneType);
-        return retDoc.get(0).getInfo();
+        return toolkit.execute(FetchServicePhoneNumBusiness.class, (c) -> {
+        });
     }
 
     @Override
     public void saveBaseInfo(BaseInfoEntity baseInfo) {
-        baseRepo.save(baseInfo);
+        toolkit.execute(SaveBaseinfoBusiness.class, (c) -> {
+            ((BaseInfoEntityContext<?>) c).setBasicInfoEntity(baseInfo);
+        });
     }
+
     @Override
     public void saveOpinion(ServiceUserOpinionDocument opinionDocument) {
-        opinionRepo.save(opinionDocument);
+        toolkit.execute(SaveOpinionBusiness.class, (c) -> {
+            ((ServiceUserOpinionDocumentContext<?>) c).setOpinionDocment(opinionDocument);
+        });
     }
+
     @Override
     public List<ServiceUserOpinionDocument> getAll() {
-        return opinionRepo.findAll();
+        return toolkit.execute(FetchAllOpinionsBusiness.class, (c) -> {
+        });
     }
+
     @Override
     public List<ServiceUserOpinionDocument> findByFeedbackStatus(String feedbackStatus) {
-        return opinionRepo.findByStatusCodeOrderByOpinionTimeDescCreateTimeDesc(feedbackStatus);
+        return toolkit.execute(FindUserOpinionByFeedbackStatusBusiness.class, (c) -> {
+            ((FeedbackStatusContext<?>) c).setFeedbackStatus(feedbackStatus);
+        });
     }
+
     @Override
     public List<ServiceUserOpinionDocument> getByUserId(String userId) {
-        return opinionRepo.findByUserIdOrderByOpinionTimeDescCreateTimeDesc(userId);
+        return toolkit.execute(FetchByUserIdBusiness.class, (c) -> {
+            ((UserIdContext<?>) c).setUserId(userId);
+        });
     }
 
     @Override
     public List<ServiceUserOpinionDocument> getByUserIdAndFeedbackStatus(String userId, String feedbackStatus) {
-        return opinionRepo.findByUserIdAndStatusCodeOrderByOpinionTimeDescCreateTimeDesc(userId, feedbackStatus);
+        return toolkit.execute(FindByUserIdAndFeedbackStatusFunction.class, (c) -> {
+            ((UserIdContext<?>) c).setUserId(userId);
+            ((FeedbackStatusContext<?>) c).setFeedbackStatus(feedbackStatus);
+        });
     }
+
     @Override
-    public ServiceUserOpinionDocument getById(String id){
-        return opinionRepo.findById(id);
+    public ServiceUserOpinionDocument getById(String id) {
+        return toolkit.execute(FetchByIdBusiness.class, (c) -> {
+            ((OpinionIdContext<?>) c).setOpinionId(id);
+        });
     }
 
     @Override
-    public ServiceFeedbackDocument getFeedBackInfo(String userName, String userTel, String statusCode,
-            String opinion, String feedback, String pageNo,  String pageSize) throws Exception {
-        // 查询条件
-        Query query = new Query();
-        // 用户姓名
-        if(StringUtil.isNotEmpty(userName)) {
-            Pattern ptUserName = Pattern.compile("^.*"+userName+".*$", Pattern.CASE_INSENSITIVE);
-            query.addCriteria(Criteria.where("userName").regex(ptUserName));
-        }
-        // 用户手机号
-        if(StringUtil.isNotEmpty(userTel)) {
-            Pattern ptUserTel = Pattern.compile("^.*"+userTel+".*$", Pattern.CASE_INSENSITIVE);
-            query.addCriteria(Criteria.where("userTel").regex(ptUserTel));
-        }
-        // 反馈状态
-        if(StringUtil.isNotEmpty(statusCode)) {
-            query.addCriteria(Criteria.where("statusCode").is(statusCode));
-        }
-        // 用户意见
-        if(StringUtil.isNotEmpty(opinion)) {
-            Pattern ptOpinion = Pattern.compile("^.*"+opinion+".*$", Pattern.CASE_INSENSITIVE);
-            query.addCriteria(Criteria.where("opinion").regex(ptOpinion));
-        }
-        // 反馈意见
-        if(StringUtil.isNotEmpty(feedback)) {
-            Pattern ptFeedback = Pattern.compile("^.*"+feedback+".*$", Pattern.CASE_INSENSITIVE);
-            query.addCriteria(Criteria.where("feedback").regex(ptFeedback));
-        }
-        // 设置按照时间倒序
-        query.with(new Sort(Sort.Direction.DESC, "opinionTime").and(new Sort(Sort.Direction.DESC, "createTime")));
-        // 设置分页
-        // 当前页码
-        int iPageNo = Integer.parseInt(pageNo);
-        // 每页数量
-        int iPageSize = Integer.parseInt(pageSize);
-        // 获取总条数
-        long opinionCount = this.mongoTemplate.count(query, ServiceUserOpinionDocument.class);
-        // 分页页码
-        int skip = (iPageNo - 1) * iPageSize;
-        // skip相当于从那条记录开始
-        query.skip(skip);
-        // 从skip开始,取多少条记录
-        query.limit(iPageSize);
-
-        ServiceFeedbackDocument feedbackInfo = new ServiceFeedbackDocument();
-        // 总条数
-        feedbackInfo.setCount((int) opinionCount);
-        LOGGER.debug("count:" + feedbackInfo.getCount());
-        // 列表数据
-        List<ServiceUserOpinionDocument> opinionList = mongoTemplate.find(query, ServiceUserOpinionDocument.class);
-        feedbackInfo.setData(opinionList);
-
-        return feedbackInfo;
+    public ServiceFeedbackDocument getFeedBackInfo(String userName, String userTel, String statusCode, String opinion,
+            String feedback, String pageNo, String pageSize) throws Exception {
+        
+        return toolkit.execute(FetchFeedBackInfoBusiness.class, (c) -> {
+            ((UserNameContext<?>) c).setUserName(userName);
+            ((UserTelContext<?>) c).setUserTel(userTel);
+            ((StatusCodeContext<?>) c).setStatusCode(statusCode);
+            ((OpinionContext<?>) c).setOpinion(opinion);
+            ((FeedbackContext<?>) c).setFeedback(feedback);
+            ((PageNoContext<?>) c).setPageNo(Integer.parseInt(pageNo));
+            ((PageSizeContext<?>) c).setPageSize(Integer.parseInt(pageSize));
+        });
+        
     }
 }

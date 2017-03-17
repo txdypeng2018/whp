@@ -2,12 +2,14 @@ package com.proper.enterprise.isj.proxy.document.registration;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/12/13 0013. 挂号流程状态
  */
 public class RegistrationOrderProcessDocument implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 步骤图标

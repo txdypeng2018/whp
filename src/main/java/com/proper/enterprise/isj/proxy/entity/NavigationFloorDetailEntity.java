@@ -2,12 +2,14 @@ package com.proper.enterprise.isj.proxy.entity;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * 医院导航楼层科室对象
  */
 public class NavigationFloorDetailEntity implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 楼层所在楼宇ID

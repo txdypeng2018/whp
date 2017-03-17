@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.log.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +15,10 @@ import java.util.Map;
 @Document(collection = "WS_LOG")
 public class WSLogDocument extends BaseDocument {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 方法名称
      */

@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.res.reportinfo.ReportCheckList;
 import com.proper.enterprise.isj.webservices.model.res.reportinfo.ReportUserDetailInfo;
 
@@ -17,6 +18,11 @@ import java.util.List;
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReportDetailInfo implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院ID

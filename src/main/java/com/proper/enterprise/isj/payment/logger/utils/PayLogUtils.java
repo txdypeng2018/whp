@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.payment.logger.utils;
 
+
 import static com.proper.enterprise.isj.payment.logger.PayLog.DEFAULT_CAUSE;
 
 import org.slf4j.Logger;

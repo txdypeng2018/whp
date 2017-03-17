@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.proper.enterprise.isj.payment.logger.LoggerApplicationContextHelper;
 import com.proper.enterprise.isj.payment.logger.PayLog;
-import com.proper.enterprise.platform.utils.factory.Factory;
+import com.proper.enterprise.platform.core.api.IFactory;
 
 /**
  * 默认{@link PayLog}工厂实现类.
@@ -19,7 +19,7 @@ import com.proper.enterprise.platform.utils.factory.Factory;
  */
 @Component
 public class DefaultPayLogFactory<T>
-        implements Factory<PayLog<T>>, com.proper.enterprise.isj.payment.logger.utils.codec.Factory<PayLog<T>> {
+        implements IFactory {
 
     @SuppressWarnings("unchecked")
     @Override
@@ -27,7 +27,6 @@ public class DefaultPayLogFactory<T>
         return LoggerApplicationContextHelper.findAppContext().getBean(PayLog.class);
     }
 
-    @Override
     public PayLog<T> newInstance() {
         return create();
     }

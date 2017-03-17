@@ -1,13 +1,14 @@
 package com.proper.enterprise.isj.rule.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.proper.enterprise.platform.core.annotation.CacheEntity;
-import com.proper.enterprise.platform.core.entity.BaseEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proper.enterprise.isj.support.VersionEnum;
+import com.proper.enterprise.platform.core.annotation.CacheEntity;
+import com.proper.enterprise.platform.core.entity.BaseEntity;
 
 @Entity
 @Table(name = "ISJ_RULES")
@@ -17,7 +18,7 @@ public class RuleEntity extends BaseEntity {
     /**
      * serialVersionUID.
      */
-    private static final long serialVersionUID = -7989449074557416016L;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 规则描述，使用 Spring EL 表达式描述
@@ -42,10 +43,10 @@ public class RuleEntity extends BaseEntity {
      */
     @Column(name = "RULE_HOWTOUSE", length = 4000)
     private String howToUse;
-    
+
     @Transient
     private String lastModifyUserName;
-
+    
     /**
      * 规则分类
      */

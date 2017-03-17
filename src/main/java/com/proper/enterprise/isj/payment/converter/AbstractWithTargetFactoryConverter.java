@@ -1,6 +1,6 @@
 package com.proper.enterprise.isj.payment.converter;
 
-import com.proper.enterprise.platform.utils.factory.FactoryWrapper;
+import com.proper.enterprise.platform.core.factory.FactoryWrapper;
 
 /**
  * 定义了转换目标工厂的抽象转换器.
@@ -10,8 +10,7 @@ import com.proper.enterprise.platform.utils.factory.FactoryWrapper;
  * @author 王东石<wangdongshi@propersoft.cn>
  * @since 0.1.0
  */
-public abstract class AbstractWithTargetFactoryConverter<S, T> extends FactoryWrapper<T>
-        implements Converter<S, T> {
+public abstract class AbstractWithTargetFactoryConverter<S, T> extends FactoryWrapper implements Converter<S, T> {
 
     @Override
     public T convert(S source, T target) {
@@ -27,7 +26,9 @@ public abstract class AbstractWithTargetFactoryConverter<S, T> extends FactoryWr
      *
      * @param source 转换源对象.
      * @param target 转换目标对象.
-     *               <p>此参数为非空.</p>
+     *            <p>
+     *            此参数为非空.
+     *            </p>
      * @since 0.1.0
      */
     protected abstract void doConvert(S source, T target);

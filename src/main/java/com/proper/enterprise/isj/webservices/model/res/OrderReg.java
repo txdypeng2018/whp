@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.res.orderreg.Concession;
 import com.proper.enterprise.platform.core.enums.WhetherType;
 
@@ -14,6 +15,11 @@ import java.util.List;
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderReg implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院订单号 必填

@@ -10,17 +10,17 @@ public class DefaultBeanContainer<K> implements BeanContainer<K> {
      *
      * @since 0.1.0
      */
-    private Map<K, ManagedBean<K>> convMap = new ConcurrentHashMap<>();
+    private Map<K, ManagedBean<K>> beanMap = new ConcurrentHashMap<>();
 
     @Override
     public void register(ManagedBean<K> conv) {
-        convMap.put(conv.getKey(), conv);
+        beanMap.put(conv.getKey(), conv);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <B extends ManagedBean<K>> B findBean(K key) {
-        return (B) convMap.get(key);
+        return (B) beanMap.get(key);
     }
 
 }

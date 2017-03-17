@@ -7,9 +7,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 @XmlRootElement(name = "STOP_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StopReg implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     @XmlElement(name = "DISTRICT")
     private String district;

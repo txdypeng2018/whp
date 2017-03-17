@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.HosLevel;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,6 +12,11 @@ import java.io.Serializable;
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HosInfo implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院ID 必填

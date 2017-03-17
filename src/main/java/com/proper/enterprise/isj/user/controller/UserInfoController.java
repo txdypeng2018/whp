@@ -1,19 +1,31 @@
 package com.proper.enterprise.isj.user.controller;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.proper.enterprise.isj.controller.IHosBaseController;
 import com.proper.enterprise.isj.proxy.document.DoctorDocument;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.service.RegistrationService;
@@ -31,7 +43,7 @@ import com.proper.enterprise.platform.api.auth.model.User;
 import com.proper.enterprise.platform.api.auth.service.UserService;
 import com.proper.enterprise.platform.auth.jwt.model.JWTHeader;
 import com.proper.enterprise.platform.auth.jwt.service.JWTService;
-import com.proper.enterprise.platform.core.controller.BaseController;
+import com.proper.enterprise.platform.core.api.ILoggable;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.utils.StringUtil;
 import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
@@ -43,9 +55,7 @@ import com.proper.enterprise.platform.core.utils.sort.CNStrComparator;
 
 @RestController
 @RequestMapping(path = "/user")
-public class UserInfoController extends BaseController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoController.class);
+public class UserInfoController extends IHosBaseController implements ILoggable {
 
     @Autowired
     UserInfoService userInfoServiceImpl;

@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.proper.enterprise.isj.support.VersionEnum;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +15,11 @@ import java.io.Serializable;
 @XmlRootElement(name = "PAY_DETAIL_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PayDetail implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 明细费别，例：药品费，注射费等

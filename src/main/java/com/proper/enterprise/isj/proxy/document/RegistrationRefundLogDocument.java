@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.document;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 /**
@@ -10,7 +11,7 @@ import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 @Document(collection = "registration_refund_log")
 public class RegistrationRefundLogDocument extends BaseDocument {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 挂号单号

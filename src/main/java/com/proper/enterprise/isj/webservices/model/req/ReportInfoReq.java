@@ -2,10 +2,17 @@ package com.proper.enterprise.isj.webservices.model.req;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * 检验/检测报告详细信息请求对象.
  */
 public class ReportInfoReq implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院ID

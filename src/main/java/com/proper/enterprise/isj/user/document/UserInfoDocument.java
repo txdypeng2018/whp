@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.model.enums.CredentialsEnum;
@@ -16,6 +17,11 @@ import com.proper.enterprise.isj.user.model.enums.CredentialsEnum;
  */
 @Document(collection = "user_info")
 public class UserInfoDocument extends BasicInfoDocument {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 自定义登录名

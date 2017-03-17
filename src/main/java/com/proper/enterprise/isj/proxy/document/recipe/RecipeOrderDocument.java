@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.DateUtil;
@@ -19,7 +20,7 @@ import com.proper.enterprise.platform.core.utils.DateUtil;
 @Document(collection = "recipeorder")
 public class RecipeOrderDocument extends BaseDocument {
 
-    private static final long serialVersionUID = -1;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 患者id

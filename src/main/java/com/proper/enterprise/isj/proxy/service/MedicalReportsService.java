@@ -20,7 +20,7 @@ public interface MedicalReportsService {
 
     String getRepostsDetailsInfo(String reportId) throws IHosException;
 
-    MedicalReportsDetailDocument getRepostsDetailsInfo(String reportId, ReportInfoReq req) throws Exception;
+    MedicalReportsDetailDocument getRepostsDetailsInfo(String reportId, ReportInfoReq req) throws Throwable;
 
     ReportListReq getReportListReq(BasicInfoDocument basic);
 
