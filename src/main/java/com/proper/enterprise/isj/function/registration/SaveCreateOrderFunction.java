@@ -50,7 +50,7 @@ public class SaveCreateOrderFunction implements IFunction<Order> {
                     recipeOrder.getId().concat("_").concat(recipeOrder.getRecipeNonPaidDetail().getOrderNum()));
             orderInfo.setOrderAmount(recipeOrder.getRecipeNonPaidDetail().getAmount());
         }
-        orderInfo = toolkitx.executeFunction(OrderRepository.class, "save", orderInfo);
+        orderInfo = toolkitx.executeRepositoryFunction(OrderRepository.class, "save", orderInfo);
         return orderInfo;
     }
 

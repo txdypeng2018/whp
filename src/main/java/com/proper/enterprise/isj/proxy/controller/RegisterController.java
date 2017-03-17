@@ -119,10 +119,12 @@ public class RegisterController extends IHosBaseController {
      *
      * @return 返回的应答.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @RequestMapping(path = "/registrations/registration", method = RequestMethod.POST)
     public ResponseEntity addRegistration(@RequestBody RegistrationDocument reg) throws Exception {
-        return new ResponseEntity(toolkit.execute(RegisterCtrlAddRegistrationBusiness.class,
-                ctx -> ((RegistrationDocumentContext) ctx).setRegistrationDocument(reg)), HttpStatus.CREATED);
+        Object res = toolkit.execute(RegisterCtrlAddRegistrationBusiness.class,
+                ctx -> ((RegistrationDocumentContext) ctx).setRegistrationDocument(reg));
+        return new ResponseEntity(res, HttpStatus.CREATED);
     }
 
     /**

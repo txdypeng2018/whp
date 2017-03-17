@@ -11,9 +11,10 @@ import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
 import com.proper.enterprise.platform.core.api.BusinessContext;
 import com.proper.enterprise.platform.core.api.IBusiness;
 import com.proper.enterprise.platform.core.api.IFunction;
+import com.proper.enterprise.platform.core.api.ILoggable;
 import com.proper.enterprise.platform.core.exception.ErrMsgException;
 
-public abstract class AbstractBusinessToolkit implements BusinessToolkit {
+public abstract class AbstractBusinessToolkit implements BusinessToolkit, ILoggable {
 
     @Autowired
     protected BusinessContextFactory ctxFact;
@@ -75,6 +76,7 @@ public abstract class AbstractBusinessToolkit implements BusinessToolkit {
             if (cause != null && (cause instanceof IHosException || cause instanceof ErrMsgException)) {
                 throw new ErrMsgException(cause.getMessage());
             } else {
+                error(e.getMessage(), e);
                 throw new ErrMsgException(CenterFunctionUtils.APP_SYSTEM_ERR);
             }
         }

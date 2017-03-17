@@ -41,6 +41,7 @@ public class RegisterControllerTest extends AbstractTest {
         get("/register/registration?id=123123", HttpStatus.NOT_FOUND);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testPutRegistration() throws Exception {
         registrationRepository.deleteAll();

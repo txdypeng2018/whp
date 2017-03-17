@@ -12,11 +12,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import com.proper.enterprise.isj.context.IsAppointmentContext;
 import com.proper.enterprise.isj.context.RegistrationDocIdContext;
 import com.proper.enterprise.isj.context.RegistrationDocNumContext;
 import com.proper.enterprise.isj.context.RegistrationDocumentContext;
-import com.proper.enterprise.isj.proxy.business.his.HisCreateRegistrationAndOrderBusiness;
+import com.proper.enterprise.isj.proxy.business.his.HisCreateRegistrationAndOrderFunction;
 import com.proper.enterprise.isj.proxy.business.his.HisCreateRegistrationBusiness;
 import com.proper.enterprise.isj.proxy.business.registration.FetchRegistrationDocumentByIdBusiness;
 import com.proper.enterprise.isj.proxy.business.registration.FetchRegistrationDocumentByNumBusiness;
@@ -35,10 +34,9 @@ public abstract class AbstractRegistrationService extends AbstractService {
         super();
     }
 
-
     @Autowired
     MongoTemplate mongoTemplate;
-    
+
     /**
      * 通过ID获取挂号信息.
      *
@@ -66,13 +64,15 @@ public abstract class AbstractRegistrationService extends AbstractService {
     /**
      * 通过用户ID以及支付状态获取挂号单信息.
      *
-     * @param userId        患者ID.
-     * @param status        支付状态.
+     * @param userId 患者ID.
+     * @param status 支付状态.
      * @param isAppointment 挂号类别.
      * @return 挂号单信息.
      */
-    public List<RegistrationDocument> findRegistrationByCreateUserIdAndPayStatus(String userId, String status, String isAppointment) {
-        return toolkit.executeRepositoryFunction(RegistrationRepository.class, "findByCreateUserIdAndStatusCodeAndIsAppointment", userId, status, isAppointment);
+    public List<RegistrationDocument> findRegistrationByCreateUserIdAndPayStatus(String userId, String status,
+            String isAppointment) {
+        return toolkit.executeRepositoryFunction(RegistrationRepository.class,
+                "findByCreateUserIdAndStatusCodeAndIsAppointment", userId, status, isAppointment);
     }
 
     /**
@@ -116,7 +116,8 @@ public abstract class AbstractRegistrationService extends AbstractService {
      */
     public List<RegistrationDocument> findAlreadyCancelRegAndRefundErrRegList() {
         Query query = new Query();
-        Pattern cancelHisReturnMsgPattern = Pattern.compile("^.*" + ReturnCode.SUCCESS + ".*$", Pattern.CASE_INSENSITIVE);
+        Pattern cancelHisReturnMsgPattern = Pattern.compile("^.*" + ReturnCode.SUCCESS + ".*$",
+                Pattern.CASE_INSENSITIVE);
         query.addCriteria(Criteria.where("statusCode").is(RegistrationStatusEnum.PAID.getValue())
                 .and("cancelHisReturnMsg").regex(cancelHisReturnMsgPattern));
         return mongoTemplate.find(query, RegistrationDocument.class);
@@ -132,8 +133,9 @@ public abstract class AbstractRegistrationService extends AbstractService {
         cal.setTime(new Date());
         cal.add(Calendar.MINUTE, -overTimeMinute);
         Query query = new Query();
-        query.addCriteria(Criteria.where("createTime").lte(DateUtil.toString(cal.getTime(),
-                PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode").is(RegistrationStatusEnum.NOT_PAID.getValue()));
+        query.addCriteria(Criteria.where("createTime")
+                .lte(DateUtil.toString(cal.getTime(), PEPConstants.DEFAULT_TIMESTAMP_FORMAT)).and("statusCode")
+                .is(RegistrationStatusEnum.NOT_PAID.getValue()));
         query.with(new Sort(Sort.Direction.DESC, "apptDate"));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
@@ -146,9 +148,9 @@ public abstract class AbstractRegistrationService extends AbstractService {
      */
     public List<RegistrationDocument> findRegistrationDocumentByStopReg(Map<String, String> paramMap) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("doctorId").is(paramMap.get("doctorId"))
-                .and("deptId").is(paramMap.get("deptId")).and("regDate").is(paramMap.get("regDate"))
-                .and("beginTime").gte(paramMap.get("beginTime")).lte(paramMap.get("endTime")).and("statusCode")
+        query.addCriteria(Criteria.where("doctorId").is(paramMap.get("doctorId")).and("deptId")
+                .is(paramMap.get("deptId")).and("regDate").is(paramMap.get("regDate")).and("beginTime")
+                .gte(paramMap.get("beginTime")).lte(paramMap.get("endTime")).and("statusCode")
                 .in(RegistrationStatusEnum.NOT_PAID.getValue(), RegistrationStatusEnum.PAID.getValue()));
         return mongoTemplate.find(query, RegistrationDocument.class);
     }
@@ -156,12 +158,14 @@ public abstract class AbstractRegistrationService extends AbstractService {
     /**
      * 通过创建挂号单用户ID以及患者身份证号查询挂号信息.
      *
-     * @param createUserId  创建挂号单用户ID.
+     * @param createUserId 创建挂号单用户ID.
      * @param patientIdCard 患者身份证号.
      * @return 查询结果.
      */
-    public List<RegistrationDocument> findRegistrationDocumentByCreateUserIdAndPatientIdCard(String createUserId, String patientIdCard) {
-        return toolkit.executeRepositoryFunction(RegistrationRepository.class, "findRegistrationDocumentByCreateUserIdAndPatientIdCard", createUserId, patientIdCard);
+    public List<RegistrationDocument> findRegistrationDocumentByCreateUserIdAndPatientIdCard(String createUserId,
+            String patientIdCard) {
+        return toolkit.executeRepositoryFunction(RegistrationRepository.class,
+                "findRegistrationDocumentByCreateUserIdAndPatientIdCard", createUserId, patientIdCard);
     }
 
     /**
@@ -174,11 +178,7 @@ public abstract class AbstractRegistrationService extends AbstractService {
      */
     public RegistrationDocument saveCreateRegistrationAndOrder(RegistrationDocument saveReg, String isAppointment)
             throws Exception {
-        return toolkit.execute(HisCreateRegistrationAndOrderBusiness.class, (c) -> {
-            ((RegistrationDocumentContext<?>) c).setRegistrationDocument(saveReg);
-            ((IsAppointmentContext<?>) c).setIsAppointment(isAppointment);
-        });
-
+        return toolkit.executeFunction(HisCreateRegistrationAndOrderFunction.class, saveReg, isAppointment);
     }
 
     /**
@@ -193,6 +193,5 @@ public abstract class AbstractRegistrationService extends AbstractService {
             ((RegistrationDocumentContext<?>) c).setRegistrationDocument(reg);
         });
     }
-
 
 }
