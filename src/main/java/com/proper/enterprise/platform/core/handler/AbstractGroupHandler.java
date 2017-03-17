@@ -40,7 +40,7 @@ public abstract class AbstractGroupHandler<H extends IHandler, C extends Collect
     /**
      * 子过程.
      */
-    private C handlers;
+    private C handlers= autoInitializedHandlers();
 
     /**
      * AbstractGroupHandler的构造函数.
@@ -49,7 +49,7 @@ public abstract class AbstractGroupHandler<H extends IHandler, C extends Collect
      * </p>
      */
     protected AbstractGroupHandler() {
-        autoInitializedHandlers();
+
     }
 
     /**
@@ -62,9 +62,11 @@ public abstract class AbstractGroupHandler<H extends IHandler, C extends Collect
      * </p>
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void autoInitializedHandlers() {
+    private C autoInitializedHandlers() {
+        C result = null;
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        Type type = pt.getActualTypeArguments()[1];
+        Type[] args = pt.getActualTypeArguments();
+        Type type = args[args.length-1];
         // java8中无法将type强转为Class类型.
         String typeName = type.toString();
         int idx = typeName.indexOf("<");
@@ -78,12 +80,13 @@ public abstract class AbstractGroupHandler<H extends IHandler, C extends Collect
 
             if (!Modifier.isAbstract(clz.getModifiers())) {
                 Constructor constr = clz.getConstructor(new Class[0]);
-                this.handlers = (C) constr.newInstance();
+                result = (C)constr.newInstance();
             }
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            trace("c.p.e.p.c.h.AbstractGroupHandler.autoInitializedHandlers() init fail.");
+            trace("c.p.e.p.c.h.AbstractGroupHandler.autoInitializedHandlers() init fail.", e);
         }
+        return result;
 
     }
 
