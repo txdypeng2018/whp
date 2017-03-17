@@ -52,8 +52,8 @@ apply from: "$rootDir/configs/dependencies.gradle"
 apply from: "$rootDir/configs/dependencies-project.gradle"
 apply from: "$rootDir/configs/quality/codeQuality.gradle"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 group = 'com.proper'
 version = '0.1.0-isj-SNAPSHOT'
@@ -90,7 +90,8 @@ dependencies {
             libraries.slf4j_api,
             libraries.spring_data_jpa,
             libraries.spring_webmvc,
-            libraries.thumbnailator
+            libraries.thumbnailator,
+            'cglib:cglib-nodep:2.2.2'
 
     compile libraries.pep_auth_jwt,
             libraries.pep_cache_redis,

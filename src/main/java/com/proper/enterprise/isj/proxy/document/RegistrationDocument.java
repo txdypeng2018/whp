@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.proper.enterprise.isj.proxy.document.registration.*;
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.RegType;
 import com.proper.enterprise.isj.webservices.model.enmus.Sex;
 import com.proper.enterprise.isj.webservices.model.enmus.TimeFlag;
@@ -23,7 +24,7 @@ import java.util.List;
 @Document(collection = "registration")
 public class RegistrationDocument extends BaseDocument {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 挂号单号,格式yyMMddHHmm+5位流水号

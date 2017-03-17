@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Transient;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.*;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
@@ -14,7 +15,7 @@ import com.proper.enterprise.platform.core.utils.StringUtil;
  */
 public class RegistrationOrderReqDocument extends BaseDocument {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 号源锁定ID
      *

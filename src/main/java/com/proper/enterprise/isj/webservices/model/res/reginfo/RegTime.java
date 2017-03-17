@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res.reginfo;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.RegStatus;
 import com.proper.enterprise.isj.webservices.model.enmus.TimeFlag;
 import com.proper.enterprise.platform.core.enums.WhetherType;
@@ -13,6 +14,11 @@ import java.io.Serializable;
 @XmlRootElement(name = "REG_TIME_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RegTime implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 排班ID，如果存在分时，那么挂号的排班ID以分时接口里返回的排班ID为准 必填

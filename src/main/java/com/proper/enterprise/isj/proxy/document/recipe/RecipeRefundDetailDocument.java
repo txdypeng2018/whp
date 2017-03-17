@@ -1,12 +1,20 @@
 package com.proper.enterprise.isj.proxy.document.recipe;
 
 import javax.persistence.Transient;
+
+import com.proper.enterprise.isj.support.VersionEnum;
+
 import java.io.Serializable;
 
 /**
  * Created by think on 2016/10/6 0006.
  */
 public class RecipeRefundDetailDocument implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 序号

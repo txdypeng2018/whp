@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,6 +14,10 @@ import java.util.Date;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class NetTestResult implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 返回系统时间，格式：YYYY-MM-DD HH24:MI:SS 必填
      */

@@ -2,11 +2,18 @@ package com.proper.enterprise.isj.proxy.document.recipe;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/9/29 0029. his读取的缴费记录,原样保存
  */
 
 public class RecipeDetailAllDocument implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 挂号流程号

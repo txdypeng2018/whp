@@ -1,10 +1,17 @@
 package com.proper.enterprise.isj.app.document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "APP_VERSIONS")
 public class AppVersionDocument extends BaseDocument {
+
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 版本号

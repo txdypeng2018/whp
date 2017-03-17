@@ -1,19 +1,9 @@
 package com.proper.enterprise.isj.proxy.utils.cache;
 
-import com.proper.enterprise.isj.proxy.utils.scheduler.TaskSchedulerUtil;
-import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.isj.webservices.WebServicesClient;
-import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
-import com.proper.enterprise.isj.webservices.model.req.PayListReq;
-import com.proper.enterprise.isj.webservices.model.req.ReportInfoReq;
-import com.proper.enterprise.isj.webservices.model.req.ReportListReq;
-import com.proper.enterprise.isj.webservices.model.res.*;
-import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
-import com.proper.enterprise.isj.webservices.model.res.doctorinfo.Doctor;
-import com.proper.enterprise.platform.core.PEPConstants;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-import com.proper.enterprise.platform.core.utils.DateUtil;
-import com.proper.enterprise.platform.core.utils.http.HttpClient;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,9 +12,27 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.isj.webservices.WebServicesClient;
+import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
+import com.proper.enterprise.isj.webservices.model.req.PayListReq;
+import com.proper.enterprise.isj.webservices.model.req.ReportInfoReq;
+import com.proper.enterprise.isj.webservices.model.req.ReportListReq;
+import com.proper.enterprise.isj.webservices.model.res.DeptInfo;
+import com.proper.enterprise.isj.webservices.model.res.DoctorInfo;
+import com.proper.enterprise.isj.webservices.model.res.HosInfo;
+import com.proper.enterprise.isj.webservices.model.res.PayList;
+import com.proper.enterprise.isj.webservices.model.res.RegInfo;
+import com.proper.enterprise.isj.webservices.model.res.ReportDetailInfo;
+import com.proper.enterprise.isj.webservices.model.res.ReportInfo;
+import com.proper.enterprise.isj.webservices.model.res.ResModel;
+import com.proper.enterprise.isj.webservices.model.res.TimeRegInfo;
+import com.proper.enterprise.isj.webservices.model.res.deptinfo.Dept;
+import com.proper.enterprise.isj.webservices.model.res.doctorinfo.Doctor;
+import com.proper.enterprise.platform.core.PEPConstants;
+import com.proper.enterprise.platform.core.utils.ConfCenter;
+import com.proper.enterprise.platform.core.utils.DateUtil;
+import com.proper.enterprise.platform.core.utils.http.HttpClient;
 
 /**
  * His Web Service服务接口.
@@ -34,8 +42,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "pep-temp")
 public class WebService4HisInterfaceCacheUtil {
 
-
-    //private static final Logger LOGGER = LoggerFactory.getLogger(WebService4HisInterfaceCacheUtil.class);
+    // private static final Logger LOGGER = LoggerFactory.getLogger(WebService4HisInterfaceCacheUtil.class);
 
     private static final String HIS_DEPTINFO_KEY = "'his_deptinfo'";
 
@@ -46,9 +53,6 @@ public class WebService4HisInterfaceCacheUtil {
     @Autowired
     @Lazy
     WebServicesClient webServicesClient;
-
-    @Autowired
-    TaskSchedulerUtil taskSchedulerUtil;
 
     @CachePut(key = HIS_DEPTINFO_KEY)
     public List<Dept> cacheDeptInfo() throws Exception {
@@ -69,7 +73,8 @@ public class WebService4HisInterfaceCacheUtil {
     @CachePut(key = HIS_DOCTORINFO_KEY)
     public List<Doctor> cacheDoctorInfoRes() throws Exception {
         List<Doctor> doctorList = new ArrayList<>();
-        ResModel<DoctorInfo> doctorInfoRes = webServicesClient.getDoctorInfo(CenterFunctionUtils.getHosId(), String.valueOf(-1), String.valueOf(-1));
+        ResModel<DoctorInfo> doctorInfoRes = webServicesClient.getDoctorInfo(CenterFunctionUtils.getHosId(),
+                String.valueOf(-1), String.valueOf(-1));
         if (doctorInfoRes.getRes().getDoctorList() != null) {
             doctorList.addAll(doctorInfoRes.getRes().getDoctorList());
         }
@@ -97,13 +102,16 @@ public class WebService4HisInterfaceCacheUtil {
     }
 
     @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
-    public ResModel<RegInfo> cacheDoctorScheInfoRes(String doctorId, String startDate, String endDate) throws Exception {
+    public ResModel<RegInfo> cacheDoctorScheInfoRes(String doctorId, String startDate, String endDate)
+            throws Exception {
         String hosId = CenterFunctionUtils.getHosId();
-        return webServicesClient.getRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(startDate), DateUtil.toDate(endDate));
+        return webServicesClient.getRegInfo(hosId, String.valueOf(-1), doctorId, DateUtil.toDate(startDate),
+                DateUtil.toDate(endDate));
     }
 
     @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_120, key = "'doctorSche_'+#p0+#p1+#p2")
-    public ResModel<RegInfo> getCacheDoctorScheInfoRes(String doctorId, String startDate, String endDate) throws Exception {
+    public ResModel<RegInfo> getCacheDoctorScheInfoRes(String doctorId, String startDate, String endDate)
+            throws Exception {
         return cacheDoctorScheInfoRes(doctorId, startDate, endDate);
     }
 
@@ -178,10 +186,12 @@ public class WebService4HisInterfaceCacheUtil {
 
     @CachePut(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
     public String cachePacsListInfo(String patientId) throws IOException {
-        String reportListUrl = ConfCenter.get("isj.report.baseUrl") + ConfCenter.get("isj.report.showListParam1") + patientId + ConfCenter.get("isj.report.showListParam2");
-        //reportListUrl.append("M004830551"); // TODO TEMP
+        String reportListUrl = ConfCenter.get("isj.report.baseUrl") + ConfCenter.get("isj.report.showListParam1")
+                + patientId + ConfCenter.get("isj.report.showListParam2");
+        // reportListUrl.append("M004830551"); // TODO TEMP
         return new String(HttpClient.get(reportListUrl).getBody(), PEPConstants.DEFAULT_CHARSET);
     }
+
     @Cacheable(value = CenterFunctionUtils.CACHE_NAME_PEP_TEMP_600, key = "'report_pacs_list_idcard_'+#p0")
     public String getCachePacsListInfo(String patientId) throws IOException {
         return this.cachePacsListInfo(patientId);

@@ -2,12 +2,14 @@ package com.proper.enterprise.isj.proxy.document;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/8/16 0016. 医生列表
  */
 public class DoctorDocument implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     private String id;
 

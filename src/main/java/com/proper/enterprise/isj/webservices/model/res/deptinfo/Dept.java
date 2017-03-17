@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.res.deptinfo;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.DeptLevel;
 import com.proper.enterprise.isj.webservices.model.enmus.Status;
 
@@ -12,6 +13,11 @@ import java.io.Serializable;
 @XmlRootElement(name = "DEPT_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Dept implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * ID；当 LEVEL 为 2 时此 ID 医生编码 必填

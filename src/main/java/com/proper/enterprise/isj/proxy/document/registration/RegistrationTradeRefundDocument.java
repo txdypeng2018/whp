@@ -1,11 +1,17 @@
 package com.proper.enterprise.isj.proxy.document.registration;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 /**
  * Created by think on 2016/10/5 0005.
  */
 public class RegistrationTradeRefundDocument extends BaseDocument {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 商户订单号

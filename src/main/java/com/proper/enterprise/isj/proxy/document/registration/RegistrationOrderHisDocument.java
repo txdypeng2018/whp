@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.document.registration;
 
 import com.proper.enterprise.isj.proxy.document.RegistrationConcession;
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 import java.util.ArrayList;
@@ -10,6 +11,12 @@ import java.util.List;
  * Created by think on 2016/9/8 0008. 挂号支付接口返回信息
  */
 public class RegistrationOrderHisDocument extends BaseDocument {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+
 
     /**
      * 医院支付单号

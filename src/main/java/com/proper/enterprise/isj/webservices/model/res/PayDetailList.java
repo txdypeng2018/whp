@@ -9,11 +9,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.res.paydetaillist.PayDetail;
 
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PayDetailList implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 用户姓名 必填

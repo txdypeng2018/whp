@@ -4,11 +4,19 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.proper.enterprise.isj.support.VersionEnum;
+
 import java.io.Serializable;
 
 @XmlRootElement(name = "CONCESSIONS")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Concession implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 本次挂号优惠的总金额，无优惠返回0，单位：分

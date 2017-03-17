@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.user.document.info;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.user.model.enums.CardTypeEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
@@ -9,6 +10,11 @@ import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
  */
 
 public class CardInfoDocument extends BaseDocument {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     private CardTypeEnum cardType;
 

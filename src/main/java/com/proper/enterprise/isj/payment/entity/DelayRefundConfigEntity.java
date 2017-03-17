@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.payment.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.entity.BaseEntity;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class DelayRefundConfigEntity extends BaseEntity implements Serializable 
     /**
      * serialVersionUID : long.
      */
-    private static final long serialVersionUID = -6870841573946964726L;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     @Column(length = 500)
     private String text;

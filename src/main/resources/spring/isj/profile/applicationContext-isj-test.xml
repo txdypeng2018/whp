@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/aop
                            http://www.springframework.org/schema/aop/spring-aop.xsd"
-       profile="test">
+	profile="test">
 
-    <context:property-placeholder ignore-unresolvable="true"
-                                  location="classpath:conf/isj/isj-test.properties,
-                                            classpath:conf/isj/isj-ws-proxy.properties"/>
+	<context:property-placeholder
+		ignore-unresolvable="true"
+		location="classpath:conf/isj/isj-test.properties,
+                                            classpath:conf/isj/isj-ws-proxy.properties" />
 
 
 	<bean id="loggerTestAdvice"
@@ -29,10 +29,15 @@
 			<aop:pointcut id="loggerTestFindOrderNoEntryPoint"
 				expression="execution(* com.proper.enterprise.isj.order.service.OrderService.findByOrderNo(..))" />
 
-			<aop:around pointcut-ref="loggerTestEntryPoint" method="forTest" />
-			<aop:around pointcut-ref="loggerTestEntryPoint2" method="forTest" />
+			<aop:pointcut id="testWebClientAsUserInfoWebServiceClientCustom"
+				expression="execution(* com.proper.enterprise.isj.webservices.WebServicesClient.*(..))" />
+
 			<aop:around pointcut-ref="loggerTestFindOrderNoEntryPoint"
 				method="forFindByOrderNo" />
+			<aop:around pointcut-ref="testWebClientAsUserInfoWebServiceClientCustom"
+				method="useWebClientAsUserInfoWebServiceClientCustom" />
+			<aop:around pointcut-ref="loggerTestEntryPoint" method="forTest" />
+			<aop:around pointcut-ref="loggerTestEntryPoint2" method="forTest" />
 		</aop:aspect>
 	</aop:config>
 </beans>

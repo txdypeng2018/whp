@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+
+	<bean id="THE_TRUE" class="java.lang.Boolean">
+		<constructor-arg>
+			<value>true</value>
+		</constructor-arg>
+	</bean>
+	<bean id="THE_FALSE" class="java.lang.Boolean">
+		<constructor-arg>
+			<value>false</value>
+		</constructor-arg>
+	</bean>
+	
+
+
+	<bean id="testBusiness"
+		class="com.proper.enterprise.isj.support.business.DefaultGroupBusiness">
+		<property name="handlers">
+			<list>
+				<bean class="com.proper.enterprise.isj.support.Step1"></bean>
+				<bean class="com.proper.enterprise.isj.support.Step2"></bean>
+				<bean
+					class="com.proper.enterprise.isj.support.business.DefaultGroupBusiness">
+					<property name="strategy">
+						<bean
+							class="com.proper.enterprise.isj.support.strategy.ConditionDecideFilterProcessStrategy">
+							<property name="decide">
+								<bean class="com.proper.enterprise.isj.support.TestDecide"></bean>
+							</property>
+						</bean>
+					</property>
+					<property name="handlers">
+								<list>
+									<bean
+										class="com.proper.enterprise.isj.business.KeyBusinessWrap">
+										<constructor-arg ref="THE_TRUE" />
+										<constructor-arg>
+											<bean class="com.proper.enterprise.isj.support.StepTrue"></bean>
+										</constructor-arg>
+									</bean>
+									<bean
+										class="com.proper.enterprise.isj.business.KeyBusinessWrap">
+										<constructor-arg ref="THE_TRUE" />
+										<constructor-arg>
+											<bean class="com.proper.enterprise.isj.support.StepTrueEx"></bean>
+										</constructor-arg>
+									</bean>
+									<bean
+										class="com.proper.enterprise.isj.business.KeyBusinessWrap">
+										<constructor-arg ref="THE_FALSE" />
+										<constructor-arg>
+											<bean class="com.proper.enterprise.isj.support.business.DefaultGroupBusiness">
+												<property name="handlers">
+													<list>
+														<bean class="com.proper.enterprise.isj.support.StepFalse"></bean>
+													</list>
+												</property>
+											</bean>
+										</constructor-arg>
+									</bean>
+								</list>
+							</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,11 +1,13 @@
 package com.proper.enterprise.isj.exception;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 public class DelayException extends AbstractIHosException {
 
     /**
      * serialVersionUID : long.
      */
-    private static final long serialVersionUID = 8992766393049854581L;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     private int position;
 

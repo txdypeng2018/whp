@@ -2,12 +2,14 @@ package com.proper.enterprise.isj.proxy.document.medicalreports;
 
 import java.io.Serializable;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * 检查报告列表
  */
 public class MedicalReportsDocument implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 报告ID

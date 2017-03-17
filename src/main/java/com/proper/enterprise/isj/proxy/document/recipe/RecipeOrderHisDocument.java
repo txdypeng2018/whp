@@ -1,11 +1,17 @@
 package com.proper.enterprise.isj.proxy.document.recipe;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 /**
  * Created by think on 2016/9/17 0017.
  */
 public class RecipeOrderHisDocument extends BaseDocument {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * HIS缴费支付订单号，缴费成功时返回HIS系统生成的缴费支付流水，唯一

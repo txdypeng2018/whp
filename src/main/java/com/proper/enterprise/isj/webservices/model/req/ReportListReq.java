@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.webservices.model.req;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.enmus.CardType;
 import com.proper.enterprise.isj.webservices.model.enmus.IDCardType;
 import com.proper.enterprise.isj.webservices.model.enmus.Sex;
@@ -10,6 +11,11 @@ import java.io.Serializable;
  * 检验/检测报告请求对象.
  */
 public class ReportListReq implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院ID

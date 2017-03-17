@@ -47,9 +47,8 @@ public interface RecipeService {
      * @return 缴费报文.
      * @throws Exception 异常.
      */
-    List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus,
-                                                         @SuppressWarnings("SameParameterValue") String sDate,
-                                                         @SuppressWarnings("SameParameterValue") String eDate) throws Exception;
+    List<RecipeDocument> findRecipeDocumentByUserAndDate(BasicInfoDocument basic, String payStatus, String sDate,
+            String eDate) throws Exception;
 
     /**
      * 生成缴费订单.
@@ -69,8 +68,9 @@ public interface RecipeService {
      * @param infoObj 支付对象.
      * @return order 订单信息.
      * @throws Exception 异常.
+     * @throws Throwable 
      */
-    Order saveUpdateRecipeAndOrder(String orderNo, String channelId, Object infoObj) throws Exception;
+    Order saveUpdateRecipeAndOrder(String orderNo, String channelId, Object infoObj) throws Throwable;
 
     /**
      * 将APP转化为向HIS请求对象.
@@ -94,7 +94,7 @@ public interface RecipeService {
      * @throws Exception 异常.
      */
     ResModel<PayList> findPayListModel(BasicInfoDocument basic, String clinicCode, String payStatus, String sDate,
-                                       String eDate, boolean userCache) throws Exception;
+            String eDate, boolean userCache) throws Exception;
 
     /**
      * (HIS线下退费)保存退款以及更新缴费信息.

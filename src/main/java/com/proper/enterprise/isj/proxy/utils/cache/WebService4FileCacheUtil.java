@@ -1,15 +1,13 @@
 package com.proper.enterprise.isj.proxy.utils.cache;
 
-import com.proper.enterprise.isj.exception.IHosException;
-import com.proper.enterprise.isj.proxy.document.DoctorDocument;
-import com.proper.enterprise.isj.proxy.service.DoctorService;
-import com.proper.enterprise.isj.proxy.utils.scheduler.TaskSchedulerUtil;
-import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
-import com.proper.enterprise.platform.core.PEPConstants;
-import com.proper.enterprise.platform.core.utils.ConfCenter;
-import com.proper.enterprise.platform.core.utils.StringUtil;
-import com.proper.enterprise.platform.core.utils.http.HttpClient;
-import net.coobird.thumbnailator.Thumbnails;
+import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_PACS_REPORT_ERR;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.codec.binary.Base64;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,13 +22,16 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.proper.enterprise.isj.exception.IHosException;
+import com.proper.enterprise.isj.proxy.document.DoctorDocument;
+import com.proper.enterprise.isj.proxy.service.DoctorService;
+import com.proper.enterprise.isj.user.utils.CenterFunctionUtils;
+import com.proper.enterprise.platform.core.PEPConstants;
+import com.proper.enterprise.platform.core.utils.ConfCenter;
+import com.proper.enterprise.platform.core.utils.StringUtil;
+import com.proper.enterprise.platform.core.utils.http.HttpClient;
 
-import static com.proper.enterprise.isj.user.utils.CenterFunctionUtils.APP_PACS_REPORT_ERR;
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
  * Web Service缓存工具.
@@ -46,9 +47,6 @@ public class WebService4FileCacheUtil {
 
     @Autowired
     DoctorService doctorService;
-
-    @Autowired
-    TaskSchedulerUtil taskSchedulerUtil;
 
     @Value("${isj.photo.url}")
     String photoUrl;

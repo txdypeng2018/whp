@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.proper.enterprise.isj.payment.logger.LoggerApplicationContextHelper;
 import com.proper.enterprise.isj.payment.logger.entity.DefaultPayLogRecordEntity;
 import com.proper.enterprise.isj.payment.logger.entity.PayLogRecord;
-import com.proper.enterprise.platform.utils.factory.Factory;
+import com.proper.enterprise.platform.core.api.IFactory;
 
 /**
  * 默认{@link PayLogRecord}工厂实现类.
@@ -17,11 +17,12 @@ import com.proper.enterprise.platform.utils.factory.Factory;
  * @since 0.1.0
  */
 @Component
-public class DefaultPayLogRecordFactory implements Factory<DefaultPayLogRecordEntity> {
+public class DefaultPayLogRecordFactory implements IFactory {
 
+    @SuppressWarnings("unchecked")
     @Override
-    public DefaultPayLogRecordEntity create(Object... objects) {
-        return LoggerApplicationContextHelper.findAppContext().getBean(DefaultPayLogRecordEntity.class);
+    public <T> T create(Object... objects) {
+        return (T)LoggerApplicationContextHelper.findAppContext().getBean(DefaultPayLogRecordEntity.class);
     }
 
 }

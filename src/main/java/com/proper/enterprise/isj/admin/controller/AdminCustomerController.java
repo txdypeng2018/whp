@@ -1,6 +1,17 @@
 package com.proper.enterprise.isj.admin.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.proper.enterprise.isj.admin.service.AdminCustomerService;
+import com.proper.enterprise.isj.controller.IHosBaseController;
 import com.proper.enterprise.isj.proxy.document.MessagesDocument;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.recipe.RecipeOrderDocument;
@@ -11,21 +22,11 @@ import com.proper.enterprise.isj.user.document.UserInfoDocument;
 import com.proper.enterprise.isj.user.document.info.BasicInfoDocument;
 import com.proper.enterprise.isj.user.document.info.FamilyMemberInfoDocument;
 import com.proper.enterprise.isj.user.service.UserInfoService;
-import com.proper.enterprise.platform.core.controller.BaseController;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/admin/customer")
-public class AdminCustomerController extends BaseController {
+public class AdminCustomerController extends IHosBaseController {
 
     @Autowired
     UserInfoService userInfoService;

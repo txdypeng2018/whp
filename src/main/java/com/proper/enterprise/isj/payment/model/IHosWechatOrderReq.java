@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.payment.model;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.pay.wechat.model.WechatOrderReq;
 
 public class IHosWechatOrderReq extends WechatOrderReq implements OrderReq {
@@ -7,7 +8,7 @@ public class IHosWechatOrderReq extends WechatOrderReq implements OrderReq {
     /**
      * serialVersionUID : long.
      */
-    private static final long serialVersionUID = -2369573368118254598L;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     @Override
     public String findOutTradeNo() {

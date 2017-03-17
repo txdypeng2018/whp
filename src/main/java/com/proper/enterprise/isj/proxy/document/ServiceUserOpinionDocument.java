@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.DateUtil;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "service_user_opinion")
 public class ServiceUserOpinionDocument extends BaseDocument {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 用户id
      */

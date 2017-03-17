@@ -58,7 +58,7 @@ public class WebServicesClient {
      * 在调用其它接口之前用于测试目标服务网络是否通畅，服务是否处于工作状态、数据库是否处于连接状态.
      *
      * @param hosId 医院ID.
-     * @param ip    请求IP.
+     * @param ip 请求IP.
      * @return 响应模型及网络测试结果对象.
      * @throws Exception 异常.
      */
@@ -79,7 +79,8 @@ public class WebServicesClient {
         long start = System.currentTimeMillis();
         try {
             String result = (String) method.invoke(regSJService, reqStr);
-            wsLogService.persistLog(funCode + ":" + methodName, param, reqStr, result, System.currentTimeMillis() - start);
+            wsLogService.persistLog(funCode + ":" + methodName, param, reqStr, result,
+                    System.currentTimeMillis() - start);
             return result;
         } catch (Throwable e) {
             wsLogService.persistLog(funCode + ":" + methodName, param, reqStr, e, System.currentTimeMillis() - start);
@@ -106,8 +107,7 @@ public class WebServicesClient {
 
     @SuppressWarnings("unchecked")
     <T> ResModel<T> parseEnvelop(String responseStr, Class<T> clz) throws Exception {
-        ResModel<T> resModel = (ResModel<T>) unmarshaller
-                .unmarshal(new StreamSource(new StringReader(responseStr)));
+        ResModel<T> resModel = (ResModel<T>) unmarshaller.unmarshal(new StreamSource(new StringReader(responseStr)));
         if (signValid(resModel)) {
             if (resModel.getReturnCode() != ReturnCode.ERROR) {
                 byte[] res = aes.decrypt(resModel.getResEncrypted().getBytes(PEPConstants.DEFAULT_CHARSET));
@@ -124,19 +124,21 @@ public class WebServicesClient {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     private boolean signValid(ResModel resModel) {
         Assert.notNull(resModel.getSign());
 
-        String sign = MessageFormat.format(ConfCenter.get("isj.his.template.sign.res"),
-                resModel.getResEncrypted(), resModel.getReturnCode().getCode(),
-                resModel.getReturnMsg(), ConfCenter.get("isj.his.aes.key"));
+        String sign = MessageFormat.format(ConfCenter.get("isj.his.template.sign.res"), resModel.getResEncrypted(),
+                resModel.getReturnCode().getCode(), resModel.getReturnMsg(), ConfCenter.get("isj.his.aes.key"));
 
         return resModel.getSign().equalsIgnoreCase(MD5.md5Hex(sign));
     }
 
     /**
      * 查询医院列表及单个医院的详细信息.
-     * <p>需要获取医院基本信息时调用，平台可通过该接口获取医院的信息更新。</p>
+     * <p>
+     * 需要获取医院基本信息时调用，平台可通过该接口获取医院的信息更新。
+     * </p>
      *
      * @param hosId 医院ID.
      * @return 响应模型及医院信息.
@@ -157,9 +159,11 @@ public class WebServicesClient {
      * 通过返回 ID 作为父级 ID 进行递归查询.
      * </p>
      *
-     * @param hosId    医院ID.
+     * @param hosId 医院ID.
      * @param parentId 科室ID.
-     *                 <p>为 0 时查询所有院区，通过院区 ID 查询所有一级科室信息，通过本科室 ID 查询所有子科室及科室医生</p>
+     *            <p>
+     *            为 0 时查询所有院区，通过院区 ID 查询所有一级科室信息，通过本科室 ID 查询所有子科室及科室医生
+     *            </p>
      * @return 响应模型及科室信息
      * @throws Exception 异常.
      */
@@ -174,18 +178,20 @@ public class WebServicesClient {
 
     /**
      * 平台通过调用HIS的该接口获取某医生具体的排班信息.
-     * <p>医生ID（DOCTOR_ID）为-1时查询科室ID下所有医生排班。</p>
+     * <p>
+     * 医生ID（DOCTOR_ID）为-1时查询科室ID下所有医生排班。
+     * </p>
      *
-     * @param hosId     医院ID.
-     * @param deptId    科室ID，HIS系统中科室唯一ID.
-     * @param doctorId  医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
+     * @param hosId 医院ID.
+     * @param deptId 科室ID，HIS系统中科室唯一ID.
+     * @param doctorId 医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
      * @param startDate 排班开始日期，格式：YYYY-MM-DD.
-     * @param endDate   排班结束日期，格式：YYYY-MM-DD.
+     * @param endDate 排班结束日期，格式：YYYY-MM-DD.
      * @return 响应模型及排班信息对象.
      * @throws Exception 异常.
      */
-    public ResModel<RegInfo> getRegInfo(String hosId, String deptId, String doctorId,
-                                        Date startDate, Date endDate) throws Exception {
+    public ResModel<RegInfo> getRegInfo(String hosId, String deptId, String doctorId, Date startDate, Date endDate)
+            throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
         map.put("DEPT_ID", deptId);
@@ -238,6 +244,7 @@ public class WebServicesClient {
      * @param bean 容器对象.
      * @return 容器对象的 key-value 形式表示。若传入的非容器对象则直接返回 null.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Map<String, Object> toKVStyle(Object bean) {
         if (!isBean(bean)) {
             return null;
@@ -259,8 +266,8 @@ public class WebServicesClient {
                     continue;
                 }
                 if (field.getType().equals(Date.class)) {
-                    fieldValue = fieldName.equals("orderTime")
-                            ? DateUtil.toTimestamp((Date) value) : DateUtil.toDateString((Date) value);
+                    fieldValue = fieldName.equals("orderTime") ? DateUtil.toTimestamp((Date) value)
+                            : DateUtil.toDateString((Date) value);
                 } else if (value instanceof IntEnum) {
                     fieldValue = ((IntEnum) value).getCode() + "";
                 } else if (value instanceof Collection) {
@@ -268,7 +275,7 @@ public class WebServicesClient {
                     List<Map<String, Object>> list = new ArrayList<>(collection.size());
                     for (Object obj : collection) {
                         if (obj instanceof Map) {
-                            //noinspection unchecked
+                            // noinspection unchecked
                             list.add(plainMap((Map) obj));
                         } else {
                             list.add(toKVStyle(obj));
@@ -276,7 +283,7 @@ public class WebServicesClient {
                     }
                     fieldValue = list;
                 } else if (value instanceof Map) {
-                    //noinspection unchecked
+                    // noinspection unchecked
                     fieldValue = plainMap((Map) value);
                 } else {
                     fieldValue = value + "";
@@ -302,6 +309,7 @@ public class WebServicesClient {
         return false;
     }
 
+    @SuppressWarnings("rawtypes")
     private Map<String, Object> plainMap(Map<Object, Object> map) {
         Map<String, Object> newMap = new HashMap<>(map.size());
         for (Map.Entry entry : map.entrySet()) {
@@ -322,14 +330,13 @@ public class WebServicesClient {
      * <li>当医生ID（DOCTOR_ID）不为-1时，查询该医生详细信息。</li>
      * </ul>
      *
-     * @param hosId    医院ID.
-     * @param deptId   科室ID，HIS系统中科室唯一ID，为-1时查所有科室医生.
+     * @param hosId 医院ID.
+     * @param deptId 科室ID，HIS系统中科室唯一ID，为-1时查所有科室医生.
      * @param doctorId 医生ID，HIS系统中医生唯一ID，为-1时查询该科室下所有医生，否则查指定某个医生信息.
      * @return 结果.
      * @throws Exception 异常.
      */
-    public ResModel<DoctorInfo> getDoctorInfo(String hosId, String deptId, String doctorId)
-            throws Exception {
+    public ResModel<DoctorInfo> getDoctorInfo(String hosId, String deptId, String doctorId) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
         map.put("DEPT_ID", deptId);
@@ -357,13 +364,14 @@ public class WebServicesClient {
     /**
      * 平台调用医院接口获取用户缴费明细记录，包括待缴费和已缴费的信息，涉及医保部分由医院和医保部门结算后返回相应的医保和个人自付金额.
      *
-     * @param hosId         医院ID，必填.
+     * @param hosId 医院ID，必填.
      * @param hospPatientId 用户院内ID.
-     * @param hospSequence  HIS就诊登记号，必填.
+     * @param hospSequence HIS就诊登记号，必填.
      * @return 响应对象及缴费明细列表信息.
      * @throws Exception 异常.
      */
-    public ResModel<PayDetailList> getPayDetail(String hosId, String hospPatientId, String hospSequence) throws Exception {
+    public ResModel<PayDetailList> getPayDetail(String hosId, String hospPatientId, String hospSequence)
+            throws Exception {
         Map<String, Object> map = new HashMap<>(3);
         map.put("HOS_ID", hosId);
         map.put("HOSP_PATIENT_ID", hospPatientId);
@@ -394,17 +402,19 @@ public class WebServicesClient {
      * 如果TIME_FLAG为具体值时，则查当前传入分时的分时排班；如果TIME_FLAG为-1时查询全天的分时排班。
      * </p>
      *
-     * @param hosId    医院ID.
-     * @param deptId   科室ID，HIS系统中科室唯一ID.
+     * @param hosId 医院ID.
+     * @param deptId 科室ID，HIS系统中科室唯一ID.
      * @param doctorId 医生ID，HIS系统中医生唯一ID，为-1时查询科室ID下所有医生排班.
-     * @param regDate  出诊日期，格式：YYYY-MM-DD
+     * @param regDate 出诊日期，格式：YYYY-MM-DD
      * @param timeFlag 时段.
-     *                 <p>详见 “时段”，为-1时查询当天所有的分时排班</p>
+     *            <p>
+     *            详见 “时段”，为-1时查询当天所有的分时排班
+     *            </p>
      * @return 医生排班分时信息集合.
      * @throws Exception 异常.
      */
     public ResModel<TimeRegInfo> getTimeRegInfo(String hosId, String deptId, String doctorId, Date regDate,
-                                                int timeFlag) throws Exception {
+            int timeFlag) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
         map.put("DEPT_ID", deptId);
@@ -416,16 +426,16 @@ public class WebServicesClient {
         return parseEnvelop(result, TimeRegInfo.class);
     }
 
-
     /**
      * 医院方发起未支付的挂号订单的取消操作.
      *
-     * @param hosId        医院ID.
-     * @param orderId      订单号.
-     * @param cancelDate   取消时间，格式：YYYY-MM-DD HI24:MI:SS.
+     * @param hosId 医院ID.
+     * @param orderId 订单号.
+     * @param cancelDate 取消时间，格式：YYYY-MM-DD HI24:MI:SS.
      * @param cancelRemark 取消原因.
      * @throws Exception 异常.
      */
+    @SuppressWarnings("rawtypes")
     public ResModel cancelReg(String hosId, String orderId, String cancelDate, String cancelRemark) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("HOS_ID", hosId);
@@ -435,7 +445,6 @@ public class WebServicesClient {
         String result = invokeWS("cancelReg", map);
         return (ResModel) unmarshaller.unmarshal(new StreamSource(new StringReader(result)));
     }
-
 
     /**
      * 挂号成功后调用。 医院his根据平台订单号（挂号接口有传入）进行挂号订单的支付操作.
@@ -475,13 +484,12 @@ public class WebServicesClient {
         return parseEnvelop(result, StopRegInfo.class);
     }
 
-
     /**
      * 查询线下退款记录.
      *
-     * @param hosId     医院Id.
+     * @param hosId 医院Id.
      * @param startDate 开始时间,格式:yyyy-MM-dd HH24:mm:ss.
-     * @param endDate   结束时间(不包括),格式:yyyy-MM-dd HH24:mm:ss.
+     * @param endDate 结束时间(不包括),格式:yyyy-MM-dd HH24:mm:ss.
      * @return 操作结果.
      * @throws Exception 异常.
      */

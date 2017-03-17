@@ -1,6 +1,7 @@
 package com.proper.enterprise.isj.proxy.entity;
 
 import com.proper.enterprise.isj.rule.entity.RuleEntity;
+import com.proper.enterprise.isj.support.VersionEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class RegistrationRulesEntity implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 总数

@@ -2,62 +2,70 @@ package com.proper.enterprise.isj.proxy.service.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.proper.enterprise.isj.context.PageNoContext;
+import com.proper.enterprise.isj.context.PageSizeContext;
+import com.proper.enterprise.isj.context.RuleCatalogueContext;
+import com.proper.enterprise.isj.context.RuleContext;
+import com.proper.enterprise.isj.context.RuleEntityContext;
+import com.proper.enterprise.isj.context.RuleInfoIdContext;
+import com.proper.enterprise.isj.context.RuleInfoIdsContext;
+import com.proper.enterprise.isj.context.RuleNameContext;
+import com.proper.enterprise.isj.proxy.business.rule.DelRuleInfoByIdsBusiness;
+import com.proper.enterprise.isj.proxy.business.rule.FetchRuleInfoByIdBusiness;
+import com.proper.enterprise.isj.proxy.business.rule.FetchRulesInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.rule.SaveRuleInfoBusiness;
 import com.proper.enterprise.isj.proxy.entity.RegistrationRulesEntity;
 import com.proper.enterprise.isj.proxy.service.RegistrationRulesService;
 import com.proper.enterprise.isj.rule.entity.RuleEntity;
-import com.proper.enterprise.isj.rule.repository.RuleRepository;
-import com.proper.enterprise.platform.api.auth.model.User;
+import com.proper.enterprise.isj.support.service.AbstractService;
 import com.proper.enterprise.platform.api.auth.service.UserService;
-import com.proper.enterprise.platform.core.utils.StringUtil;
 
 /**
  * 挂号规则ServiceImpl.
  */
 @Service
-public class RegistrationRulesServiceImpl implements RegistrationRulesService {
-
-    @Autowired
-    RuleRepository ruleRepo;
+public class RegistrationRulesServiceImpl extends AbstractService implements RegistrationRulesService {
 
     @Autowired
     UserService userService;
 
     @Override
     public void saveRuleInfo(RuleEntity ruleInfo) throws Exception {
-        ruleRepo.save(ruleInfo);
+        toolkit.execute(SaveRuleInfoBusiness.class, (c)->{
+            ((RuleEntityContext<?>)c).setRuleEntity(ruleInfo);
+        });
     }
 
     @Override
     public void deleteRuleInfo(List<String> idList) throws Exception {
-        List<RuleEntity> baseInfoList = ruleRepo.findAll(idList);
-        ruleRepo.delete(baseInfoList);
+        toolkit.execute(DelRuleInfoByIdsBusiness.class, (c)->{
+            ((RuleInfoIdsContext<?>)c).setRuleInfoIds(idList);
+        });
     }
 
     @Override
     public RuleEntity getRuleInfoById(String id) throws Exception {
-        return ruleRepo.findById(id);
+        return toolkit.execute(FetchRuleInfoByIdBusiness.class, (c)->{
+            ((RuleInfoIdContext<?>)c).setRuleInfoId(id);
+        });
     }
 
     /**
      * 获取挂号规则信息
      *
      * @param catalogue
-     *            挂号规则分类
+     *        挂号规则分类
      * @param name
-     *            挂号规则名称
+     *        挂号规则名称
      * @param rule
-     *            挂号规则内容
+     *        挂号规则内容
      * @param pageNo
-     *            当前页码
+     *        当前页码
      * @param pageSize
-     *            每页数量
+     *        每页数量
      * @return retObj
      *         挂号规则信息
      * @throws Exception 异常.
@@ -65,58 +73,13 @@ public class RegistrationRulesServiceImpl implements RegistrationRulesService {
     @Override
     public RegistrationRulesEntity getRulesInfo(String catalogue, String name, String rule, String pageNo,
             String pageSize) throws Exception {
-
-        RegistrationRulesEntity retObj = new RegistrationRulesEntity();
-
-        PageRequest pageReq = buildPageRequest(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-
-        if (StringUtil.isEmpty(catalogue)) {
-            catalogue = "%%";
-        } else {
-            catalogue = "%" + catalogue + "%";
-        }
-
-        if (StringUtil.isEmpty(name)) {
-            name = "%%";
-        } else {
-            name = "%" + name + "%";
-        }
-
-        if (StringUtil.isEmpty(rule)) {
-            rule = "%%";
-        } else {
-            rule = "%" + rule + "%";
-        }
-
-        int count = ruleRepo.findByCatalogueLikeAndNameLikeAndRuleLike(catalogue, name, rule).size();
-
-        Page<RuleEntity> pageInfo = ruleRepo.findByCatalogueLikeAndNameLikeAndRuleLike(catalogue, name, rule, pageReq);
-
-        List<RuleEntity> rulesList = pageInfo.getContent();
-
-        String userId = "";
-        for (RuleEntity entity : rulesList) {
-            userId = entity.getLastModifyUserId();
-            if (StringUtils.isNotEmpty(userId)) {
-                User curUser = userService.get(userId);
-                if (curUser != null) {
-                    entity.setLastModifyUserName(curUser.getUsername());
-                }
-            }
-        }
-
-        // 设置总数
-        retObj.setCount(count);
-        // 设置列表
-        retObj.setData(rulesList);
-
-        return retObj;
+        return toolkit.execute(FetchRulesInfoBusiness.class, (c)->{
+            ((RuleCatalogueContext<?>)c).setCatalogue(catalogue);
+            ((RuleNameContext<?>)c).setRuleName(name);
+            ((RuleContext<?>)c).setRule(rule);
+            ((PageNoContext<?>)c).setPageNo(Integer.parseInt(pageNo));
+            ((PageSizeContext<?>)c).setPageSize(Integer.parseInt(pageSize));
+        });
     }
 
-    /**
-     * 创建分页请求.
-     */
-    private PageRequest buildPageRequest(int pageNo, int pageSize) {
-        return new PageRequest(pageNo - 1, pageSize, new Sort(Sort.Direction.ASC, "catalogue"));
-    }
 }

@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/8/16 0016. 学科
  */
 public class SubjectDocument implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 学科Id

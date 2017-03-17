@@ -30,7 +30,7 @@ public enum OrderStatus implements IntEnum {
 
     @Override
     public int getCode() {
-        return 0;
+        return this.code;
     }
 
     public static OrderStatus codeOf(int code) {

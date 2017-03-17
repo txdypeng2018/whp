@@ -32,6 +32,7 @@ public class ReqEncryptedAdapter extends XmlAdapter<String, Map<String, Object>>
         return needCDATA ? CDATAAdapter.wrapCDATA(result) : result;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private String iterateCollection(Map<String, Object> map) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> entry : map.entrySet()) {

@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.entity;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.annotation.CacheEntity;
 import com.proper.enterprise.platform.core.entity.BaseEntity;
 
@@ -14,6 +15,11 @@ import javax.persistence.Table;
 @Table(name = "ISJ_NAV_INFO")
 @CacheEntity
 public class NavInfoEntity extends BaseEntity {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 医院导航使用id

@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.proper.enterprise.isj.support.VersionEnum;
+
 /**
  * Created by think on 2016/8/24 0024.
  * 
@@ -15,6 +17,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "DOCTOR_LIST")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Doctor implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+
     /**
      * 科室ID
      */

@@ -9,12 +9,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.res.timereglist.TimeReg;
 
 @XmlRootElement(name = "RES")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeRegInfo implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
     /**
      * 医生排班分时信息集合
      */

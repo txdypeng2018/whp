@@ -1,5 +1,6 @@
 package com.proper.enterprise.isj.proxy.document;
 
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 
 /**
@@ -7,6 +8,11 @@ import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
  */
 
 public class RegistrationConcession extends BaseDocument {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 本次挂号优惠的总金额，无优惠返回0，单位：分 必填

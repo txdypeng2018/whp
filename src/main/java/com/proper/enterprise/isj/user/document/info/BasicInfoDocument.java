@@ -1,13 +1,17 @@
 package com.proper.enterprise.isj.user.document.info;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.annotation.Transient;
+
+import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.user.model.enums.MemberRelationEnum;
-import com.proper.enterprise.platform.core.PEPConstants;
 import com.proper.enterprise.platform.core.converter.AESStringConverter;
 import com.proper.enterprise.platform.core.mongo.document.BaseDocument;
 import com.proper.enterprise.platform.core.utils.StringUtil;
-import org.springframework.data.annotation.Transient;
-
-import java.util.*;
 
 /**
  * Created by think on 2016/8/12 0012. 公共信息
@@ -15,7 +19,7 @@ import java.util.*;
 
 public class BasicInfoDocument extends BaseDocument {
 
-    private static final long serialVersionUID = PEPConstants.VERSION;
+    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
 
     /**
      * 姓名

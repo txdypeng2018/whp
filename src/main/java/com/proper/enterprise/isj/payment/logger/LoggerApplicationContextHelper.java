@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.proper.enterprise.platform.utils.context.ApplicationContextHelper;
+
 /**
  * 日志操作过程中获取Spring的应用上下文的Helper.
  * <p>
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Lazy(false)
-public class LoggerApplicationContextHelper implements ApplicationContextAware {
+public class LoggerApplicationContextHelper implements ApplicationContextAware, ApplicationContextHelper {
 
     /**
      * 保存应用上下文的属性.
@@ -64,6 +66,15 @@ public class LoggerApplicationContextHelper implements ApplicationContextAware {
      */
     public static String getDelayLoggerName() {
         return HELPER.delayLoggerName;
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.proper.enterprise.isj.payment.logger.ApplicationContextHelper#getApplicationContext()
+     */
+    @Override
+    public ApplicationContext getApplicationContext(){
+        return this.context;
     }
 
 }
