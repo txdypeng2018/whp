@@ -27,6 +27,7 @@ import com.proper.enterprise.isj.context.UserTelContext;
 import com.proper.enterprise.isj.controller.IHosBaseController;
 import com.proper.enterprise.isj.proxy.business.customerservice.FetchAppNameBusiness;
 import com.proper.enterprise.isj.proxy.business.customerservice.GetPhoneNumBusiness;
+import com.proper.enterprise.isj.proxy.business.customerservice.GetUserOpinionBusiness;
 import com.proper.enterprise.isj.proxy.business.customerservice.SaveFeedbackOpinionBusiness;
 import com.proper.enterprise.isj.proxy.business.customerservice.ServiceFeedbackOpinionBusiness;
 import com.proper.enterprise.isj.proxy.business.customerservice.ServiceSaveUserOpinionBusiness;
@@ -93,7 +94,7 @@ public class ServiceController extends IHosBaseController {
     @GetMapping(path = "/userOpinion")
     public ResponseEntity<List<ServiceUserOpinionDocument>> getUserOpinion(
             @RequestParam(required = false) String feedbackStatus) throws Exception {
-        return responseOfGet(toolkit.execute(SaveFeedbackOpinionBusiness.class, (c) -> {
+        return responseOfGet(toolkit.execute(GetUserOpinionBusiness.class, (c) -> {
             ((FeedbackStatusContext<?>) c).setFeedbackStatus(feedbackStatus);
         }));
     }

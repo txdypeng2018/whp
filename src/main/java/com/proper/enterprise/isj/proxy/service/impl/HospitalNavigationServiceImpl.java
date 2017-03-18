@@ -20,8 +20,8 @@ import com.proper.enterprise.isj.context.NavFloorDetailEntityContext;
 import com.proper.enterprise.isj.context.NavInfoIdsContext;
 import com.proper.enterprise.isj.context.PageNoContext;
 import com.proper.enterprise.isj.context.PageSizeContext;
-import com.proper.enterprise.isj.proxy.business.his.HisFetchOA2HISDoctorInfoBusiness;
 import com.proper.enterprise.isj.proxy.business.navinfo.DelWebNavInfoBusiness;
+import com.proper.enterprise.isj.proxy.business.navinfo.FetchAppDistrictsListBusiness;
 import com.proper.enterprise.isj.proxy.business.navinfo.FetchAppFloorListBusiness;
 import com.proper.enterprise.isj.proxy.business.navinfo.FetchWebBuildByIdBusiness;
 import com.proper.enterprise.isj.proxy.business.navinfo.FetchWebBuildInfoBusiness;
@@ -54,7 +54,8 @@ public class HospitalNavigationServiceImpl extends AbstractService implements Ho
     @SuppressWarnings("unchecked")
     @Override
     public List<Map<String, Object>> getAppDistrictsList(String districtId) throws Exception {
-        return toolkit.execute(HisFetchOA2HISDoctorInfoBusiness.class, ctx->((DistrictIdContext<Collection<Map<String, Object>>>)ctx).setDistrictId(districtId));
+        return toolkit.execute(FetchAppDistrictsListBusiness.class, ctx->
+        ((DistrictIdContext<List<Map<String, Object>>>)ctx).setDistrictId(districtId));
     }
 
     /**
