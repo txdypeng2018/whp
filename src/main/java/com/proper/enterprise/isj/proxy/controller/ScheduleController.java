@@ -19,6 +19,7 @@ import com.proper.enterprise.isj.context.StartDateContext;
 import com.proper.enterprise.isj.context.SubjectIdContext;
 import com.proper.enterprise.isj.controller.IHosBaseController;
 import com.proper.enterprise.isj.proxy.business.schedule.FetchDoctorDateBusiness;
+import com.proper.enterprise.isj.proxy.business.schedule.FetchScheduleDoctorsBusiness;
 import com.proper.enterprise.isj.proxy.business.schedule.ScheduleGetTimesBusiness;
 import com.proper.enterprise.isj.proxy.document.DoctorScheduleDocument;
 import com.proper.enterprise.isj.proxy.document.TimeRegDocument;
@@ -70,7 +71,7 @@ public class ScheduleController extends IHosBaseController {
     public ResponseEntity<List<ScheDoctorDocument>> getScheduleDoctors(String districtId, String subjectId,
             String major, @RequestParam String startDate, String endDate, Integer pageNo,
             @RequestParam String isAppointment) {
-        return responseOfGet(toolkit.execute(FetchDoctorDateBusiness.class, (c) -> {
+        return responseOfGet(toolkit.execute(FetchScheduleDoctorsBusiness.class, (c) -> {
             ((DistrictIdContext<?>) c).setDistrictId(districtId);
             ((SubjectIdContext<?>) c).setSubjectId(subjectId);
             ((MajorContext<?>) c).setMajor(major);

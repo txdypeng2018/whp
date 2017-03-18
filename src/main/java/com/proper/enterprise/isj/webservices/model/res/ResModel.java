@@ -1,13 +1,13 @@
 package com.proper.enterprise.isj.webservices.model.res;
 
-import com.proper.enterprise.isj.support.VersionEnum;
-import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
+import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
+
+import com.proper.enterprise.isj.webservices.model.enmus.ReturnCode;
 
 @XmlRootElement(name = "ROOT")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -16,7 +16,7 @@ public class ResModel<T> implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+    private static final long serialVersionUID = 7254482459384824717L;
 
     @XmlElement(name = "RETURN_CODE")
     private int returnCode;

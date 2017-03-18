@@ -17,6 +17,7 @@ import com.proper.enterprise.isj.context.DateContext;
 import com.proper.enterprise.isj.context.DistrictIdContext;
 import com.proper.enterprise.isj.context.DoctorIdContext;
 import com.proper.enterprise.isj.context.IsAppointmentContext;
+import com.proper.enterprise.isj.context.MajorContext;
 import com.proper.enterprise.isj.context.SubjectIdContext;
 import com.proper.enterprise.isj.exception.HisReturnException;
 import com.proper.enterprise.isj.proxy.document.DoctorScheduleDocument;
@@ -28,7 +29,7 @@ import com.proper.enterprise.platform.core.utils.DateUtil;
 
 @Service
 public class FetchDoctorDateBusiness<T, M extends DoctorIdContext<Object> & DistrictIdContext<Object>
-& SubjectIdContext<Object> & DateContext<Object> & IsAppointmentContext<Object>
+& SubjectIdContext<Object> & MajorContext<Object> & DateContext<Object> & IsAppointmentContext<Object>
 & ModifiedResultBusinessContext<Object>>
         implements IBusiness<Object, M>, ILoggable {
 
@@ -42,7 +43,6 @@ public class FetchDoctorDateBusiness<T, M extends DoctorIdContext<Object> & Dist
         String districtId = ctx.getDistrictId();
         String subjectId = ctx.getSubjectId();
         String doctorId = ctx.getDoctorId();
-
         List<DoctorScheduleDocument> scheList;
         try {
             if (isAppointment.equals(String.valueOf(0)) && DateUtil.toDate(date).compareTo(new Date()) > 0) {

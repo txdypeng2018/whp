@@ -109,7 +109,7 @@ public class RegisterController extends IHosBaseController {
      */
     @RequestMapping(path = "/registrations/registration", method = RequestMethod.GET)
     public ResponseEntity<RegistrationDocument> getRegistration(@RequestParam String id) {
-        return responseOfGet(toolkit.execute(RegisterGetUserRegistrationsBusiness.class, (c) -> {
+        return responseOfGet(toolkit.execute(RegisterGetRegistrationBusiness.class, (c) -> {
             ((IdContext<?>) c).setId(id);
         }));
     }
