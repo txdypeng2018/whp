@@ -41,6 +41,11 @@
             setTimeout(function(){
                 document.querySelector('.btn-advanced-search').focus();
             }, 300);
+            if($stateParams.transFromInfo !== null) {
+              $scope.name = $stateParams.transFromInfo.name;
+              $scope.medicalNum = $stateParams.transFromInfo.medicalNum;
+              $scope.phoneOrIdcard = $stateParams.transFromInfo.phone;
+            }
         };
         $scope.customSearch = function(){
             $scope.gridParam.selected = [];
@@ -108,7 +113,6 @@
                 {text: '查询信息', click: searchData, iconClass: 'description_black', display: ['singleSelected']}
             ],
             title: '人员详细信息',
-            url: '/admin/customer/users',
             dblClick: dbEditData
         };
     };

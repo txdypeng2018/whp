@@ -11,14 +11,32 @@
       "statusCode": "0",
       "recipeNonPaidDetail": {
         "orderNum": "2017021609493070828196",
-        "amount": "48872"
+        "amount": "39300"
       },
       "recipePaidFailDetailList": {
       },
       "recipeOrderReqMap": {
+        "2017021609493070828196": {
+
+        }
       },
       "recipeOrderHisMap": {
-      }
+        "2017021609493070828196": {
+
+        }
+      },
+      "recipePaidDetailList": [{
+        "orderNum": "2017021609493070828196",
+        "detailList": [
+          {
+            "itemName": "达芙通片",
+            "ownCost": "39300",
+            "packQty": "20",
+            "qty": "60",
+            "unitPrice": "13100"
+          }
+        ]
+      }]
     },
     {
       "patientId": "72cd5828-2446-4ee7-a7e7-8ddd5500",
@@ -35,19 +53,35 @@
       "recipePaidFailDetailList": {
       },
       "recipeOrderReqMap": {
-        "orderId": "2017021610175239990031",
-        "payDate": "2017-02-16",
-        "payTime": "10:21:45",
-        "payChannelId": "WECHATPAY",
-        "payTotalFee": 285965,
-        "payResCode": "SUCCESS",
-        "payAccount": "wxc7825f86d99f3d90",
-        "CT": "2017-02-16 10:21:55.119"
+        "2017021609493070828196": {
+          "orderId": "2017021610175239990031",
+          "payDate": "2017-02-16",
+          "payTime": "10:21:45",
+          "payChannelId": "WECHATPAY",
+          "payTotalFee": 39300,
+          "payResCode": "SUCCESS",
+          "payAccount": "wxc7825f86d99f3d90",
+          "CT": "2017-02-16 10:21:55.119"
+        }
       },
       "recipeOrderHisMap": {
-        "clientReturnMsg": "交易成功[31807955 101561](SUCCESS)",
-        "CT": "2017-02-16 10:21:58.191"
-      }
+        "2017021609493070828196": {
+          "clientReturnMsg": "交易成功[31807955 101561](SUCCESS)",
+          "CT": "2017-02-16 10:21:58.191"
+        }
+      },
+      "recipePaidDetailList": [{
+        "orderNum": "2017021609493070828196",
+        "detailList": [
+          {
+            "itemName": "达芙通片",
+            "ownCost": "39300",
+            "packQty": "20",
+            "qty": "60",
+            "unitPrice": "13100"
+          }
+        ]
+      }]
     },
     {
       "patientId": "72cd5828-2446-4ee7-a7e7-8ddd5500",
@@ -65,21 +99,37 @@
         "orderNum": "2017021610271420819509",
         "refundNum": "2017021610271420819509001",
         "description": "门诊流水号:31816413HIS查询已缴费信息出现异常,不进行自动退费,HIS返回信息:数据库异常",
-        "amount": "115142"
+        "amount": "39300"
       },
       "recipeOrderReqMap": {
-        "orderId": "2017021610271420819509",
-        "payDate": "2017-02-16",
-        "payTime": "10:21:45",
-        "payChannelId": "WECHATPAY",
-        "payTotalFee": 115142,
-        "payResCode": "SUCCESS",
-        "payAccount": "wxc7825f86d99f3d90",
-        "CT": "2017-02-16 10:21:55.119"
+        "2017021609493070828196": {
+          "orderId": "2017021610271420819509",
+          "payDate": "2017-02-16",
+          "payTime": "10:21:45",
+          "payChannelId": "WECHATPAY",
+          "payTotalFee": 39300,
+          "payResCode": "SUCCESS",
+          "payAccount": "wxc7825f86d99f3d90",
+          "CT": "2017-02-16 10:21:55.119"
+        }
       },
       "recipeOrderHisMap": {
-        "clientReturnMsg": "缴费失败:SetFeeOnThirdparty异常未将对象引用设置到对象的实例。7 31816413 101571 Z2017021610271420819509(ERROR)",
-        "CT": "2017-02-16 10:21:58.191"
-      }
+        "2017021609493070828196": {
+          "clientReturnMsg": "缴费失败:SetFeeOnThirdparty异常未将对象引用设置到对象的实例。7 31816413 101571 Z2017021610271420819509(ERROR)",
+          "CT": "2017-02-16 10:21:58.191"
+        }
+      },
+      "recipePaidDetailList": [{
+        "orderNum": "2017021609493070828196",
+        "detailList": [
+          {
+            "itemName": "达芙通片",
+            "ownCost": "39300",
+            "packQty": "20",
+            "qty": "60",
+            "unitPrice": "13100"
+          }
+        ]
+      }]
     }
   ]
