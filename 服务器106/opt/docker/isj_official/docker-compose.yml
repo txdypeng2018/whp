@@ -6,6 +6,6 @@ isj-nginx_official:
     - ./nginx/log:/var/log/nginx
     - ./nginx/hc/www:/etc/nginx/hc
     - ./nginx/hc/www_debug:/etc/nginx/hc_debug
-    - ./nginx/isjadm/repo/www:/etc/nginx/isjadm
+    - ./nginx/isjadm/repo/admin/www:/etc/nginx/isjadm
   ports:
     - "80:80"

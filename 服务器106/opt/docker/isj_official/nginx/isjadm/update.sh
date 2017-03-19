@@ -17,4 +17,4 @@ then
     git clone https://github.com/propersoft-cn/ihos.git -b fe-deploy --depth=1 $WORKDIR/repo
 fi
 
-sed -i 's/"\.\/api"/location.protocol+"\/\/"+location.host+"\/isj"/' $WORKDIR/repo/www/scripts/scripts*.js
+sed -i 's/"\.\/api"/location.protocol+"\/\/"+location.host+"\/isj"/' $WORKDIR/repo/admin/www/scripts/scripts*.js
