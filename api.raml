@@ -638,7 +638,14 @@ traits:
                     "dept": { "type": "string", "description": "科室名称" },
                     "categoryCode": { "type": "string", "description": "类别编码" },
                     "category": { "type": "string", "description": "类别名称" },
-                    "amount": { "type": "string", "description": "挂号金额", "example": "7.00" }
+                    "amount": { "type": "string", "description": "挂号总金额", "example": "300.00" },
+                    "itemName": { "type": "array", "description": "包括挂号费用和其它费用","properties":[
+                      {
+                        "name": { "type":"string","description": "费用明细名称"},
+                        "price": { "type":"string","description": "费用明细费用"}
+                      }
+                    ]},
+                    "serialNum": { "type": "integer", "description": "剩余流水号数" }
                   }
                 ]
               }
@@ -695,8 +702,7 @@ traits:
                     "skill": { "type": "string", "description": "擅长" },
                     "total": { "type": "integer", "description": "可挂号总数" },
                     "overCount": { "type": "integer", "description": "剩余挂号数" },
-                    "unallowed": { "type": "string", "description": "医生不能挂号异常情况说明" },
-                    "serialNum": { "type": "string", "description": "剩余流水号数" }
+                    "unallowed": { "type": "string", "description": "医生不能挂号异常情况说明" }
                   }
                 ]
               }
@@ -841,7 +847,13 @@ traits:
                       "dept": { "type": "string", "description": "科室名称" },
                       "doctorId": { "type": "string", "description": "医生Id" },
                       "doctor": { "type": "string", "description": "医生名称" },
-                      "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                      "amount": { "type": "string", "description": "挂号总金额", "example": "300.00" },
+                      "itemName": { "type": "array", "description": "包括挂号费用和其它费用","properties":[
+                        {
+                          "name": { "type":"string","description": "费用明细名称"},
+                          "price": { "type":"string","description": "费用明细费用"}
+                        }
+                      ]},
                       "registerDate": { "type": "string", "description": "挂号时间" },
                       "statusCode": { "type": "string", "description": "挂号单状态" },
                       "status": { "type": "string", "description": "状态名称" }
@@ -878,7 +890,7 @@ traits:
                     "dept": { "type": "string", "description": "科室名称" },
                     "doctorId": { "type": "string", "description": "医生Id" },
                     "doctor": { "type": "string", "description": "医生名称" },
-                    "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                    "amount": { "type": "string", "description": "挂号总金额", "example": "300.00" },
                     "registerDate": { "type": "string", "description": "挂号时间" },
                     "statusCode": { "type": "string", "description": "挂号单状态" },
                     "status": { "type": "string", "description": "状态名称" },
@@ -891,7 +903,13 @@ traits:
                         "detail": { "type": "string", "description": "详细内容" },
                         "status": { "type": "string", "description": "状态code" }
                       }
-                    ] }
+                    ] },
+                    "itemName": { "type": "array", "description": "包括挂号费用和其它费用","properties":[
+                      {
+                        "name": { "type":"string","description": "费用明细名称"},
+                        "price": { "type":"string","description": "费用明细费用"}
+                      }
+                    ]}
                   }
                 }
       post:
@@ -908,7 +926,13 @@ traits:
                 "registerDate": { "type": "string", "description": "挂号时间", "example": "{2016-08-10 09:10|2016-08-10}" },
                 "doctorId": { "type": "string", "description": "医生ID" },
                 "categoryCode": { "type": "string", "description": "挂号类别编码" },
-                "amount": { "type": "string", "description": "挂号金额", "example": "7.00" },
+                "amount": { "type": "string", "description": "挂号总金额", "example": "300.00" },
+                "itemName": { "type": "array", "description": "包括挂号费用和其它费用","properties":[
+                  {
+                    "name": { "type":"string","description": "费用明细名称"},
+                    "price": { "type":"string","description": "费用明细费用"}
+                  }
+                ]},
                 "payStatus": { "type": "string", "description": "支付状态" }
               }
             }
