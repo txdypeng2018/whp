@@ -1,3 +1,0 @@
-{
-  "data":["{\"_id\" : { \"$oid\" : \"583e6d90059c13048f0d7c41\" },\"_class\" : \"com.proper.enterprise.isj.proxy.document.ServiceUserOpinionDocument\",\"userId\": \"1\",\"userName\": \"用户1\",\"userTel\": \"13812345678\",\"opinion\": \"用户意见用户意见用户意见用户意见用户意见用户意见用户意见用户意见用户意见用户意见1\",\"opinionTime\": \"2016-10-25 09:30\",\"feedback\": \"12343245\",\"feedbackTime\": \"2016-10-25 09:30\",\"statusCode\": \"1\",\"status\": \"已反馈\",\"createTime\": \"2016-10-27 11:21:50.723\",\"lastModifyUserId\": \"7b612aaa-d553-4428-84cd-8c92af75e2e7\",\"lastModifyTime\": \"2016-10-27 11:21:50.781\"}"
-  ]}
