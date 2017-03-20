@@ -816,7 +816,13 @@ traits:
                   "deptId": { "type": "string", "description": "科室Id" },
                   "dept": { "type": "string", "description": "科室名称" },
                   "clinicCategoryCode": { "type": "string", "description": "挂号类别编码" },
-                  "amount": { "type": "string", "description": "挂号金额", "example": "7.00" }
+                  "amount": { "type": "string", "description": "挂号总金额", "example": "300.00" },
+                  "itemName": { "type": "array", "description": "包括挂号费用和其它费用","properties":[
+                    {
+                      "name": { "type":"string","description": "费用明细名称"},
+                      "price": { "type":"string","description": "费用明细费用"}
+                    }
+                  ]}
                 }
               }
   /registrations:
