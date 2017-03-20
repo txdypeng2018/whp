@@ -1,0 +1,66 @@
+[
+  {
+    "name":"流程设计",
+    "url":"/workflow/designer",
+    "quanpin": "liuchengsheji",
+    "py": "lcsj"
+  },
+  {
+    "name":"流程实例",
+    "url":"/workflow/instances",
+    "quanpin": "liuchengshili",
+    "py": "lchshl"
+  },
+  {
+    "name":"资源",
+    "url":"/sys/resources",
+    "quanpin": "ziyuan",
+    "py": "zy"
+  },
+  {
+    "name":"测试",
+    "url":"/playground/test",
+    "quanpin": "ceshi",
+    "py": "test"
+  },
+  {
+    "name":"iframe 测试",
+    "url":"/playground/iframe",
+    "quanpin": "iframeceshi",
+    "py": "iframetest"
+  },
+  {
+    "createTime":"2015-08-18 09:38:00",
+    "createUserId":"sys",
+    "id":"BBD7A5193ECC493DB202A7F0DECF386C",
+    "lastModifyTime":"2015-08-18 09:38:00",
+    "lastModifyUserId":"sys",
+    "method":"GET",
+    "name":"默认根资源",
+    "url":"/"
+  },
+  {
+    "name":"全都管理全都管理全都管理全都管理全都管理",
+    "url":"/test",
+    "quanpin": "quandouguanli",
+    "py": "qdgl"
+  },
+  {
+    "name":"资源管理",
+    "url":"/resources",
+    "quanpin": "ziyuanguanli",
+    "py": "zygl"
+  },
+  {
+    "name":"用户管理",
+    "url":"/user",
+    "quanpin": "yonghuguanli",
+    "py": "yhgl"
+  },
+  {
+    "name":"系统管理",
+    "url":"/system",
+    "quanpin": "xitongguanli",
+    "py": "xtgl"
+  }
+]
