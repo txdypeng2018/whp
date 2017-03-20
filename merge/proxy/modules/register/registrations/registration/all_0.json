@@ -12,11 +12,11 @@
   "dept": "第八普通外科门诊",
   "doctorId": "1",
   "doctor": "姓名1",
-  "amount": "500",
+  "amount": "500.00",
   "itemName": [
     {
-      "name": "特殊服务费2",
-      "price": "500"
+      "name": "挂号费",
+      "price": "500.00"
     }
   ],
   "registerDate": "2017年01月19日 9:10",

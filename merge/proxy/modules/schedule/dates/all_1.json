@@ -17,11 +17,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "133"
+        "price": "133.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -44,11 +44,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "144"
+        "price": "144.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -71,11 +71,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "155"
+        "price": "155.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -98,11 +98,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "166"
+        "price": "166.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -125,11 +125,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "177"
+        "price": "177.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -152,11 +152,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "188"
+        "price": "188.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -179,11 +179,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "133"
+        "price": "133.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
@@ -206,11 +206,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "100"
+        "price": "100.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1

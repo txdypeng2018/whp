@@ -17,11 +17,11 @@
     "itemName": [
       {
         "name": "特殊服务费1",
-        "price": "200"
+        "price": "200.00"
       },
       {
         "name": "特殊服务费2",
-        "price": "200"
+        "price": "200.00"
       }
     ],
     "serialNum": 1
