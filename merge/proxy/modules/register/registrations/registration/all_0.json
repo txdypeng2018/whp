@@ -1,0 +1,41 @@
+{
+  "id": "1",
+  "num": "1701200012345",
+  "memberId": "1",
+  "patientName": "王二",
+  "apptDate": "2017年01月20日 9:10",
+  "clinicNum": "M001234567",
+  "hospital": "中国医科大学附属盛京医院",
+  "districtId": "1",
+  "district": "南湖院区",
+  "deptId": "1",
+  "dept": "第八普通外科门诊",
+  "doctorId": "1",
+  "doctor": "姓名1",
+  "amount": "7.00",
+  "registerDate": "2017年01月19日 9:10",
+  "statusCode": "1",
+  "status": "已支付",
+  "canBack": "0",
+  "orderNum": "1",
+  "orders": [
+    {
+      "img": "user.png",
+      "name": "生成订单,待支付",
+      "detail": "1710200012345<br>2017-01-19 09:10:00",
+      "status": "1"
+    },
+    {
+      "img": "alipay_icon.png",
+      "name": "订单已支付",
+      "detail": "2017010112334234234123<br>2017-01-19 09:12:00",
+      "status": "1"
+    },
+    {
+      "img": "logo.png",
+      "name": "医院确认",
+      "detail": "2017-01-19 9:12:00",
+      "status": "1"
+    }
+  ]
+}
