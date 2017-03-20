@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2016-09-30",
+    "total": 20,
+    "overCount": 5,
+    "doctorId": "1",
+    "name": "姓名1",
+    "sexCode": "1",
+    "title": "主任医师",
+    "districtId": "1",
+    "district": "南湖院区",
+    "deptId": "1",
+    "dept": "第一内分泌科门诊",
+    "categoryCode": "1",
+    "category": "普通",
+    "amount": "400.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "200.00"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200.00"
+      }
+    ],
+    "serialNum": 1
+  }
+]

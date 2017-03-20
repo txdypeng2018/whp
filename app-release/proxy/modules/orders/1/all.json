@@ -1,0 +1,8 @@
+{
+  "orderNum": "1",
+  "name": "费用",
+  "description": "挂号",
+  "amount": "300.00",
+  "isAppointment": "1",
+  "closeTime": [30,0]
+}

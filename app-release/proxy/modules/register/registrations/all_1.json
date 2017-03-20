@@ -1,0 +1,28 @@
+[
+  {
+    "id": "3",
+    "apptDate": "2017年10月20日 9:10",
+    "clinicNum": "1710200012345",
+    "hospital": "中国医科大学附属盛京医院",
+    "districtId": "1",
+    "district": "南湖院区",
+    "deptId": "1",
+    "dept": "第八普通外科门诊",
+    "doctorId": "1",
+    "doctor": "姓名1",
+    "amount": "300.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "100.00"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200.00"
+      }
+    ],
+    "registerDate": "2017年10月19日 10:12",
+    "statusCode": "0",
+    "status": "未支付"
+  }
+]
