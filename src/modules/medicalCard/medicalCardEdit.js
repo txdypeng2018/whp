@@ -16,9 +16,15 @@
       });
     });
 
+    //字母大写
+    var ucfirst = function(str) {
+      return str.toUpperCase();
+    };
+
     //更新病历号
     $scope.changeNum = function() {
       $scope.isSubmit = true;
+      $scope.input.medicalNum = ucfirst($scope.input.medicalNum);
       $http.put('/user/medicalNum', $scope.input).success(function() {
         $ionicHistory.goBack();
         toastService.show('更新成功');
