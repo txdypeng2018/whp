@@ -13,7 +13,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "5.00"
+    "amount": "333.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "133"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-08-25",
@@ -29,7 +40,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "6.00"
+    "amount": "344.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "144"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-08-29",
@@ -45,7 +67,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "355.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "155"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-08-30",
@@ -61,7 +94,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "366.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "166"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-09-21",
@@ -77,7 +121,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "377.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "177"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-09-22",
@@ -93,7 +148,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "388.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "188"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-09-23",
@@ -109,7 +175,18 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "333.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "133"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   },
   {
     "date": "2016-09-24",
@@ -125,6 +202,17 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "7.00"
+    "amount": "300.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "100"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   }
 ]

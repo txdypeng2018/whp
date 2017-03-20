@@ -27,7 +27,7 @@ handler.onGet = function(req, res) {
 handler.onPost = function(req, res, data) {
   if (data.patientId === '1') {
     res.writeHeader(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify({ orderNum: '1' ,registrationId: '3'}));
+    res.write(JSON.stringify({ orderNum: '1' }));
     res.end();
   }
   else {

@@ -10,7 +10,13 @@
     "dept": "第八普通外科门诊",
     "doctorId": "1",
     "doctor": "姓名1",
-    "amount": "7.00",
+    "amount": "500",
+    "itemName": [
+      {
+        "name": "特殊服务费2",
+        "price": "500"
+      }
+    ],
     "registerDate": "2017年01月19日 9:10",
     "statusCode": "1",
     "status": "已支付"
@@ -26,7 +32,17 @@
     "dept": "第八普通外科门诊",
     "doctorId": "1",
     "doctor": "姓名1",
-    "amount": "7.00",
+    "amount": "400",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "200"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
     "registerDate": "2017年01月19日 9:10",
     "statusCode": "6",
     "status": "已退费"

@@ -13,6 +13,17 @@
     "dept": "第一内分泌科门诊",
     "categoryCode": "1",
     "category": "普通",
-    "amount": "5.00"
+    "amount": "400.00",
+    "itemName": [
+      {
+        "name": "特殊服务费1",
+        "price": "200"
+      },
+      {
+        "name": "特殊服务费2",
+        "price": "200"
+      }
+    ],
+    "serialNum": 1
   }
 ]
