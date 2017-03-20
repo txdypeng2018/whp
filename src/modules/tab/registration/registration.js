@@ -13,6 +13,13 @@
             if ($scope.registrations[i].district.length > 2) {
               $scope.registrations[i].district = $scope.registrations[i].district.substring(0,2);
             }
+            if($scope.registrations[i].itemName.length === 1){
+              $scope.registrations[i].priceIsShow1 = false;
+              $scope.registrations[i].priceIsShow2 = true;
+            }else{
+              $scope.registrations[i].priceIsShow1 = true;
+              $scope.registrations[i].priceIsShow2 = false;
+            }
           }
         }
       }).error(function(data, status, fun, config){

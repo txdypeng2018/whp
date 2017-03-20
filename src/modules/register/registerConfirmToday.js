@@ -30,6 +30,7 @@
       toastService.show(data);
     });
     //取得医生信息
+    //取得项目明细
     $http.get('/register/doctor', {params: {id: doctorId, date: today}}).success(function(data) {
       $scope.doctor = data;
       if ($scope.doctor.district.length > 2) {
@@ -94,7 +95,8 @@
         doctorId: doctorId,
         clinicCategoryCode: $scope.doctor.clinicCategoryCode,
         amount: $scope.doctor.amount,
-        payStatus: '0'
+        payStatus: '0',
+        itemName: $scope.itemNames
       };
       $http.post('/register/registrations/registration', registration).success(function(data) {
         $state.go('paymentSelect', {orderNum: data.orderNum, memberId: $stateParams.memberId});

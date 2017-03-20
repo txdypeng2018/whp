@@ -71,14 +71,18 @@
       }
     }
   }
-
+}
+.registerConfirmAppt-footer{
   .amount {
-    padding: 15px 0;
     font-size: 18px;
-    text-align: right;
+    line-height: 33px;
+    float: left;
+    width: 70%;
   }
 
   .confirm {
+    float: right;
+    width: 30%;
     .button {
       width: 100%;
     }
