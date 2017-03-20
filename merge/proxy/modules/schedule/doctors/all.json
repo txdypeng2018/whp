@@ -10,8 +10,7 @@
     "dept": "第一内分泌科门诊",
     "skill": "擅长于风湿科常见疾病",
     "total": "99",
-    "overCount": "99",
-    "serialNum": "10"
+    "overCount": "99"
   },
   {
     "id": "2",
@@ -25,7 +24,6 @@
     "skill": "",
     "total": "10",
     "overCount": "5",
-    "serialNum": "10",
     "unallowed": "停诊"
   },
   {
@@ -40,7 +38,6 @@
     "skill": "",
     "total": "10",
     "overCount": "0",
-    "serialNum": "0",
     "unallowed": ""
   }
 ]
