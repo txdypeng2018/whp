@@ -1,0 +1,23 @@
+<div layout-gt-sm="row">
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>日志过滤条件</label>
+        <input ng-model="gridParam.searchData.search" type="text" ng-keyup="searchKeyup($event)">
+    </md-input-container>
+    <form name="searchForm">
+        <md-input-container md-no-float style="margin-top: 15px">
+            <md-button class="md-icon-button md-primary" aria-label="按时间查询">
+                <md-tooltip md-direction="bottom">按时间查询</md-tooltip>
+                <md-icon style="padding: 0;">access_time</md-icon>
+            </md-button>
+        </md-input-container>
+        <md-input-container md-no-float>
+            <input ng-model="gridParam.searchData.startDate" type="text" placeholder="2017-01-01 10:00:00">
+        </md-input-container>
+        <md-input-container md-no-float style="margin-top: 23px">
+            <span class="date-to">&nbsp;~&nbsp;</span>
+        </md-input-container>
+        <md-input-container md-no-float>
+            <input ng-model="gridParam.searchData.endDate" type="text" placeholder="2017-01-01 10:02:00">
+        </md-input-container>
+    </form>
+</div>
