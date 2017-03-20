@@ -81,43 +81,65 @@ handler.service = {
       },
       GetRegInfo: function(args) {
         commonStep(args);
-        var res = '<RES>'
-                +   '<HOS_ID></HOS_ID>'
-                +   '<DEPT_ID>100101</DEPT_ID>'
-                +   '<REG_DOCTOR_LIST>'
-                +     '<DOCTOR_ID></DOCTOR_ID>'
-                +     '<NAME>张为</NAME>'
-                +     '<JOB_TITLE>主治医师</JOB_TITLE>'
-                +     '<REG_LIST>'
-                +       '<REG_DATE>2014-10-12</REG_DATE>'
-                +       '<REG_WEEKDAY>星期日</REG_WEEKDAY>'
-                +       '<REG_TIME_LIST>'
-                +         '<REG_ID>1005</REG_ID>'
-                +         '<TIME_FLAG>1</TIME_FLAG>'
-                +         '<REG_STATUS>1</REG_STATUS>'
-                +         '<TOTAL>15</TOTAL>'
-                +         '<OVER_COUNT>5</OVER_COUNT>'
-                +         '<REG_LEVEL>1</REG_LEVEL>'
-                +         '<REG_FEE>100</REG_FEE>'
-                +         '<TREAT_FEE>1000</TREAT_FEE>'
-                +         '<ISTIME>1</ISTIME>'
-                +       '</REG_TIME_LIST>'
-                +       '<REG_TIME_LIST>'
-                +         '<REG_ID>1005</REG_ID>'
-                +         '<TIME_FLAG>2</TIME_FLAG>'
-                +         '<REG_STATUS>1</REG_STATUS>'
-                +         '<TOTAL>15</TOTAL>'
-                +         '<OVER_COUNT>5</OVER_COUNT>'
-                +         '<REG_LEVEL>1</REG_LEVEL>'
-                +         '<REG_FEE>100</REG_FEE>'
-                +         '<TREAT_FEE>1000</TREAT_FEE>'
-                +         '<ISTIME>1</ISTIME>'
-                +       '</REG_TIME_LIST>'
-                +     '</REG_LIST>'
-                +   '</REG_DOCTOR_LIST>'
-                + '</RES>';
+        var data = {
+          HOS_ID: "",
+          DEPT_ID: "100101",
+          REG_DOCTOR_LIST: [
+            {
+              DOCTOR_ID: "",
+              NAME: "张为",
+              JOB_TITLE: "主治医师",
+              REG_LIST: [
+                {
+                  REG_DATE: "2014-10-12",
+                  REG_WEEKDAY: "星期日",
+                  REG_TIME_LIST: [
+                    {
+                      REG_ID: 1005,
+                      TIME_FLAG: 1,
+                      REG_STATUS: 1,
+                      TOTAL: 15,
+                      OVER_COUNT: 5,
+                      POINT_COUNT: 5,
+                      REG_LEVEL: 1,
+                      REG_FEE: 100,
+                      TREAT_FEE: 1000,
+                      REG_FEE_LIST: [
+                        {
+                          ITEM_FEE_NAME: "特需服务费",
+                          ITEM_FEE_NUM: 1,
+                          ITEM_UNIT_PRICE: 19400
+                        }
+                      ],
+                      ISTIME: 1
+                    },
+                    {
+                      REG_ID: 1005,
+                      TIME_FLAG: 2,
+                      REG_STATUS: 1,
+                      TOTAL: 15,
+                      OVER_COUNT: 5,
+                      POINT_COUNT: 5,
+                      REG_LEVEL: 1,
+                      REG_FEE: 100,
+                      TREAT_FEE: 1000,
+                      REG_FEE_LIST: [
+                        {
+                          ITEM_FEE_NAME: "特需服务费",
+                          ITEM_FEE_NUM: 1,
+                          ITEM_UNIT_PRICE: 19400
+                        }
+                      ],
+                      ISTIME: 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
         return {
-          GetRegInfoResult: resXml(res)
+          GetRegInfoResult: resXml(obj2xml(data))
         };
       },
       GetHosInfo: function(args) {
@@ -306,6 +328,21 @@ handler.service = {
         return {
           GetTimeRegInfoResult: resXml(res)
         }
+      },
+      PayOrderReg: function(args) {
+        commonStep(args);
+        var data = {
+          HOSP_PATIENT_ID: "A001",
+          HOSP_ORDER_ID: "123",
+          HOSP_SERIAL_NUM: "",
+          HOSP_MEDICAL_NUM: "123",
+          HOSP_GETREG_DATE: "123",
+          HOSP_SEE_DOCT_ADDR: "123",
+          HOSP_REMARK: "123"
+        };
+        return {
+          PayOrderRegResult: resXml(obj2xml(data))
+        };
       },
       CancelReg: function(args) {
         commonStep(args);
