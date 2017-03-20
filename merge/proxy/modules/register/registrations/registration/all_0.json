@@ -12,13 +12,7 @@
   "dept": "第八普通外科门诊",
   "doctorId": "1",
   "doctor": "姓名1",
-  "amount": "500.00",
-  "itemName": [
-    {
-      "name": "挂号费",
-      "price": "500.00"
-    }
-  ],
+  "amount": "7.00",
   "registerDate": "2017年01月19日 9:10",
   "statusCode": "1",
   "status": "已支付",
