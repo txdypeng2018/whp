@@ -21,27 +21,46 @@
           <p>{{dataInfo.title}}</p>
         </div>
         <p>出诊地点：{{dataInfo.dept}}</p>
-        <p>挂号费：<span class="positive" style="font-weight: 600;font-size: 15px">￥{{dataInfo.amount}}</span></p>
+        <p>总费用
+          <span class="positive" style="font-weight: 600;font-size: 15px">￥{{totalPrice}}元</span>
+          <span style="position: relative;margin-left: 5px;" ng-if="(itemNames.length > 1) && (times.length != 0)">
+            <i ng-click="showDetail()" class = "icon ion-ios-eye-outline" style="position: absolute;left: 0px;top: -5px;font-size: 28px;color: #387ef5;"></i>
+          </span>
+        </p>
         <div class="positive-border district-icon" ng-class="districtColor[dataInfo.districtId]"></div>
         <div class="district-icon-font">{{dataInfo.district}}</div>
       </li>
-      <li class="item item-divider">
+      <li class="item item-divider" ng-if="times.length > 0">
         预约时间
       </li>
     </ul>
   </div>
 
-  <ion-content delegate-handle="registerTimeScroll" ng-class="{true: 'no-dates'}[dateSelectParam.selectDays.length == 0]" class="has-header content-fill registerDoctorTimeSelect-content">
-    <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
-    <div ng-if="dataInfo.overCount == 0" class="no-count">
-      <span>号满</span>
-    </div>
-    <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
-      <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
-        <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
-        <span>{{time.time}}</span>
+  <ion-content delegate-handle="registerTimeScroll" ng-class="{'has-footer': dataInfo.serialNum > 0,'no-dates': dateSelectParam.selectDays.length == 0,'registerDoctorTimeSelect-content-today': times.length == 0}" class="has-header content-fill registerDoctorTimeSelect-content">
+    <ul class="list" ng-if="times.length == 0">
+      <li ng-repeat="item in itemNames" class="price-detail" >
+        <span class="price-detail-left">{{item.name}}</span>
+        <span class="price-detail-right">{{item.price}}元</span>
+      </li>
+    </ul>
+    <div ng-if="times.length > 0">
+      <ion-refresher refreshing-icon="" on-refresh="doRefresh()"></ion-refresher>
+      <div ng-if="dataInfo.overCount == 0" class="no-count">
+        <span>号满</span>
+      </div>
+      <div ng-if="dateSelectParam.selectDays.length > 0" class="time-select">
+        <div ng-repeat="time in times" ng-class="{true: 'time-disable'}[time.overCount==0]" ng-click="timeClk(time.time, time.overCount)">
+          <i ng-if="time.time != ''" class="icon ion-ios-clock-outline"></i>
+          <span>{{time.time}}</span>
+        </div>
       </div>
     </div>
     <div ng-if="dateSelectParam.selectDays.length == 0 && !$root.inProcess" class="no-content-center">暂无医生号点信息</div>
   </ion-content>
+
+  <ion-footer-bar ng-if="dataInfo.serialNum > 0" align-title="center" class="registrationView-footer operation">
+    <div style="width:100%">
+      <button class="button button-positive has-two-button has-two-button-up" ng-click="serialNumClk()">挂号</button>
+    </div>
+  </ion-footer-bar>
 </ion-view>

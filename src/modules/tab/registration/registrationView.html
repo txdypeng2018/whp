@@ -54,7 +54,15 @@
             <td class="label">就诊地点</td>
             <td>看诊前查看就诊地点</td>
           </tr>
-          <tr>
+          <tr ng-repeat="item in registration.itemName" ng-if="registration.itemName.length > 1">
+            <td class="label" rowspan='{{registration.itemName.length}}' ng-if='$index==0'>费用明细 </td>
+            <td width="100%">{{item.name}}:<span style="margin-left: 5px;">{{item.price}}元</span></td>
+          </tr>
+          <tr ng-if="registration.itemName.length > 1">
+            <td class="label">总费用</td>
+            <td>{{registration.amount}}元</td>
+          </tr>
+          <tr ng-if="registration.itemName.length == 1">
             <td class="label">挂号费</td>
             <td>{{registration.amount}}元</td>
           </tr>

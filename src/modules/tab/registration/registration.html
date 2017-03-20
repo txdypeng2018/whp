@@ -46,8 +46,11 @@
           <div class="bottom">
             就诊时间：{{registration.apptDate}}
           </div>
-          <div class="bottom">
-            挂号费：{{registration.amount}}元
+          <div class="bottom" ng-if="registration.priceIsShow1">
+            总费用：{{registration.amount}}元
+          </div>
+          <div class="bottom" ng-if="registration.priceIsShow2">
+            {{registration.itemName[0].name}}：{{registration.itemName[0].price}}元
           </div>
         </div>
         <div class="time-line-bottom">

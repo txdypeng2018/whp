@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicScrollDelegate, toastService, userService, doctorPhotoService, utilsService) {
+  var registerDoctorTimeSelectCtrl = function($scope, $http, $state, $stateParams, $filter, $timeout, $ionicScrollDelegate, toastService, userService, doctorPhotoService, utilsService, $ionicPopup) {
     //数据初始化
     var weekStr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var isAppointment = '1';
@@ -37,6 +37,7 @@
             }
           }
           $scope.times = data;
+          $scope.times.length = data.length;
         }
       }).error(function(data, status, fun, config){
         if (angular.isUndefined($scope.httpIndex[config.params.index])) {
@@ -80,6 +81,9 @@
         };
         getScheduleTimes($scope.dateSelectParam.daySelected);
         $scope.dataInfo = data[0];
+        //取得项目明细
+        $scope.totalPrice = data[0].amount;
+        $scope.itemNames = data[0].itemName;
         if ($scope.dataInfo.district.length > 2) {
           $scope.dataInfo.district = $scope.dataInfo.district.substring(0, 2);
         }
@@ -136,6 +140,64 @@
           $state.go('login');
         }
       }
+    };
+
+    //流水号挂号点击事件
+    $scope.serialNumClk = function() {
+      if ($scope.dateSelectParam.daySelected !== null && $scope.dateSelectParam.daySelected !== '' && $scope.dataInfo.serialNum > 0) {
+        var isLogin = userService.hasToken();
+        if (isLogin) {
+          $http.get('/user/tokenVal').success(function () {
+            if ($stateParams.type === '1') {
+              $state.go('registerConfirmToday', {
+                doctorId: $stateParams.doctorId,
+                date: $scope.dateSelectParam.daySelected
+              });
+            }
+            else {
+              $state.go('registerConfirmAppt', {
+                doctorId: $stateParams.doctorId,
+                date: $scope.dateSelectParam.daySelected
+              });
+            }
+          }).error(function (data, status) {
+            if (status !== 401) {
+              toastService.show(data);
+            }
+            else {
+              userService.clearToken();
+              $state.go('login');
+            }
+          });
+        }
+        else {
+          $state.go('login');
+        }
+      }
+    };
+
+    //显示详细信息
+    $scope.showDetail = function(){
+      var myPopup = $ionicPopup.show({
+        template: '<p ng-repeat="item in itemNames"><span>{{item.name}}</span> <span style="float: right">{{item.price}}元</span></p>',
+        title: '费用明细',
+        scope: $scope,
+        buttons: [
+          {
+            text: '<b>关闭</b>',
+            type: 'button-positive',
+            onTap: function (e) {
+              e.preventDefault();
+              myPopup.close();
+            }
+          }
+        ]
+      });
+      $scope.$on('$ionicView.beforeLeave', function(){
+        if (myPopup !== null) {
+          myPopup.close();
+        }
+      });
     };
 
     //遮蔽罩取消

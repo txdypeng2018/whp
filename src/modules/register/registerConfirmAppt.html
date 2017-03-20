@@ -5,7 +5,7 @@
     <div class="title"></div>
     <a class="button button-clear icon ion-ios-home-outline positive return-home-icon" ng-click="goMainPage()"></a>
   </ion-header-bar>
-  <ion-content class="has-header registerConfirmAppt-content">
+  <ion-content class="has-header registerConfirmAppt-content has-footer">
     <div class="patient">
       <img ng-if="patient.memberCode == '00' && patient.sexCode == '1'" src="./assets/images/pic_man.png" class="photo">
       <img ng-if="patient.memberCode == '00' && patient.sexCode == '0'" src="./assets/images/pic_woman.png" class="photo">
@@ -33,6 +33,10 @@
           <td class="label">看诊医生：</td>
           <td width="100%">{{doctor.name}}</td>
         </tr>
+        <tr ng-repeat="item in doctor.itemName">
+          <td class="label" rowspan='{{doctor.itemName.length}}' ng-if='$index==0'>费用明细：</td>
+          <td width="100%">{{item.name}}:<span style="margin-left: 5px;color:#387ef5;">{{item.price}}元</span></td>
+        </tr>
         <tr>
           <td class="label positive">温馨提示：</td>
           <td width="100%" class="positive">
@@ -52,12 +56,15 @@
           </ion-checkbox>
       </div>
 
-
-    <div class="amount">
-      合计：{{doctor.amount}}元
-    </div>
-    <div class="confirm">
-      <button class="button button-positive" ng-click="registerConfirm()" ng-disabled="!isChecked">确定</button>
-    </div>
   </ion-content>
+  <ion-footer-bar align-title="center" class="registerConfirmAppt-footer">
+    <div style="width:100%">
+      <div class="amount">
+        合计：<span style="margin-left: 5px;color:#387ef5;">{{doctor.amount}}元</span>
+      </div>
+      <div class="confirm">
+        <button class="button button-positive" ng-click="registerConfirm()" ng-disabled="!isChecked">确定</button>
+      </div>
+    </div>
+  </ion-footer-bar>
 </ion-view>
