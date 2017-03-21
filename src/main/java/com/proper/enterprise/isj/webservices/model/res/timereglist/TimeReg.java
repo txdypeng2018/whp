@@ -5,8 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.proper.enterprise.isj.support.VersionEnum;
-
 import java.io.Serializable;
 
 @XmlRootElement(name = "TIME_REG_LIST")
@@ -16,7 +14,7 @@ public class TimeReg implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+    private static final long serialVersionUID = -1836112553092414845L;
 
     /**
      * 时段 1:上午 (06:00-12:00),2:下午 (12:00-18:00),3:晚上(18:00-次日06:00)

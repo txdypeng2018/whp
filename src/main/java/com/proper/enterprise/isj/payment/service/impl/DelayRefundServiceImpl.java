@@ -12,7 +12,6 @@ public class DelayRefundServiceImpl extends AbstractService implements DelayRefu
 
     @Override
     public void doDelayRefund(long delayTime) {
-        //TODO
         toolkit.executeFunction(DoDelayRefundFunction.class, delayTime);
     }
 

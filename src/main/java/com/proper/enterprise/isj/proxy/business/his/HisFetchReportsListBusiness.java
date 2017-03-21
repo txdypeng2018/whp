@@ -97,7 +97,7 @@ public class HisFetchReportsListBusiness<M extends ReportListReqContext<Collecti
                     }
                     // 其他报告类型
                 } else {
-                    debug("其他报告类型"); // TODO
+                    debug("其他报告类型"); 
                 }
             }
         }

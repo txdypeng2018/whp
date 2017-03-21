@@ -30,7 +30,7 @@ public class SendRecipeMsgFunction implements IFunction<Object>, ILoggable {
 
     @Override
     public Object execute(Object... params) throws Exception {
-        // TODO Auto-generated method stub
+        this.sendRecipeMsg((RecipeOrderDocument) params[0], (SendPushMsgEnum) params[1], (Object) params[2]);
         return null;
     }
 
