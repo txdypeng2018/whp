@@ -2,6 +2,7 @@ package com.proper.enterprise.isj.proxy.business.opinion;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.proper.enterprise.isj.context.UserIdContext;
@@ -15,6 +16,7 @@ import com.proper.enterprise.isj.support.function.FunctionUtils;
 public class FetchByUserIdBusiness<M extends UserIdContext<List<ServiceUserOpinionDocument>> & ModifiedResultBusinessContext<List<ServiceUserOpinionDocument>>>
         implements IBusiness<List<ServiceUserOpinionDocument>, M> {
 
+    @Autowired
     FetchByUserIdFunction func;
 
     @Override

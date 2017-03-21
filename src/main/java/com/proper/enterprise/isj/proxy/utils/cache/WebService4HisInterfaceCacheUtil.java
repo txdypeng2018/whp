@@ -188,7 +188,7 @@ public class WebService4HisInterfaceCacheUtil {
     public String cachePacsListInfo(String patientId) throws IOException {
         String reportListUrl = ConfCenter.get("isj.report.baseUrl") + ConfCenter.get("isj.report.showListParam1")
                 + patientId + ConfCenter.get("isj.report.showListParam2");
-        // reportListUrl.append("M004830551"); // TODO TEMP
+        // reportListUrl.append("M004830551"); 
         return new String(HttpClient.get(reportListUrl).getBody(), PEPConstants.DEFAULT_CHARSET);
     }
 

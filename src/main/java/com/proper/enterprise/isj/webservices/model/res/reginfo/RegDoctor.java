@@ -5,8 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.proper.enterprise.isj.support.VersionEnum;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +13,11 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RegDoctor implements Serializable {
 
+
     /**
-     * 
-     */
-    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+    * 
+    */
+    private static final long serialVersionUID = -5623354724628029691L;
 
     /**
      * 医生ID

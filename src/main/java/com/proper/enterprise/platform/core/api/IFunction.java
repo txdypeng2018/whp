@@ -34,6 +34,6 @@ public interface IFunction<T> extends IHandler{
      * @return 返回值.
      * @throws Exception 可能抛出异常.
      */
-    T execute(Object ... params) throws Exception;
+    T execute(Object... params) throws Exception;
     
 }

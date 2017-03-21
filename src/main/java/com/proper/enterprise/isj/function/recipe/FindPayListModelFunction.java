@@ -34,8 +34,7 @@ public class FindPayListModelFunction implements IFunction<ResModel<PayList>> {
     
     @Override
     public ResModel<PayList> execute(Object... params) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        return this.findPayListModel((BasicInfoDocument) params[0], (String) params[1], (String) params[2], (String) params[3], (String) params[4], (boolean) params[5]);
     }
     
     /**

@@ -34,7 +34,7 @@ public class ReportDetailInfo implements Serializable {
      * 用户报告信息
      */
     @XmlElement(name = "REPORT_INFO")
-    private List<ReportUserDetailInfo> reportInfo = new ArrayList<>(); // TODO 是LIST还是一条数据???
+    private List<ReportUserDetailInfo> reportInfo = new ArrayList<>(); // 是LIST还是一条数据???
 
     /**
      * 检验项目列表

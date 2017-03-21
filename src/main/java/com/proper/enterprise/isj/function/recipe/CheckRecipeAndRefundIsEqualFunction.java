@@ -47,8 +47,7 @@ public class CheckRecipeAndRefundIsEqualFunction implements IFunction<String>, I
     
     @Override
     public String execute(Object... params) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        return this.checkRecipeAndRefundIsEqual((RecipeOrderDocument) params[0], (RecipePaidDetailDocument) params[1], (RefundByHis) params[2]);
     }
     
     /**

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.proper.enterprise.isj.business.RepositoryFunctionToolkit;
 import com.proper.enterprise.isj.proxy.document.RegistrationDocument;
 import com.proper.enterprise.isj.proxy.document.RegistrationRefundLogDocument;
+import com.proper.enterprise.isj.proxy.repository.RegistrationRefundLogRepository;
 import com.proper.enterprise.platform.core.api.IFunction;
 
 /**
@@ -38,7 +39,7 @@ public class SaveOrUpdateRegRefundLogFunction implements IFunction<Object> {
             refundLogDocument.setRefundStatus(refundStatus);
             refundLogDocument.setRefundHisStatus(refundHisStatus);
 
-            toolkitx.executeRepositoryFunction(RegistrationRefundLogDocument.class, "save", refundLogDocument);
+            toolkitx.executeRepositoryFunction(RegistrationRefundLogRepository.class, "save", refundLogDocument);
         }
     }
 

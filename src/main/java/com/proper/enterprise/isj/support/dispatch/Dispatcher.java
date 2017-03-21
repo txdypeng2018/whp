@@ -30,6 +30,6 @@ public interface Dispatcher {
      * @throws Exception 可能抛出异常.
      * @author 王东石<wangdongshi@propersoft.cn>
      */
-    <T> T dispatch(String key, Object ... params) throws Exception;
+    <T> T dispatch(String key, Object... params) throws Exception;
 
 }

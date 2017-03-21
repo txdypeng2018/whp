@@ -42,7 +42,7 @@ public interface ILoggable {
         trace(findLogger(), msg, t);
     }
     
-    default void trace(String format, Object ... args){
+    default void trace(String format, Object... args){
         trace(findLogger(), format, args);
     }
     
@@ -54,7 +54,7 @@ public interface ILoggable {
         debug(findLogger(), msg, t);
     }
     
-    default void debug(String format, Object ... args){
+    default void debug(String format, Object... args){
         debug(findLogger(), format, args);
     }
     
@@ -66,7 +66,7 @@ public interface ILoggable {
         info(findLogger(), msg, t);
     }
     
-    default void info(String format, Object ... args){
+    default void info(String format, Object... args){
         info(findLogger(), format, args);
     }
     
@@ -78,7 +78,7 @@ public interface ILoggable {
         warn(findLogger(), msg, t);
     }
     
-    default void warn(String format, Object ... args){
+    default void warn(String format, Object... args){
         warn(findLogger(), format, args);
     }
     
@@ -90,7 +90,7 @@ public interface ILoggable {
         error(findLogger(), msg, t);
     }
     
-    default void error(String format, Object ... args){
+    default void error(String format, Object... args){
         error(findLogger(), format, args);
     }
     
@@ -102,7 +102,7 @@ public interface ILoggable {
         fatal(findLogger(), msg, t);
     }
     
-    default void fatal(String format, Object ... args){
+    default void fatal(String format, Object... args){
         fatal(findLogger(), format, args);
     }
     
@@ -125,22 +125,22 @@ public interface ILoggable {
         logger.error(msg, t);
     }
     
-    static void trace(Logger logger, String format, Object ... params){
+    static void trace(Logger logger, String format, Object... params){
         logger.trace(format, params);
     }
-    static void debug(Logger logger, String format, Object ... params){
+    static void debug(Logger logger, String format, Object... params){
         logger.debug(format, params);
     }
-    static void info(Logger logger, String format, Object ... params){
+    static void info(Logger logger, String format, Object... params){
         logger.info(format, params);
     }
-    static void warn(Logger logger, String format, Object ... params){
+    static void warn(Logger logger, String format, Object... params){
         logger.warn(format, params);
     }
-    static void error(Logger logger, String format, Object ... params){
+    static void error(Logger logger, String format, Object... params){
         logger.error(format, params);
     }
-    static void fatal(Logger logger, String format, Object ... params){
+    static void fatal(Logger logger, String format, Object... params){
         logger.error(format, params);
     }
     

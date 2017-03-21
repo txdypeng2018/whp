@@ -26,8 +26,7 @@ public class FetchFamilyAddLeftIntervalDaysFunction implements IFunction<Integer
 
     @Override
     public Integer execute(Object... params) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        return this.getFamilyAddLeftIntervalDays((int) params[0], (String) params[1]);
     }
 
     public int getFamilyAddLeftIntervalDays(int familyMemberSize, String lastCreateTime) {

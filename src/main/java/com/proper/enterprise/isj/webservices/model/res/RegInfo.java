@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.proper.enterprise.isj.support.VersionEnum;
 import com.proper.enterprise.isj.webservices.model.res.reginfo.RegDoctor;
 
 @XmlRootElement(name = "RES")
@@ -17,9 +16,9 @@ import com.proper.enterprise.isj.webservices.model.res.reginfo.RegDoctor;
 public class RegInfo implements Serializable {
 
     /**
-     * 
-     */
-    private static final long serialVersionUID = VersionEnum.CODE_V1_0_0;
+    * 
+    */
+    private static final long serialVersionUID = -6879156418402382298L;
 
     /**
      * 医院ID 必填
