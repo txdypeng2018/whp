@@ -31,6 +31,8 @@ public class AdminCustomerController extends IHosBaseController {
     @Autowired
     UserInfoService userInfoService;
 
+    
+    
     @Autowired
     MessagesService messagesService;
 
